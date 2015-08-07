@@ -27,5 +27,6 @@ int main(int argc, char *argv[])
 	char str[40] = "linux";
 	showall(num1);
 	std::cout << "\n\n\n";
+	showall(num1, db1, str);
 	return 0;
 }
