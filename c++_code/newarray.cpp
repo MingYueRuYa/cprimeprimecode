@@ -1,5 +1,5 @@
-/*
-   new type array
+/**
+ *  new type array
  */
 #include <iostream>
 #include <array>
@@ -16,8 +16,8 @@ int main()
 	vector<string> str01; 
 	str01.push_back("notepadqq");
 	str01.push_back("firefox");
-	str01.push_back("git");
-	
+	str01.push_back("git");	
+
 	//反向迭代器
 	vector<string>::reverse_iterator rbegin = str01.rbegin();
 	vector<string>::reverse_iterator rend = str01.rend();
