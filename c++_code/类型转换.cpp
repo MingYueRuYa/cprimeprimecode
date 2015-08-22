@@ -1,6 +1,34 @@
 #include <iostream>
 
-int main(int argc, char *argv[])
+class Father
+{
+public:
+	int num;
+	void PrintName() {
+		std::cout << "this is father." << " num = " << num <<std::endl;
+	}
+};
+
+class Son : public Father
+{
+public:
+	int num;
+	void PrintName() {
+		std::cout << "this is father." << " num = " << num <<std::endl;
+	}
+
+};
+
+
+int main()
+{
+	//指针没有初始化，就使用，这是危险的事
+	Father *father;
+	Son *son = reinterpret_cast<Son *> (father);
+	son->PrintName();
+	return 0;
+}
+int main03(int argc, char *argv[])
 {
 	//指针类型转换
 	int num = 5;
