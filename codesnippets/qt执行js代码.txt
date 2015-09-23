@@ -1,0 +1,21 @@
+QString webQQ::runJS(QString scriptfile, QString functionname, QScriptValueList _args)
+{
+    QString m_encodePassword = "";
+    QFile _scriptFile(scriptfile);
+    if (!_scriptFile.open(QIODevice::ReadOnly))
+    {
+        m_encodePassword.clear();
+        qWarning() << ".js open failed";
+        return NULL;
+    }
+    QTextStream _stream(&_scriptFile);
+    QString _contents = _stream.readAll();
+    _scriptFile.close();
+    QScriptEngine _engine;
+    QScriptValue _js = _engine.evaluate(_contents);
+    QScriptValue _passwordEncoding = _engine.globalObject().property(functionname);
+ 
+    m_encodePassword = _passwordEncoding.call(QScriptValue(), _args).toString();
+    return m_encodePassword;
+ 
+}
