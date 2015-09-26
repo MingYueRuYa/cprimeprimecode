@@ -1,5 +1,5 @@
 /*
- * 类模板于友元函数
+ * 类模板于友元函数, 友元类
  * 关于友元函数的声明，是个比较复杂的问题
  * 1.在模板内部的时，声明友元不需要加<T>，在外部需要加上<T>
  * 2.在外部的时候还必须加上类和友元函数的说明，此时友元函数不需要再加上<T>，如print02函数
@@ -9,6 +9,7 @@
 
 template<class T> class myclass;
 template<class T> void print02(myclass<T> &my);
+template<class T> class runclass;
 
 template<class T>
 class myclass
@@ -23,17 +24,30 @@ public:
 	{
 
 	}
+	friend class runclass<T>;
 private:
 	T x;
 	T y;
 
 };
 
+//友元函数
 template<class T> 
 void print02(myclass<T> &my)
 {
 	std::cout << my.x << " " << my.y << std::endl;
 }
+
+//友元类
+template<class T>
+class runclass
+{
+public:
+	void print(const myclass<T> &my)
+	{
+		std::cout << my.x << " " << my.y << std::endl;
+	}
+};
 
 
 int main()
@@ -41,6 +55,8 @@ int main()
 	myclass<int> myclass1(2, 1);
 	//print(myclass1);
 	print02(myclass1);
+	runclass<int> r1;
+	r1.print(myclass1);
 	return 0;
 }
 
