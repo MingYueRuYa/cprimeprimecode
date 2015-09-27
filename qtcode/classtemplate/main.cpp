@@ -1,10 +1,12 @@
 #include <iostream>
-
+#include "myarray.h"
+#include "myarray.cpp"
 using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
+    MyArray<int> array(5);
+    array.print();
     return 0;
 }
 
