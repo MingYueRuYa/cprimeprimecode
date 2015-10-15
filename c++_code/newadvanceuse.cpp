@@ -16,7 +16,35 @@ char buffer[buf] = {0}; //存储在静态区
 //避免了内存泄漏，自动释放内存。牺牲了内存访问的独立性
 using namespace std;
 
+class MyClass
+{
+public:
+	MyClass()
+	{
+		std::cout << "创建\n";
+	}
+	~MyClass()
+	{
+		std::cout << "销毁\n";
+	}
+};
+
+
 int main()
+{
+	char *pcathe = new char[1024];
+	char *pcatheend = pcathe + 1024;
+	std::cout << (void *)pcathe << "	" << (void *)pcatheend << std::endl;
+	//限定区域内存分配，覆盖模式
+	MyClass *pmyclass = new (pcathe)MyClass[10];
+	//不需要delete[]pmyclas，会自动覆盖
+	std::cout << pmyclass << "\n";
+	pmyclass = new (pcathe)MyClass[10];
+	std::cout << pmyclass << "\n";
+	return 0;
+}
+
+int main01()
 {
 	double *p1, *p2;
 	p1 = new double[N];  //分配内存大小为N个元素
@@ -41,7 +69,7 @@ int main()
 		std::cout << "p5 value " << &p5[i] << "  " << p5[i];
 		std::cout << " p6 value " << &p6[i] << "  " << p6[i] << std::endl;
 	}
-
+	//注意上述代码已造成内存泄漏
 
 	return 0;
 }
