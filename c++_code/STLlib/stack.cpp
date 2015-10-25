@@ -13,6 +13,7 @@ int main()
 	for (int i = 0; i < 10; i++) {
 		mystack.push(a[i]);
 	}
+	cout << "stack size: " << mystack.size() << "\n";
 	while (! mystack.empty()) {
 		cout << mystack.top() << "\n";
 		mystack.pop();
