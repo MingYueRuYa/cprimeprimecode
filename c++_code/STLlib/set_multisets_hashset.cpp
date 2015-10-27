@@ -83,7 +83,7 @@ int main_multiset()
 
 //hash_set 哈希是一种高效的检索方法，本身并不用排序,算法复杂度O(1)
 //在g++编译不能通过，原因是hash_set已经过时，具体的还没有调查
-int main()
+int main_hash_set()
 {
 	const char *cmd[] = {"abc", "calc", "notepad", "const"};		
 	//hash_set<const char *>hs;
@@ -101,6 +101,30 @@ int main()
 	*/
 	return 0;
 }
+
+int main()
+{
+	multiset<int> myset;
+	myset.insert(100);
+	myset.insert(101);
+	myset.insert(101);
+	myset.insert(102);
+	myset.insert(103);
+	auto pfind = myset.find(101);
+	//默认只找到第一个
+	cout << *pfind << endl;
+	auto allfind = myset.equal_range(101);
+	//find链表的头结点，second最后一个空节点，遍历所有的元素
+	for (auto it = allfind.first; it != allfind.second; it++) {
+		cout << *it << endl;
+	}
+	return 0;
+}
+
+
+
+
+
 
 
 
