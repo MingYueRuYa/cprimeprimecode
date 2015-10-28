@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <list>
+#include <set>
 
 using namespace std;
 
@@ -43,7 +45,7 @@ void printNum(int num)
 	cout << num << endl;
 }
 
-int main()
+int main02()
 {
 	vector<int> myvector;
 	myvector.push_back(1);
@@ -77,5 +79,83 @@ int main01()
 	//for_each(a, a + 4, printNum);
 	//重载了结构体中()运算符
 	for_each(a, a + 4, print());
+	return 0;
+}
+
+//find_if find_if_not
+int main03()
+{
+	vector<int> myvector;
+	myvector.push_back(1);
+	myvector.push_back(2);
+	myvector.push_back(3);
+	myvector.push_back(2);
+	myvector.push_back(5);
+	//查询第一个大于4
+	//auto i = find_if(myvector.begin(), myvector.end(), [](int v)->bool{ return (v > 4); });
+	//查找第一个小于4
+	auto i = find_if_not(myvector.begin(), myvector.end(), [](int v)->bool{ return (v > 4); });
+	if (i != myvector.end()) {
+		cout << *i <<endl;
+	} else {
+		cout << "Not find.\n";
+	}
+
+	return 0;
+}
+
+template<class T>
+class Show
+{
+public:
+	void operator()(T &t)
+	{
+		cout << t << "  ";
+	}
+};
+
+//find 
+int main04()
+{
+	list<int> mylist;
+	vector<int> myvector;
+	mylist.push_back(11);
+	mylist.push_back(22);
+	mylist.push_back(3);
+	mylist.push_back(4);
+	mylist.push_back(4);
+
+	myvector.push_back(21);
+	myvector.push_back(2);
+	myvector.push_back(33);
+	myvector.push_back(4);
+	myvector.push_back(4);
+	//报错，算法依赖于数据结构（链式，线性），不同的数据结构，算法不一样
+	//sort(mylist.begin(), mylist.end());
+	sort(myvector.begin(), myvector.end());
+	//for_each(mylist.begin(), mylist.end(), [](int v){ cout << v << endl;});
+	for_each(myvector.begin(), myvector.end(), [](int v){ cout << v << endl;});
+	cout << "\n";
+	//填充，指定位置数据进行初始化
+	fill(myvector.begin() + 3, myvector.end(), 3);
+	for_each(myvector.begin(), myvector.end(), [](int v){ cout << v << endl;});
+	cout << "\n";
+
+	for_each(myvector.begin(), myvector.end(), Show<int>());
+	return 0;
+}
+
+int main()
+{
+	multiset<int>myset;
+	myset.insert(1);
+	myset.insert(2);
+	myset.insert(1);
+	myset.insert(1);
+	myset.insert(3);
+	myset.insert(4);
+	//统计 1 有多少个节点
+	int num = count(myset.begin(), myset.end(), 1);
+	cout << num << endl;
 	return 0;
 }
