@@ -1,0 +1,23 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+SALS_ITEM_H	Sales_item.h	2;"	d
+Sales_item	Sales_item.h	/^	Sales_item(const std::string& bookNo):bookNo(bookNo) {}$/;"	f	class:Sales_item
+Sales_item	Sales_item.h	/^	Sales_item(std::istream& is) {is >> *this;}$/;"	f	class:Sales_item
+Sales_item	Sales_item.h	/^class Sales_item {$/;"	c
+avg_price	Sales_item.h	/^double Sales_item::avg_price() const$/;"	f	class:Sales_item
+bookNo	Sales_item.h	/^	std::string bookNo;$/;"	m	class:Sales_item
+isbn	Sales_item.h	/^	std::string isbn() const {return bookNo;}$/;"	f	class:Sales_item
+main	cin.cpp	/^int main()$/;"	f
+main	main.cpp	/^int main()$/;"	f
+operator +	Sales_item.h	/^Sales_item operator +(const Sales_item& item01, const Sales_item& item02)$/;"	f
+operator +=	Sales_item.h	/^Sales_item& Sales_item::operator+=(const Sales_item& item)$/;"	f	class:Sales_item
+operator <	Sales_item.h	/^bool operator <(const Sales_item& item1, const Sales_item& item2)$/;"	f
+operator <<	Sales_item.h	/^std::ostream& operator <<(std::ostream &out, const Sales_item& item)$/;"	f
+operator ==	Sales_item.h	/^bool operator ==(const Sales_item& item1, const Sales_item& item2)$/;"	f
+operator >>	Sales_item.h	/^std::istream& operator >>(std::istream &in, Sales_item &item)$/;"	f
+revenue	Sales_item.h	/^	double revenue = 0.0;$/;"	m	class:Sales_item
+units_sold	Sales_item.h	/^	unsigned units_sold = 0;$/;"	m	class:Sales_item
