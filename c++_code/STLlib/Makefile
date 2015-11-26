@@ -1,2 +1,2 @@
-app: red_black_tree_containter.cpp
+app: stringcontainter.cpp
 	g++ -std=c++11 -o $@ $^
