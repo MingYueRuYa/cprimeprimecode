@@ -1,4 +1,0 @@
-#ifndef STARDELEGATE_H
-#define STARDELEGATE_H
-
-#endif // STARDELEGATE_H
