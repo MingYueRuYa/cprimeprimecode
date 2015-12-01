@@ -1,0 +1,82 @@
+
+" Taglist session file. This file is auto-generated.
+" File information
+let tlist_file_count = 3
+let tlist_0_filename = '/home/liushixiong/code/c++_code/studyc++primer/main.cpp'
+let tlist_0_sort_type = "order"
+let tlist_0_filetype = "cpp"
+let tlist_0_tag_count = 1
+let tlist_0_1_tag = "main	/home/liushixiong/code/c++_code/studyc++primer/main.cpp	/^int main()$/;\"	f	line:5"
+let tlist_0_1_tag_name = "main"
+let tlist_0_1_ttype_idx = 1
+let tlist_0_f = "    main\n"
+let tlist_0_f_count = 1
+let tlist_0_f_1 = 1
+let tlist_1_filename = '/home/liushixiong/code/c++_code/studyc++primer/cin.cpp'
+let tlist_1_sort_type = "order"
+let tlist_1_filetype = "cpp"
+let tlist_1_tag_count = 1
+let tlist_1_1_tag = "main	/home/liushixiong/code/c++_code/studyc++primer/cin.cpp	/^int main()$/;\"	f	line:3"
+let tlist_1_1_tag_name = "main"
+let tlist_1_1_ttype_idx = 1
+let tlist_1_f = "    main\n"
+let tlist_1_f_count = 1
+let tlist_1_f_1 = 1
+let tlist_2_filename = '/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h'
+let tlist_2_sort_type = "order"
+let tlist_2_filetype = "cpp"
+let tlist_2_tag_count = 12
+let tlist_2_1_tag = "SALS_ITEM_H	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^#define SALS_ITEM_H$/;\"	d	line:2"
+let tlist_2_1_tag_name = "SALS_ITEM_H"
+let tlist_2_1_ttype_idx = 1
+let tlist_2_2_tag = "Sales_item	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^class Sales_item {$/;\"	c	line:7"
+let tlist_2_2_tag_name = "Sales_item"
+let tlist_2_2_ttype_idx = 1
+let tlist_2_3_tag = "Sales_item	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^	Sales_item(const std::string& bookNo):bookNo(bookNo) {}$/;\"	f	line:19	class:Sales_item"
+let tlist_2_3_tag_name = "Sales_item"
+let tlist_2_3_ttype_idx = 1
+let tlist_2_4_tag = "Sales_item	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^	Sales_item(std::istream& is) {is >> *this;}$/;\"	f	line:21	class:Sales_item"
+let tlist_2_4_tag_name = "Sales_item"
+let tlist_2_4_ttype_idx = 2
+let tlist_2_5_tag = "isbn	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^	std::string isbn() const {return bookNo;}$/;\"	f	line:26	class:Sales_item"
+let tlist_2_5_tag_name = "isbn"
+let tlist_2_5_ttype_idx = 3
+let tlist_2_6_tag = "operator >>	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^std::istream& operator >>(std::istream &in, Sales_item &item)$/;\"	f	line:38"
+let tlist_2_6_tag_name = "operator >>"
+let tlist_2_6_ttype_idx = 4
+let tlist_2_7_tag = "operator <<	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^std::ostream& operator <<(std::ostream &out, const Sales_item& item)$/;\"	f	line:50"
+let tlist_2_7_tag_name = "operator <<"
+let tlist_2_7_ttype_idx = 5
+let tlist_2_8_tag = "avg_price	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^double Sales_item::avg_price() const$/;\"	f	line:58	class:Sales_item"
+let tlist_2_8_tag_name = "avg_price"
+let tlist_2_8_ttype_idx = 6
+let tlist_2_9_tag = "operator <	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^bool operator <(const Sales_item& item1, const Sales_item& item2)$/;\"	f	line:67"
+let tlist_2_9_tag_name = "operator <"
+let tlist_2_9_ttype_idx = 7
+let tlist_2_10_tag = "operator ==	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^bool operator ==(const Sales_item& item1, const Sales_item& item2)$/;\"	f	line:72"
+let tlist_2_10_tag_name = "operator =="
+let tlist_2_10_ttype_idx = 8
+let tlist_2_11_tag = "operator +=	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^Sales_item& Sales_item::operator+=(const Sales_item& item)$/;\"	f	line:79	class:Sales_item"
+let tlist_2_11_tag_name = "operator +="
+let tlist_2_11_ttype_idx = 9
+let tlist_2_12_tag = "operator +	/home/liushixiong/code/c++_code/studyc++primer/Sales_item.h	/^Sales_item operator +(const Sales_item& item01, const Sales_item& item02)$/;\"	f	line:86"
+let tlist_2_12_tag_name = "operator +"
+let tlist_2_12_ttype_idx = 10
+let tlist_2_d = "    SALS_ITEM_H\n"
+let tlist_2_d_count = 1
+let tlist_2_d_1 = 1
+let tlist_2_c = "    Sales_item\n"
+let tlist_2_c_count = 1
+let tlist_2_c_1 = 2
+let tlist_2_f = "    Sales_item [Sales_item]\n    Sales_item [Sales_item]\n    isbn [Sales_item]\n    operator >>\n    operator <<\n    avg_price [Sales_item]\n    operator <\n    operator ==\n    operator += [Sales_item]\n    operator +\n"
+let tlist_2_f_count = 10
+let tlist_2_f_1 = 3
+let tlist_2_f_2 = 4
+let tlist_2_f_3 = 5
+let tlist_2_f_4 = 6
+let tlist_2_f_5 = 7
+let tlist_2_f_6 = 8
+let tlist_2_f_7 = 9
+let tlist_2_f_8 = 10
+let tlist_2_f_9 = 11
+let tlist_2_f_10 = 12
