@@ -12,12 +12,15 @@
 #include <QTableWidget>
 #include <QWidget>
 
-class TabWidget : public QTableWidget
+class TableWidget : public QTableWidget
 {
-public:
-    TabWidget(QWidget *pParent);
+    Q_OBJECT
 
-    ~TabWidget();
+public:
+    TableWidget(QWidget *pParent = 0);
+
+    ~TableWidget();
+
 private:
     void InitTable();
 };

@@ -5,20 +5,26 @@
 **
 ****************************************************************************/
 
-#include "tabwidget.h"
+#include <QHeaderView>
 
-TabWidget::TabWidget(QWidget *pParent)
-   : QTabWidget(pParent)
+#include "tablewidget.h"
+
+TableWidget::TableWidget(QWidget *pParent)
+   : QTableWidget(pParent)
+{
+    InitTable();
+}
+
+TableWidget::~TableWidget()
 {
 
 }
 
-TabWidget::~TabWidget()
+void TableWidget::InitTable()
 {
-
-}
-
-void TabWidget::InitTable()
-{
+    setColumnCount(3);
     QStringList header;
+    header << "url address" << "username" << "password";
+    setHorizontalHeaderLabels(header);
+    horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 }

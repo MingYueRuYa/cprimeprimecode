@@ -11,14 +11,17 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = passwordmanager
 TEMPLATE = app
 
+SOURCES += \
+    source/main.cpp \
+    source/mainwindow.cpp \
+    source/tablewidget.cpp \
+    source/pwmdialog.cpp
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    tabwidget.cpp \
-    source_files/main.cpp \
-    source_files/mainwindow.cpp \
-    source_files/tabwidget.cpp
+HEADERS += \
+    source/mainwindow.h \
+    source/tablewidget.h \
+    source/config.h \
+    source/pwmdialog.h
 
-HEADERS  += mainwindow.h
 
-FORMS    += mainwindow.ui
+
