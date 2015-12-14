@@ -8,12 +8,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMenu>
-#include <QtGui/QAction>
-#include <QtGui/QTableWidgetItem>
-#include <QtGui/QMainWindow>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QShortcut>
+#include <QMenu>
+#include <QAction>
+#include <QTableWidgetItem>
+#include <QMainWindow>
+#include <QVBoxLayout>
+#include <QShortcut>
+#include <QtCore/QCryptographicHash>
 
 #include "tablewidget.h"
 
@@ -76,6 +77,8 @@ private:
        ctrl + i 插入
      */
      QShortcut *mInsertShrotcut;
+
+     //QCryptographicHash mCryptographicHash;
 };
 
 #endif // MAINWINDOW_H

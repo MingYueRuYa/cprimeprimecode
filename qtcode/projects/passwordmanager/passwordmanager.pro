@@ -21,7 +21,7 @@ HEADERS += \
     source/mainwindow.h \
     source/tablewidget.h \
     source/config.h \
-    source/pwmdialog.h
+    source/pwmdialog.h \
 
-
-
+LIBS += -L/usr/lib/qca2 -lqca
+#INCLUDEPATH += /usr/include/qca2/QtCrypto

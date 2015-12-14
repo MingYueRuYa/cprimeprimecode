@@ -5,15 +5,16 @@
 **
 ****************************************************************************/
 
-#include <QDebug>
-#include <QFile>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
 #include <QMenuBar>
-#include <QTextStream>
-#include <QSettings>
+#include <QtCore/QTextStream>
+#include <QtCore/QSettings>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QtCrypto>
 
 #include "config.h"
 #include "mainwindow.h"
@@ -21,11 +22,12 @@
 //TODO 根据逗号进行分割的时候会有问题，如果用户的密码含有逗号，这样解析就是错误的  ---> 对密码进行加密处理，就不存在逗号问题 ---> 加密算法选取
 //TODO 如果光标，没有离开单元格的时候，在保存的程序异常退出--->解决，因为QTableWidgetItem可能为空
 //TODO 每次都把原来的野保存了一份，冗余保存 ---> 暂时没有方案
-//TODO 添加网络功能，上传文件到服务器中
+//TODO 添加网络功能，上传文件到服务器中 --->服务器还没有搭建
 
 MainWindow::MainWindow(QWidget *pParent)
-    : QMainWindow(pParent)
+    : QMainWindow(pParent)//, mCryptographicHash(QCryptographicHash::Sha1)
 {
+    QCA::Initializer init;
     //读取配置文件，如果mRegisterFlag = false, 表示是第一次使用
     ReadSettings();
     Init();
@@ -43,6 +45,7 @@ void MainWindow::Init()
     mRegisterFlag = false;
     mIsModified = false;
 
+
     mSaveShrotcut = new QShortcut(QKeySequence::Save, this);
     connect(mSaveShrotcut, SIGNAL(activated()), this ,SLOT(DoSave()));
 
@@ -59,6 +62,8 @@ void MainWindow::Init()
 
     mVBoxlayout->addWidget(mTableWidget);
     setCentralWidget(mCentralWidget);
+
+    //mCryptographicHash = QCryptographicHash(QCryptographicHash::Sha1);
 
     CreateAction();
     //居中显示
@@ -109,7 +114,12 @@ bool MainWindow::LoadInfo()
         mTableWidget->insertRow(mTableWidget->rowCount());
         for (int i = 0; i < strlist.count(); ++i) {
             QTableWidgetItem *item = new QTableWidgetItem();
-            item->setText(strlist[i]);
+            if (strlist.count() -1 == i) {
+                //item->setText(mCryptographicHash.result());
+                item->setText(strlist[i]);
+            } else {
+                item->setText(strlist[i]);
+            }
             mTableWidget->setItem(mTableWidget->rowCount() - 1, i, item);
         }
     }
@@ -170,7 +180,8 @@ bool MainWindow::DoSave()
             QMessageBox::information(this, tr("info"), tr("Please save modify information, Press enter."));
             return false;
         }
-        textstream << mTableWidget->item(i, 0)->text() << "," << mTableWidget->item(i, 1)->text() << "," << mTableWidget->item(i, 2)->text();
+        textstream << mTableWidget->item(i, 0)->text() << "," << mTableWidget->item(i, 1)->text() << "," <<
+                      mTableWidget->item(i, 2)->text();
         textstream << "\n";
     }
     file.close();
