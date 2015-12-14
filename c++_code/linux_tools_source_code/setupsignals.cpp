@@ -1,18 +1,20 @@
 /*
- * 向linux 系统中截断信号处理, 处理片段
+ * 向linux 系统初始化Term信号捕捉函数，使程序正确处理kill指令片段
  * */
 #ifdef Q_OS_LINUX
 #include "signal.h"
 void TermHandler(int sig)
 {
-  Q_UNUSED(sig);
-  QCoreApplication::quit();
+  //TODO something
+  //Q_UNUSED(sig);
+  //QCoreApplication::quit();
 }
 
 void IntHandler(int sig)
 {
-  Q_UNUSED(sig);
-  QCoreApplication::quit();
+  //TODO something
+  //Q_UNUSED(sig);
+  //QCoreApplication::quit();
 }
 
 /*!
@@ -36,3 +38,11 @@ static bool SetupSignalHandlers()
   return true;
 }
 #endif
+
+int main(int argc, char *argv[])
+{
+  //注册捕捉函数
+  SetupSignalHandlers();
+  return 0;
+}
+
