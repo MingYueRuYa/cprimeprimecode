@@ -28,16 +28,21 @@ MainWindow::MainWindow(QWidget *pParent)
     : QMainWindow(pParent)//, mCryptographicHash(QCryptographicHash::Sha1)
 {
     //QCA::Initializer init;
+    mRegisterFlag = false;
+    mIsModified = false;
+
     //读取配置文件，如果mRegisterFlag = false, 表示是第一次使用
     ReadSettings();
     SetupUi();
-    unsigned char privatekey[1024] = "key";
-    unsigned char *p = privatekey;
 
+    //Q_UINT64_C(0x0c2ad4a4acb9f023)  randow number
     mBaseEncrypt = new SimpleCrypt(Q_UINT64_C(0x0c2ad4a4acb9f023));
     Load();
     setWindowModified(true);
     setWindowTitle(APPLICATION_NAME);
+
+    connect(mTableWidget, SIGNAL(itemChanged(QTableWidgetItem *)), this,
+            SLOT(DoTableItemChanged(QTableWidgetItem *)));
 }
 
 MainWindow::~MainWindow()
@@ -50,8 +55,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::SetupUi()
 {
-    mRegisterFlag = false;
-    mIsModified = false;
 
 
     mSaveShrotcut = new QShortcut(QKeySequence::Save, this);
@@ -59,6 +62,9 @@ void MainWindow::SetupUi()
 
     mInsertShrotcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_I), this);
     connect(mInsertShrotcut, SIGNAL(activated()), this, SLOT(DoInsert()));
+
+    mDeleteShrotcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this);
+    connect(mDeleteShrotcut, SIGNAL(activated()), this, SLOT(DoDelete()));
 
     QDesktopWidget *desktopwidget = QApplication::desktop();
     int deskwidth = desktopwidget->width();
@@ -71,8 +77,6 @@ void MainWindow::SetupUi()
     mVBoxlayout->addWidget(mTableWidget);
     setCentralWidget(mCentralWidget);
 
-    //mCryptographicHash = QCryptographicHash(QCryptographicHash::Sha1);
-
     CreateAction();
     //居中显示
     if (! mRegisterFlag) {
@@ -81,8 +85,7 @@ void MainWindow::SetupUi()
     else {
         setGeometry(mPositionPoint.x(), mPositionPoint.y(), mWindowSize.x(), mWindowSize.y());
     }
-    connect(mTableWidget, SIGNAL(itemChanged(QTableWidgetItem *)), this,
-            SLOT(DoTableItemChanged(QTableWidgetItem *)));
+
 }
 
 void MainWindow::CreateAction()
@@ -90,11 +93,15 @@ void MainWindow::CreateAction()
     mInsertAction = new QAction(tr("insert"), this);
     connect(mInsertAction, SIGNAL(triggered()), this, SLOT(DoInsert()));
 
+    mDeleteAction = new QAction(tr("delete"), this);
+    connect(mDeleteAction, SIGNAL(triggered()), this, SLOT(DoDelete()));
+
     mSaveAction = new QAction(tr("save"), this);
     connect(mSaveAction, SIGNAL(triggered()), this, SLOT(DoSave()));
 
     mMenu = menuBar()->addMenu(tr("operation"));
     mMenu->addAction(mInsertAction);
+    mMenu->addAction(mDeleteAction);
     mMenu->addAction(mSaveAction);
 }
 
@@ -123,11 +130,10 @@ bool MainWindow::Load()
         for (int i = 0; i < strlist.count(); ++i) {
             QTableWidgetItem *item = new QTableWidgetItem();
             if (i == strlist.count() - 1) {
-                if (NULL == mBaseEncrypt) {
-                    item->setText("");
-                    continue;
+                item->setText("");
+                if (NULL != mBaseEncrypt) {
+                    item->setText(mBaseEncrypt->Decrypt(strlist[i]));
                 }
-                item->setText(mBaseEncrypt->Decrypt(strlist[i]));
             } else {
                 item->setText(strlist[i]);
             }
@@ -175,6 +181,17 @@ void MainWindow::closeEvent(QCloseEvent *pEvent)
 void MainWindow::DoInsert()
 {
     mTableWidget->insertRow(mTableWidget->rowCount());
+}
+
+void MainWindow::DoDelete()
+{
+    int currentrow = mTableWidget->currentRow();
+    if (-1 == currentrow){
+        return;
+    }
+    mTableWidget->removeRow(currentrow);
+    mIsModified = true;
+    setWindowTitle(QString(APPLICATION_NAME) + "[*]");
 }
 
 bool MainWindow::DoSave()

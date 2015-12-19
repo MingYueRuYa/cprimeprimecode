@@ -12,7 +12,7 @@
 TableWidget::TableWidget(QWidget *pParent)
    : QTableWidget(pParent)
 {
-    InitTable();
+    SetupUi();
 }
 
 TableWidget::~TableWidget()
@@ -20,7 +20,7 @@ TableWidget::~TableWidget()
 
 }
 
-void TableWidget::InitTable()
+void TableWidget::SetupUi()
 {
     setColumnCount(3);
     QStringList header;

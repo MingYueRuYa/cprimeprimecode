@@ -51,6 +51,8 @@ protected:
 protected slots:
     void DoInsert();
 
+    void DoDelete();
+
     bool DoSave();
 
     void DoTableItemChanged(QTableWidgetItem *pItem);
@@ -65,6 +67,8 @@ private:
      QMenu *mMenu;
 
      QAction *mInsertAction;
+
+     QAction *mDeleteAction;
 
      QAction *mSaveAction;
 
@@ -85,6 +89,11 @@ private:
       * ctrl + i 插入
       */
      QShortcut *mInsertShrotcut;
+
+     /*!
+      * ctrl + delete 插入
+      */
+     QShortcut *mDeleteShrotcut;
 
      BaseEncrypt *mBaseEncrypt;
 
