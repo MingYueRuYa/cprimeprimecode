@@ -8,8 +8,6 @@
 #ifndef encryptpach_h
 #define encryptpach_h
 
-#include "encrypt/aesencrypt.h"
-#include "encrypt/taesclass.h"
 #include "encrypt/baseencrypt.h"
 #include "encrypt/encryptconfig.h"
 #include "encrypt/simplecrypt.h"

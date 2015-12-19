@@ -53,6 +53,8 @@ protected slots:
 
     void DoDelete();
 
+    void DoAllDelete();
+
     bool DoSave();
 
     void DoTableItemChanged(QTableWidgetItem *pItem);
@@ -69,6 +71,8 @@ private:
      QAction *mInsertAction;
 
      QAction *mDeleteAction;
+
+     QAction *mAllDeleteAction;
 
      QAction *mSaveAction;
 
@@ -94,6 +98,8 @@ private:
       * ctrl + delete 插入
       */
      QShortcut *mDeleteShrotcut;
+
+     QShortcut *mAllDeleteShrotcut;
 
      BaseEncrypt *mBaseEncrypt;
 

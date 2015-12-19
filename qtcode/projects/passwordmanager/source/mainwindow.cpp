@@ -55,16 +55,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::SetupUi()
 {
-
-
-    mSaveShrotcut = new QShortcut(QKeySequence::Save, this);
-    connect(mSaveShrotcut, SIGNAL(activated()), this ,SLOT(DoSave()));
-
     mInsertShrotcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_I), this);
     connect(mInsertShrotcut, SIGNAL(activated()), this, SLOT(DoInsert()));
 
-    mDeleteShrotcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this);
+    mDeleteShrotcut = new QShortcut(QKeySequence(Qt::Key_Delete), this);
     connect(mDeleteShrotcut, SIGNAL(activated()), this, SLOT(DoDelete()));
+
+    mAllDeleteShrotcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this);
+    connect(mAllDeleteShrotcut, SIGNAL(activated()), this, SLOT(DoAllDelete()));
+
+    mSaveShrotcut = new QShortcut(QKeySequence::Save, this);
+    connect(mSaveShrotcut, SIGNAL(activated()), this ,SLOT(DoSave()));
 
     QDesktopWidget *desktopwidget = QApplication::desktop();
     int deskwidth = desktopwidget->width();
@@ -96,12 +97,16 @@ void MainWindow::CreateAction()
     mDeleteAction = new QAction(tr("delete"), this);
     connect(mDeleteAction, SIGNAL(triggered()), this, SLOT(DoDelete()));
 
+    mAllDeleteAction = new QAction(tr("delete all"), this);
+    connect(mAllDeleteAction, SIGNAL(triggered()), this, SLOT(DoAllDelete()));
+
     mSaveAction = new QAction(tr("save"), this);
     connect(mSaveAction, SIGNAL(triggered()), this, SLOT(DoSave()));
 
     mMenu = menuBar()->addMenu(tr("operation"));
     mMenu->addAction(mInsertAction);
     mMenu->addAction(mDeleteAction);
+    mMenu->addAction(mAllDeleteAction);
     mMenu->addAction(mSaveAction);
 }
 
@@ -190,6 +195,16 @@ void MainWindow::DoDelete()
         return;
     }
     mTableWidget->removeRow(currentrow);
+    mIsModified = true;
+    setWindowTitle(QString(APPLICATION_NAME) + "[*]");
+}
+
+void MainWindow::DoAllDelete()
+{
+    int rowcount = mTableWidget->rowCount();
+    for (int i = 0; i < rowcount; ++i) {
+        mTableWidget->removeRow(0);
+    }
     mIsModified = true;
     setWindowTitle(QString(APPLICATION_NAME) + "[*]");
 }
