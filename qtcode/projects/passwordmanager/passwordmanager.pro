@@ -16,21 +16,19 @@ SOURCES += \
     source/mainwindow.cpp \
     source/tablewidget.cpp \
     source/pwmdialog.cpp \
-#    source/encrypt/taesclass.cpp \
     source/encrypt/baseencrypt.cpp \
-    source/encrypt/aesencrypt.cpp \
-    source/encrypt/simplecrypt.cpp
+    source/encrypt/simplecrypt.cpp \
+    source/passwordinfo.cpp
 
 HEADERS += \
     source/mainwindow.h \
     source/tablewidget.h \
     source/config.h \
     source/pwmdialog.h \
-#    source/encrypt/taesclass.h \
     source/encryptpack.h \
     source/encrypt/baseencrypt.h \
-    source/encrypt/aesencrypt.h \
-    source/encrypt/simplecrypt.h
+    source/encrypt/simplecrypt.h \
+    source/passwordinfo.h
 
 #LIBS += -L/usr/lib/qca2 -lqca
 #INCLUDEPATH += /usr/include/qca2/QtCrypto
