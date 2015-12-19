@@ -5,8 +5,8 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef mainwindow_h
+#define mainwindow_h
 
 #include <QMenu>
 #include <QAction>
@@ -17,7 +17,14 @@
 #include <QtCore/QCryptographicHash>
 
 #include "tablewidget.h"
+#include "encryptpack.h"
 
+/**
+  * @brief   main window
+  * @author  liushixiong (635672377@qq.com)
+  * @version 0.01
+  * @date    2015/11/30
+  */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -26,12 +33,13 @@ public:
     explicit MainWindow(QWidget *pParent = 0);
 
     ~MainWindow();
+
 private:
-    void Init();
+    void SetupUi();
 
     void CreateAction();
 
-    bool LoadInfo();
+    bool Load();
 
     void WriteSettings();
 
@@ -69,16 +77,18 @@ private:
      QPoint mWindowSize;
 
      /*!
-       ctrl + s 保存
-     */
+      * ctrl + s 保存
+      */
      QShortcut *mSaveShrotcut;
 
      /*!
-       ctrl + i 插入
-     */
+      * ctrl + i 插入
+      */
      QShortcut *mInsertShrotcut;
+
+     BaseEncrypt *mBaseEncrypt;
 
      //QCryptographicHash mCryptographicHash;
 };
 
-#endif // MAINWINDOW_H
+#endif // mainwindow_h

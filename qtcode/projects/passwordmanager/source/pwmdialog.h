@@ -5,8 +5,8 @@
 **
 ****************************************************************************/
 
-#ifndef PWMDIALOG_H
-#define PWMDIALOG_H
+#ifndef pwmdialog_h
+#define pwmdialog_h
 
 #include <QDialog>
 #include <QLabel>
@@ -14,6 +14,12 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
+/**
+  * @brief   dailog window
+  * @author  liushixiong (635672377@qq.com)
+  * @version 0.01
+  * @date    2015/11/30
+  */
 class PWMDialog : public QDialog
 {
     Q_OBJECT
@@ -37,4 +43,4 @@ private:
 
 };
 
-#endif //PWMDIALOG_H
+#endif //pwmdialog_h

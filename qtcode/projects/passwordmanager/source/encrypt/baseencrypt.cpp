@@ -5,13 +5,17 @@
 **
 ****************************************************************************/
 
-#ifndef config_h
-#define config_h
+#include "baseencrypt.h"
 
-#define APPLICATION_NAME "passwordmanager"
-#define VERSION "0.01"
-#define AUTHOR "liushixiong"
-#define CONTANCT "635672377@qq.com"
-#define PASSWORD_NAME "password.txt"
+BaseEncrypt::BaseEncrypt()
+{
+}
 
-#endif //config_h
+BaseEncrypt::~BaseEncrypt()
+{
+}
+
+void BaseEncrypt::Init(DWORD KeySize, UCHAR *KeyBytes)
+{
+}
+

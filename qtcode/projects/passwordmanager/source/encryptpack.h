@@ -5,13 +5,14 @@
 **
 ****************************************************************************/
 
-#ifndef config_h
-#define config_h
+#ifndef encryptpach_h
+#define encryptpach_h
 
-#define APPLICATION_NAME "passwordmanager"
-#define VERSION "0.01"
-#define AUTHOR "liushixiong"
-#define CONTANCT "635672377@qq.com"
-#define PASSWORD_NAME "password.txt"
+#include "encrypt/aesencrypt.h"
+#include "encrypt/taesclass.h"
+#include "encrypt/baseencrypt.h"
+#include "encrypt/encryptconfig.h"
+#include "encrypt/simplecrypt.h"
 
-#endif //config_h
+#endif //encryptpach_h
+

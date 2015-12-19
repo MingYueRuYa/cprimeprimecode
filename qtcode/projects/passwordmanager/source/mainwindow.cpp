@@ -14,7 +14,7 @@
 #include <QDesktopWidget>
 #include <QMessageBox>
 #include <QCloseEvent>
-#include <QtCrypto>
+//#include <QtCrypto>
 
 #include "config.h"
 #include "mainwindow.h"
@@ -27,20 +27,28 @@
 MainWindow::MainWindow(QWidget *pParent)
     : QMainWindow(pParent)//, mCryptographicHash(QCryptographicHash::Sha1)
 {
-    QCA::Initializer init;
+    //QCA::Initializer init;
     //读取配置文件，如果mRegisterFlag = false, 表示是第一次使用
     ReadSettings();
-    Init();
-    LoadInfo();
+    SetupUi();
+    unsigned char privatekey[1024] = "key";
+    unsigned char *p = privatekey;
+
+    mBaseEncrypt = new SimpleCrypt(Q_UINT64_C(0x0c2ad4a4acb9f023));
+    Load();
     setWindowModified(true);
     setWindowTitle(APPLICATION_NAME);
 }
 
 MainWindow::~MainWindow()
 {
+    if (NULL != mBaseEncrypt) {
+        delete mBaseEncrypt;
+        mBaseEncrypt = NULL;
+    }
 }
 
-void MainWindow::Init()
+void MainWindow::SetupUi()
 {
     mRegisterFlag = false;
     mIsModified = false;
@@ -90,7 +98,7 @@ void MainWindow::CreateAction()
     mMenu->addAction(mSaveAction);
 }
 
-bool MainWindow::LoadInfo()
+bool MainWindow::Load()
 {
     QFile file(PASSWORD_NAME);
     if (! file.exists()) {
@@ -104,19 +112,22 @@ bool MainWindow::LoadInfo()
         return false;
     }
     QTextStream textstream(&file);
-    QString line;
+    QString linestring = 0;
     while (1) {
-        line = textstream.readLine();
-        if (line.isEmpty()) {
+        linestring = textstream.readLine();
+        if (linestring.isEmpty()) {
             break;
         }
-        QStringList strlist = line.split(",");
+        QStringList strlist = linestring.split(",");
         mTableWidget->insertRow(mTableWidget->rowCount());
         for (int i = 0; i < strlist.count(); ++i) {
             QTableWidgetItem *item = new QTableWidgetItem();
-            if (strlist.count() -1 == i) {
-                //item->setText(mCryptographicHash.result());
-                item->setText(strlist[i]);
+            if (i == strlist.count() - 1) {
+                if (NULL == mBaseEncrypt) {
+                    item->setText("");
+                    continue;
+                }
+                item->setText(mBaseEncrypt->Decrypt(strlist[i]));
             } else {
                 item->setText(strlist[i]);
             }
@@ -180,8 +191,11 @@ bool MainWindow::DoSave()
             QMessageBox::information(this, tr("info"), tr("Please save modify information, Press enter."));
             return false;
         }
-        textstream << mTableWidget->item(i, 0)->text() << "," << mTableWidget->item(i, 1)->text() << "," <<
-                      mTableWidget->item(i, 2)->text();
+        if (NULL == mBaseEncrypt) {
+            return false;
+        }
+        QString passwordencryptstr = mBaseEncrypt->Encrypt(mTableWidget->item(i, 2)->text());
+        textstream << mTableWidget->item(i, 0)->text() << "," << mTableWidget->item(i, 1)->text() << "," << passwordencryptstr;
         textstream << "\n";
     }
     file.close();

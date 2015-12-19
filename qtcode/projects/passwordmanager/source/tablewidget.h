@@ -1,4 +1,3 @@
-
 /****************************************************************************
 **
 ** Copyright (C) 2015 liushixiong. (635672377@qq.com)
@@ -6,8 +5,8 @@
 **
 ****************************************************************************/
 
-#ifndef TABWIDGET_H
-#define TABWIDGET_H
+#ifndef tableWidget_h
+#define tableWidget_h
 
 #include <QTableWidget>
 #include <QWidget>
@@ -22,7 +21,7 @@ public:
     ~TableWidget();
 
 private:
-    void InitTable();
+    void SetupUi();
 };
 
-#endif //TABWIDGET_H
+#endif //tableWidget_h
