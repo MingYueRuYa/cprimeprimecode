@@ -1,59 +1,100 @@
-#ifndef AES_H
-#define AES_H
+/****************************************************************************
+**
+** Copyright (C) 2015 liushixiong. (635672377@qq.com)
+** All rights reserved.
+**
+****************************************************************************/
+
+#ifndef aes_h
+#define aes_h
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-typedef unsigned long DWORD;
-typedef unsigned char UCHAR,*PUCHAR;
-typedef void *PVOID,*LPVOID;
-typedef unsigned char byte;
-typedef DWORD *PDWORD,*LPDWORD;
+#include "baseencrypt.h"
 
-#ifndef VOID
-#define VOID void
-#endif
+/**
+  * @brief   this class copy from Internet
+  * @author  liushixiong (635672377@qq.com)
+  * @version 0.01
+  * @date    2015/11/30
+  */
+class AesEncrypt
+{
+public:
+    AesEncrypt(int keySize, unsigned char* keyBytes);
 
-class Aes // Advanced Encryption Standard
-  {
-  public:
-      ~Aes();
-      Aes();
-      Aes(int keySize, unsigned char* keyBytes);
-      unsigned char State[4][4];
-      void Cipher(unsigned char* input, unsigned char* output); // encipher 16-bit input
-      void InvCipher(unsigned char* input, unsigned char* output); // decipher 16-bit input
-  private:
-      int Nb; // block size in 32-bit words. Always 4 for AES. (128 bits).
-      int Nk; // key size in 32-bit words. 4, 6, 8. (128, 192, 256 bits).
-      int Nr; // number of rounds. 10, 12, 14.
+    ~AesEncrypt();
 
-      unsigned char key[32];
-      unsigned char w[16*15];
+    void Init(DWORD KeySize, UCHAR *KeyBytes);
 
-      void SetNbNkNr(int keySize);
-      void AddRoundKey(int round); //轮密钥加
-      void SubBytes(); //S盒字节代换
-      void InvSubBytes(); //逆S盒字节代换
-      void ShiftRows(); //行移位
-      void InvShiftRows();
-      void MixColumns(); //列混淆
-      void InvMixColumns();
-      unsigned char gfmultby01(unsigned char b);
-      unsigned char gfmultby02(unsigned char b);
-      unsigned char gfmultby03(unsigned char b);
-      unsigned char gfmultby09(unsigned char b);
-      unsigned char gfmultby0b(unsigned char b);
-      unsigned char gfmultby0d(unsigned char b);
-      unsigned char gfmultby0e(unsigned char b);
-      void KeyExpansion(); //密钥扩展
-      unsigned char* SubWord(unsigned char* word); //密钥S盒字代换
-      unsigned char* RotWord(unsigned char* word); //密钥移位
+    int Encrypt(const LPVOID InBuffer, DWORD InLength, LPVOID OutBuffer);
 
-  };
+    int Decrypt(const LPVOID InBuffer, DWORD InLength, LPVOID OutBuffer);
 
-//#pragma once
+    unsigned char State[4][4];
+
+    /*!
+     * Aes加密函数
+     */
+    void Cipher(unsigned char* input, unsigned char* output); // encipher 16-bit input
+
+    /*!
+     * Aes解密函数
+     */
+    void InvCipher(unsigned char* input, unsigned char* output); // decipher 16-bit input
+
+private:
+    void SetNbNkNr(int keySize);
+
+    void AddRoundKey(int round); //轮密钥加
+
+    void SubBytes(); //S盒字节代换
+
+    void InvSubBytes(); //逆S盒字节代换
+
+    void ShiftRows(); //行移位
+
+    void InvShiftRows();
+
+    void MixColumns(); //列混淆
+
+    void InvMixColumns();
+
+    unsigned char gfmultby01(unsigned char b);
+
+    unsigned char gfmultby02(unsigned char b);
+
+    unsigned char gfmultby03(unsigned char b);
+
+    unsigned char gfmultby09(unsigned char b);
+
+    unsigned char gfmultby0b(unsigned char b);
+
+    unsigned char gfmultby0d(unsigned char b);
+
+    unsigned char gfmultby0e(unsigned char b);
+
+    void KeyExpansion(); //密钥扩展
+
+    unsigned char* SubWord(unsigned char* word); //密钥S盒字代换
+
+    unsigned char* RotWord(unsigned char* word); //密钥移位
+
+private:
+    int Nb; // block size in 32-bit words. Always 4 for AES. (128 bits).
+
+    int Nk; // key size in 32-bit words. 4, 6, 8. (128, 192, 256 bits).
+
+    int Nr; // number of rounds. 10, 12, 14.
+
+    unsigned char key[32];
+
+    unsigned char w[16*15];
+
+};
 
 //enum KeySize { Bits128, Bits192, Bits256 }; // key size, in bits, for construtor
 #define Bits128    16
@@ -102,6 +143,7 @@ static unsigned char AesiSbox[16*16]=
     /*e*/ 0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
     /*f*/ 0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d
 };
+
 static unsigned char AesRcon[11*4]=
 {
     0x00, 0x00, 0x00, 0x00,
@@ -117,6 +159,4 @@ static unsigned char AesRcon[11*4]=
         0x36, 0x00, 0x00, 0x00
 };
 
-
-
-#endif // AES_H
+#endif //aes_h
