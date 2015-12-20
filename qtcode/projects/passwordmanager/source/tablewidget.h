@@ -8,8 +8,8 @@
 #ifndef tableWidget_h
 #define tableWidget_h
 
-#include <QTableWidget>
-#include <QWidget>
+#include <QtGui/QTableWidget>
+#include <QtGui/QWidget>
 
 class TableWidget : public QTableWidget
 {

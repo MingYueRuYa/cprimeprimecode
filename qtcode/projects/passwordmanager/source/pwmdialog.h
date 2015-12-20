@@ -8,11 +8,11 @@
 #ifndef pwmdialog_h
 #define pwmdialog_h
 
-#include <QDialog>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
+#include <QtGui/QDialog>
+#include <QtGui/QLabel>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QPushButton>
 
 /**
   * @brief   dailog window

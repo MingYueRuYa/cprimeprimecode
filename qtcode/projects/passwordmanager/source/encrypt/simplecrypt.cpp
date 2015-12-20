@@ -5,13 +5,12 @@
 **
 ****************************************************************************/
 
-
-#include <QByteArray>
-#include <QtDebug>
-#include <QtGlobal>
-#include <QDateTime>
-#include <QCryptographicHash>
-#include <QDataStream>
+#include <QtCore/QByteArray>
+#include <QtCore/QtDebug>
+#include <QtCore/QtGlobal>
+#include <QtCore/QDateTime>
+#include <QtCore/QCryptographicHash>
+#include <QtCore/QDataStream>
 
 #include "simplecrypt.h"
 

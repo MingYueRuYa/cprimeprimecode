@@ -10,12 +10,6 @@
 
 #include <QtCore/QObject>
 
-typedef unsigned long DWORD;
-typedef unsigned char UCHAR,*PUCHAR;
-typedef void *PVOID,*LPVOID;
-typedef unsigned char byte;
-typedef DWORD *PDWORD,*LPDWORD;
-
 /**
   * @brief   encrypt base class
   * @author  liushixiong (635672377@qq.com)
@@ -31,7 +25,7 @@ public:
 
 	virtual ~BaseEncrypt();
 
-    virtual void Init(DWORD KeySize, UCHAR *KeyBytes);
+    virtual void Init();
 
     virtual QString Encrypt(const QString &pEncryptStr) = 0;
 

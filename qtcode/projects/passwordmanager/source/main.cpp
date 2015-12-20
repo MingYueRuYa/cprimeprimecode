@@ -5,18 +5,16 @@
 **
 ****************************************************************************/
 
-#include <QApplication>
-#include <QDebug>
-#include <QFile>
-#include <QTextStream>
+#include <QtGui/QApplication>
 
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    MainWindow mainwindow;
 
+    MainWindow mainwindow;
     mainwindow.show();
+
     return app.exec();
 }

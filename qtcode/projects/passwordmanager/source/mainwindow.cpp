@@ -7,13 +7,13 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
-#include <QMenuBar>
 #include <QtCore/QTextStream>
 #include <QtCore/QSettings>
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QMessageBox>
-#include <QCloseEvent>
+#include <QtGui/QMenuBar>
+#include <QtGui/QApplication>
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QMessageBox>
+#include <QtGui/QCloseEvent>
 //#include <QtCrypto>
 
 #include "config.h"

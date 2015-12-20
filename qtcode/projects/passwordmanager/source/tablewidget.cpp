@@ -5,7 +5,7 @@
 **
 ****************************************************************************/
 
-#include <QHeaderView>
+#include <QtGui/QHeaderView>
 
 #include "tablewidget.h"
 

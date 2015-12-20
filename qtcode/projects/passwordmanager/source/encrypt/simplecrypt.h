@@ -23,31 +23,20 @@
 class SimpleCrypt : public BaseEncrypt
 {
 public:
-    /**
-      CompressionMode describes if compression will be applied to the data to be
-      encrypted.
-      */
     enum CompressionMode {
         CompressionAuto,
-        CompressionAlways,  /*!< Always apply compression. Note that for short inputs, a compression may result in longer data */
-        CompressionNever    /*!< Never apply compression. */
+        CompressionAlways,
+        CompressionNever
     };
-    /**
-      IntegrityProtectionMode describes measures taken to make it possible to detect problems with the data
-      or wrong decryption keys.
 
-      Measures involve adding a checksum or a cryptograhpic hash to the data to be encrypted. This
-      increases the length of the resulting cypertext, but makes it possible to check if the plaintext
-      appears to be valid after decryption.
-    */
     enum IntegrityProtectionMode {
-        ProtectionNone,    /*!< The integerity of the encrypted data is not protected. It is not really possible to detect a wrong key, for instance. */
-        ProtectionChecksum,/*!< A simple checksum is used to verify that the data is in order. If not, an empty string is returned. */
-        ProtectionHash     /*!< A cryptographic hash is used to verify the integrity of the data. This method produces a much stronger, but longer check */
+        ProtectionNone,
+
+        ProtectionChecksum,
+
+        ProtectionHash
     };
-    /**
-      Error describes the type of error that occured.
-      */
+
     enum Error {
         ErrorNoError,         /*!< No error occurred. */
         ErrorNoKeySet,        /*!< No key was set. You can not encrypt or decrypt without a valid key. */
@@ -55,17 +44,8 @@ public:
         ErrorIntegrityFailed, /*!< The integrity check of the data failed. Perhaps the wrong key was used. */
     };
 
-    /**
-      Constructor.
-
-      Constructs a SimpleCrypt instance without a valid key set on it.
-     */
     SimpleCrypt();
-    /**
-      Constructor.
 
-      Constructs a SimpleCrypt instance and initializes it with the given @arg key.
-     */
     explicit SimpleCrypt(quint64 key);
 
     QString Encrypt(const QString &pEncryptStr);

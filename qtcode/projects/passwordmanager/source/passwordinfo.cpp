@@ -6,9 +6,9 @@
 ****************************************************************************/
 
 #include <QtCore/QFile>
-#include <QtXml/QDomDocument>
 #include <QtCore/QTextStream>
 #include <QtCore/QDate>
+#include <QtXml/QDomDocument>
 
 #include "passwordinfo.h"
 

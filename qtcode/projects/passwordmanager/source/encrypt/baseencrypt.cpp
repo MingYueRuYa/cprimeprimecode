@@ -15,7 +15,7 @@ BaseEncrypt::~BaseEncrypt()
 {
 }
 
-void BaseEncrypt::Init(DWORD KeySize, UCHAR *KeyBytes)
+void BaseEncrypt::Init()
 {
 }
 

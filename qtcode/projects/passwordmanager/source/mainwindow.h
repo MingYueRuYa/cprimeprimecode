@@ -8,12 +8,12 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
-#include <QMenu>
-#include <QAction>
-#include <QTableWidgetItem>
-#include <QMainWindow>
-#include <QVBoxLayout>
-#include <QShortcut>
+#include <QtGui/QMenu>
+#include <QtGui/QAction>
+#include <QtGui/QTableWidgetItem>
+#include <QtGui/QMainWindow>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QShortcut>
 #include <QtCore/QCryptographicHash>
 
 #include "tablewidget.h"
