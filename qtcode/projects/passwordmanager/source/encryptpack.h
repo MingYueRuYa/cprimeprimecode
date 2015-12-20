@@ -8,6 +8,7 @@
 #ifndef encryptpach_h
 #define encryptpach_h
 
+#include "encrypt/encryptcontroller.h"
 #include "encrypt/baseencrypt.h"
 #include "encrypt/encryptconfig.h"
 #include "encrypt/simplecrypt.h"

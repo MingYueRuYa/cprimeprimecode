@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,7 +18,8 @@ SOURCES += \
     source/pwmdialog.cpp \
     source/encrypt/baseencrypt.cpp \
     source/encrypt/simplecrypt.cpp \
-    source/passwordinfo.cpp
+    source/passwordinfo.cpp \
+    source/encrypt/encryptcontroller.cpp
 
 HEADERS += \
     source/mainwindow.h \
@@ -28,7 +29,8 @@ HEADERS += \
     source/encryptpack.h \
     source/encrypt/baseencrypt.h \
     source/encrypt/simplecrypt.h \
-    source/passwordinfo.h
+    source/passwordinfo.h \
+    source/encrypt/encryptcontroller.h
 
 #LIBS += -L/usr/lib/qca2 -lqca
 #INCLUDEPATH += /usr/include/qca2/QtCrypto

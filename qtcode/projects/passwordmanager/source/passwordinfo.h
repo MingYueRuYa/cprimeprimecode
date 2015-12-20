@@ -1,24 +1,37 @@
-
+/****************************************************************************
+**
+** Copyright (C) 2015 liushixiong. (635672377@qq.com)
+** All rights reserved.
+**
+****************************************************************************/
 
 #ifndef passwordinfo_h
 #define passwordinfo_h
 
-#include <QString>
+#include <QtCore/QObject>
 
-class PasswordInfo
+/**
+  * @brief   about password class
+  * @author  liushixiong (635672377@qq.com)
+  * @version 0.01
+  * @date    2015/12/19
+  */
+class PasswordInfo : public QObject
 {
-public:
-	PasswordInfo();
+    Q_OBJECT
 
-	PasswordInfo(const QString &pUrlAddress, const QString &pUserName, const QString &pPassword, const QString &pExtraInfo);
+public:
+    PasswordInfo(const QString &pPasswordPath);
+
+    PasswordInfo(const QString &pUrlAddress, const QString &pUserName, const QString &pPassword, const QString &pExtraInfo, const QString &pPasswordPath);
 
 	~PasswordInfo();
 
-    void Save();
-
-    void Modify();
+    bool Save();
 
     void Delete();
+
+    void Modify();
 
     void Load();
 
@@ -45,7 +58,12 @@ private:
 
 	QString mPassword;
 
+    /*!
+     * about option information.
+     */
 	QString mExtraInfo;
+
+    QString mPasswordPath;
 
 };
 #endif //passwordinfo_h

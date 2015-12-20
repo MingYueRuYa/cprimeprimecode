@@ -35,8 +35,7 @@ MainWindow::MainWindow(QWidget *pParent)
     ReadSettings();
     SetupUi();
 
-    //Q_UINT64_C(0x0c2ad4a4acb9f023)  randow number
-    mBaseEncrypt = new SimpleCrypt(Q_UINT64_C(0x0c2ad4a4acb9f023));
+    mBaseEncrypt = EncryptController::__Instance()->GetBaseEncrypt("simplecrypt");
     Load();
     setWindowModified(true);
     setWindowTitle(APPLICATION_NAME);
@@ -86,7 +85,6 @@ void MainWindow::SetupUi()
     else {
         setGeometry(mPositionPoint.x(), mPositionPoint.y(), mWindowSize.x(), mWindowSize.y());
     }
-
 }
 
 void MainWindow::CreateAction()
