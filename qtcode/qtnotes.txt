@@ -1,0 +1,5 @@
+安装mysql驱动
+sudo apt-get install libqt4-sql-mysql
+默认安装的路径在/usr/lib/x86-64-linux-gun/qt4/plugins/sqldrives/libqsqlmysql.so
+需要cp /usr/lib/x86-64-linux-gun/qt4/plugins/sqldrivers/libqsqlmysql.so /usr/lib/qt4/plugins/sqldrivers/
+

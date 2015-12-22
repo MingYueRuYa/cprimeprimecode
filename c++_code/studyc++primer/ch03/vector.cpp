@@ -5,6 +5,7 @@
 using std::vector;
 using std::string;
 using std::cout;
+using std::cin;
 using std::endl;
 
 int main(int argc, char *argv[])
@@ -61,6 +62,7 @@ int main(int argc, char *argv[])
 
 	//vector<string> v6{10};
 	vector<string> v6(10, "hello");
+	//vector<string> v6("hi", "hello"); //synatx error
 	cout << " \"v6\":{\"size\":\"" << v6.size() << "\", \"value\":[";
 	for (string i : v6) {
 		if (i.empty()) {
@@ -108,3 +110,39 @@ int main(int argc, char *argv[])
 	cout << "}\n";
 	return 0;
 }
+
+int main01(int argc, char *argv[])
+{
+	vector<int> ivec;
+	int i;
+	while (cin >> i) { ivec.push_back(i); }
+
+	if (ivec.empty()) {
+		cout << "input at least one integer." << endl;		
+		return -1;
+	}
+	else if (ivec.size() == 1) {
+		cout << ivec[0] << " don't have any adjacent elements.";
+	}
+	else {
+		for (decltype(ivec.size()) i = 0; i != ivec.size() - 1; ++i) {
+			cout << ivec[i] + ivec[i+1] << " ";
+		}
+	}
+	cout << endl;
+
+	decltype(ivec.size()) size = ivec.size();
+	if (size % 2 != 0) {
+		size = size / 2 + 1;
+	}
+	else {
+		size /= 2;
+	}
+	for (decltype(ivec.size()) i = 0; i != size; ++i) {
+		cout << ivec[i]	+ ivec[ivec.size() - i - 1] << " ";
+	}
+	cout << endl;
+	return 0;
+}
+
+
