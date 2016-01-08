@@ -71,6 +71,46 @@ public:
 	int num = 0;
 };
 
+class test;
+
+//控制类的某一个函数成为友元函数
+class friendclassB
+{
+public:
+	friendclassB()
+	{
+	}
+
+	~friendclassB()
+	{
+	}
+
+	void testfriendfun(test *pTest)
+	{
+		std::cout << pTest->num << std::endl;
+	}
+	
+};
+
+class test
+{
+public:
+	test()
+	{
+	}
+
+	~test()
+	{
+	}
+
+	void friendclassB::testfriendfun(test *pTest);
+
+private:
+	int num = 0;
+
+};
+
+
 int main()
 {
 	friendclass fc(5);
@@ -84,5 +124,7 @@ int main()
 	
 	friendclassA fca01(fs);
 	std::cout << fca01.num << std::endl;
+
+	
 	return 0;
 }
