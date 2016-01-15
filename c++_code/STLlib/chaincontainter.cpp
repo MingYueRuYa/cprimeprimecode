@@ -1,5 +1,8 @@
 /*
  * 链式容器
+ * iterator: (begin, end) (rbegin, rend) ()
+ * insert: push_back
+ * delete:
  * */
 #include <iostream>
 #include <hash_set>
