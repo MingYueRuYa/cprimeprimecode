@@ -148,7 +148,7 @@ bool MainWindow::Load()
 
 void MainWindow::WriteSettings()
 {
-    QSettings settings("passwordmanager.ini", QSettings::IniFormat, 0);
+    QSettings settings("passwordmanager");
     settings.setValue("flag/registerflag", "true");
     settings.setValue("position/pos", this->pos());
     settings.setValue("info/size/height", this->height());
@@ -157,7 +157,7 @@ void MainWindow::WriteSettings()
 
 void MainWindow::ReadSettings()
 {
-    QSettings settings("passwordmanager.ini", QSettings::IniFormat, 0);
+    QSettings settings("passwordmanager");
     mRegisterFlag = settings.value("flag/registerflag", "false").toBool();
     mPositionPoint = settings.value("position/pos", QPoint(0, 0)).value<QPoint>();
     mWindowSize.setX(settings.value("info/size/width", 800).toInt());
@@ -167,7 +167,9 @@ void MainWindow::ReadSettings()
 void MainWindow::closeEvent(QCloseEvent *pEvent)
 {
     if (mIsModified) {
-        QMessageBox::StandardButton standardbutton = QMessageBox::information(this, APPLICATION_NAME, tr("Are you sure to close window?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::SaveAll, QMessageBox::No);
+        QMessageBox::StandardButton standardbutton = QMessageBox::information(this,
+                 APPLICATION_NAME, tr("Are you sure to close window?"),
+                 QMessageBox::Yes | QMessageBox::No | QMessageBox::SaveAll, QMessageBox::No);
         if (QMessageBox::SaveAll == standardbutton) {
             DoSave();
             //WriteSettings();
