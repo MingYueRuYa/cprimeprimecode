@@ -3,11 +3,12 @@
  * iterator: (begin, end) (rbegin, rend) ()
  * insert: push_back
  * delete:
+ * search:
  * */
 #include <iostream>
-#include <hash_set>
+//#include <hash_set>
 #include <list>
-#include <stdio.h>
+//#include <stdio.h>
 
 //list适用于经常插入，经常删除
 //链式存储，不允许小标访问
@@ -104,9 +105,9 @@ int main05()
 }
 
 //去除重复
-int main()
+int main06()
 {
-	
+
 	int a[7] = {1, 2, 3,34, 5, 5, 2};
 	list<int> mylist01(a, a + 7);
 	mylist01.sort();
@@ -119,9 +120,23 @@ int main()
 	return 0;
 }
 
-
-
-
+int main()
+{
+	list<int> intlist(2, 3);
+	list<int>::iterator beg = intlist.begin();
+	list<int>::iterator end = intlist.end();
+	//for (; beg != end; ++beg) {
+	//	cout << *beg << endl;
+	// }
+	intlist.push_front(3);
+	intlist.push_front(2);
+	beg = intlist.begin();
+	end = intlist.end();
+	for (; beg != end; ++beg) {
+		cout << *beg << endl;
+	}
+	return 0;
+}
 
 
 
