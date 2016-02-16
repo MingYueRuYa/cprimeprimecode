@@ -2,5 +2,6 @@ test/
 *.out
 *.o
 
+app
 
 build*Debug
