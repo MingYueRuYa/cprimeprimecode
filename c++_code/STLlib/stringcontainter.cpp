@@ -1,12 +1,18 @@
 /*
- * string 容器
- * */
+ * copy
+ * iterate
+ * asign
+ * add
+ * delete
+ * modify
+ * serach
+ */
 #include <iostream>
 #include <string>
 
 
 using namespace std;
-int main()
+int main01()
 {
 	//init string
 	string strname = "I am a student";	
@@ -32,5 +38,15 @@ int main()
 		pos = strdump.find("linux", pos + 5);
 	}
 
+	return 0;
+}
+
+int main(void)
+{
+	string tmpstring("hello string");	
+	for (string::size_type index = 0; index < tmpstring.length(); ++index) {
+		cout << tmpstring[index] << " ";
+	}
+	cout << endl;
 	return 0;
 }
