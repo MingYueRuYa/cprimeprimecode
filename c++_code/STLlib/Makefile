@@ -1,6 +1,11 @@
-<<<<<<< HEAD
-app: algorithmconcept.cpp
-=======
-app: stringcontainter.cpp
->>>>>>> e06bcd8d461e8952d8976c0d902a2343f789875c
-	g++ -std=c++11 -o $@ $^
+app:vector.cpp
+	g++ -Wall -g -std=c++11 -o $@ $^
+
+invaliditerator: invaliditerator.cpp
+	g++ -Wall -g -std=c++11 -o $@ $^
+
+forward_list: forward_list.cpp
+	g++ -Wall -g -std=c++11 -o $@ $^
+
+vector: vector.cpp
+	g++ -Wall -g -std=c++11 -o $@ $^
