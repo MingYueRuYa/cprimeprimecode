@@ -9,10 +9,19 @@ forward_list: forward_list.cpp
 
 algorithmconcept: algorithmconcept.cpp
 	g++ -std=c++11 -o $@ $^
+
 string: stringcontainter.cpp
+	g++ -std=c++11 -o $@ $^
+
+deque: deque.cpp
+	g++ -std=c++11 -o $@ $^
+
+set: set_multisets_hashset.cpp
 	g++ -std=c++11 -o $@ $^
 
 clean:
 	sudo rm -rf string
 	sudo rm -rf app
 	sudo rm -rf vector
+	sudo rm -rf deque
+	sudo rm -rf	set 

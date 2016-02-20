@@ -2,6 +2,12 @@
  *set 内部的元素依据其值自动排序，相同的元素数值元素只能出现一次
  *multiset 内部的元素依据其值自动排序，相同的元素数值元素只能出现多次
  *其内部都是用二叉树实现的
+ *基本操作
+ *	insert count find erase
+ *	insert操作会币vector慢一点
+ *注意：
+ * 不能通过find进行修改，因为set和multiset是自动排序的，如果修改了，就不是自动排序了
+ * 要想修改的话，只能先删除了在插入操作
  **/
 
 #include <iostream>
@@ -17,6 +23,45 @@ struct strless
 		return strcmp(str1, str2) < 0;
 	}
 };
+
+
+template <typename T>
+void PrintContents(const T &pContainer)
+{
+	typename T::const_iterator begin =  pContainer.begin();
+	for (; begin != pContainer.end(); ++begin) {
+		cout << *begin << endl;
+	}
+}
+
+int main(void)
+{
+	set<int> myset;
+	myset.insert(1);
+	myset.insert(1);
+	myset.insert(2);
+	myset.insert(3);
+	PrintContents(myset);
+	cout << endl;
+	//始终都是一个
+	cout << "1 count = " << myset.count(1) << endl;
+	multiset<int> mymulset;
+	mymulset.insert(1);
+	mymulset.insert(1);
+	mymulset.insert(1);
+	mymulset.insert(2);
+	mymulset.insert(3);
+	PrintContents(mymulset);
+	mymulset.erase(1);
+	cout << "1 count = " << mymulset.count(1) << endl;
+	cout << endl;
+	PrintContents(mymulset);
+	mymulset.clear();
+	cout << endl;
+	PrintContents(mymulset);
+	return 0;
+}
+
 //set 
 int main_set()
 {
@@ -102,7 +147,7 @@ int main_hash_set()
 	return 0;
 }
 
-int main()
+int main01()
 {
 	multiset<int> myset;
 	myset.insert(100);
@@ -120,13 +165,3 @@ int main()
 	}
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
