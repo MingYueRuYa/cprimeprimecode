@@ -19,9 +19,17 @@ deque: deque.cpp
 set: set_multisets_hashset.cpp
 	g++ -std=c++11 -o $@ $^
 
+map: map_multimap_hashmap.cpp
+	g++ -std=c++11 -o $@ $^
+
+stack: stack.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf string
 	sudo rm -rf app
 	sudo rm -rf vector
 	sudo rm -rf deque
-	sudo rm -rf	set 
+	sudo rm -rf set 
+	sudo rm -rf map 
+	sudo rm -rf stack	

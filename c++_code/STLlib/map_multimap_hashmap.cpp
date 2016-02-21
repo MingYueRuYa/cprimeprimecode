@@ -26,6 +26,9 @@ int main_map()
 	mymap["freeBSD"] = 3;
 	mymap["windows"] = 4;
 	mymap.insert(pair<const char *, int>("orangeos", 5));
+	mymap.insert(pair<const char *, int>("windows", 1));
+	mymap.insert(multimap<const char *, int>::value_type("freeBSD", 6));
+	mymap.insert(make_pair("solaris", 7));
 	cout << mymap["unix"] << endl;
 	cout << mymap["linux"] << endl;
 	cout << mymap["orangeos"] << endl;
@@ -70,15 +73,24 @@ int main_hashmap()
 int main()
 {
 	multimap<const char *, int>mymap;
-	
 	mymap.insert(pair<const char *, int>("linux", 4));
 	mymap.insert(pair<const char *, int>("linux", 4));
 	mymap.insert(pair<const char *, int>("linux", 4));
 	mymap.insert(pair<const char *, int>("unix", 5));
 	mymap.insert(pair<const char *, int>("windows", 1));
-	
+	mymap.insert(multimap<const char *, int>::value_type("freeBSD", 6));
+	mymap.insert(make_pair("solaris", 7));
+	cout << mymap.size() << endl;
+	cout << "liunx count = " << mymap.count("linux") << endl;
+
 	multimap<const char *, int>::iterator pfind = mymap.find("linux");
-	cout << (*pfind).first << " " << pfind->second << endl;
+	//cout << (*pfind).first << " " << pfind->second << endl;
+	//从第一个迭代器位置删除到最后一个迭代器位置
+	mymap.erase(mymap.lower_bound("linux"), mymap.upper_bound("linux"));
+	mymap.erase("linux");
+	if (mymap.find("linux") != mymap.end()) {
+		mymap.erase(mymap.find("linux"));
+	}
 	auto it = mymap.equal_range("linux");
 	for (auto i = it.first; i != it.second; i++) {
 		cout << (*i).first << " " << i->second << endl;
