@@ -44,4 +44,4 @@ clean:
 	sudo rm -rf stack	
 	sudo rm -rf queue
 	sudo rm -rf priority_queue
-	sudo rm -rf functionobject
+	sudo rm -rf funcobject
