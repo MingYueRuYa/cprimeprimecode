@@ -1,5 +1,9 @@
 /*
- * 队列
+ * queue 适配器
+ * queue<int, list<int>> 
+ * queue<int, deque<int>>
+ * size empty front back push pop 
+ * 不能使用vector 实现queue，因为queue需要在两头进行操作
  * */
 
 #include <iostream>
@@ -10,6 +14,17 @@
 //提供了二维动态数组的功能，头部，尾部，任意操作
 
 using namespace std;
+
+int main(void)
+{
+	queue<int, deque<int>> myqueue;
+	myqueue.push(1);
+	myqueue.push(2);
+	myqueue.push(3);
+	myqueue.push(4);
+	cout << "front "<< myqueue.front()  << " back: " << myqueue.back() << endl;
+	return 0;
+}
 
 int main01()
 {
@@ -27,7 +42,7 @@ int main01()
 }
 
 //双端队列
-int main()
+int main02()
 {
 	deque<int> mydeque;
 	mydeque.push_back(1);
@@ -52,8 +67,3 @@ int main()
 	}
 	return 0;
 }
-
-
-
-
-

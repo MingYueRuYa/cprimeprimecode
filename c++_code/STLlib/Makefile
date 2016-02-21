@@ -25,6 +25,9 @@ map: map_multimap_hashmap.cpp
 stack: stack.cpp
 	g++ -std=c++11 -o $@ $^
 
+queue: queue.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf string
 	sudo rm -rf app
@@ -33,3 +36,5 @@ clean:
 	sudo rm -rf set 
 	sudo rm -rf map 
 	sudo rm -rf stack	
+	sudo rm -rf queue
+
