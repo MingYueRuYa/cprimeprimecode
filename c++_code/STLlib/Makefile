@@ -28,6 +28,12 @@ stack: stack.cpp
 queue: queue.cpp
 	g++ -std=c++11 -o $@ $^
 
+priority_queue: priority_queue.cpp
+	g++ -std=c++11 -o $@ $^
+
+funcobject: functionobject.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf string
 	sudo rm -rf app
@@ -37,4 +43,5 @@ clean:
 	sudo rm -rf map 
 	sudo rm -rf stack	
 	sudo rm -rf queue
-
+	sudo rm -rf priority_queue
+	sudo rm -rf functionobject
