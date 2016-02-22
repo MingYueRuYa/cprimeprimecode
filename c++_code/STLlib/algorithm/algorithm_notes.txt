@@ -9,3 +9,29 @@
 	修改算法：for_each、transform、
 	排序算法：sort、satble_sort、partial_sort、...
 	...
+
+预定义的函数对象
+	negate<type>();
+	plus<type>();
+	minus<type>();
+	multiplies<type>();
+	divide<type>();
+	modules<type>();
+	equal_to<type>();
+	not_equal_to<type>();
+	less<type>();
+	greater<type>();
+	less_equal<type>();
+	greater_equal<type>();
+	logical_not<type>();
+	logical_and<type>();
+	logical_or<type>();
+
+预定以的函数适配器
+	bind1st(op, value);
+	bind2nd(op, value);
+	not1(op);
+	not2(op);
+	mem_fun_ref(op);
+	mem_fun(op);
+	ptr_fun(op);
