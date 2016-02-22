@@ -122,7 +122,7 @@ int to_upper(int c)
 }
 
 //关于string 算法
-int main(void)
+int main07(void)
 {
 	string reversestring = "reversestring";
 	reverse(reversestring.begin(), reversestring.end());
@@ -133,5 +133,12 @@ int main(void)
 	getline(cin, strinput);	
 	transform(strinput.begin(), strinput.end(), strinput.begin(), to_upper);
 	cout << strinput << endl;
+	return 0;
+}
+
+int main(void)
+{
+	int i = atoi("a");
+	cout << i << endl;
 	return 0;
 }
