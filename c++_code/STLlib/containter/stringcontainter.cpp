@@ -138,6 +138,7 @@ int main07(void)
 
 int main(void)
 {
+	//测试如果转换失败之后会返回0
 	int i = atoi("a");
 	cout << i << endl;
 	return 0;
