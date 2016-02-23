@@ -4,12 +4,31 @@
 
 #include <iostream>
 #include <algorithm>
+#include <functional>
 #include <vector>
 #include <list>
 
 using namespace std;
 
 int main(void)
+{
+	vector<int> intvector;
+	for (int i = 6; i < 10; ++i) {
+		intvector.push_back(i);
+	}
+	intvector.push_back(9);	
+	intvector.push_back(9);	
+	//这里存在方法命名不一致的现象，此处的search_n 应该为search_n_if
+	//但是标准已经不能修改了
+	vector<int>::iterator ifind = search_n(intvector.begin(), intvector.end(), 3, 6,greater<int>());
+	if (ifind != intvector.end()) {
+		cout << "index " << distance(intvector.begin(), ifind);
+	}
+	cout << endl;
+	return 0;
+}
+
+int main01(void)
 {
 	vector<int> intvector;
 	for (int i = -9; i < 10; ++i) {
