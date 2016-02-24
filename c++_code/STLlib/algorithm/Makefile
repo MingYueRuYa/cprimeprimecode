@@ -16,6 +16,12 @@ fill: fill.cpp
 search_1: search_1.cpp
 	g++ -std=c++11 -o $@ $^
 
+find_first_of: find_first_of.cpp
+	g++ -std=c++11 -o $@ $^
+
+adjacent: adjacent.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -23,3 +29,5 @@ clean:
 	sudo rm -rf accumulate
 	sudo rm -rf fill
 	sudo rm -rf search_1
+	sudo rm -rf find_first_of
+	sudo rm -rf adjacent
