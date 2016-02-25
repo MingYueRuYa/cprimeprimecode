@@ -22,6 +22,12 @@ find_first_of: find_first_of.cpp
 adjacent: adjacent.cpp
 	g++ -std=c++11 -o $@ $^
 
+binary_search: binary_search.cpp
+	g++ -std=c++11 -o $@ $^
+
+include: include.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -30,4 +36,6 @@ clean:
 	sudo rm -rf fill
 	sudo rm -rf search_1
 	sudo rm -rf find_first_of
+	sudo rm -rf binary_search
 	sudo rm -rf adjacent
+	sudo rm -rf include
