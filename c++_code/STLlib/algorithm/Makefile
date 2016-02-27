@@ -31,6 +31,9 @@ include: include.cpp
 lower_upper_bound: lower_upper_bound.cpp
 	g++ -std=c++11 -o $@ $^
 
+for_each: for_each.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -42,3 +45,6 @@ clean:
 	sudo rm -rf binary_search
 	sudo rm -rf adjacent
 	sudo rm -rf include
+	sudo rm -rf for_each
+	sudo rm -rf lower_upper_bound 
+	
