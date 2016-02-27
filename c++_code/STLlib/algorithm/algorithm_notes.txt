@@ -35,3 +35,10 @@
 	mem_fun_ref(op);
 	mem_fun(op);
 	ptr_fun(op);
+
+已序查找算法
+	binary_search
+	includes
+	lower_bound
+	upper_bound
+	equal_range
