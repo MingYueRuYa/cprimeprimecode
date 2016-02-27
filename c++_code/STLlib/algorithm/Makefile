@@ -34,6 +34,9 @@ lower_upper_bound: lower_upper_bound.cpp
 for_each: for_each.cpp
 	g++ -std=c++11 -o $@ $^
 
+compare: compare.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -47,4 +50,4 @@ clean:
 	sudo rm -rf include
 	sudo rm -rf for_each
 	sudo rm -rf lower_upper_bound 
-	
+	sudo rm -rf compare 
