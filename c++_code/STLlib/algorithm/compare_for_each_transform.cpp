@@ -11,7 +11,7 @@
 using namespace std;
 
 //-------------------------------------------------------------
-//
+//从这里可以看出for_each算法比transform效率更高
 void Square01(int &pValue)
 {
 	pValue *= pValue;
