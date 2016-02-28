@@ -1,0 +1,15 @@
+----------------------------------------------------------------
+error 1:
+stream_iterator<int> out_it (std::cout,", ");
+  ^
+copy.cpp:43:19: error: expected primary-expression before ‘int
+ostream_iterator<int> out_it (std::cout,", ");
+	                   ^
+copy.cpp:43:19: error: expected ‘;’ before ‘int’
+copy.cpp:44:43: error: ‘out_it’ was not declared in this scope
+copy(intvector.begin(), intvector.end(), out_it);
+
+solve solution:
+加入 #include <iterator>
+----------------------------------------------------------------
+
