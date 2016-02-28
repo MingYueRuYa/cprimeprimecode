@@ -10,6 +10,22 @@
 	排序算法：sort、satble_sort、partial_sort、...
 	...
 
+3.修改性算法
+	for_each()
+	copy()
+	copy_backward()
+	transform()
+	merge()
+	swap_ranges()
+	fill()
+	fill_n()
+	generate()
+	generate_n()
+	replace()
+	replace_if()
+	replace_copy()
+	replace_copy_if()
+
 预定义的函数对象
 	negate<type>();
 	plus<type>();
