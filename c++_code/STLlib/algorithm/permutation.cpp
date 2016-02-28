@@ -1,5 +1,5 @@
 /*
- * permutation 排列组合
+ * permutation 排列组合 在排列之前一定是要按照顺序
  * next_permutation
  * prev_permutaion
  * */
