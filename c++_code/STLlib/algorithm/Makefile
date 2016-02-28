@@ -43,6 +43,12 @@ copy: copy.cpp
 permutation: permutation.cpp
 	g++ -std=c++11 -o $@ $^
 	
+transform: transform.cpp
+	g++ -std=c++11 -o $@ $^
+	
+compare_for_each_transform: compare_for_each_transform.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -59,3 +65,5 @@ clean:
 	sudo rm -rf compare 
 	sudo rm -rf copy 
 	sudo rm -rf permutation 
+	sudo rm -rf transform
+	sudo rm -rf compare_for_each_transform
