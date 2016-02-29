@@ -58,6 +58,9 @@ fill_generate: fill_generate.cpp
 replace: replace.cpp
 	g++ -std=c++11 -o $@ $^
 
+remove: remove.cpp
+	g++ -std=c++11 -o $@ $^
+	
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -79,3 +82,4 @@ clean:
 	sudo rm -rf swap_ranges
 	sudo rm -rf fill_generate
 	sudo rm -rf replace
+	sudo rm -rf remove
