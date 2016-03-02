@@ -61,6 +61,12 @@ replace: replace.cpp
 remove: remove.cpp
 	g++ -std=c++11 -o $@ $^
 	
+unique: unique.cpp
+	g++ -std=c++11 -o $@ $^
+
+reverse: reverse.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -83,3 +89,5 @@ clean:
 	sudo rm -rf fill_generate
 	sudo rm -rf replace
 	sudo rm -rf remove
+	sudo rm -rf unique
+	sudo rm -rf reverse

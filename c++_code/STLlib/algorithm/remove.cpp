@@ -4,6 +4,8 @@
  * attention:
  * 		1.并不是真正的删除算法，而是把后面的元素向前移动，覆盖被删除的元素
  * 		2.返回性的逻辑终点
+ * remove_copy(b1, e1, b2)
+ * remove_copy_if(b1, e1, b2, op)
  * */
 
 #include <iostream>
@@ -12,11 +14,12 @@
 #include <list>
 #include <iterator>
 #include <functional>
+#include <set>
 
 using namespace std;
 using namespace std::placeholders;
 
-int main(void)
+int main_copy(void)
 {
 	list<int> intlist{1, 1, 2, 3, 3, 4, 1, 2, 5, 6};
 	for_each(intlist.begin(), intlist.end(), [](const int &pValue){ cout << pValue << " ";});
@@ -33,6 +36,24 @@ int main(void)
 	intlist.erase(remove_if(intlist.begin(), intlist.end(), bind(less<int>(), _1, 4)), intlist.end());
 	for_each(intlist.begin(), intlist.end(), [](const int &pValue){ cout << pValue << " ";});
 
+
+	return 0;
+}
+
+int main(void)
+{
+	list<int> intlist{1, 2, 3, 4, 5};
+	multiset<int> intset;
+	remove_copy_if(intlist.begin(), intlist.end(), inserter(intset, intset.end()), bind(less<int>(), _1, 4));
+	cout << "intlist element: " ;
+	for_each(intlist.begin(), intlist.end(), [](const int &pValue){ cout << pValue << " ";});
+	cout << endl;
+	for_each(intset.begin(), intset.end(), [](const int &pValue){ cout << pValue << " ";});
+	cout << endl;
+
+	//想输出流copy，并删除3
+	remove_copy(intlist.begin(), intlist.end(), ostream_iterator<int>(cout, " "), 3);
+	cout << endl;
 
 	return 0;
 }

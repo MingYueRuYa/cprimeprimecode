@@ -8,6 +8,8 @@
 	删除算法：remove、remove_if、remove_copy、...
 	修改算法：for_each、transform、
 	排序算法：sort、satble_sort、partial_sort、...
+	变序性算法：reverse(), reverse_copy(), rotate(), retate_copy(), next_permutation()
+				prev_permutation(), random_shuffle(), partition(), stable_partition()
 	...
 
 3.修改性算法
@@ -25,6 +27,14 @@
 	replace_if()
 	replace_copy()
 	replace_copy_if()
+
+4.删除性算法
+	remove()
+	remove_if()
+	remove_copy()
+	remove_copy_if()
+	unique() //删除连续的重复，如果不连续的话，则不行
+	unique_copy()
 
 预定义的函数对象
 	negate<type>();
