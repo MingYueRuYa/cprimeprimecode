@@ -70,7 +70,35 @@ int main_hashmap()
 	return 0;
 }
 
+bool Less(const int &pvalue1, const int &pvalue2)
+{
+	return pvalue1 > pvalue2;
+}
+
 int main()
+{
+	multimap<int, const char *> charmap;
+	charmap.insert(pair<int, const char *>(1, "A"));
+	charmap.insert(pair<int, const char *>(1, "B"));
+	multimap<int, const char *>::iterator ifind = charmap.find(1);	
+	cout << ifind->second << endl;
+
+	for_each(charmap.lower_bound(1), charmap.upper_bound(1), [](pair<int, const char *> pFind){ cout << pFind.second<< " ";});
+	cout << endl;
+
+	//customer sort function
+	multimap<int, int, decltype(Less)*> intmap(Less);
+	intmap.insert({1, 2});
+	intmap.insert(pair<int, int>(2, 4));
+	intmap.insert(pair<int, int>(3, 4));
+	intmap.insert(pair<int, int>(5, 4));
+	
+	for_each(intmap.begin(), intmap.end(), [](pair<int, int> pIterator){ cout <<  pIterator.first << " second: "<< pIterator.second << " "; });
+	cout << endl;
+	return 0;
+}
+
+int main01()
 {
 	multimap<const char *, int>mymap;
 	mymap.insert(pair<const char *, int>("linux", 4));
