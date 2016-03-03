@@ -67,6 +67,12 @@ unique: unique.cpp
 reverse: reverse.cpp
 	g++ -std=c++11 -o $@ $^
 
+random_shuffle: random_shuffle.cpp
+	g++ -std=c++11 -o $@ $^
+
+partition: partition.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -91,3 +97,5 @@ clean:
 	sudo rm -rf remove
 	sudo rm -rf unique
 	sudo rm -rf reverse
+	sudo rm -rf random_shuffle 
+	sudo rm -rf partition 
