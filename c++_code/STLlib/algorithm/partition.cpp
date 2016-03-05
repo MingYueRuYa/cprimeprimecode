@@ -16,7 +16,6 @@ bool Even(const int &pValue)
 	return pValue % 2 == 1;
 }
 
-
 int main(void)
 {
 	vector<int> intvector{1, 2, 3, 4, 5, 6, 7, 8, 9};	
@@ -25,7 +24,7 @@ int main(void)
 	partition(intvector.begin(), intvector.end(), Even);
 	for_each(intvector.begin(), intvector.end(), [](const int &pValue){ cout << pValue << " ";});
 	cout << endl << "stable_partition: " << endl;
-	vector<int> intvector01 = intvector;
+	vector<int> intvector01{1, 2, 3, 4, 5, 6, 7, 8, 9};
 	//stable_partition(intvector01.begin(), intvector01.end(), Even);
 	stable_partition(intvector01.begin(), intvector01.end(), not1(bind2nd(modulus<int>(), 2)));
 	for_each(intvector01.begin(), intvector01.end(), [](const int &pValue){ cout << pValue << " ";});
