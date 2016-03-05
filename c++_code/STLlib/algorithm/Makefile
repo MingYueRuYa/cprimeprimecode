@@ -73,6 +73,12 @@ random_shuffle: random_shuffle.cpp
 partition: partition.cpp
 	g++ -std=c++11 -o $@ $^
 
+sort: sort.cpp
+	g++ -std=c++11 -o $@ $^
+
+partial: partial_sort.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -99,3 +105,5 @@ clean:
 	sudo rm -rf reverse
 	sudo rm -rf random_shuffle 
 	sudo rm -rf partition 
+	sudo rm -rf sort 
+	sudo rm -rf partial 
