@@ -79,6 +79,12 @@ sort: sort.cpp
 partial: partial_sort.cpp
 	g++ -std=c++11 -o $@ $^
 
+nth_element: nth_element.cpp
+	g++ -std=c++11 -o $@ $^
+
+heap_sort: heap_sort.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -107,3 +113,5 @@ clean:
 	sudo rm -rf partition 
 	sudo rm -rf sort 
 	sudo rm -rf partial 
+	sudo rm -rf nth_element 
+	sudo rm -rf heap_sort 
