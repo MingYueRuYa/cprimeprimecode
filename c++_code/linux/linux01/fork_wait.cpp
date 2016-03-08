@@ -24,7 +24,8 @@ int main(void)
 	if (pid == 0) {
 		printf("this is child process, pid is %d.\n", getpid());
 		sleep(3);
-		exit(3);
+		//exit(3);
+		return 4;
 	}
 	return 0;
 }
