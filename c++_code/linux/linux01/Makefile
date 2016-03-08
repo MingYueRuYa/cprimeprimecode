@@ -1,7 +1,7 @@
 .PHONY: clean all
 CC=gcc
 CFLAGS= -Wall -g
-BIN=fork fork_fd vfork hello abortprogram demo_deamon
+BIN=fork fork_fd vfork hello abortprogram demo_deamon fork_wait
 all:$(BIN)
 %.o:%.c
 	$(CC) $(CFLAGS) -c $< -o $@
