@@ -2,13 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <errno.h>
 
 void TestFunc(int loopcount)
 {
 	printf("loop %d\n", loopcount);
 }
 
-int main(void)
+int main04(void)
 {
 	//僵尸进程 -> 子进程执行完之后，父进程没有进行收尸
 	//孤儿进程 -> 就是父进程现执行完，但是子进程还没有结束，此时子进程的父进程就是1号进程 init进程
@@ -31,7 +32,7 @@ int main(void)
 	return 0;
 }
 
-int main03(void)
+int main(void)
 {
 	int threadcount = 10;
 	int loopcount = 100;
@@ -51,6 +52,15 @@ int main03(void)
 				TestFunc(j);	
 			}
 			exit(0);
+		}
+	}
+	while (1) {
+		pid_t pid = wait(NULL);
+		if (-1 == pid) {
+			if (errno == EINTR ) {
+				continue;
+			}
+			break;
 		}
 	}
 	return 0;
