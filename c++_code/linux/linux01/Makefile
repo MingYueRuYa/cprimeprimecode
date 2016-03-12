@@ -9,16 +9,16 @@ clean:
 	rm -rf *.o $(BIN)
 
 
-fork:fork.c
-	gcc -Wall -g -o $@  $^
-
-fork_fd:fork_fd.c
-	gcc -Wall -g -o $@  $^
-
-vfork:vfork.c
-	gcc -Wall -g -o $@  $^
-
-clean:
-	sudo rm -rf fork
-	sudo rm -rf fork_fd
-	sudo rm -rf vfork 
+#fork:fork.c
+#	gcc -Wall -g -o $@  $^
+#
+#fork_fd:fork_fd.c
+#	gcc -Wall -g -o $@  $^
+#
+#vfork:vfork.c
+#	gcc -Wall -g -o $@  $^
+#
+#clean:
+#	sudo rm -rf fork
+#	sudo rm -rf fork_fd
+#	sudo rm -rf vfork 
