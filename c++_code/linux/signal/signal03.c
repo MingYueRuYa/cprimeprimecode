@@ -41,14 +41,26 @@ int main(void)
 	}
 	
 	//此段代码会调用两次
+	/*
 	if (0 == pid) {
 		printf("child process.\n");
 		//向父进程发送信号	
 //		pid = getppid();
 //		kill(pid, SIGUSR1);
+		//向当前的进程组发信号
 		kill(0, SIGUSR1);
 		pause();
 	}	
+	*/
+	
+	if (0 == pid) {
+		//向当前的进程组发信号
+		pid = getpgrp();	
+		killpg(pid, SIGUSR1);
+		while (1) {
+
+		}
+	}
 
 	while (1) {
 		int ret = wait(NULL);		
