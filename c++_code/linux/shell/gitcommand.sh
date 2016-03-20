@@ -7,11 +7,17 @@
 
 if [ "$1" = "pull" ]; then
 	sudo git pull
-	echo "hello"
 else
-	#git status > status.txt | grep "modified" | awk -F" " '{print $2}' 
+	git status | grep "modified" | awk -F" " '{print $2}' > tmp.txt
 	#not complete.
-	sudo git add "$1"
-	sudo git commit -m "$2"
+	while read commitfiles
+	do
+		sudo git add "$commitfiles"
+	done < tmp.txt
+	#sudo git add "$1"
+	sudo git commit -m "$1"
 	sudo git push
+	echo "commit successfule."
+	sudo rm -rf status.txt
+	sudo rm -rf tmp.txt
 fi
