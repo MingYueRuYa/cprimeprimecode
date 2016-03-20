@@ -19,7 +19,8 @@ else
 	done < tmp.txt
 	sudo git commit -m "$1"
 	sudo git push
-	echo "commit successfule."
+	#echo "commit successfule."
+	echo -e "\033[32mcommit successfule\033[0m"
 	sudo rm -rf status.txt
 	sudo rm -rf tmp.txt
 fi
