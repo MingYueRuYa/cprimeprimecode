@@ -4,17 +4,19 @@
 # 										2016/03/18 13:25
 # add if contament 
 #										2016/03/19 21:54
+# update sh 
+#										2016/03/20 15:24
 
 if [ "$1" = "pull" ]; then
 	sudo git pull
+elif [ "$1" = "status" ]; then
+	sudo git status
 else
 	git status | grep "modified" | awk -F" " '{print $2}' > tmp.txt
-	#not complete.
 	while read commitfiles
 	do
 		sudo git add "$commitfiles"
 	done < tmp.txt
-	#sudo git add "$1"
 	sudo git commit -m "$1"
 	sudo git push
 	echo "commit successfule."
