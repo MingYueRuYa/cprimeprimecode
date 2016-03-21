@@ -7,6 +7,13 @@
 # update sh 
 #										2016/03/20 15:24
 
+ERROR_PARAMETER=100
+#check paramter count
+if [ $# -eq 0 ] ; then
+	echo -e "$0:usage $0 -a \"filenames\" -m \"comments\" -status...\n"
+	exit "$ERROR_PARAMETER"
+fi
+
 if [ "$1" = "pull" ]; then
 	sudo git pull
 elif [ "$1" = "status" ]; then
@@ -22,4 +29,5 @@ else
 	echo -e "\033[32mcommit successful\033[0m"
 	sudo rm -rf status.txt
 	sudo rm -rf tmp.txt
+	exit 0
 fi
