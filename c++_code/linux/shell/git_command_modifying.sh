@@ -46,6 +46,7 @@ do
 			do
 				if [ `expr substr $1 1 1` == "-" ]
 				then
+					# add function to solve miss parameter problem.
 					break
 				fi
 				sudo git add "$1"
