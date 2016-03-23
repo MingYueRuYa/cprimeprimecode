@@ -21,7 +21,7 @@ if [ $# -eq 0 ] ; then
 fi
 
 #p -> pull s -> status -A -> All -l -> log -m -> commit comment -a -> add
-while getopts :pmsal: OPTION
+while getopts :pm:sal: OPTION
 do
 	case $OPTION in	
 		p)
@@ -52,9 +52,6 @@ do
 				shift 1
 			done
 			;;
-#		\?)
-#			error_msg
-#			;;
 	esac
 done
 
