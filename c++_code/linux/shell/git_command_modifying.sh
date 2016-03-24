@@ -6,6 +6,8 @@
 #										2016/03/19 21:54
 # update sh 
 #										2016/03/20 15:24
+# update sh
+#										2016/03/24 23:25
 
 ERROR_PARAMETER=100
 
@@ -20,57 +22,84 @@ if [ $# -eq 0 ] ; then
 	Error_Msg
 fi
 
-#p -> pull s -> status -A -> All -l -> log -m -> commit comment -a -> add
-while getopts :pm:sal: OPTION
-do
-	case $OPTION in	
-		p)
+SolveParamter()
+{
+	_paramter="$1"
+	case $_paramter in
+		-p | p)
 			sudo git pull
 			;;
-		s)
+		-s | s)
 			sudo git status
 			;;
-		l) 
-			number=$OPTARG
-			sudo git log "-$number"
+		-l | l) 
+			_number="$2"
+			sudo git log "-$_number"
 			;;
-		m)
-			msg=$OPTARG
-			sudo git commit -m "$msg" > /dev/null 2>&1
+		-m | m)
+			_msg="$2"
+			sudo git commit -m "$_msg" > /dev/null 2>&1
 			sudo git push > /dev/null 2>&1
 			echo -e "\033[32mcommit successful\033[0m"
 			;;
-		a)
-			shift `expr $OPTIND - 1`
-			for file in $@
+		-A | A)
+			_msg="$2"
+			git status | grep "modified" | awk -F" " '{print $2}' > tmp.txt
+			while read commitfiles
 			do
-				if [ `expr substr $1 1 1` == "-" ]
-				then
-					# add function to solve miss parameter problem.
-					break
-				fi
-				sudo git add "$1"
-				shift 1
-			done
+				sudo git add "$commitfiles"
+			done < tmp.txt
+			sudo git commit -m "$_msg" > /dev/null
+			sudo git push > /dev/null
+			echo -e "\033[32mcommit successful\033[0m"
+			#sudo rm -rf status.txt
+			#sudo rm -rf tmp.txt
+			;;
+		*)
+			Error_Msg
 			;;
 	esac
-done
+}
 
+#p -> pull s -> status -A -> All -l -> log
+#-m -> commit comment -a -> add  -A auto commit modify files
+startup()
+{
+	while getopts :pm:saAl: OPTION
+	do
+		case $OPTION in	
+			p)
+				SolveParamter $OPTION
+				;;
+			s)
+				SolveParamter $OPTION
+				;;
+			l) 
+				SolveParamter $OPTION $OPTARG
+				;;
+			m)
+				SolveParamter $OPTION $OPTARG
+				;;
+			a)
+				shift `expr $OPTIND - 1`
+				for file in $@
+				do
+					if [ `expr substr $1 1 1` == "-" ]
+					then
+						SolveParamter $1 $OPTARG
+						continue
+					fi
+					sudo git add `find ./ -name "$1"`
+					shift 1
+				done
+				;;
+			A)
+				SolveParamter $OPTION $OPTARG
+			;;
+		esac
+	done
+	exit 0
+}
 
-#if [ "$1" = "pull" ]; then
-#	sudo git pull
-#elif [ "$1" = "status" ]; then
-#	sudo git status
-#else
-#	git status | grep "modified" | awk -F" " '{print $2}' > tmp.txt
-#	while read commitfiles
-#	do
-#		sudo git add "$commitfiles"
-#	done < tmp.txt
-#	sudo git commit -m "$1"
-#	sudo git push
-#	echo -e "\033[32mcommit successful\033[0m"
-#	sudo rm -rf status.txt
-#	sudo rm -rf tmp.txt
-#	exit 0
-#fi
+#start up funcion
+startup $@
