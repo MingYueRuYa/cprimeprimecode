@@ -8,6 +8,8 @@
 #										2016/03/20 15:24
 # update sh
 #										2016/03/24 23:25
+# update sh
+#										2016/03/25 22:29
 
 
 ERROR_PARAMETER=100
@@ -39,8 +41,14 @@ SolveParamter()
 			;;
 		-m | m)
 			_msg="$2"
-			sudo git commit -m "$_msg" > /dev/null 2>&1
-			sudo git push > /dev/null 2>&1
+			sudo git commit -m "$_msg" > /dev/null >&1
+			if [ $? -ne 0 ] ; then
+				break
+			fi
+			sudo git push > /dev/null >&1
+			if [ $? -ne 0 ] ; then
+				break
+			fi
 			echo -e "\033[32mcommit successful\033[0m"
 			;;
 		-A | A)
@@ -49,15 +57,21 @@ SolveParamter()
 			while read commitfiles
 			do
 				sudo git add "$commitfiles"
+				if [ $? -ne 0 ] ; then
+					break
+				fi
 			done < tmp.txt
-			echo "A"
-			echo $_msg
-			echo "A"
-			sudo git commit -m "$_msg" > /dev/null
-			sudo git push > /dev/null
+			sudo git commit -m "$_msg" > /dev/null >&1
+			if [ $? -ne 0 ] ; then
+				break
+			fi
+			sudo git push > /dev/null >&1
+			if [ $? -ne 0 ] ; then
+				break
+			fi
 			echo -e "\033[32mcommit successful\033[0m"
-			#sudo rm -rf status.txt
-			#sudo rm -rf tmp.txt
+			sudo rm -rf status.txt > /dev/null >&1
+			sudo rm -rf tmp.txt > /dev/null >&1
 			;;
 		*)
 			Error_Msg
@@ -93,7 +107,10 @@ startup()
 						SolveParamter $1 $OPTARG
 						continue
 					fi
-					sudo git add `find ./ -name "$1"`
+					sudo git add `find ./ -name "$1"` > /dev/null >&1
+					if [ $? -ne 0 ] ; then
+						break
+					fi
 					shift 1
 				done
 				;;
