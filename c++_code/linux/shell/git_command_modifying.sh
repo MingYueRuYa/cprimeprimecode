@@ -9,6 +9,7 @@
 # update sh
 #										2016/03/24 23:25
 
+
 ERROR_PARAMETER=100
 
 Error_Msg()
@@ -49,6 +50,9 @@ SolveParamter()
 			do
 				sudo git add "$commitfiles"
 			done < tmp.txt
+			echo "A"
+			echo $_msg
+			echo "A"
 			sudo git commit -m "$_msg" > /dev/null
 			sudo git push > /dev/null
 			echo -e "\033[32mcommit successful\033[0m"
@@ -65,7 +69,7 @@ SolveParamter()
 #-m -> commit comment -a -> add  -A auto commit modify files
 startup()
 {
-	while getopts :pm:saAl: OPTION
+	while getopts :pm:saA:l: OPTION
 	do
 		case $OPTION in	
 			p)
