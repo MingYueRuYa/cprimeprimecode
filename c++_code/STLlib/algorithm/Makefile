@@ -88,6 +88,9 @@ heap_sort: heap_sort.cpp
 bitset: bitset.cpp
 	g++ -std=c++11 -o $@ $^
 
+move: stdmove.cpp
+	g++ -std=c++11 -o $@ $^
+
 clean:
 	sudo rm -rf count_find
 	sudo rm -rf search 
@@ -119,3 +122,4 @@ clean:
 	sudo rm -rf nth_element 
 	sudo rm -rf heap_sort 
 	sudo rm -rf bitset 
+	sudo rm -rf stdmove

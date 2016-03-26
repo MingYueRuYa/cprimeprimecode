@@ -107,7 +107,7 @@ startup()
 						SolveParamter $1 $OPTARG
 						continue
 					fi
-					sudo git add `find ./ -name "$1"` > /dev/null >&1
+					sudo git add `find . -name "$1"` > /dev/null >&1
 					if [ $? -ne 0 ] ; then
 						break
 					fi
