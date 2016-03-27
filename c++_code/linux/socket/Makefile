@@ -1,3 +1,13 @@
+
+CC=gcc
+FLAG= -Wall -g
+
+socketserver: socketserver.c
+	$(CC) $(FLAG) -o $@ $^
+
+socketclient: socketclient.c
+	$(CC) $(FLAG) -o $@ $^
+
 experimentendian:experimentendian.c
 	gcc -Wall -g $^ -o $@
 
