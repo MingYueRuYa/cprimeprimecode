@@ -5,6 +5,9 @@ FLAG= -Wall -g
 socketserver: socketserver.c
 	$(CC) $(FLAG) -o $@ $^
 
+socketmultiprocessserver: socketmultiprocessserver.c
+	$(CC) $(FLAG) -o $@ $^
+
 socketclient: socketclient.c
 	$(CC) $(FLAG) -o $@ $^
 
