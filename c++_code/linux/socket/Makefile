@@ -18,5 +18,4 @@ basicsocketapi:basicsocketapi.c
 	gcc -Wall -g $^ -o $@
 	
 clean:
-	rm -rf experimentendian
-	rm -rf basicsocketapi
+	rm -rf socketserver socketclient basicsocketapi experimentendian

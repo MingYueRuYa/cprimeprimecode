@@ -29,8 +29,14 @@ int main(void)
 	struct sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(8001);
-	//addr.sin_addr.s_addr = inet_addr("192.168.1.113");
-	addr.sin_addr.s_addr = inet_addr("192.168.0.110");
+	addr.sin_addr.s_addr = inet_addr("192.168.1.113");
+	//addr.sin_addr.s_addr = inet_addr("192.168.0.110");
+	//地址复用，在服务器退出的时，状态为wait
+	int optval = 1;
+	if (-1 == setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval))) {
+		perror("set socket opt failed.");
+		exit(-1);
+	}
 	if (-1 == bind(sockfd, (struct sockaddr *)&addr,sizeof(addr))) {
 		perror("socket bind failed.");
 		exit(-1);
