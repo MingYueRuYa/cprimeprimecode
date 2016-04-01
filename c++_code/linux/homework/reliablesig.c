@@ -14,7 +14,7 @@
 //		                     struct sigaction *oldact);
 void ChildHandler(int signum, siginfo_t *info, void *p)
 {
-	printf("pid is %d, val %d.\n", getpid(), info->si_int);	
+	printf("child handler pid is %d, val %d.\n", getpid(), info->si_int);	
 	union sigval val;
 	val.sival_int = info->si_int;
 	sigqueue(getppid(), SIGINT, val);
@@ -22,59 +22,52 @@ void ChildHandler(int signum, siginfo_t *info, void *p)
 
 void ParentHandler(int signum, siginfo_t *info, void *p)
 {
-	printf("pid is %d, val %d.\n", getpid(), info->si_int);	
+	printf("parent handler is %d, val %d.\n", getpid(), info->si_int);	
 }
 
+//all child process was create by parent.
 int main(void)
 {
-	pid_t pid[2] = {0};
+	pid_t pid;
+	pid_t pidarr[2] = {0};
 	int i = 0;
-	pid[0] = fork();
+	pid = fork();
 	//child
-	if (0 == pid[0]) {
-		
+	if (0 == pid) {
+		pidarr[0] = getpid();
 	}
 	//parent
-	if (pid[0] > 0) {
-			
-	}
-	for (; i < 2; ++i) {
-		pid[i] = fork();
-		if (-1 == pid[i]) {
-			perror("fork error:");
-			exit(-1);
+	if (pid > 0) {
+		pidarr[0] = pid; //first process pid
+		pid = fork();
+		if (0 == pid) {
+			pidarr[1] = getpid();
 		}
-		if (pid[i] > 0) {
+		else if (pid > 0) {
 			struct sigaction action;
 			action.sa_flags = SA_SIGINFO;
 			action.sa_sigaction = ParentHandler;
 			sigaction(SIGINT, &action, NULL);	
-			break;
 		}
 	}
-	printf("pid %d, pid1 %d, pid2 %d.\n", getpid(), pid[0], pid[1]);
-	if (pid[0] == getpid()) {
+	printf("pid %d, pid1 %d, pid2 %d.\n", getpid(), pidarr[0], pidarr[1]);
+	if (pidarr[1] == getpid()) {
 		printf("first process %d.\n", getpid());
+		sleep(2);
 		union sigval val;
-		val.sival_int = pid[0] * 2;
-		sigqueue(pid[1], SIGINT, val);	
-		printf("sigqueue pid is %d, val is %d.\n", pid[0], val.sival_int);
-		while (1) {
-
-		}
-		//exit(0);
+		val.sival_int = pidarr[1] * 2;
+		sigqueue(pidarr[0], SIGINT, val);	
+		printf("sigqueue pid is %d, val is %d.\n", pidarr[1], val.sival_int);
+		exit(0);
 	}
-	if (pid[1] == getpid()) {
+	if (pidarr[0] == getpid()) {
+		printf("second process pid is %d.\n", pidarr[0]);
 		struct sigaction action;
 		action.sa_flags = SA_SIGINFO;
 		action.sa_sigaction = ChildHandler;
 		sigaction(SIGINT, &action, NULL);	
 		sleep(3);
-		//exit(0);
-
-		while (1) {
-
-		}
+		exit(0);
 	}
 	int status = 0;
 	while (-1 != wait(&status)) {

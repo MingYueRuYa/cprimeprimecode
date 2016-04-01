@@ -12,3 +12,4 @@ reliablesig:reliablesig.c
 .PHONY: clean
 clean:
 	-rm *.o -rf	
+	-rm signal process reliablesig -rf

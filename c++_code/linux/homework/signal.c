@@ -55,6 +55,7 @@ int main(void)
 			printf("read over.\n");
 		}
 		write(STDOUT_FILENO, ch, strlen(ch));
+		close(fd);
 	} while ( sleeptime = sleep(sleeptime));
 	UnBlockSignal();
 	printf("unblock sigint.\n");
