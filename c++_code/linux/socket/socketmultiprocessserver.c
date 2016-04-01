@@ -69,6 +69,10 @@ int main(void)
 					perror("socket read failed.");
 					exit(-1);
 				}
+				else if (0 == reclen) {
+					printf("client was closed.\n");
+					exit(0);
+				}
 				ssize_t sendlen = write(connsockfd, recbuf, strlen(recbuf));
 				if (-1 == sendlen) {
 					perror("socket write failed.");
