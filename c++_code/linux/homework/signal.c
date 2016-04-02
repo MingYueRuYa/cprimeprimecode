@@ -13,7 +13,7 @@
 
 void BlockSignal()
 {
-	sigset_t sigset;	
+	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGQUIT);
 	sigaddset(&sigset, SIGINT);

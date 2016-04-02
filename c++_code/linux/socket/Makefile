@@ -17,5 +17,6 @@ experimentendian:experimentendian.c
 basicsocketapi:basicsocketapi.c
 	gcc -Wall -g $^ -o $@
 	
+.PHNOY: clean
 clean:
-	rm -rf socketserver socketclient basicsocketapi experimentendian
+	-rm -rf socketserver socketclient basicsocketapi experimentendian
