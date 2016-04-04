@@ -71,6 +71,7 @@ int main(void)
 				}
 				else if (0 == reclen) {
 					printf("client was closed.\n");
+					close(conn);
 					exit(0);
 				}
 				ssize_t sendlen = write(connsockfd, recbuf, strlen(recbuf));
