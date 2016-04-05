@@ -40,6 +40,7 @@ int main(void)
 	struct sockaddr_in accepaddr;
 	socklen_t size = 0;
 	int connfd = accept(sockfd, (struct sockaddr *)&accepaddr, &size);
+	printf("Accept client.\n");
 	if (-1 == connfd) {
 		perror("Accept error.\n");
 		exit(-1);
@@ -56,9 +57,8 @@ int main(void)
 				continue;
 			}
 		}
-		printf("hello.\n");
+		write(STDOUT_FILENO, recvbuffer, strlen(recvbuffer));
 		memset(recvbuffer, 0, sizeof(recvbuffer));
-		write(stdout, recvbuffer, strlen(recvbuffer));
 	}
 	return 0;
 }

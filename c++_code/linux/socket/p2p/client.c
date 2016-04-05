@@ -35,7 +35,7 @@ int main(void)
 		if (fgets(sendbuffer, sizeof(sendbuffer), stdin) == NULL) {
 			exit(0);
 		}
-		write(connfd, sendbuffer, strlen(sendbuffer));
+		write(sockfd, sendbuffer, strlen(sendbuffer));
 		memset(sendbuffer, 0, sizeof(sendbuffer));
 	}
 	return 0;
