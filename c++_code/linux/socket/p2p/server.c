@@ -1,3 +1,7 @@
+/*
+ * p2p server
+ * tow process: one read from stdin, other is write to client. 
+ * */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -45,20 +49,45 @@ int main(void)
 		perror("Accept error.\n");
 		exit(-1);
 	}
-	char recvbuffer[1024] = {0};
-	while (1) {
-		int size = read(connfd, recvbuffer, sizeof(recvbuffer));	
-		if (0 == size) {
-			printf("Client exit.\n");
-			exit(0);
-		}
-		if (-1 == size) {
-			if (errno == EINTR) { //interrupt by signal
-				continue;
+	pid_t pid = fork();
+	if (-1 == pid) {
+		perror("Fork error:\n");
+		exit(-1);
+	}
+	else if (0 == pid) { //child process
+		char recvbuffer[1024] = {0};
+		while (1) {
+			int size = read(connfd, recvbuffer, sizeof(recvbuffer));	
+			if (0 == size) {
+				printf("Client exit.\n");
+				exit(0);
 			}
+			if (-1 == size) {
+				if (errno == EINTR) { //interrupt by signal
+					continue;
+				}
+			}
+			write(STDOUT_FILENO, recvbuffer, strlen(recvbuffer));
+			memset(recvbuffer, 0, sizeof(recvbuffer));
 		}
-		write(STDOUT_FILENO, recvbuffer, strlen(recvbuffer));
-		memset(recvbuffer, 0, sizeof(recvbuffer));
+	}
+	else if (pid > 0) { //parent process
+		char recvbuffer[1024] = {0};
+		while (1) {
+			int size = read(STDIN_FILENO, recvbuffer, sizeof(recvbuffer));
+			if (0 == size) {
+				printf("Client exit.\n");
+				exit(0);
+			}
+			if (-1 == size) {
+				if (errno == EINTR) { //interrupt by signal
+					continue;
+				}
+			}
+			printf("%s.\n", recvbuffer);
+			write(connfd, recvbuffer, strlen(recvbuffer));
+			memset(recvbuffer, 0, sizeof(recvbuffer));
+		}
 	}
 	return 0;
 }
