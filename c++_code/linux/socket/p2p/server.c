@@ -64,12 +64,14 @@ int main(void)
 		exit(-1);
 	}
 	else if (0 == pid) { //child process
+		close(sockfd);
 		char recvbuffer[1024] = {0};
 		while (1) {
 			int size = read(connfd, recvbuffer, sizeof(recvbuffer));	
 			if (0 == size) {
 				printf("Client exit.\n");
 				kill(getppid(), SIGINT);
+				close(connfd);
 				exit(0);
 			}
 			if (-1 == size) {
@@ -88,6 +90,8 @@ int main(void)
 			if (0 == size) {
 				printf("Client exit.\n");
 				kill(pid, SIGINT);
+				close(sockfd);
+				close(connfd);
 				exit(0);
 			}
 			if (-1 == size) {
@@ -99,5 +103,6 @@ int main(void)
 			memset(recvbuffer, 0, sizeof(recvbuffer));
 		}
 	}
+	close(sockfd);
 	return 0;
 }
