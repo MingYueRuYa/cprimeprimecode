@@ -17,8 +17,15 @@
 #define SERVER_PORT 8001
 #define SERVER_IP "127.0.0.1"
 
+void SigIntHandler(int pSigNum)
+{
+	printf("Receive signal number is %d.\n", pSigNum);
+	exit(0);
+}
+
 int main(void)
 {
+	signal(SIGINT, SigIntHandler);
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (-1 == sockfd) {
 		perror("Create socket error.\n");
@@ -36,10 +43,12 @@ int main(void)
 	}
 	if (-1 == bind(sockfd, (struct sockaddr *)&addr, sizeof(addr))) {
 		perror("Bind error.\n");
+		exit(-1);
 	}
 	
-	if (-1 == listen(sockfd, SOMAXCONN)) {
+	if (-1 == listen(sockfd, SOMAXCONN)) { //max file descriptor
 		perror("Listen error.\n");
+		exit(-1);
 	}
 	struct sockaddr_in accepaddr;
 	socklen_t size = 0;
@@ -60,6 +69,7 @@ int main(void)
 			int size = read(connfd, recvbuffer, sizeof(recvbuffer));	
 			if (0 == size) {
 				printf("Client exit.\n");
+				kill(getppid(), SIGINT);
 				exit(0);
 			}
 			if (-1 == size) {
@@ -77,6 +87,7 @@ int main(void)
 			int size = read(STDIN_FILENO, recvbuffer, sizeof(recvbuffer));
 			if (0 == size) {
 				printf("Client exit.\n");
+				kill(pid, SIGINT);
 				exit(0);
 			}
 			if (-1 == size) {
@@ -84,7 +95,6 @@ int main(void)
 					continue;
 				}
 			}
-			printf("%s.\n", recvbuffer);
 			write(connfd, recvbuffer, strlen(recvbuffer));
 			memset(recvbuffer, 0, sizeof(recvbuffer));
 		}
