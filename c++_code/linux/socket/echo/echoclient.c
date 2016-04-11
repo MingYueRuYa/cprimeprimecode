@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
+#define PORT 8001
+#define SERVER_IP "127.0.0.1"
+
+int main(void)
+{
+	int sockfd;
+	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		perror("Connect error:\n");
+		exit(-1);
+	}
+	struct sockaddr_in sockaddr;
+	sockaddr.sin_family = AF_INET;
+	sockaddr.sin_port = htons(PORT);
+	sockaddr.sin_addr.s_addr = inet_addr(SERVER_IP);
+	if (connect(sockfd, &sockaddr, sizeof(sockaddr)) < 0 ) {
+		perror("Connect error:\n");
+		exit(-1);
+	}
+	struct sockaddr_in localaddr;	
+	sizelen_t socklen = sizeof(localaddr);
+	if (getsockname(sockfd, (struct sockaddr *)&localaddr, &socklen) < 0) {
+		perror("getsockname error:\n");
+	}
+	
+	return 0;
+}
