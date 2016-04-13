@@ -33,12 +33,26 @@ int main(void)
 	char sendbuf[1024] = {0};
 	char recvbuf[1024] = {0};
 	while (fgets(sendbuf, sizeof(sendbuf), stdin)) {
-		int writelen = write(socket, sendbuf, strlen(sendbuf));
+		int writelen = write(sockfd, sendbuf, strlen(sendbuf));
 		if (-1 == writelen) {
 			if (EINTR == errno) {
 				continue;
 			}
 			return;
+		}
+		int readlen = read(sockfd, recvbuf, sizeof(recvbuf));
+		if (0 == readlen) {
+			printf("Server close.\n");
+		}
+		else if (-1 == readlen) {
+			if (EINTR == errono) { //maybe interupte by signal
+				continue;
+			}
+			perror("Write error:\n");
+			return;
+		}
+		else {
+			printf("%s.\n", recvbuf);
 		}
 		memset(sendbuf, 0, sizeof(sendbuf));
 		memset(recvbuf, 0, sizeof(recvbuf);
