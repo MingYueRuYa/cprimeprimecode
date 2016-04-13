@@ -30,5 +30,18 @@ int main(void)
 		perror("getsockname error:\n");
 	}
 	
+	char sendbuf[1024] = {0};
+	char recvbuf[1024] = {0};
+	while (fgets(sendbuf, sizeof(sendbuf), stdin)) {
+		int writelen = write(socket, sendbuf, strlen(sendbuf));
+		if (-1 == writelen) {
+			if (EINTR == errno) {
+				continue;
+			}
+			return;
+		}
+		memset(sendbuf, 0, sizeof(sendbuf));
+		memset(recvbuf, 0, sizeof(recvbuf);
+	}
 	return 0;
 }
