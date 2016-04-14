@@ -43,6 +43,7 @@ int main(void)
 		int readlen = read(sockfd, recvbuf, sizeof(recvbuf));
 		if (0 == readlen) {
 			printf("Server close.\n");
+			close(sockfd);
 		}
 		else if (-1 == readlen) {
 			if (EINTR == errono) { //maybe interupte by signal
