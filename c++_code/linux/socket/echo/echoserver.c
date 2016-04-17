@@ -82,12 +82,17 @@ int main(void)
 					exit(0);
 				}
 				else {
+//					if (recbuffer[0] == 'c') {
+//						close(connfd);
+//						exit(0);
+//					}
 					int writelen = write(connfd, recbuffer, strlen(recbuffer));
 					if (-1 == writelen) {
 						if (EINTR == errno) {
 							continue;
 						}
 						close(connfd);
+						//shutdown(connfd, SHUT_RDWR);
 						exit(-1);
 					}
 					else if (writelen > 0) {

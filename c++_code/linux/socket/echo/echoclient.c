@@ -25,10 +25,13 @@ void SigHandler(int pSignal, siginfo_t *pSiginfo, void *pVoid)
 
 int main(void)
 {
+	signal(SIGPIPE, SIG_IGN);
 	struct sigaction act;
 	act.sa_sigaction = SigHandler;
 	act.sa_flags = SA_SIGINFO;
 	sigaction(SIGINT, &act, NULL);
+	//int i = 0;
+	//for (; i < 4; ++i) { //test multi client to connect server, then ctrl+c client, server can correct process. 
 	if ((global_sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		perror("Connect error:\n");
 		exit(-1);
@@ -41,6 +44,7 @@ int main(void)
 		perror("Connect error:\n");
 		exit(-1);
 	}
+	//}
 	/*
 	struct sockaddr_in localaddr;	
 	socklen_t socklen = sizeof(localaddr);
