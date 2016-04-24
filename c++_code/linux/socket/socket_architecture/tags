@@ -1,0 +1,41 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+MAX_PORT	sockutil.c	19;"	d	file:
+RECV_BUFFER_SIZE	sock_client.c	13;"	d	file:
+SERVER_IP	echoserver.c	13;"	d	file:
+SERVER_IP	sock_client.c	11;"	d	file:
+SERVER_PORT	echoserver.c	14;"	d	file:
+SERVER_PORT	sock_client.c	12;"	d	file:
+SOCKET_BASE_ERROR	sockutil.h	14;"	d
+SOCKET_ERROR_MALLOC	sockutil.h	18;"	d
+SOCKET_ERROR_PARAMETER	sockutil.h	15;"	d
+SOCKET_ERROR_PEER_CLOSED	sockutil.h	17;"	d
+SOCKET_ERROR_TIMEOUT	sockutil.h	16;"	d
+SOCKET_HANDLE	sockutil.c	/^}SOCKET_HANDLE;$/;"	t	typeref:struct:socket_handle	file:
+SOCKET_OK	sockutil.h	13;"	d
+SigchldHandler	echoserver.c	/^void SigchldHandler(int pSignal)$/;"	f
+activate_nonblock	sockutil.c	/^static int activate_nonblock(int pFileDiscripte)$/;"	f	file:
+arraynum	sockutil.c	/^	int arraynum;$/;"	m	struct:socket_handle	file:
+connect_timeout	sockutil.c	/^static int connect_timeout(int sockfd, struct sockaddr *addr, unsigned int conntime)$/;"	f	file:
+conntime	sockutil.c	/^	int conntime;$/;"	m	struct:socket_handle	file:
+deactivate_nonblock	sockutil.c	/^static int deactivate_nonblock(int pFileDiscripte)$/;"	f	file:
+main	echoserver.c	/^int main(void)$/;"	f
+main	sock_client.c	/^int main(void)$/;"	f
+recvtime	sockutil.c	/^	int recvtime;$/;"	m	struct:socket_handle	file:
+sckClient_closeconn	sockutil.c	/^int sckClient_closeconn(int *connfd)$/;"	f
+sckClient_destory	sockutil.c	/^int sckClient_destory(void *pHandle)$/;"	f
+sckClient_getconn	sockutil.c	/^int sckClient_getconn(void *pHandle, char *ip, unsigned int port, int *confd)$/;"	f
+sckClient_init	sockutil.c	/^int sckClient_init(void **pHandle, int connecttime, int sendtime, int recvtime, int nConNum)$/;"	f
+sckClient_recv	sockutil.c	/^int sckClient_recv(void *pHandle, int connfd, unsigned char *outdata, int datalen)$/;"	f
+sckClient_send	sockutil.c	/^int sckClient_send(void *pHandle, int connfd, unsigned char *data, int datalen)$/;"	f
+sendtime	sockutil.c	/^	int sendtime;$/;"	m	struct:socket_handle	file:
+sock_array	sockutil.c	/^	int sock_array[100];$/;"	m	struct:socket_handle	file:
+sock_client_h	sock_client.c	3;"	d	file:
+socket_handle	sockutil.c	/^typedef struct socket_handle{$/;"	s	file:
+sockfd	sockutil.c	/^	int sockfd;$/;"	m	struct:socket_handle	file:
+sockutil_h	sockutil.h	2;"	d
+write_timeout	sockutil.c	/^static int write_timeout(int pFd, int pWait_Seconds)$/;"	f	file:
