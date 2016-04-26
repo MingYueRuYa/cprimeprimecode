@@ -50,7 +50,7 @@ int main(void)
 
 	sckClient_closeconn(&connfd);
 
-	sckClient_destory(handle);
+	sckClient_destory(&handle);
 
 	return 0;
 }

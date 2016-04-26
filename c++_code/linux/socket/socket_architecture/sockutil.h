@@ -27,7 +27,7 @@ int sckClient_send(void *pHandle, int connfd, unsigned char *data, int datalen);
 
 int sckClient_recv(void *pHandle, int connfd, unsigned char *outdata, int datalen);
 
-int sckClient_destory(void *pHandle);
+int sckClient_destory(void **pHandle);
 
 #ifdef _cplusplus
 }

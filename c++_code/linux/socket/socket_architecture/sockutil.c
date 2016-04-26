@@ -69,7 +69,6 @@ static int activate_nonblock(int pFileDiscripte)
 
 /*
  * set file discript is block
- *
  * */
 static int deactivate_nonblock(int pFileDiscripte)
 {
@@ -171,11 +170,13 @@ int sckClient_getconn(void *pHandle, char *ip, unsigned int port, int *confd)
 
 int sckClient_closeconn(int *connfd)
 {
+	close(*connfd);
 	return 0;
 }
 
 /*
  * write check timeout, not write operator
+ *
  * */
 static int write_timeout(int pFd, int pWait_Seconds)
 {
@@ -184,13 +185,17 @@ static int write_timeout(int pFd, int pWait_Seconds)
 		fd_set writefd;
 		struct timeval timeout;
 		FD_ZERO(&writefd);
+		FD_SET(pFd, &writefd);
 		timeout.tv_sec = pWait_Seconds;
 		timeout.tv_usec = 0;
-		FD_SET(pFd, &writefd);
 		do {
 			ret = select(pFd + 1, NULL, &writefd, NULL, &timeout);
-		} while (0 == ret && errno == EINTR) ;
-		if (0 == ret) {
+		} while (0 > ret && errno == EINTR) ;
+		//ret has three status:
+		//1.ret equal 0, indicate timeout.
+		//2.ret equal 1, indicate writefd changed.
+		//3.ret eqaul -1, indicate there was error occured.
+		if (0 == ret) { 
 			ret = -1;
 			errno = ETIMEDOUT;
 		}
@@ -198,9 +203,7 @@ static int write_timeout(int pFd, int pWait_Seconds)
 			ret = 0;
 		}
 		else {
-			printf("%d.\n", __LINE__);
 			ret = errno;
-			return ret;
 		}
 	}
 	return ret;
@@ -243,13 +246,60 @@ int sckClient_send(void *pHandle, int connfd, unsigned char *data, int datalen)
 	return 0;
 }
 
-int sckClient_recv(void *pHandle, int connfd, unsigned char *outdata, int datalen)
+/*
+ * set read timeout
+ * */
+static int read_timeout(int pFd, int pRead_Timeout)
 {
-	return 0;
+	int ret = 0;	
+	if (pRead_Timeout > 0) {
+		fd_set read_fdset;
+		struct timeval timeout;
+		FD_ZERO(&read_fdset);
+		FD_SET(pFd, &read_fdset);
+		timeout.tv_sec = pRead_Timeout;
+		timeout.tv_usec = 0;
+		do {
+			ret = select(pFd + 1, &read_fdset, NULL, NULL, &timeout);
+		} while (ret < 0 && errno == EINTR);
+		//ret has three status:
+		//1.ret equal 0, indicate timeout.
+		//2.ret equal 1, indicate writefd changed.
+		//3.ret eqaul -1, indicate there was error occured.
+		if (0 == ret) {
+			ret = -1;			
+			errno = ETIMEDOUT;
+		}
+		else if (1 == ret) {
+			ret = 0;	
+		}
+		else {
+			ret = errno;
+		}
+	}
+	return ret;
 }
 
-int sckClient_destory(void *pHandle)
+int sckClient_recv(void *pHandle, int connfd, unsigned char *outdata, int datalen)
 {
+	SOCKET_HANDLE *handle = (SOCKET_HANDLE *)(pHandle);
+	int ret = read_timeout(connfd, handle->recvtime);
+	if (ret < 0) {
+		if (-1 == ret && ETIMEDOUT == errno) {
+			ret = SOCKET_ERROR_TIMEOUT;	
+		}
+	}
+	else if (0 == ret) {
+		int readlen = 0;
+		readlen = read(connfd, outdata, datalen);
+	}
+	return ret;
+}
+
+int sckClient_destory(void **pHandle)
+{
+	free(*pHandle);
+	*pHandle = NULL;
 	return 0;
 }
 
