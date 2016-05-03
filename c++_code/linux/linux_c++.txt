@@ -134,6 +134,19 @@ TCP/IP的11种状态的转换？
 	int sockoptret = getsockopt(fd, SOL_SOCKET, SO_ERROR, &err, &socklen);
 	可以的到错误的信息
 		
+要深刻理解的连接的概念。
+
+TCP/UPD协议的区别？
+TCP：字节流形式发送报文。
+	面向连接
+	有流量控制
+	可靠传输
+
+UDP：数据包形式发送报文
+	无连接概念
+	无流量控制，会直接覆盖之前的数据包
+	不可靠传输
+
 
 oracle 根据错误代码 查看出错信息
 	oerr ora [错误代码]
