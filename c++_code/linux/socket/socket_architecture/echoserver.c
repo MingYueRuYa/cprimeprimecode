@@ -86,6 +86,7 @@ int main(void)
 //						close(connfd);
 //						exit(0);
 //					}
+					printf("recv %s.\n", recbuffer);
 					int writelen = write(connfd, recbuffer, strlen(recbuffer));
 					if (-1 == writelen) {
 						if (EINTR == errno) {
