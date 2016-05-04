@@ -1,0 +1,37 @@
+1.符号
+	. 和source命令用于当前bash环境下读取并执行当前shell脚本
+	" 将会阻止STRING中大部分特殊的字符
+	' 将会阻止STRING中大部分特殊的字符，比"更强烈的方式
+	/ 斜线 文件路径的分隔符和除法运算
+	\ 反斜线 对单字符的的引用机制。\X 将会转义为字符X，这等价于"X"，也等价于'X'。\通常用来转义引号(")和单引号(')，这样引号不具有特殊的含义.
+	` 反引号 可以将命令的输出输出赋值到一个变量中去。同时反引号的中命令会优先执行
+	: 空命令 也是bash的内建命令，它的退出码是0，也可以被认为shell的内建命令true作用相同
+		#!/bin/bash
+		while : # : 相当于ture
+		do 
+			echo "endless loop"
+		done
+		
+		if [ $condition -gt 0 ]
+		then :   # 什么都不做，退出分支
+		else
+		    echo "$condition"
+		fi
+
+2.变量扩展/子串替换
+	: > test.sh 这样操作会把test.sh清空
+	cat /dev/null > test.sh作用相同
+	然而，这不会产生一个新的进程，":" 是个内建命令
+	: >> test.sh 不会对文件造成影响，如果test.sh不存在的话，则会创建它
+	同时可以用来做分隔符，比如echo $PATH中的路径分隔符
+
+	?操作符在一个双括号结构中, ?就是C语言的三元操作符
+	 #!/bin/bash	
+	 a=10
+	  (( t=a<50?8:9 ))
+	 echo $t
+
+	$
+		作为变量替换 $variablename
+		作为命令替换 cd $(echo Documents)
+		
