@@ -29,6 +29,18 @@ int sckClient_recv(void *pHandle, int connfd, unsigned char *outdata, int datale
 
 int sckClient_destory(void **pHandle);
 
+
+//server encapsulation 
+int sckServer_init(int port, int *listenfd);
+
+int sckServer_accept(int listenfd, int *connfd, int timeout);
+
+int sckServer_send(int connfd, char *data, int datalen, int timeout);
+
+int sckServer_rec(int connfd, char *data, int *outlen, int timeout);
+
+int sckServer_destory(void *handle);
+
 #ifdef _cplusplus
 }
 #endif
