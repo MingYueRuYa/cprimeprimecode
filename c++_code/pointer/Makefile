@@ -1,5 +1,6 @@
-autopointer:autopointer.cpp
+smart_pointer:smart_pointer.cpp
 	g++ -Wall -g $< -o $@
 
 .PHONY:clean
-	-rm -rf autopointer
+clean:
+	-rm -rf smart_pointer 
