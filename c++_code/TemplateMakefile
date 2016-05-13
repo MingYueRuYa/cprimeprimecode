@@ -1,0 +1,18 @@
+EXE := obj
+
+CC := g++
+CFALGS := -Wall -g
+STANDARD := --std=c++11
+# all cpp source files.
+SOURCE := $(wildcard *.cpp)
+# substitute .cpp prefix to .o prefix
+OBJS := $(patsubst %.cpp, %.o, $(SOURCE))
+
+all:$(EXE)
+$(EXE):$(OBJS)
+	$(CC) $(CFALGS) $(STANDARD) $(OBJS) -o $(EXE)
+
+.PHONY: clean
+clean:
+	-rm -rf $(EXE) $(OBJS) *.o
+
