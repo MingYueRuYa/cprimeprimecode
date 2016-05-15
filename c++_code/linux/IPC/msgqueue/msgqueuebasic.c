@@ -61,7 +61,7 @@ int main03(void)
 //if msgget id set IPC_PRIVATE everytime create msgqueue is diffirent
 //also IPC_CREAT and IPC_EXCL will not useful
 //also this msgqueue only parent and this family can operation.
-int main(void)
+int main04(void)
 {
 	int msgid = msgget(0x1235, 0666 | IPC_CREAT | IPC_EXCL);
 	if (msgid < 0) {
@@ -76,3 +76,24 @@ int main(void)
 	return 0;
 }
 
+//test permissions
+//attention: there is permission denied.
+int main(void)
+{
+	int msgid = msgget(0x1235, 0666 | IPC_CREAT);
+	if (msgid < 0) {
+		if (errno == EEXIST) {
+			printf("msg id also existed.\n");
+		}
+		perror("getmsg error:");
+	}
+	else {
+		printf("msgid is %d.\n", msgid);
+	}
+	int _msgid = msgget(0x1235, 0144);
+	printf("_msgid is %d.\n", _msgid);
+	if (_msgid < 0) {
+		perror("msgget error:");
+	}
+	return 0;
+}
