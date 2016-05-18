@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -78,7 +79,7 @@ int main04(void)
 
 //test permissions
 //attention: there is permission denied.
-int main(void)
+int main05(void)
 {
 	int msgid = msgget(0x1235, 0666 | IPC_CREAT);
 	if (msgid < 0) {
@@ -94,6 +95,25 @@ int main(void)
 	printf("_msgid is %d.\n", _msgid);
 	if (_msgid < 0) {
 		perror("msgget error:");
+	}
+	return 0;
+}
+
+struct msgbuf {
+	long mtype;
+	char mtext[1024];
+};
+
+int main(void)
+{
+	int msgid = msgget(IPC_PRIVATE, 0666 | IPC_CREAT);
+	struct msgbuf buf;
+	memset(&buf, 0, sizeof(struct msgbuf));
+	buf.mtype = 1;
+	strcpy(buf.mtext, "YunOs");
+	if (msgsnd(msgid, &buf, strlen(buf.mtext), 0) < 0) {
+		perror("msgsnd error");
+		return -1;
 	}
 	return 0;
 }
