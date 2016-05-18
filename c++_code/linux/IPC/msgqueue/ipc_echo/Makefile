@@ -1,7 +1,7 @@
 CC := gcc
 CFLAGS := -Wall -g
 
-BIN := echo_client echo_server
+BIN := echo_client echo_server echo_multi_process_server
 SOURCE := $(wildcard *.c)
 OBJS := $(patsubst %.c, %.o, $(SOURCE))
 ALL: $(BIN)
