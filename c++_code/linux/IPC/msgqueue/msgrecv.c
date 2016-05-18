@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <fcntl.h>
 
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -14,14 +15,18 @@ struct msgbuf {
 
 int main(int argc, char *argv[])
 {
+	if (argc < 3) {
+		printf("Usage: %s <msgtype> <length>.\n",argv[0]);
+		return 0;
+	}
 	int type = atoi(argv[1]);
 	printf("type %d.\n", type);
 	int len = atoi(argv[2]);
 	int msgid = msgget(0x1235, 0666);
 	if (msgid < 0) {
 		perror("msgget error:");
+		return -1;
 	}
-	int i = 0;
 	struct msgbuf buf;
 	memset(&buf, 0, sizeof(struct msgbuf));
 	printf("start....id %d.\n", msgid);
