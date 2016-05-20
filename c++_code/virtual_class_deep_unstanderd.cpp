@@ -18,7 +18,7 @@ public:
 
 typedef void (*Fun)();
 
-int main01(void)
+int main(void)
 {
 	Base b;
 	Fun pFun = NULL;
@@ -44,6 +44,10 @@ int main01(void)
 
 	pFun = (Fun)*((int *)*(int *)(&d) + 4);
 	pFun();
+	
+	pFun = (Fun)*((int *)*(int *)(&d) + 6);
+	cout << pFun << endl;
+	
 	//this also invoke drived f function.
 	(static_cast<Base *>(&d))->f();
 	return 0;
@@ -78,7 +82,7 @@ public:
 	//virtual void g() { cout << "Devive:g" << endl;};
 };
 
-int main(void)
+int main02(void)
 {
 	Fun pFun = NULL;
 	Derive d;
