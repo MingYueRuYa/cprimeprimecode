@@ -20,7 +20,7 @@
 			exit(EXIT_FAILURE); \
 		} while(0)
 
-int main(int argc, char *argv[])
+int main01(int argc, char *argv[])
 {
 	int pipefd[2] = {0};
 	pid_t pid = 0;
@@ -55,3 +55,23 @@ int main(int argc, char *argv[])
 	wait(NULL);
 	return 0;
 }
+
+
+int main(int argc, char *argv[])
+{
+	//close stdin
+	close(0);
+	//Makefile become stdin
+	open("Makefile", O_RDONLY);
+	//close stdout
+	close(1);
+	//Makefile.bak become stdout
+	open("Makefile.bak22", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	//cat read stdin by readline and output to stdout
+	execlp("cat", "cat", NULL);
+	return 0;
+}
+
+
+
+
