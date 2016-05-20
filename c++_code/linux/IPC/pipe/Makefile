@@ -1,4 +1,4 @@
-BIN := pipe
+BIN := pipe pipe_non_block pipe_capcity
 CC := gcc
 CFLAGS := -Wall -g
 SOURCR := $(wildcard *.c)
