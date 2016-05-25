@@ -1,6 +1,9 @@
 test/
 *.out
 *.o
+tags
+.*
+
 
 app
 
