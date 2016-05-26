@@ -160,3 +160,6 @@ oracle 根据错误代码 查看出错信息
 	ipcs 查看内存状态
 	ipcrm msg msgid 清空消息队列id为msgdi
 	使用时要注意不能使用root权限区操作删除消息队列和内存共享，因为可能会root的消息队列和共享内存删除了.
+
+ldd exec 可以查看链接了那些库文件
+nm  xxx.so.1 可以查看库文件的函数信息
