@@ -16,16 +16,23 @@
  *  multi thread pitfalls.
  * */
 
+typedef struct Teacher {
+	char name[64];
+	int age;
+}Teacher;
+
 void *thread_routine(void *arg)
 {
 	printf("this is thread.\n");
 	int ret = pthread_detach(pthread_self());
 	int i = 0;
-	int loop = (int)arg;
-	for (; i < loop; ++i) {
-		printf("thread is %u, loop %d.\n", pthread_self(), i);
-	}
-	sleep(3);
+	Teacher *pteacher = (Teacher *)arg;
+	printf("teacher age is %d.\n", pteacher->age);
+//	int loop = (int)arg;
+//	for (; i < loop; ++i) {
+//		printf("thread is %u, loop %d.\n", pthread_self(), i);
+//	}
+//	sleep(3);
 	pthread_exit(arg);
 }
 
@@ -41,8 +48,11 @@ int main(int argc, char *argv[])
 	printf("please enter thread loops:\n");
 	scanf("%d", &loop);
 
+	Teacher teacher;
 	for (; i < num; ++i) {
-		pthread_create(&tidarray[i], NULL, thread_routine, (void *)loop);
+		memset(&teacher, 0, sizeof(teacher));
+		teacher.age = i;
+		pthread_create(&tidarray[i], NULL, thread_routine, &teacher);
 	}
 
 	for (i = 0; i < num; ++i) {
