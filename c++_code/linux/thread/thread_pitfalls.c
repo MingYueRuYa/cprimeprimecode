@@ -14,6 +14,7 @@
 
 /*
  *  multi thread pitfalls.
+ *  send msg to peer thread.
  * */
 
 typedef struct Teacher {
@@ -27,7 +28,7 @@ void *thread_routine(void *arg)
 	int ret = pthread_detach(pthread_self());
 	int i = 0;
 	Teacher *pteacher = (Teacher *)arg;
-	printf("teacher age is %d.\n", pteacher->age);
+	printf("tid %u, teacher age is %d.\n",pthread_self(), pteacher->age);
 //	int loop = (int)arg;
 //	for (; i < loop; ++i) {
 //		printf("thread is %u, loop %d.\n", pthread_self(), i);
@@ -48,11 +49,21 @@ int main(int argc, char *argv[])
 	printf("please enter thread loops:\n");
 	scanf("%d", &loop);
 
-	Teacher teacher;
+	Teacher teacher[200];
 	for (; i < num; ++i) {
-		memset(&teacher, 0, sizeof(teacher));
-		teacher.age = i;
-		pthread_create(&tidarray[i], NULL, thread_routine, &teacher);
+		/*
+		 * attention: there is pitfalls, every time send teacher struct is diffirent. so ensure every thread has 
+		 * diffirent teacher cache address. if not send diffirent teacher cache address, peer thread will have
+		 * some teacher address, this will be pitfalls.
+		 * */
+		//first way to solve pitfalls.
+		memset(&teacher[i], 0, sizeof(Teacher));
+		teacher[i].age = i;
+
+		//second way to solve pitfalls.
+		//dynamic memory
+		//teacher = (Teacher *)(malloc(Teacher));
+		pthread_create(&tidarray[i], NULL, thread_routine, &teacher[i]);
 	}
 
 	for (i = 0; i < num; ++i) {
