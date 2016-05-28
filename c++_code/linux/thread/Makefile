@@ -1,4 +1,4 @@
-BIN := threadbase thread_deliver  thread_pitfalls thread_attr
+BIN := threadbase thread_deliver  thread_pitfalls thread_attr thread_mutex
 CC := gcc
 CFALGS := -Wall -g
 SOURCE := $(wildcard *.c)
@@ -17,6 +17,9 @@ thread_pitfalls:thread_pitfalls.o
 	$(CC) $(CFALGS) $^ -o $@ -lpthread
 
 thread_attr:thread_attr.o
+	$(CC) $(CFALGS) $^ -o $@ -lpthread
+
+thread_mutex:thread_mutex.o
 	$(CC) $(CFALGS) $^ -o $@ -lpthread
 
 .PHONY: clean
