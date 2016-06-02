@@ -19,7 +19,7 @@ Folder& Folder::operator=(const Folder &pFolder)
 
 Folder::~Folder()
 {
-	RemoveToMessage();
+	//RemoveToMessage();
 }
 
 void Folder::AddMessage(Message *pMessage)
@@ -27,21 +27,21 @@ void Folder::AddMessage(Message *pMessage)
 	mMessageSet.insert(pMessage);
 }
 
-void Folder::RemoveMessage(Message &pMessage)
+void Folder::RemoveMessage(Message *pMessage)
 {
-	mMessageSet.erase(&pMessage);
+	mMessageSet.erase(pMessage);
 }
 
-void Folder::AddToMessage(const Folder& pFolder)
+void Folder::AddToMessage(Folder& pFolder)
 {
 	for (Message *message : pFolder.mMessageSet) {
 		message->AddToFolders(this);
 	}
 }
 
-void Folder::RemoveToMessage()
+void Folder::RemoveToMessage(Message &pMessage)
 {
 	 for (Message *message : mMessageSet) {
-		message->RemoveFromFolder(this);
+		message->RemoveFromFolder();
 	 }
 }

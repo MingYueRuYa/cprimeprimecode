@@ -32,16 +32,16 @@ public:
 
 	Message& operator=(const Message &pMessage);
 
-	void Save(const Folder &pFolder);
+	void Save(Folder &pFolder);
 
-	void Remove(const Folder &pFolder);
+	void Remove(Folder &pFolder);
 
 private:
 	string content;	
 
 	set<Folder *> mFolderSet;
 
-	void AddToFolders(const Message &pMessage);
+	void AddToFolders(Message *pMessage);
 
 	void RemoveFromFolder();
 };

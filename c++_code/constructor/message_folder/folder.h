@@ -29,14 +29,14 @@ public:
 
 	void AddMessage(Message *pMessage);
 
-	void RemoveMessage(Message &pMessage);
+	void RemoveMessage(Message *pMessage);
 
 private:
 	set<Message *> mMessageSet;
 
-	void AddToMessage(const Folder&);
+	void AddToMessage(Folder&);
 
-	void RemoveToMessage();
+	void RemoveToMessage(Message &pMessage);
 
 };
 

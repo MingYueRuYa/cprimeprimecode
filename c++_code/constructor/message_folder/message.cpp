@@ -21,7 +21,8 @@ Message::~Message()
 Message::Message(const Message &pMessage)
 	: content(pMessage.content), mFolderSet(pMessage.mFolderSet)
 {
-	AddToFolders(pMessage);
+	RemoveFromFolder();
+	AddToFolders(this);
 }
 
 Message& Message::operator=(const Message &pMessage)
@@ -29,26 +30,26 @@ Message& Message::operator=(const Message &pMessage)
 	RemoveFromFolder();
 	content = pMessage.content;
 	mFolderSet = pMessage.mFolderSet;
-	AddToFolders(pMessage);
+	AddToFolders(this);
 	return *this;
 }
 
-void Message::Save(const Folder &pFolder)
+void Message::Save(Folder &pFolder)
 {
-	mFolderSet.insert(pFolder);
+	mFolderSet.insert(&pFolder);
 	pFolder.AddMessage(this);
 }
 
-void Message::Remove(const Folder &pFolder)
+void Message::Remove(Folder &pFolder)
 {
-	mFolderSet.erase(pFolder);
+	mFolderSet.erase(&pFolder);
 	pFolder.RemoveMessage(this);
 }
 
-void Message::AddToFolders(const Message &pMessage)
+void Message::AddToFolders(Message *pMessage)
 {
-	for (Folder *folder : pMessage.mFolderSet) {
-		folder->AddMessage(this);
+	for (Folder *folder : pMessage->mFolderSet) {
+		folder->AddMessage(pMessage);
 	}
 }
 
