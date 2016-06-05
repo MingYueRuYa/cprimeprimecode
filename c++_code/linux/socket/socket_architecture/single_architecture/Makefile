@@ -17,5 +17,5 @@ sock_server.o:sock_server.c
 
 .PHONY:clean
 clean:
-	-rm -rf *.o echoserver echoclient sock_server 
+	-rm -rf *.o echoserver echoclient sock_server sock_client
 

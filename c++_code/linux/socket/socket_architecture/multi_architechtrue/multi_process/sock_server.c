@@ -30,7 +30,7 @@ int main(void)
 
 	while (1) {
 		int ret = 0;
-		int wait_second = 0;
+		int wait_second = 5;
 		int connfd = 0;
 
 		ret = sckServer_accept(listenfd, &connfd, wait_second);
@@ -38,7 +38,6 @@ int main(void)
 			printf("timeout...\n");
 			continue;
 		}
-		printf("client connected.\n");
 		int pid = fork();
 		if (pid < 0) {
 			printf("fork...\n");
@@ -50,23 +49,14 @@ int main(void)
 			close(listenfd);
 			while (1) {
 				memset(recvbuff, 0, 1024);
-				//ret = sckServer_rec(connfd, recvbuff, &recvbuflen, 0);
-				ret = read(connfd, recvbuff, recvbuflen);
-				if (ret < 0) {
+				ret = sckServer_rec(connfd, recvbuff, &recvbuflen, 5);
+				if (ret != 0) {
 					printf("sckServer_rec error:\n");
 					break;
 				}
-				else if (ret == 0) {
-					printf("client close.\n");
-					break;
-				}
-				else {
-					printf("recv %s.\n", recvbuff);
-				}
-				//ret = sckServer_send(connfd, recvbuff, strlen(recvbuff), 0);
-				ret = write(connfd, recvbuff, strlen(recvbuff));
-				if (ret < 0) {
-					perror("sckServer_send error");
+				ret = sckServer_send(connfd, recvbuff, recvbuflen, 6);
+				if (ret != 0) {
+					printf("sckServer_send error:\n");
 					break;
 				}
 			}	

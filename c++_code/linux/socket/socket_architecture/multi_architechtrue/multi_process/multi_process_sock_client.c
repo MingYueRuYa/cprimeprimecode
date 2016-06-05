@@ -32,17 +32,21 @@ int main(void)
 	}
 
 	ret = sckClient_send(handle, connfd, (unsigned char *)data, strlen(data));
-	if (ret < 0) {
+	if (0 != ret) {
+		printf("Send error code %d.\n", ret);
 		perror("Send error");
 		return ret;
 	}
+	//sckClient_recv(void *pHandle, int connfd, unsigned char *outdata, int datalen)
 	unsigned char buffer[RECV_BUFFER_SIZE] = {0};
 	ret = sckClient_recv(handle, connfd, buffer, sizeof(buffer));
-	if (ret < 0) {
+	if (0 != ret) {
+		printf("Recvie error code %d.\n", ret);
 		perror("Recvie error:\n");
 		return ret;
 	}
-	printf("recv....%s.\n", buffer);
+	printf("recv....\n");
+	printf("%s", buffer);
 
 	sckClient_closeconn(&connfd);
 
