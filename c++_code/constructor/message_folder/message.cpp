@@ -5,12 +5,17 @@
  **
  ***************************************************************/
 
+#include <iostream>
+
 #include "message.h"
 #include "folder.h"
 
-Message::Message()
+using std::cout;
+using std::endl;
+
+Message::Message(string pContent)
+	: content(pContent)
 {
-	content = "";
 }
 
 Message::~Message()
@@ -46,9 +51,21 @@ void Message::Remove(Folder &pFolder)
 	pFolder.RemoveMessage(this);
 }
 
+string Message::GetContent() const
+{
+	return content;
+}
+
+void Message::GetFolders() const
+{
+	for (Folder *folder : mFolderSet) {
+		cout << folder->GetFolderName() << endl;
+	}
+}
+
 void Message::AddToFolders(Message *pMessage)
 {
-	for (Folder *folder : pMessage->mFolderSet) {
+	for (Folder *folder : mFolderSet) {
 		folder->AddMessage(pMessage);
 	}
 }

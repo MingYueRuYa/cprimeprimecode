@@ -7,11 +7,24 @@
 
 #include <iostream>
 
+#include "message.h"
+#include "folder.h"
+
 using std::cout;
 using std::endl;
 
 int main(int argc, char *argv[])
 {
-	cout << "hello world." << endl;
+	Folder folder("new Folder");
+	Message msg("new Message");
+	msg.Save(folder);	
+	msg.GetFolders();
+	folder.GetAllMessage();
+
+	Folder newfolder = folder;
+	cout << newfolder.GetFolderName() << endl;
+
+	newfolder.GetAllMessage();
+	
 	return 0;
 }

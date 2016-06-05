@@ -18,8 +18,9 @@ using std::set;
 class Folder 
 {
 	friend class Message;
+
 public:
-	Folder() = default;
+	Folder(string pFolderName = "defualt");
 
 	Folder(const Folder &pFolder);
 
@@ -31,12 +32,19 @@ public:
 
 	void RemoveMessage(Message *pMessage);
 
+	string GetFolderName() const;
+
+	void GetAllMessage() const;
+
 private:
+	void AddToFolder(const Folder &pFolder);
+
+	void RemoveFromFolder();
+
+private:
+	string mFolderName;
+
 	set<Message *> mMessageSet;
-
-	void AddToMessage(Folder&);
-
-	void RemoveToMessage(Message &pMessage);
 
 };
 

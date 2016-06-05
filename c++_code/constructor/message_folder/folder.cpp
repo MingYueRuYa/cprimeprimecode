@@ -5,24 +5,51 @@
  **
  ***************************************************************/
 
+#include <iostream>
+
 #include "folder.h"
+
+using std::string;
+using std::cout;
+using std::endl;
+
+Folder::Folder(string pFolderName)
+	: mFolderName(pFolderName)
+{
+}
 
 Folder::Folder(const Folder &pFolder)
 {
-
+	mFolderName = pFolder.GetFolderName();
+	RemoveFromFolder();
+	AddToFolder(pFolder);
 }
 
 Folder& Folder::operator=(const Folder &pFolder)
 {
+	mFolderName = pFolder.GetFolderName();
+	RemoveFromFolder();
+	AddToFolder(pFolder);
 	return *this;
 }
 
 Folder::~Folder()
 {
-	//RemoveToMessage();
 }
 
-void Folder::AddMessage(Message *pMessage)
+string Folder::GetFolderName() const
+{
+	return mFolderName;
+}
+	
+void Folder::GetAllMessage() const
+{
+	for (Message *message : mMessageSet) {
+		cout << message->content << endl;
+	}
+}
+
+void Folder::AddMessage(Message *pMessage = nullptr)
 {
 	mMessageSet.insert(pMessage);
 }
@@ -32,16 +59,17 @@ void Folder::RemoveMessage(Message *pMessage)
 	mMessageSet.erase(pMessage);
 }
 
-void Folder::AddToMessage(Folder& pFolder)
+void Folder::AddToFolder(const Folder &pFolder)
 {
 	for (Message *message : pFolder.mMessageSet) {
-		message->AddToFolders(this);
+		mMessageSet.insert(message);
 	}
 }
 
-void Folder::RemoveToMessage(Message &pMessage)
+void Folder::RemoveFromFolder()
 {
-	 for (Message *message : mMessageSet) {
-		message->RemoveFromFolder();
-	 }
+	for (Message *message : mMessageSet) {
+		this->RemoveMessage(message);
+	}
 }
+

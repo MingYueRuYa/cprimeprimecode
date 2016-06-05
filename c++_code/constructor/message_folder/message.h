@@ -24,7 +24,7 @@ class Message
 	friend class Folder;
 
 public:
-	Message();
+	Message(string pContent = "new Message");
 
 	~Message();
 
@@ -35,6 +35,10 @@ public:
 	void Save(Folder &pFolder);
 
 	void Remove(Folder &pFolder);
+
+	string GetContent() const;
+
+	void GetFolders() const;
 
 private:
 	string content;	
