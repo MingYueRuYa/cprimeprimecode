@@ -34,6 +34,8 @@ public:
 
 	string GetFolderName() const;
 
+	void SetFolderName(const string &pFolderName);
+
 	void GetAllMessage() const;
 
 private:

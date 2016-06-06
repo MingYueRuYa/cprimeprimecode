@@ -22,9 +22,23 @@ int main(int argc, char *argv[])
 	folder.GetAllMessage();
 
 	Folder newfolder = folder;
-	cout << newfolder.GetFolderName() << endl;
-
+	newfolder.SetFolderName("Linxu Folder");
 	newfolder.GetAllMessage();
+
+	cout << "add new message ...." << endl;
+	Message newmsg("news about linux");
+	newmsg.Save(newfolder);
 	
+	newfolder.GetAllMessage();
+
+	Swap(msg, newmsg);	
+
+	cout << "old msg ....." << endl;
+	msg.GetFolders();
+	cout << msg.GetContent() << endl;
+	
+	cout << "new msg ....." << endl;
+	newmsg.GetFolders();
+	cout << newmsg.GetContent() << endl;
 	return 0;
 }

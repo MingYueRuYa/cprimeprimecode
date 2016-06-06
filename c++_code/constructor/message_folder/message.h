@@ -23,6 +23,8 @@ class Message
 {
 	friend class Folder;
 
+	void friend Swap(Message &pLeftMessage, Message &pRightMessage);
+
 public:
 	Message(string pContent = "new Message");
 
@@ -49,5 +51,7 @@ private:
 
 	void RemoveFromFolder();
 };
+
+void  Swap(Message &pLeftMessage, Message &pRightMessage);
 
 #endif //message_h

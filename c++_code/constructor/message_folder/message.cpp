@@ -13,6 +13,32 @@
 using std::cout;
 using std::endl;
 
+void Swap(Message &pLeftMessage, Message &pRightMessage)
+{
+	using std::swap;	
+
+	for (Folder *folder : pLeftMessage.mFolderSet) {
+		folder->RemoveMessage(&pLeftMessage);		
+	}
+
+	for (Folder *folder : pRightMessage.mFolderSet) {
+		folder->RemoveMessage(&pRightMessage);		
+	}
+
+	//swap set
+	swap(pLeftMessage.mFolderSet, pRightMessage.mFolderSet);
+	//swap string
+	swap(pLeftMessage.content, pRightMessage.content);
+	
+	for (Folder *folder : pLeftMessage.mFolderSet) {
+		folder->AddMessage(&pLeftMessage);		
+	}
+
+	for (Folder *folder : pRightMessage.mFolderSet) {
+		folder->AddMessage(&pRightMessage);		
+	}
+}
+
 Message::Message(string pContent)
 	: content(pContent)
 {

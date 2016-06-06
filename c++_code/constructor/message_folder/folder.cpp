@@ -42,6 +42,11 @@ string Folder::GetFolderName() const
 	return mFolderName;
 }
 	
+void Folder::SetFolderName(const string &pFolderName)
+{
+	mFolderName = pFolderName;
+}
+
 void Folder::GetAllMessage() const
 {
 	for (Message *message : mMessageSet) {
