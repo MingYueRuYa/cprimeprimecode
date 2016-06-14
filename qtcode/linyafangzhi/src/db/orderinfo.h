@@ -12,10 +12,15 @@
 
 class OrderInfo : public BaseInfo
 {
+	Q_OBJECT
+
 public:
 	OrderInfo();
 
 	~OrderInfo();
+
+private:
+	
 };
 
 #endif //orderinfo_h
