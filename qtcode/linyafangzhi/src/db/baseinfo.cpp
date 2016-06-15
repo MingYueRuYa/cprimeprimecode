@@ -1,12 +1,11 @@
-﻿/****************************************************************************
-**
-** Copyright (C) 2010 Kazo Vision. (http://www.kazovision.com)
-** All rights reserved.
-**
-****************************************************************************/
+﻿/****************************************************************
+ **
+ **	Copyright (C) 2016 635672377@qq.com
+ ** All rights reserved.
+ **
+ ***************************************************************/
 
 #include <QtGui/QMessageBox>
-//#include <QMessageBox>
 #include <QtSql/QSqlError>
 
 #include "baseinfo.h"

@@ -46,6 +46,33 @@ public:
 	QString GetPrice() { return mPrice; }
 	void SetPrice(const QString &pPrice) { mPrice = pPrice; }
 
+	QString GetProcesCost() { return mProcesCost; }
+	void SetProcesCost(const QString &pProcesCost) { mProcesCost = pProcesCost; }
+
+	QString GetIsShangRou() { return mIsShangRou; }
+	void SetIsShangRou(const QString &pIsShangRou) { mIsShangRou = pIsShangRou; }
+
+	QString GetOtherCraftwork() { return mOtherCraftwork; }
+	void SetOtherCraftwork(const QString &pOtherCraftwork) { mOtherCraftwork = pOtherCraftwork; }
+	
+	QString GetColorTextilePrintPrice() { return mColorTextilePrintPrice; }
+	void SetColorTextilePrintPrice(const QString &pColorTextilePrintPrice) { mColorTextilePrintPrice = pColorTextilePrintPrice; }
+
+	QString GetGradeA() { return mGradeA; }
+	void SetGradeA(const QString &pGradeA) { mGradeA = pGradeA; }
+
+	QString GetGradeB() { return mGradeB; }
+	void SetGradeB(const QString &pGradeB) { mGradeB = pGradeB; }
+
+	QString GetGreyClothSupplier() { return mGreyClothSupplier; }
+	void SetGreyClothSupplier(const QString &pGreyClothSupplier) { mGradeB = pGreyClothSupplier; }
+
+	QString GetGreyClothCount() { return mGreyClothCount; }
+	void SetGreyClothCount(const QString &pGreyClothCount) { mGreyClothCount = pGreyClothCount; }
+
+	QString GetGreyClothPrice() { return mGreyClothPrice; }
+	void SetGreyClothPrice(const QString &pGreyClothPrice) { mGreyClothPrice = pGreyClothPrice; }
+
 private:
 	QString mDyeWork; //染场名称	
 
