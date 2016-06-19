@@ -1,4 +1,4 @@
-/****************************************************************
+﻿/****************************************************************
  **
  **	Copyright (C) 2016 635672377@qq.com
  ** All rights reserved.
@@ -8,75 +8,105 @@
 #ifndef orderinfo_h
 #define orderinfo_h
 
+#include <QtCore/QDate>
+
 #include "baseinfo.h"
+
+class OrderInfo;
+typedef QList<OrderInfo> OrderInfoList;
 
 class OrderInfo : public BaseInfo
 {
 	Q_OBJECT
 
 public:
+    static bool CreateTable();
+
+    static bool Delete(const int &pOrderInfoId);
+
+    static bool GetOrderInfoList(OrderInfoList &pOrderInfoList);
+
+public:
 	OrderInfo();
 
 	~OrderInfo();
 
-	QString GetDyeWork() { return mDyeWork; }
+	OrderInfo(const OrderInfo &pOrderInfo);
+
+	OrderInfo &operator=(const OrderInfo &pOrderInfo);
+
+	bool Update();
+
+	bool Insert();
+
+	bool Load(const int &pOrderId);
+
+	int GetOrderId() const { return mOrderId; }
+	void SetOrderId(const int &pOrderId) { mOrderId = pOrderId; }
+
+	QString GetDyeWork() const { return mDyeWork; }
 	void SetDyeWork(const QString &pDyeWork) { mDyeWork = pDyeWork;}
 
-	QString GetOrderDate() { return mOrderDate; }
-	void SetOrderDate(const QString &pOrderDate) { mOrderDate = pOrderDate;}
+    QString GetOrderDate() const { return mOrderDate; }
+    void SetOrderDate(const QString &pOrderDate) { mOrderDate = pOrderDate;}
 
-	QString GetClientName() { return mClientName; }
+	QString GetClientName() const { return mClientName; }
 	void SetClientName(const QString &pClientName) { mClientName = pClientName;}
 
-	QString GetClientContact() { return mClientContact; }
-	void SetClientContact(const QString &pClientName) { mClientContact = pClientContact;}
+	QString GetClientContact() const { return mClientContact; }
+	void SetClientContact(const QString &pClientContact) { mClientContact = pClientContact;}
 
-	QString GetSpecificationProduct() { return mSpecificationProduct; }
+	QString GetSpecificationProduct() const { return mSpecificationProduct; }
 	void SetSpecificationProduct(const QString &pSpecificationProduct) { mSpecificationProduct = pSpecificationProduct; }
 
-	QString GetColor() { return mColor; }
+	QString GetColor() const { return mColor; }
 	void SetColor(const QString &pColor) { mColor = pColor; }
 
-	QString GetMenFu() { return mMenFu; }
+	QString GetMenFu() const { return mMenFu; }
 	void SetMenFu(const QString &pMenFu) { mMenFu = pMenFu; }
 
-	QString GetCount() { return mCount; }
-	void SetCount(const QString &pCount) { mCount = pCount; }
+	int GetCount() const { return mCount; }
+	void SetCount(const int &pCount) { mCount = pCount; }
 
-	QString GetPrice() { return mPrice; }
-	void SetPrice(const QString &pPrice) { mPrice = pPrice; }
+	double GetPrice() const { return mPrice; }
+	void SetPrice(const double &pPrice) { mPrice = pPrice; }
 
-	QString GetProcesCost() { return mProcesCost; }
-	void SetProcesCost(const QString &pProcesCost) { mProcesCost = pProcesCost; }
+	double GetProcessCost() const { return mProcessCost; }
+	void SetProcessCost(const double &pProcessCost) { mProcessCost = pProcessCost; }
 
-	QString GetIsShangRou() { return mIsShangRou; }
-	void SetIsShangRou(const QString &pIsShangRou) { mIsShangRou = pIsShangRou; }
+	bool GetIsShangRou() const { return mIsShangRou; }
+	void SetIsShangRou(const bool &pIsShangRou) { mIsShangRou = pIsShangRou; }
 
-	QString GetOtherCraftwork() { return mOtherCraftwork; }
+	QString GetOtherCraftwork() const { return mOtherCraftwork; }
 	void SetOtherCraftwork(const QString &pOtherCraftwork) { mOtherCraftwork = pOtherCraftwork; }
 	
-	QString GetColorTextilePrintPrice() { return mColorTextilePrintPrice; }
-	void SetColorTextilePrintPrice(const QString &pColorTextilePrintPrice) { mColorTextilePrintPrice = pColorTextilePrintPrice; }
+	double GetColorTextilePrintPrice() const { return mColorTextilePrintPrice; }
+	void SetColorTextilePrintPrice(const double &pColorTextilePrintPrice) { mColorTextilePrintPrice = pColorTextilePrintPrice; }
 
-	QString GetGradeA() { return mGradeA; }
-	void SetGradeA(const QString &pGradeA) { mGradeA = pGradeA; }
+	int GetGradeACount() const { return mGradeACount; }
+	void SetGradeACount(const int &pGradeACount) { mGradeACount = pGradeACount; }
 
-	QString GetGradeB() { return mGradeB; }
-	void SetGradeB(const QString &pGradeB) { mGradeB = pGradeB; }
+	int GetGradeBCount() const { return mGradeBCount; }
+	void SetGradeBCount(const int &pGradeBCount) { mGradeBCount = pGradeBCount; }
 
-	QString GetGreyClothSupplier() { return mGreyClothSupplier; }
-	void SetGreyClothSupplier(const QString &pGreyClothSupplier) { mGradeB = pGreyClothSupplier; }
+	QString GetGreyClothSupplier() const { return mGreyClothSupplier; }
+	void SetGreyClothSupplier(const QString &pGreyClothSupplier) { mGreyClothSupplier = pGreyClothSupplier; }
 
-	QString GetGreyClothCount() { return mGreyClothCount; }
-	void SetGreyClothCount(const QString &pGreyClothCount) { mGreyClothCount = pGreyClothCount; }
+	int GetGreyClothCount() const { return mGreyClothCount; }
+	void SetGreyClothCount(const int &pGreyClothCount) { mGreyClothCount = pGreyClothCount; }
 
-	QString GetGreyClothPrice() { return mGreyClothPrice; }
-	void SetGreyClothPrice(const QString &pGreyClothPrice) { mGreyClothPrice = pGreyClothPrice; }
+	double GetGreyClothPrice() const { return mGreyClothPrice; }
+	void SetGreyClothPrice(const double &pGreyClothPrice) { mGreyClothPrice = pGreyClothPrice; }
+
+    QString GetMemory() const { return mMemory; }
+    void SetMemory(const QString &pMemory) { mMemory = pMemory; }
 
 private:
+	int mOrderId;
+
 	QString mDyeWork; //染场名称	
 
-	QDate mOrderDate;
+    QString mOrderDate;
 
 	QString mClientName;
 
@@ -88,26 +118,29 @@ private:
 
 	QString mMenFu; //门副
 
-	QString mCount;
+	int mCount;
 
 	double mPrice;
 
-	double mProcesCost;//加工费
+	double mProcessCost;//加工费
 
 	bool mIsShangRou; //是否上柔
 
 	QString mOtherCraftwork; //其他工艺
 
-	QString mColorTextilePrintPrice; //染色/印花 单价	
-	int mGradeA; //一等品
+	double mColorTextilePrintPrice; //染色/印花 单价	
 
-	int mGradeB; //次等品
+	int mGradeACount; //一等品
+
+	int mGradeBCount; //次等品
 
 	QString mGreyClothSupplier;
 
 	int mGreyClothCount;
 
 	double mGreyClothPrice;
+
+    QString mMemory; //备注
 };
 
 #endif //orderinfo_h
