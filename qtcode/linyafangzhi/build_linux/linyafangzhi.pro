@@ -4,17 +4,28 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql widgets
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = linyafangzhi
 TEMPLATE = app
 
-
 SOURCES += ../src/main.cpp \
-    ../src/mainwindow.cpp
+    ../src/mainwindow.cpp \
+	../src/userpath.cpp \
+	../src/db/baseinfo.cpp	\
+	../src/db/db.cpp	\
+	../src/db/orderinfo.cpp
 
-HEADERS  += ../src/mainwindow.h
+HEADERS  += ../src/mainwindow.h \
+	../src/userpath.h \
+	../src/db/baseinfo.h \
+	../src/db/db.h	\
+	../src/db/orderinfo.h \
+    ../src/config.h
 
-FORMS    += ../ui/mainwindow.ui
+unix {
+	MOC_DIR=.moc
+	OBJECT_DIR=.obj
+}
