@@ -22,6 +22,17 @@ public:
 		std::cout << "Father desconstruct..." << std::endl;
 	}
 
+	Father(const Father &pFather)
+	{
+		std::cout << "Father copy ...." << std::endl;
+	}
+
+	Father& operator=(const Father &pFather)
+	{
+		std::cout << "Father operator = " << std::endl;
+		return *this;
+	}
+
 	void PrintName()
 	{
 		std::cout << "this is father." << std::endl;
@@ -57,6 +68,16 @@ public:
 	 ~Son()
 	{
 		std::cout << "Son desconstruct...\n";
+	}
+
+	 Son(const Son &pSon)
+	{
+		std::cout << "Son copy construct...\n";
+	}
+	Son& operator=(const Son &pSon)
+	{
+		std::cout << "Father operator = .\n";
+		return *this;
 	}
 
 	void PrintName()
@@ -135,7 +156,12 @@ int main()
 	//TestFun();
 	//TestFun01();	
 	//TestFunc02();
-	TestFunc03();
+	//TestFunc03();
+
+	Son son;
+	Son son01;
+	//赋值运算符 只会调用子类的不会调用父类的赋值运算符
+	son = son01;
 	return 0;
 }
 
