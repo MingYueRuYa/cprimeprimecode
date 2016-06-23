@@ -153,6 +153,14 @@ void TestFunc03()
 
 int main()
 {
+	Son son;
+	Father &father = son;
+	father.PrintName();
+	return 0;
+}
+
+int main02()
+{
 	//TestFun();
 	//TestFun01();	
 	//TestFunc02();
