@@ -226,91 +226,21 @@ void MainWindow::SerachInfo(const SearchType &pSearchType, const QString &pSerac
 void MainWindow::DoComDyeWorkChanged(const QString &pDyeWorkName)
 {
     SerachInfo(DyeWork, pDyeWorkName);
-//    int count = 0;
-//    foreach (OrderInfo info, mOrderInfoList) {
-//        if (info.GetDyeWork() == pDyeWorkName) {
-//            ++count;
-//        }
-//    }
-
-//    int j = 0;
-//    foreach (OrderInfo info, mOrderInfoList) {
-//        if (info.GetDyeWork() != pDyeWorkName) {
-//            continue;
-//        }
-//        if (count > tableWidget->rowCount()) {
-//            int rowcount = tableWidget->rowCount();
-//            while ((count - rowcount) > 0) {
-//                tableWidget->insertRow(rowcount);
-//                for (int i = 0; i < G_COLUMN_COUNT; ++i) {
-//                    QTableWidgetItem *item = new QTableWidgetItem();
-//                    item->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-//                    tableWidget->setItem(rowcount, i, item);
-//                }
-//                rowcount = tableWidget->rowCount();
-//            }
-//        }
-//        tableWidget->item(j, 0)->setText(info.GetDyeWork());
-//        tableWidget->item(j, 1)->setText(info.GetOrderDate());
-//        tableWidget->item(j, 2)->setText(info.GetClientName());
-//        tableWidget->item(j, 3)->setText(info.GetClientContact());
-//        tableWidget->item(j, 4)->setText(info.GetSpecificationProduct());
-//        tableWidget->item(j, 5)->setText(info.GetColor());
-//        ++j;
-//    }
-//    while (count < tableWidget->rowCount()) {
-//        tableWidget->removeRow(tableWidget->rowCount() - 1);
-//    }
 }
 
 void MainWindow::DoComClientNameChanged(const QString &pClientName)
 {
-    SerachInfo(ClientName, pClientName);
+	SerachInfo(ClientName, pClientName);
 }
 
 void MainWindow::DoComSpecficationProductsChanged(const QString &pSepificationProducts)
 {
       SerachInfo(SpecificationProducts, pSepificationProducts);
-//    int count = 0;
-//    foreach (OrderInfo info, mOrderInfoList) {
-//        if (info.GetSpecificationProduct() == pSepificationProducts) {
-//            ++count;
-//        }
-//    }
-
-//    int j = 0;
-//    foreach (OrderInfo info, mOrderInfoList) {
-//        if (info.GetSpecificationProduct() != pSepificationProducts) {
-//            continue;
-//        }
-//        if (count > tableWidget->rowCount()) {
-//            int rowcount = tableWidget->rowCount();
-//            while ((count - rowcount) > 0) {
-//                tableWidget->insertRow(rowcount);
-//                for (int i = 0; i < G_COLUMN_COUNT; ++i) {
-//                    QTableWidgetItem *item = new QTableWidgetItem();
-//                    item->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-//                    tableWidget->setItem(rowcount, i, item);
-//                }
-//                rowcount = tableWidget->rowCount();
-//            }
-//        }
-//        tableWidget->item(j, 0)->setText(info.GetDyeWork());
-//        tableWidget->item(j, 1)->setText(info.GetOrderDate());
-//        tableWidget->item(j, 2)->setText(info.GetClientName());
-//        tableWidget->item(j, 3)->setText(info.GetClientContact());
-//        tableWidget->item(j, 4)->setText(info.GetSpecificationProduct());
-//        tableWidget->item(j, 5)->setText(info.GetColor());
-//        ++j;
-//    }
-//    while (count < tableWidget->rowCount()) {
-//        tableWidget->removeRow(tableWidget->rowCount() - 1);
-//    }
 }
 
 void MainWindow::DoImport()
 {
-    QMessageBox::information(this, APPLICATION_NAME, tr("Temprorarily unable to use."));
+
 }
 
 #include "moc_mainwindow.cpp"
