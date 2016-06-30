@@ -15,7 +15,18 @@ struct {
 
 //结构体本身不可以再嵌套自身，但是可以包含指向自身的指针，链表等其他数据结构都是这样实现的
 
-
+//测试结构体的时候有构造和析构函数
+//没有构造和析构函数
+typedef struct _Best{
+//	Best()
+//	{
+//		std::cout << "struct Best....\n";
+//	}
+//	~Best()
+//	{
+//		std::cout << "struct ~Best....\n";
+//	}
+}Best;
 
 int main()
 {

@@ -8,13 +8,14 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
 
+#include "application.h"
 #include "dbpack.h"
 #include "config.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    Application app(argc, argv);
 	
 	if(! Db::Initialize()) {
 		QMessageBox::critical(NULL, APPLICATION_NAME, "Error when initialize.");
@@ -22,6 +23,5 @@ int main(int argc, char *argv[])
 	}
     MainWindow w;
     w.showMaximized();
-
-    return a.exec();
+    return app.exec();
 }
