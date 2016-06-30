@@ -112,7 +112,8 @@ void MainWindow::UpdateUi()
 
 bool MainWindow::CreateSample()
 {
-    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    //QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+	QTextCodec *codec = QTextCodec::codecForName("GBK");
     QFile file("order.txt");
     if (! file.open(QIODevice::ReadOnly)) {
         file.close();
@@ -123,7 +124,7 @@ bool MainWindow::CreateSample()
         OrderInfo orderinfo;
         QByteArray line = file.readLine();
         QStringList stringlist = codec->toUnicode(line).split(",");
-		if (stringlist.count() < 18) {
+		if (stringlist.count() < 6) {
 			continue;
 		}
         orderinfo.SetDyeWork(stringlist[0].trimmed());
@@ -132,19 +133,19 @@ bool MainWindow::CreateSample()
         orderinfo.SetClientContact(stringlist[3]);
         orderinfo.SetSpecificationProduct(stringlist[4].trimmed());
         orderinfo.SetColor(stringlist[5].trimmed());
-        orderinfo.SetMenFu(stringlist[6].trimmed());
-        orderinfo.SetCount(stringlist[7].toInt());
-        orderinfo.SetPrice(stringlist[8].toDouble());
-        orderinfo.SetProcessCost(stringlist[9].toDouble());
-        orderinfo.SetIsShangRou(stringlist[10] == "1" ? true : false);
-        orderinfo.SetOtherCraftwork(stringlist[11]);
-        orderinfo.SetColorTextilePrintPrice(stringlist[12].toDouble());
-        orderinfo.SetGradeACount(stringlist[13].toInt());
-        orderinfo.SetGradeBCount(stringlist[14].toInt());
-        orderinfo.SetGreyClothSupplier(stringlist[15]);
-        orderinfo.SetGreyClothCount(stringlist[16].toInt());
-        orderinfo.SetGreyClothPrice(stringlist[17].toDouble());
-        orderinfo.SetMemory(stringlist[18].trimmed());
+        //orderinfo.SetMenFu(stringlist[6].trimmed());
+        //orderinfo.SetCount(stringlist[7].toInt());
+        //orderinfo.SetPrice(stringlist[8].toDouble());
+        //orderinfo.SetProcessCost(stringlist[9].toDouble());
+        //orderinfo.SetIsShangRou(stringlist[10] == "1" ? true : false);
+        //orderinfo.SetOtherCraftwork(stringlist[11]);
+        //orderinfo.SetColorTextilePrintPrice(stringlist[12].toDouble());
+        //orderinfo.SetGradeACount(stringlist[13].toInt());
+        //orderinfo.SetGradeBCount(stringlist[14].toInt());
+        //orderinfo.SetGreyClothSupplier(stringlist[15]);
+        //orderinfo.SetGreyClothCount(stringlist[16].toInt());
+        //orderinfo.SetGreyClothPrice(stringlist[17].toDouble());
+        //orderinfo.SetMemory(stringlist[18].trimmed());
         mOrderInfoList.append(orderinfo);
     }
     return true;
