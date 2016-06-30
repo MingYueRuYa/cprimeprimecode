@@ -12,6 +12,7 @@ TARGET = linyafangzhi
 TEMPLATE = app
 
 SOURCES += ../src/main.cpp \
+    ../src/application.cpp \
     ../src/mainwindow.cpp \
 	../src/userpath.cpp \
 	../src/db/baseinfo.cpp	\
@@ -19,6 +20,7 @@ SOURCES += ../src/main.cpp \
 	../src/db/orderinfo.cpp
 
 HEADERS  += ../src/mainwindow.h \
+    ../src/application.h \
 	../src/userpath.h \
 	../src/db/baseinfo.h \
 	../src/db/db.h	\

@@ -19,7 +19,7 @@ class MainWindow : public QMainWindow, protected Ui::MainWindow
     Q_OBJECT
 
 public:
-    typedef enum {DyeWork, ClientName, SpecificationProducts } SearchType;
+    typedef enum {DyeWork, ClientName, SpecificationProducts} SearchType;
 
 public:
     explicit MainWindow(QWidget *parent = 0);

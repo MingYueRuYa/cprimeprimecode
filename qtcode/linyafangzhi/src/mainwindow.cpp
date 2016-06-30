@@ -13,6 +13,8 @@
 #include "dbpack.h"
 #include "mainwindow.h"
 
+const QString ALL = tr("ALL");
+
 const int G_COLUMN_COUNT = 6;
 
 MainWindow::MainWindow(QWidget *pParent) : QMainWindow(pParent)
@@ -25,8 +27,7 @@ MainWindow::MainWindow(QWidget *pParent) : QMainWindow(pParent)
             SLOT(DoComDyeWorkChanged(const QString &)));
     connect(combo_clientname, SIGNAL(currentIndexChanged(const QString &)),this,
             SLOT(DoComClientNameChanged(const QString &)));
-    connect(combo_specificationproducts, SIGNAL(currentIndexChanged(const QString &)),this,
-            SLOT(DoComSpecficationProductsChanged(const QString &)));
+    connect(combo_specificationproducts, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(DoComSpecficationProductsChanged(const QString &)));
 
     connect(btn_import, SIGNAL(clicked()), this, SLOT(DoImport()));
 }
@@ -69,16 +70,21 @@ void MainWindow::UpdateUi()
         combo_dyework->addItem(*ibegin);
         ++ibegin;
     }
+	combo_dyework->addItem(ALL);
+
     ibegin = mClientNameSet.begin();
     while (ibegin != mClientNameSet.end()) {
         combo_clientname->addItem(*ibegin);
         ++ibegin;
     }
+	combo_clientname->addItem(ALL);
+
     ibegin = mSpecificationProducetSet.begin();
     while (ibegin != mSpecificationProducetSet.end()) {
         combo_specificationproducts->addItem(*ibegin);
         ++ibegin;
     }
+	combo_specificationproducts->addItem(ALL);
 
     QTableWidgetItem *widgetitem = NULL;
     for (int i = 0; i < mOrderInfoList.count(); ++i) {
@@ -112,7 +118,12 @@ void MainWindow::UpdateUi()
 
 bool MainWindow::CreateSample()
 {
+#ifdef Q_OS_WIN32
+    QTextCodec *codec = QTextCodec::codecForName("GBK");
+#endif
+#ifdef Q_OS_LINUX
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+#endif
     QFile file("order.txt");
     if (! file.open(QIODevice::ReadOnly)) {
         file.close();
