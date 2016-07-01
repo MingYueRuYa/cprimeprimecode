@@ -13,9 +13,9 @@
 #include "dbpack.h"
 #include "mainwindow.h"
 
-const QString ALL = tr("ALL");
-
-const int G_COLUMN_COUNT = 6;
+//const QString ALL = tr("ALL");
+const QString G_ALL = ("ALL");
+const int G_COLUMN_COUNT = 7;
 
 MainWindow::MainWindow(QWidget *pParent) : QMainWindow(pParent)
 {
@@ -27,7 +27,8 @@ MainWindow::MainWindow(QWidget *pParent) : QMainWindow(pParent)
             SLOT(DoComDyeWorkChanged(const QString &)));
     connect(combo_clientname, SIGNAL(currentIndexChanged(const QString &)),this,
             SLOT(DoComClientNameChanged(const QString &)));
-    connect(combo_specificationproducts, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(DoComSpecficationProductsChanged(const QString &)));
+    connect(combo_specificationproducts, SIGNAL(currentIndexChanged(const QString &)), this,
+            SLOT(DoComSpecficationProductsChanged(const QString &)));
 
     connect(btn_import, SIGNAL(clicked()), this, SLOT(DoImport()));
 }
@@ -40,11 +41,12 @@ void MainWindow::resizeEvent(QResizeEvent *)
 {
     QHeaderView *headerview = tableWidget->horizontalHeader();
     headerview->resizeSection(0, width() * 0.10);
-    headerview->resizeSection(1, width() * 0.25);
-    headerview->resizeSection(2, width() * 0.25);
-    headerview->resizeSection(3, width() * 0.10);
-    headerview->resizeSection(4, width() * 0.10);
-    headerview->resizeSection(5, width() * 0.10);
+    headerview->resizeSection(1, width() * 0.15);
+    headerview->resizeSection(2, width() * 0.15);
+    headerview->resizeSection(3, width() * 0.15);
+    headerview->resizeSection(4, width() * 0.15);
+    headerview->resizeSection(5, width() * 0.15);
+    headerview->resizeSection(6, width() * 0.10);
 }
 
 void MainWindow::UpdateUi()
@@ -70,49 +72,53 @@ void MainWindow::UpdateUi()
         combo_dyework->addItem(*ibegin);
         ++ibegin;
     }
-	combo_dyework->addItem(ALL);
+    combo_dyework->addItem(G_ALL);
 
     ibegin = mClientNameSet.begin();
     while (ibegin != mClientNameSet.end()) {
         combo_clientname->addItem(*ibegin);
         ++ibegin;
     }
-	combo_clientname->addItem(ALL);
+    combo_clientname->addItem(G_ALL);
 
     ibegin = mSpecificationProducetSet.begin();
     while (ibegin != mSpecificationProducetSet.end()) {
         combo_specificationproducts->addItem(*ibegin);
         ++ibegin;
     }
-	combo_specificationproducts->addItem(ALL);
+    combo_specificationproducts->addItem(G_ALL);
 
     QTableWidgetItem *widgetitem = NULL;
     for (int i = 0; i < mOrderInfoList.count(); ++i) {
         int rowcount = tableWidget->rowCount();
         tableWidget->insertRow(rowcount);
-        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetDyeWork());
+        widgetitem = new QTableWidgetItem(QString::number(i));
         widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
         tableWidget->setItem(rowcount, 0, widgetitem);
 
-        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetOrderDate());
+        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetDyeWork());
         widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
         tableWidget->setItem(rowcount, 1, widgetitem);
 
-        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetClientName());
+        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetOrderDate());
         widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
         tableWidget->setItem(rowcount, 2, widgetitem);
 
-        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetClientContact());
+        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetClientName());
         widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
         tableWidget->setItem(rowcount, 3, widgetitem);
 
-        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetSpecificationProduct());
+        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetClientContact());
         widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
         tableWidget->setItem(rowcount, 4, widgetitem);
 
-        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetColor());
+        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetSpecificationProduct());
         widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
         tableWidget->setItem(rowcount, 5, widgetitem);
+
+        widgetitem = new QTableWidgetItem(mOrderInfoList[i].GetColor());
+        widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+        tableWidget->setItem(rowcount, 6, widgetitem);
     }
 }
 
@@ -185,8 +191,10 @@ void MainWindow::SerachInfo(const SearchType &pSearchType, const QString &pSerac
             }
         }
     }
-    else {
-        return;
+    else if (pSearchType == ALL) {
+        foreach (OrderInfo info, mOrderInfoList) {
+            ++count;
+        }
     }
 
     int j = 0;
@@ -206,6 +214,9 @@ void MainWindow::SerachInfo(const SearchType &pSearchType, const QString &pSerac
                 continue;
             }
         }
+        else if (pSearchType == ALL) {
+            //TODO todnothing
+        }
         else {
             continue;
         }
@@ -221,12 +232,13 @@ void MainWindow::SerachInfo(const SearchType &pSearchType, const QString &pSerac
                 rowcount = tableWidget->rowCount();
             }
         }
-        tableWidget->item(j, 0)->setText(info.GetDyeWork());
-        tableWidget->item(j, 1)->setText(info.GetOrderDate());
-        tableWidget->item(j, 2)->setText(info.GetClientName());
-        tableWidget->item(j, 3)->setText(info.GetClientContact());
-        tableWidget->item(j, 4)->setText(info.GetSpecificationProduct());
-        tableWidget->item(j, 5)->setText(info.GetColor());
+        tableWidget->item(j, 0)->setText(QString::number(j + 1));
+        tableWidget->item(j, 1)->setText(info.GetDyeWork());
+        tableWidget->item(j, 2)->setText(info.GetOrderDate());
+        tableWidget->item(j, 3)->setText(info.GetClientName());
+        tableWidget->item(j, 4)->setText(info.GetClientContact());
+        tableWidget->item(j, 5)->setText(info.GetSpecificationProduct());
+        tableWidget->item(j, 6)->setText(info.GetColor());
         ++j;
     }
     while (count < tableWidget->rowCount()) {
@@ -236,17 +248,32 @@ void MainWindow::SerachInfo(const SearchType &pSearchType, const QString &pSerac
 
 void MainWindow::DoComDyeWorkChanged(const QString &pDyeWorkName)
 {
-    SerachInfo(DyeWork, pDyeWorkName);
+    if (G_ALL == pDyeWorkName) {
+        SerachInfo(ALL, "");
+    }
+    else {
+        SerachInfo(DyeWork, pDyeWorkName);
+    }
 }
 
 void MainWindow::DoComClientNameChanged(const QString &pClientName)
 {
-	SerachInfo(ClientName, pClientName);
+    if (G_ALL == pClientName) {
+        SerachInfo(ALL, "");
+    }
+    else {
+        SerachInfo(ClientName, pClientName);
+    }
 }
 
 void MainWindow::DoComSpecficationProductsChanged(const QString &pSepificationProducts)
 {
+    if (G_ALL == pSepificationProducts) {
+        SerachInfo(ALL, "");
+    }
+    else {
       SerachInfo(SpecificationProducts, pSepificationProducts);
+    }
 }
 
 void MainWindow::DoImport()
