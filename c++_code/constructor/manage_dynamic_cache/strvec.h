@@ -10,19 +10,44 @@
 #define strvec_h
 
 #include <iostream>
+#include <initializer_list>
 
 using std::string;
+using std::initializer_list;
+using std::allocator;
 
 class StrVec
 {
 public:
-	StrVec();
+	explicit StrVec();
+
+	StrVec(initializer_list<string> pStringList);
 
 	~StrVec();
 
 	StrVec(const StrVec &pStrVec);
 
+	StrVec(const StrVec &&pStrVec);
+
 	StrVec& operator=(const StrVec &pStrVec);
+	
+	StrVec& operator=(const StrVec &&pStrVec);
+
+	void PushBack(const string &pString);
+	
+	void Foreach();
+
+	size_t Size();
+
+private:
+	void Free();
+
+	/*!
+	 * reallocator memory
+	 * */
+	void Reallocator();
+
+	void CheckMemory();
 
 private:
 	string *mFirst;	
@@ -30,6 +55,8 @@ private:
 	string *mEnd;
 
 	string *mCapacity;
+
+	allocator<string> mAllocator;
 
 };
 
