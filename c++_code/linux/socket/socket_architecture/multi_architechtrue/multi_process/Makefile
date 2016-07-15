@@ -1,19 +1,3 @@
-
-#sockutil.o:sockutil.c
-#	gcc -Wall -g -c $^
-#
-#sock_client:sock_client.o sockutil.o
-#	gcc -Wall -g $^ -o $@
-#
-#sock_client.o:sock_client.c
-#	gcc -Wall -g -c $^
-#
-#sock_server:sock_server.o sockutil.o
-#	gcc -Wall -g $^ -o $@
-#
-#sock_server.o:sock_server.c
-#	gcc -Wall -g -c $^
-
 .PHONY: ALL
 CC=gcc
 CFLAGS=-Wall -g 
@@ -31,11 +15,7 @@ server:
 sockutil.o:sockutil.c
 	$(CC) $(CFLAGS) $^ -c
 
-#$(OBJ):$(SOURCE)
-#	$(CC) $(CFLAGS) $^ -c
-#
-
 .PHONY:clean
 clean:
-	-rm -rf *.o echoserver echoclient sock_server sock_client
+	-rm -rf *.o server client sockutil.o
 
