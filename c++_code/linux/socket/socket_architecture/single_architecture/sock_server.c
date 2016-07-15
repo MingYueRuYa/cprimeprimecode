@@ -10,7 +10,7 @@
 void handle(int signum)
 {
 	int pid = 0;
-	while ((pid = waitpid(-1, NULL, WNOHANG) > 0)) {
+	while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
 		printf("child process %d exited.\n", pid);
 	}
 }
@@ -41,7 +41,6 @@ int main(void)
 		printf("client connected.\n");
 		int pid = fork();
 		if (pid < 0) {
-			printf("fork...\n");
 			continue;
 		}
 		else if (0 == pid) {
@@ -51,7 +50,8 @@ int main(void)
 			while (1) {
 				memset(recvbuff, 0, 1024);
 				//ret = sckServer_rec(connfd, recvbuff, &recvbuflen, 0);
-				ret = read(connfd, recvbuff, recvbuflen);
+				ret = sckServer_send(connfd, recvbuff, strlen(recvbuff), 0);
+				//ret = read(connfd, recvbuff, recvbuflen);
 				if (ret < 0) {
 					printf("sckServer_rec error:\n");
 					break;

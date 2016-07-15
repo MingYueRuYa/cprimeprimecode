@@ -389,7 +389,8 @@ int accept_timeout(int listenfd, struct sockaddr_in *addr, unsigned int timeout)
 int sckServer_accept(int listenfd, int *connfd, int timeout)
 {
 	int ret = 0;	
-	printf("func %s, line %d.\n", __func__, __LINE__);
+	//printf("func %s, line %d.\n", __func__, __LINE__);
+	ret = accept_timeout(listenfd, NULL, (unsigned int)timeout);
 	if (ret < 0) {
 		if (-1 == ret  && errno == ETIMEDOUT) {
 			printf("accept timeout.\n");
