@@ -233,11 +233,29 @@ void MainWindow::SerachInfo(const SearchType &pSearchType, const QString &pSerac
             }
         }
         tableWidget->item(j, 0)->setText(QString::number(j + 1));
+        if (pSearchType == DyeWork) {
+            tableWidget->item(j, 1)->setBackgroundColor(QColor(39, 169, 255, 255));
+        }
+        else {
+            tableWidget->item(j, 1)->setBackgroundColor(Qt::white);
+        }
         tableWidget->item(j, 1)->setText(info.GetDyeWork());
         tableWidget->item(j, 2)->setText(info.GetOrderDate());
         tableWidget->item(j, 3)->setText(info.GetClientName());
+        if (pSearchType == ClientName) {
+            tableWidget->item(j, 3)->setBackgroundColor(Qt::red);
+        }
+        else {
+            tableWidget->item(j, 3)->setBackgroundColor(Qt::white);
+        }
         tableWidget->item(j, 4)->setText(info.GetClientContact());
         tableWidget->item(j, 5)->setText(info.GetSpecificationProduct());
+        if (pSearchType == SpecificationProducts) {
+            tableWidget->item(j, 5)->setBackgroundColor(QColor(0, 170, 0, 255));
+        }
+        else {
+            tableWidget->item(j, 5)->setBackgroundColor(Qt::white);
+        }
         tableWidget->item(j, 6)->setText(info.GetColor());
         ++j;
     }

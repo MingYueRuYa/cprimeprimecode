@@ -14,6 +14,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QComboBox>
+#include <QtGui/QGroupBox>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QMainWindow>
@@ -31,6 +32,8 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
+    QVBoxLayout *verticalLayout_2;
+    QGroupBox *groupBox;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
     QComboBox *combo_dyework;
@@ -49,35 +52,54 @@ public:
         MainWindow->resize(824, 429);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        verticalLayout = new QVBoxLayout(centralWidget);
+        verticalLayout_2 = new QVBoxLayout(centralWidget);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        groupBox = new QGroupBox(centralWidget);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        groupBox->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 85, 127);\n"
+"color: rgb(255, 255, 255);"));
+        verticalLayout = new QVBoxLayout(groupBox);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        combo_dyework = new QComboBox(centralWidget);
+        combo_dyework = new QComboBox(groupBox);
         combo_dyework->setObjectName(QString::fromUtf8("combo_dyework"));
+        combo_dyework->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);"));
 
         horizontalLayout->addWidget(combo_dyework);
 
-        combo_clientname = new QComboBox(centralWidget);
+        combo_clientname = new QComboBox(groupBox);
         combo_clientname->setObjectName(QString::fromUtf8("combo_clientname"));
+        combo_clientname->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);"));
 
         horizontalLayout->addWidget(combo_clientname);
 
-        combo_specificationproducts = new QComboBox(centralWidget);
+        combo_specificationproducts = new QComboBox(groupBox);
         combo_specificationproducts->setObjectName(QString::fromUtf8("combo_specificationproducts"));
+        combo_specificationproducts->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);"));
 
         horizontalLayout->addWidget(combo_specificationproducts);
 
-        btn_import = new QPushButton(centralWidget);
+        btn_import = new QPushButton(groupBox);
         btn_import->setObjectName(QString::fromUtf8("btn_import"));
+        btn_import->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);"));
 
         horizontalLayout->addWidget(btn_import);
 
 
         verticalLayout->addLayout(horizontalLayout);
+
+
+        verticalLayout_2->addWidget(groupBox);
 
         tableWidget = new QTableWidget(centralWidget);
         if (tableWidget->columnCount() < 7)
@@ -99,7 +121,7 @@ public:
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
         tableWidget->verticalHeader()->setVisible(false);
 
-        verticalLayout->addWidget(tableWidget);
+        verticalLayout_2->addWidget(tableWidget);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -121,6 +143,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        groupBox->setTitle(QApplication::translate("MainWindow", "\346\220\234\347\264\242", 0, QApplication::UnicodeUTF8));
         btn_import->setText(QApplication::translate("MainWindow", "Import", 0, QApplication::UnicodeUTF8));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "\347\274\226\345\217\267", 0, QApplication::UnicodeUTF8));
