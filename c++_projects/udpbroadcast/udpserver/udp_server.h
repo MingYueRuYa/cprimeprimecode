@@ -10,13 +10,16 @@
 #define udp_server_h
 
 #include <iostream>
+
 #include <unistd.h>
+#include <errno.h>
+#include <stdio.h>
 
 #include <sys/socket.h>
 #include <sys/types.h>
-//#include <netinet.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <ifaddrs.h>
 
 class UdpServer 
 {
@@ -30,6 +33,9 @@ public:
 	bool Finalize();
 
 	bool SendDatagram();
+	
+private:
+	bool GetLocalIp(char *pLocalIp, int pIpLen);
 
 private:
 	int mPort;

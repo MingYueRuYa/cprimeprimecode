@@ -54,10 +54,44 @@ bool UdpServer::Finalize()
 
 bool UdpServer::SendDatagram()
 {
-	string sendmsg = "hello";
-	if (sendto(mSocket, sendmsg.c_str(), sendmsg.length(), 0, (sockaddr *)&mSocketAddr, sizeof(sockaddr_in)) < 0) {
+	char ipstr[1024] = "";
+	GetLocalIp(ipstr, 1024);
+	if (sendto(mSocket, ipstr, strlen(ipstr), 0, (sockaddr *)&mSocketAddr, sizeof(sockaddr_in)) < 0) {
 		cout << "sendto function error." << endl;
 		return false;
 	}
+	return true;
+}
+
+bool UdpServer::GetLocalIp(char *pLocalIp, int pIpLen)
+{
+	struct ifaddrs *ifaddr, *ifa;
+	int family, s;
+	char host[NI_MAXHOST] = {0};
+
+	if (getifaddrs(&ifaddr) == -1) {
+		perror("getifaddrs error");
+		return false;
+	}
+	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+		if (ifa->ifa_addr == NULL) {
+			continue;
+		}
+		family = ifa->ifa_addr->sa_family;
+		if (family == AF_INET || family == AF_INET6) {
+			s = getnameinfo(ifa->ifa_addr, (family == AF_INET) ? sizeof(struct sockaddr_in) : sizeof(struct sockaddr_in6), host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+			if (0 != s) {
+				printf("getnameinfo() failed: %s.\n", gai_strerror(s));
+				return -1;
+			}
+			if (strlen(pLocalIp) < (pIpLen - 1)) {
+				strcat(pLocalIp, "-");
+			}
+			if (strlen(pLocalIp) < (pIpLen - strlen(host))) {
+				strcat(pLocalIp, host);
+			}
+		}
+	}
+	freeifaddrs(ifaddr);
 	return true;
 }
