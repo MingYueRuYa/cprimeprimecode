@@ -84,6 +84,7 @@ bool UdpServer::GetLocalIp(char *pLocalIp, int pIpLen)
 				printf("getnameinfo() failed: %s.\n", gai_strerror(s));
 				return -1;
 			}
+			//background run
 			if (strlen(pLocalIp) < (pIpLen - 1)) {
 				strcat(pLocalIp, "-");
 			}
