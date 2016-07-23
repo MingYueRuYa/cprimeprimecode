@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include "glogencapsulation.h"
 #include "udp_server.h"
 
 using std::cout;
@@ -45,20 +46,25 @@ int main(int argc, char *argv[])
 {
 	//background run
 	daemon(0, 0);
+	SetupSignalHandle();
+	glogEncapsulation::Initialize();
 	UdpServer server;
 	if (! server.Initialize()) {
-		cout << "server initialize error." << endl;
+		//cout << "server initialize error." << endl;
+		glogEncapsulation::Error("Server initialize errro.");
 		return -1;
 	}
 	int count = 0;
 	while (G_FOREVER_LOOP) {
 		sleep(5);
 		if (! server.SendDatagram()) {
-			cout << "send datagram error." << endl;
+			//cout << "send datagram error." << endl;
+			glogEncapsulation::Error("Send datagram error.");
 			return -1;
 		}
 		cout << ++count << endl;
 	}
+	glogEncapsulation::Finalize();
 	return 0;
 }
 

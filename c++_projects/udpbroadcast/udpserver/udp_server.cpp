@@ -7,10 +7,9 @@
 
 #include <string.h>
 
+#include "glogencapsulation.h"
 #include "udp_server.h"
 
-using std::cout;
-using std::endl;
 using std::string;
 
 const int G_PORT = 6000;
@@ -31,14 +30,16 @@ UdpServer::~UdpServer()
 bool UdpServer::Initialize()
 {
 	if ((mSocket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-		cout << "socket function error." << endl;
+		//cout << "socket function error." << endl;
+		glogEncapsulation::Error(strerror(errno));
 		return false;
 	}
 	const int option = 1;
 	//set broadcast type
 	if (setsockopt(mSocket, SOL_SOCKET, SO_BROADCAST, (char *)&option, sizeof(option)) < 0) {
 		//log and error reason
-		cout << "setsockopt function error." << endl;
+		//cout << "setsockopt function error." << endl;
+		glogEncapsulation::Error(strerror(errno));
 		return false;
 	}
 	mSocketAddr.sin_family = AF_INET;
@@ -57,7 +58,8 @@ bool UdpServer::SendDatagram()
 	char ipstr[1024] = "";
 	GetLocalIp(ipstr, 1024);
 	if (sendto(mSocket, ipstr, strlen(ipstr), 0, (sockaddr *)&mSocketAddr, sizeof(sockaddr_in)) < 0) {
-		cout << "sendto function error." << endl;
+		//cout << "sendto function error." << endl;
+		glogEncapsulation::Error(strerror(errno));
 		return false;
 	}
 	return true;
@@ -70,7 +72,8 @@ bool UdpServer::GetLocalIp(char *pLocalIp, int pIpLen)
 	char host[NI_MAXHOST] = {0};
 
 	if (getifaddrs(&ifaddr) == -1) {
-		perror("getifaddrs error");
+		//perror("getifaddrs error");
+		glogEncapsulation::Error(strerror(errno));
 		return false;
 	}
 	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
@@ -81,7 +84,8 @@ bool UdpServer::GetLocalIp(char *pLocalIp, int pIpLen)
 		if (family == AF_INET || family == AF_INET6) {
 			s = getnameinfo(ifa->ifa_addr, (family == AF_INET) ? sizeof(struct sockaddr_in) : sizeof(struct sockaddr_in6), host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
 			if (0 != s) {
-				printf("getnameinfo() failed: %s.\n", gai_strerror(s));
+				//printf("getnameinfo() failed: %s.\n", gai_strerror(s));
+				glogEncapsulation::Error(strerror(errno));
 				return -1;
 			}
 			//background run

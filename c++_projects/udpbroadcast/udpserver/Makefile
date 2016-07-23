@@ -3,8 +3,10 @@ CC := g++
 CFLAGS := -Wall -g
 SOURCE := $(wildcard *.cpp)
 OBJ := $(patsubst %.cpp, %.o, $(SOURCE))
+GLOG_LIB_PATH :=/usr/local/lib/libglog.a
+
 $(BIN):$(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $@
+	$(CC) $(CFLAGS) $(OBJ) $(GLOG_LIB_PATH) -lpthread -o $@
 
 $(OBJ):$(SOURCE)
 	$(CC) $(CFLAGS) $^ -c
