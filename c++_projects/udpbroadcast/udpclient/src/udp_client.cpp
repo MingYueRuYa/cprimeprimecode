@@ -66,3 +66,5 @@ void UdpClient::DoSocketDataRecevied()
 		}
 	}
 }
+
+#include "moc_udp_client.cpp"

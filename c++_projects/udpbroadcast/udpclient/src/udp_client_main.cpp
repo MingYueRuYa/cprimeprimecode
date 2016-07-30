@@ -17,6 +17,5 @@ int main(int argc, char *argv[])
     if (! client.Initialize()) {
 		qDebug() << "udpclient initialize error.";
 	}
-
 	return app.exec();
 }
