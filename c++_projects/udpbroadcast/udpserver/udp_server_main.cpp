@@ -14,7 +14,6 @@
 #include "udp_server.h"
 
 #ifdef OPEN_GLOG
-	//#include "glogencapsulation.h"
 	#include <glog/logging.h>
 #endif 
 
@@ -65,7 +64,6 @@ int main(int argc, char *argv[])
 	SetupSignalHandle();
 	
 #ifdef OPEN_GLOG
-	//glogEncapsulation::Initialize();
 	google::InitGoogleLogging(APPLICATION_NAME);
 	FLAGS_logbufsecs = 0;
 #endif 
@@ -87,9 +85,9 @@ int main(int argc, char *argv[])
 		trycount++;
 	}
 	while (G_FOREVER_LOOP) {
+		//if send datagram error, try more time.
 		if (! server.SendDatagram()) {
 #ifdef OPEN_GLOG
-			//glogEncapsulation::Error("Send datagram error.");
 			LOG(ERROR) << "Send datagram error.";
 #endif 
 		}

@@ -11,7 +11,7 @@
 #include "udp_server_config.h"
 
 #ifdef OPEN_GLOG
-	#include "glogencapsulation.h"
+	#include <glog/logging.h>
 #endif 
 
 using std::string;
@@ -34,9 +34,7 @@ UdpServer::~UdpServer()
 bool UdpServer::Initialize()
 {
 	if ((mSocket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-		//cout << "socket function error." << endl;
 #ifdef OPEN_GLOG
-		//glogEncapsulation::Error(strerror(errno));
 		LOG(ERROR) << strerror(errno);
 #endif
 		return false;
@@ -45,9 +43,7 @@ bool UdpServer::Initialize()
 	//set broadcast type
 	if (setsockopt(mSocket, SOL_SOCKET, SO_BROADCAST, (char *)&option, sizeof(option)) < 0) {
 		//log and error reason
-		//cout << "setsockopt function error." << endl;
 #ifdef OPEN_GLOG
-		//glogEncapsulation::Error(strerror(errno));
 		LOG(ERROR) << strerror(errno);
 #endif
 		return false;
@@ -68,15 +64,12 @@ bool UdpServer::SendDatagram()
 	char ipstr[1024] = "";
 	GetLocalIp(ipstr, 1024);
 	if (sendto(mSocket, ipstr, strlen(ipstr), 0, (sockaddr *)&mSocketAddr, sizeof(sockaddr_in)) < 0) {
-		//cout << "sendto function error." << endl;
 #ifdef OPEN_GLOG
-		//glogEncapsulation::Error(strerror(errno));
 		LOG(ERROR) << strerror(errno);
 #endif
 		return false;
 	}
 #ifdef OPEN_GLOG
-	//glogEncapsulation::Info(ipstr);
 	LOG(INFO) << ipstr;
 #endif
 	return true;
@@ -90,7 +83,6 @@ bool UdpServer::GetLocalIp(char *pLocalIp, int pIpLen)
 
 	if (getifaddrs(&ifaddr) == -1) {
 #ifdef OPEN_GLOG
-		//glogEncapsulation::Error(strerror(errno));
 		LOG(ERROR) << strerror(errno);
 #endif
 		return false;
@@ -104,7 +96,6 @@ bool UdpServer::GetLocalIp(char *pLocalIp, int pIpLen)
 			s = getnameinfo(ifa->ifa_addr, (family == AF_INET) ? sizeof(struct sockaddr_in) : sizeof(struct sockaddr_in6), host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
 			if (0 != s) {
 #ifdef OPEN_GLOG
-				//glogEncapsulation::Error(strerror(errno));
 				LOG(ERROR) << strerror(errno);
 #endif
 				return -1;
