@@ -6,9 +6,7 @@
  ***************************************************************/
 
 #include "glogencapsulation.h"
-
-//this macro should be in application config file.
-const string G_APPLICATION_NAME = "test";
+#include "udp_server_config.h"
 
 glogEncapsulation* glogEncapsulation::mThis = NULL;
 
@@ -52,7 +50,8 @@ void glogEncapsulation::Fatal(const string &pFatalMsg)
 
 glogEncapsulation::glogEncapsulation()
 {
-	google::InitGoogleLogging(G_APPLICATION_NAME.c_str());
+	google::InitGoogleLogging(APPLICATION_NAME);
+	FLAGS_logbufsecs = 0;
 }
 
 glogEncapsulation::~glogEncapsulation()

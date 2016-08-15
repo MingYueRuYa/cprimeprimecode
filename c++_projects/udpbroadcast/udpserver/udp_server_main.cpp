@@ -10,8 +10,15 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include "glogencapsulation.h"
+#include "udp_server_config.h"
 #include "udp_server.h"
+
+#ifdef OPEN_GLOG
+	#include <glog/logging.h>
+#endif 
+
+const int G_TRY_COUNT = 50;
+const int G_SLEPP_TIME = 5;
 
 using std::cout;
 using std::endl;
@@ -21,11 +28,19 @@ bool G_FOREVER_LOOP = true;
 static void TermHandle(int pSignal, siginfo_t *pSiginfo, void *pUnused)
 {
 	G_FOREVER_LOOP = false;
+#ifdef OPEN_GLOG
+	LOG(INFO) << "receive signal num:" << pSignal;
+	google::ShutdownGoogleLogging();
+#endif
 }
 
 static void IntHandle(int pSignal, siginfo_t *pSiginfo, void *pUnused)
 {
 	G_FOREVER_LOOP = false;
+#ifdef OPEN_GLOG
+	LOG(INFO) << "receive signal num:" << pSignal;
+	google::ShutdownGoogleLogging();
+#endif
 }
 
 static int SetupSignalHandle()
@@ -47,24 +62,42 @@ int main(int argc, char *argv[])
 	//background run
 	daemon(0, 0);
 	SetupSignalHandle();
-	glogEncapsulation::Initialize();
+	
+#ifdef OPEN_GLOG
+	google::InitGoogleLogging(APPLICATION_NAME);
+	FLAGS_logbufsecs = 0;
+#endif 
+
 	UdpServer server;
-	if (! server.Initialize()) {
-		//cout << "server initialize error." << endl;
-		glogEncapsulation::Error("Server initialize errro.");
-		return -1;
-	}
-	int count = 0;
-	while (G_FOREVER_LOOP) {
-		sleep(5);
-		if (! server.SendDatagram()) {
-			//cout << "send datagram error." << endl;
-			glogEncapsulation::Error("Send datagram error.");
+	//if initialize error, try more time
+	int trycount = 0;
+	while (true) {
+		if (server.Initialize()) {
+#ifdef OPEN_GLOG
+			LOG(INFO) << "Initialize ok......";
+#endif 
+			break;
+		}
+		sleep(G_SLEPP_TIME);
+		if (trycount > G_TRY_COUNT){
 			return -1;
 		}
-		cout << ++count << endl;
+		trycount++;
 	}
-	glogEncapsulation::Finalize();
+	while (G_FOREVER_LOOP) {
+		//if send datagram error, try more time.
+		if (! server.SendDatagram()) {
+#ifdef OPEN_GLOG
+			LOG(ERROR) << "Send datagram error.";
+#endif 
+		}
+		sleep(G_SLEPP_TIME);
+	}
+
+#ifdef OPEN_GLOG
+	google::ShutdownGoogleLogging();
+#endif 
+
 	return 0;
 }
 

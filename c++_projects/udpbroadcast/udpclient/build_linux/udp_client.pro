@@ -1,13 +1,13 @@
 QT	+= core network
 
 SOURCES += \
-	..\src\udp_client.cpp \
-	..\src\udp_client_main.cpp
+	../src/udp_client.cpp \
+	../src/udp_client_main.cpp
 
 HEADERS += \
-	..\src\udp_client.h 
+	../src/udp_client.h 
 
-TARGET = ../../bin_linux/udp_client
+TARGET = ../bin_linux/udp_client
 	
 unix {
 	MOC_DIR = .moc
