@@ -13,12 +13,12 @@
 #include "dbpack.h"
 #include "mainwindow.h"
 
-//const QString ALL = tr("ALL");
 const QString G_ALL = ("ALL");
 const int G_COLUMN_COUNT = 7;
 
 MainWindow::MainWindow(QWidget *pParent) : QMainWindow(pParent)
 {
+	setProperty("needbkgcolor", true);
     setupUi(this);
     CreateSample();
     UpdateUi();

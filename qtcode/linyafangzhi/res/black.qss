@@ -1,0 +1,194 @@
+QWidget[needbkgcolor="true"] {
+	background-color: #333;
+}
+
+QWidget {
+	color: white;
+}
+
+QWidget#tabVideo, QWidget#tabSoftware {
+	background-color: #545454;
+}
+
+QMessageBox {
+	background-color: #333;
+}
+
+QScrollArea {
+	border: 0px;
+	background-color: #545454;
+}
+
+QTabWidget {
+	border: none;
+	background-color: #333;
+}
+QTabWidget::pane {
+	border: 0px;
+	background-color:  #545454;
+}
+/* Style the tab using the tab sub-control. Note that
+    it reads QTabBar _not_ QTabWidget */
+QTabBar::tab {
+	background-color: #333;/*qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #2A2A2A,stop:1 #111111);*/
+
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	min-width: 80px;
+	min-height: 35px;
+	padding: 2px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+	background: #545454;
+}
+
+/*QMenuBar QMenu*/
+QMenuBar, QMenuBar::item, QMenu{
+	background-color: #3A3A3A;
+}
+
+QMenuBar::item:pressed, QMenuBar::item:selected, QMenu::item:selected, QMenu::item:hover {
+	background-color: #808080;
+}
+
+/*QTableWidget*/
+QTableWidget {
+
+	background-color: #333333;
+	selection-background-color: #222222;
+	gridline-color: #666;
+}
+
+QHeaderView::section {
+	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+								   stop:0 #616161, stop: 0.5 #505050,
+								   stop: 0.6 #434343, stop:1 #656565);
+	color: white;
+	padding-left: 4px;
+	border: 1px solid #6c6c6c;
+ }
+
+QHeaderView::section:checked
+{
+	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+									  stop:0 #616161, stop: 0.5 #505050,
+									  stop: 0.6 #434343, stop:1 #656565);
+}
+
+QPushButton, QToolButton {
+ 	border: 1px solid #666;
+ 	color: #F0F0F0;
+ 	padding: 5px;
+ 	border-radius: 5px;
+	min-width: 60px;
+	background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #333333,stop:1 #222222);
+ }
+
+QPushButton:hover, QToolButton:hover{
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #515151,stop:1 #4D4D4D);
+}
+
+QPushButton:pressed, QToolButton:pressed{
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #4D4D4D,stop:1 #292929);
+}
+
+QPushButton:disabled, QToolButton:disabled {
+	background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #444,stop:1 #555);
+}
+
+QComboBox {
+    border: 1px solid gray;
+	border-radius: 3px;
+	padding: 1px 2px 1px 2px;
+	min-width: 9em;
+	color: white;
+	background: #333333;
+}
+
+QComboBox::drop-down {
+	subcontrol-origin: padding;
+	subcontrol-position: top right;
+	width: 20px;
+
+	border-left-width: 1px;
+	border-left-color: #333333;
+	border-left-style: solid; /* just a single line */
+	border-top-right-radius: 3px; /* same radius as the QComboBox */
+	border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    	image: url(:/images/add-line_vertical.png);
+}
+
+QAbstractItemView {
+	border-color: #333333;
+	border-width: 0px;
+	background-color: #333333;
+	selection-background-color: #222222;
+	outline: 0px;
+}
+
+QScrollBar:vertical {
+	width: 10px;
+	background-color: rgba(0, 0, 0, 0%);
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+QScrollBar::handle:vertical {
+	width: 10px;
+	background: #222;
+}
+
+QScrollBar::handle:vertical:hover {
+	width: 10px;
+	background: #232323;
+}
+
+QScrollBar::add-line:vertical {
+	width: 10px;
+	height: 10px;
+	subcontrol-position: bottom;
+	subcontrol-origin: margin;
+	border-image: url(:/images/add-line_vertical.png);
+}
+
+QScrollBar::sub-line:vertical {
+	width: 10px;
+	height: 10px;
+	subcontrol-position: top;
+	subcontrol-position: margin;
+	border-image: url(:/images/sub-line_vertical.png);
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+	width: 10px;
+	background: #767676;
+}
+
+ QLineEdit {
+     border: 1px solid gray;
+     border-radius: 3px;
+     padding-left: 2px;
+     background: #545454;
+     selection-background-color: darkgray;
+ }
+ 
+ QGroupBox {
+     border: 1px solid #333;
+     border-radius: 5px;
+     margin-top: 2ex; /* leave space at the top for the title */
+ }
+
+ QGroupBox::title {
+     subcontrol-origin: margin;
+     subcontrol-position: top center; /* position at the top center */
+     padding: 0 3px;
+ }
+ 
+ QFileDialog {
+	background-color: #333;
+	color: white;
+ }
