@@ -18,10 +18,15 @@ const int G_COLUMN_COUNT = 7;
 
 MainWindow::MainWindow(QWidget *pParent) : QMainWindow(pParent)
 {
-	setProperty("needbkgcolor", true);
+	//setProperty("needbkgcolor", true);
+	setProperty("Form", true);
     setupUi(this);
     CreateSample();
     UpdateUi();
+	//设置窗体标题栏隐藏
+	this->setWindowFlags(Qt::FramelessWindowHint |
+		Qt::WindowSystemMenuHint |
+		Qt::WindowMinMaxButtonsHint);
 
     connect(combo_dyework, SIGNAL(currentIndexChanged(const QString &)),this,
             SLOT(DoComDyeWorkChanged(const QString &)));

@@ -1,7 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ui_mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created: Mon Aug 15 23:16:19 2016
+**      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -58,8 +59,7 @@ public:
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 85, 127);\n"
-"color: rgb(255, 255, 255);"));
+        groupBox->setStyleSheet(QString::fromUtf8(""));
         verticalLayout = new QVBoxLayout(groupBox);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
@@ -69,29 +69,25 @@ public:
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         combo_dyework = new QComboBox(groupBox);
         combo_dyework->setObjectName(QString::fromUtf8("combo_dyework"));
-        combo_dyework->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
-"color: rgb(0, 0, 0);"));
+        combo_dyework->setStyleSheet(QString::fromUtf8(""));
 
         horizontalLayout->addWidget(combo_dyework);
 
         combo_clientname = new QComboBox(groupBox);
         combo_clientname->setObjectName(QString::fromUtf8("combo_clientname"));
-        combo_clientname->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
-"color: rgb(0, 0, 0);"));
+        combo_clientname->setStyleSheet(QString::fromUtf8(""));
 
         horizontalLayout->addWidget(combo_clientname);
 
         combo_specificationproducts = new QComboBox(groupBox);
         combo_specificationproducts->setObjectName(QString::fromUtf8("combo_specificationproducts"));
-        combo_specificationproducts->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
-"color: rgb(0, 0, 0);"));
+        combo_specificationproducts->setStyleSheet(QString::fromUtf8(""));
 
         horizontalLayout->addWidget(combo_specificationproducts);
 
         btn_import = new QPushButton(groupBox);
         btn_import->setObjectName(QString::fromUtf8("btn_import"));
-        btn_import->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
-"color: rgb(0, 0, 0);"));
+        btn_import->setStyleSheet(QString::fromUtf8(""));
 
         horizontalLayout->addWidget(btn_import);
 
@@ -126,7 +122,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 824, 25));
+        menuBar->setGeometry(QRect(0, 0, 824, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));

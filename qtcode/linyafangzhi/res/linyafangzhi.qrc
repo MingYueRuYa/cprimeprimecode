@@ -1,6 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 	<qresource>
 		<file>black.qss</file>
+		<file>blue.qss</file>
 		<file>images/add-line_vertical.png</file>
 		<file>images/add-line_horizontal.png</file>
 		<file>images/sub-line_horizontal.png</file>
