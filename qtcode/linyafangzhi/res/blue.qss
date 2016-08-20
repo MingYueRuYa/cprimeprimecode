@@ -138,11 +138,11 @@ height:20px;
 }
 
 QCheckBox::indicator:unchecked{
-image:url(:/image/checkbox_unchecked.png);
+image:url(:/images/checkbox_unchecked.png);
 }
 
 QCheckBox::indicator:checked{
-image:url(:/image/checkbox_checked.png);
+image:url(:/images/checkbox_checked.png);
 }
 
 QRadioButton{
@@ -156,11 +156,11 @@ height:15px;
 }
 
 QRadioButton::indicator::unchecked{
-image:url(:/image/radio_normal.png);
+image:url(:/images/radio_normal.png);
 }
 
 QRadioButton::indicator::checked{
-image:url(:/image/radio_selected.png);
+image:url(:/images/radio_selected.png);
 }
 
 QSpinBox{
@@ -170,11 +170,11 @@ border:1px solid #C2CCD8;
 }
 
 QSpinBox::up-button{
-image:url(:/image/array_up.png);
+image:url(:/images/array_up.png);
 }
 
 QSpinBox::down-button{
-image:url(:/image/array_down.png);
+image:url(:/images/array_down.png);
 }
 
 QComboBox,QDateEdit,QSpinBox{
@@ -195,7 +195,7 @@ border-left-color:#C0DCF2;
 }
 
 QComboBox::down-arrow,QDateEdit::down-arrow{
-image:url(:/image/array_down.png);
+image:url(:/images/add-line_vertical.png);
 }
 
 QMenu{
@@ -306,7 +306,7 @@ height:10px;
 width:10px;
 subcontrol-position:bottom;
 subcontrol-origin:margin;
-border-image:url(:/image/add-line_vertical.png);
+border-image:url(:/images/add-line_vertical.png);
 }
 
 QScrollBar::add-line:horizontal{
@@ -314,7 +314,7 @@ height:10px;
 width:10px;
 subcontrol-position:right;
 subcontrol-origin:margin;
-border-image:url(:/image/add-line_horizontal.png);
+border-image:url(:/images/add-line_horizontal.png);
 }
 
 QScrollBar::sub-line:vertical{
@@ -322,7 +322,7 @@ height:10px;
 width:10px;
 subcontrol-position:top;
 subcontrol-origin:margin;
-border-image:url(:/image/sub-line_vertical.png);
+border-image:url(:/images/sub-line_vertical.png);
 }
 
 QScrollBar::sub-line:horizontal{
@@ -330,7 +330,7 @@ height:10px;
 width:10px;
 subcontrol-position:left;
 subcontrol-origin:margin;
-border-image:url(:/image/sub-line_horizontal.png);
+border-image:url(:/images/sub-line_horizontal.png);
 }
 
 QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical,QScrollBar::add-page:horizontal,QScrollBar::sub-page:horizontal{

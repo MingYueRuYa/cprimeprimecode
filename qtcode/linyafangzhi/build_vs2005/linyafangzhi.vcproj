@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\bin_win32"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -189,6 +189,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\searchdockwidget.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\userpath.cpp"
 				>
 			</File>
@@ -206,7 +210,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -215,13 +219,35 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\mainwindow.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\searchdockwidget.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -250,7 +276,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -259,7 +285,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -301,7 +327,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 							Outputs="$(InputDir)/moc_$(InputName).cpp"
 						/>
 					</FileConfiguration>
@@ -310,7 +336,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 							Outputs="$(InputDir)/moc_$(InputName).cpp"
 						/>
 					</FileConfiguration>
@@ -323,7 +349,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 							Outputs="$(InputDir)/moc_$(InputName).cpp"
 						/>
 					</FileConfiguration>
@@ -332,7 +358,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 							Outputs="$(InputDir)/moc_$(InputName).cpp"
 						/>
 					</FileConfiguration>
@@ -345,7 +371,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 							Outputs="$(InputDir)/moc_$(InputName).cpp"
 						/>
 					</FileConfiguration>
@@ -354,7 +380,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+							CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 							Outputs="$(InputDir)/moc_$(InputName).cpp"
 						/>
 					</FileConfiguration>

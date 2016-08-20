@@ -8,11 +8,13 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
-#include <QtGui/QMainWindow>
 #include <QtCore/QTextCodec>
+#include <QtGui/QMainWindow>
+#include <QtGui/QVBoxLayout>
 
 #include "ui_mainwindow.h"
 #include "dbpack.h"
+#include "searchdockwidget.h"
 
 class MainWindow : public QMainWindow, protected Ui::MainWindow
 {
@@ -35,6 +37,8 @@ protected:
 
     void SerachInfo(const SearchType &pSearchType, const QString &pSerachText);
 
+	void InsertDataToTable(const OrderInfoList &pOrderInfoList);
+
 protected slots:
     void DoComDyeWorkChanged(const QString &pDyeWorkName);
 
@@ -42,7 +46,16 @@ protected slots:
 
     void DoComSpecficationProductsChanged(const QString &pSepificationProducts);
 
+	void DoOrderInfoSearched();
+
     void DoImport();
+
+private:
+	SearchDockWidget *mSearchDockWidget;
+
+	QWidget *mSearchDockWidgetContents;
+
+	QVBoxLayout *mDockVLayout;
 
 private:
     OrderInfoList mOrderInfoList;

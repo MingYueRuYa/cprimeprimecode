@@ -6,5 +6,7 @@
 		<file>images/add-line_horizontal.png</file>
 		<file>images/sub-line_horizontal.png</file>
 		<file>images/sub-line_vertical.png</file>
+		<file>images/checkbox_checked.png</file>
+		<file>images/checkbox_unchecked.png</file>
 	</qresource>
 </RCC>
