@@ -93,50 +93,52 @@ OrderInfo::~OrderInfo()
 
 OrderInfo::OrderInfo(const OrderInfo &pOrderInfo)
 {
-	mDyeWork = pOrderInfo.GetDyeWork();
-    mOrderDate = pOrderInfo.GetOrderDate();
-	mClientName = pOrderInfo.GetClientName();
-	mClientContact = pOrderInfo.GetClientContact();
-	mOrderDate = pOrderInfo.GetOrderDate();
-	mSpecificationProduct = pOrderInfo.GetSpecificationProduct();
-	mGreyClothSupplier = pOrderInfo.GetGreyClothSupplier();
-	mOtherCraftwork = pOrderInfo.GetOtherCraftwork();
-	mColorTextilePrintPrice = pOrderInfo.GetColorTextilePrintPrice();
-	mColor = pOrderInfo.GetColor();
-	mMenFu = pOrderInfo.GetMenFu();
-	mCount = pOrderInfo.GetCount();
-	mPrice = pOrderInfo.GetPrice();
-	mProcessCost = pOrderInfo.GetProcessCost();
-	mGreyClothPrice = pOrderInfo.GetGreyClothPrice();
-	mGradeACount = pOrderInfo.GetGradeACount();
-	mGradeBCount = pOrderInfo.GetGradeBCount();
-	mGreyClothCount = pOrderInfo.GetGreyClothCount();
-	mIsShangRou = pOrderInfo.GetIsShangRou();
-    mMemory = pOrderInfo.GetMemory();
+	mOrderId  = pOrderInfo.mOrderId;
+	mDyeWork = pOrderInfo.mDyeWork;
+    mOrderDate = pOrderInfo.mOrderDate;
+	mClientName = pOrderInfo.mClientName;
+	mClientContact = pOrderInfo.mClientContact;
+	mOrderDate = pOrderInfo.mOrderDate;
+	mSpecificationProduct = pOrderInfo.mSpecificationProduct;
+	mGreyClothSupplier = pOrderInfo.mGreyClothSupplier;
+	mOtherCraftwork = pOrderInfo.mOtherCraftwork;
+	mColorTextilePrintPrice = pOrderInfo.mColorTextilePrintPrice;
+	mColor = pOrderInfo.mColor;
+	mMenFu = pOrderInfo.mMenFu;
+	mCount = pOrderInfo.mCount;
+	mPrice = pOrderInfo.mPrice;
+	mProcessCost = pOrderInfo.mProcessCost;
+	mGreyClothPrice = pOrderInfo.mGreyClothPrice;
+	mGradeACount = pOrderInfo.mGradeACount;
+	mGradeBCount = pOrderInfo.mGradeBCount;
+	mGreyClothCount = pOrderInfo.mGreyClothCount;
+	mIsShangRou = pOrderInfo.mIsShangRou;
+    mMemory = pOrderInfo.mMemory;
 }
 
 OrderInfo &OrderInfo::operator=(const OrderInfo &pOrderInfo)
 {
-	mDyeWork = pOrderInfo.GetDyeWork();
-    mOrderDate = pOrderInfo.GetOrderDate();
-	mClientName = pOrderInfo.GetClientName();
-	mClientContact = pOrderInfo.GetClientContact();
-	mOrderDate = pOrderInfo.GetOrderDate();
-	mSpecificationProduct = pOrderInfo.GetSpecificationProduct();
-	mGreyClothSupplier = pOrderInfo.GetGreyClothSupplier();
-	mOtherCraftwork = pOrderInfo.GetOtherCraftwork();
-	mColorTextilePrintPrice = pOrderInfo.GetColorTextilePrintPrice();
-	mColor = pOrderInfo.GetColor();
-	mMenFu = pOrderInfo.GetMenFu();
-	mCount = pOrderInfo.GetCount();
-	mPrice = pOrderInfo.GetPrice();
-	mProcessCost = pOrderInfo.GetProcessCost();
-	mGreyClothPrice = pOrderInfo.GetGreyClothPrice();
-	mGradeACount = pOrderInfo.GetGradeACount();
-	mGradeBCount = pOrderInfo.GetGradeBCount();
-	mGreyClothCount = pOrderInfo.GetGreyClothCount();
-	mIsShangRou = pOrderInfo.GetIsShangRou();
-    mMemory = pOrderInfo.GetMemory();
+	mOrderId  = pOrderInfo.mOrderId;
+	mDyeWork = pOrderInfo.mDyeWork;
+	mOrderDate = pOrderInfo.mOrderDate;
+	mClientName = pOrderInfo.mClientName;
+	mClientContact = pOrderInfo.mClientContact;
+	mOrderDate = pOrderInfo.mOrderDate;
+	mSpecificationProduct = pOrderInfo.mSpecificationProduct;
+	mGreyClothSupplier = pOrderInfo.mGreyClothSupplier;
+	mOtherCraftwork = pOrderInfo.mOtherCraftwork;
+	mColorTextilePrintPrice = pOrderInfo.mColorTextilePrintPrice;
+	mColor = pOrderInfo.mColor;
+	mMenFu = pOrderInfo.mMenFu;
+	mCount = pOrderInfo.mCount;
+	mPrice = pOrderInfo.mPrice;
+	mProcessCost = pOrderInfo.mProcessCost;
+	mGreyClothPrice = pOrderInfo.mGreyClothPrice;
+	mGradeACount = pOrderInfo.mGradeACount;
+	mGradeBCount = pOrderInfo.mGradeBCount;
+	mGreyClothCount = pOrderInfo.mGreyClothCount;
+	mIsShangRou = pOrderInfo.mIsShangRou;
+	mMemory = pOrderInfo.mMemory;
 	return *this;
 }
 

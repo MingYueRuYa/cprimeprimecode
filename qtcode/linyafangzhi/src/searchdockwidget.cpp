@@ -51,6 +51,7 @@ OrderInfoList SearchDockWidget::FilterOrderInfo()
 			}
 			temporderinfolist.append(info);
 		}
+		checkflag = true;
 	}
 
 	//过滤客户名
@@ -59,12 +60,23 @@ OrderInfoList SearchDockWidget::FilterOrderInfo()
 		if (clientnamestr == tr("ALL")) {
 			return mOrderInfoList;
 		}
-		for (int i = temporderinfolist.count() - 1; i >= 0; --i) {
-			if (temporderinfolist[i].GetClientName() == clientnamestr) {
-				continue;
+		if (checkflag) {
+			for (int i = temporderinfolist.count() - 1; i >= 0; --i) {
+				if (temporderinfolist[i].GetClientName() == clientnamestr) {
+					continue;
+				}
+				temporderinfolist.removeAt(i);
 			}
-			temporderinfolist.removeAt(i);
 		}
+		else {
+			foreach (OrderInfo info, mOrderInfoList) {
+				if (info.GetClientName() != clientnamestr) {
+					continue;
+				}
+				temporderinfolist.append(info);
+			}
+		}
+		checkflag = true;
 	}
 
 	//过滤品名规格
@@ -73,12 +85,23 @@ OrderInfoList SearchDockWidget::FilterOrderInfo()
 		if (specificatiostr == tr("ALL")) {
 			return mOrderInfoList;
 		}
-		for (int i = temporderinfolist.count() - 1; i >= 0; --i) {
-			if (temporderinfolist[i].GetSpecificationProduct() == specificatiostr) {
-				continue;
+		if (checkflag) {
+			for (int i = temporderinfolist.count() - 1; i >= 0; --i) {
+				if (temporderinfolist[i].GetSpecificationProduct() == specificatiostr) {
+					continue;
+				}
+				temporderinfolist.removeAt(i);
 			}
-			temporderinfolist.removeAt(i);
 		}
+		else {
+			foreach (OrderInfo info, mOrderInfoList) {
+				if (info.GetSpecificationProduct() != specificatiostr) {
+					continue;
+				}
+				temporderinfolist.append(info);
+			}
+		}
+		checkflag = true;
 	}
 	
 	//过滤供应商
@@ -87,12 +110,23 @@ OrderInfoList SearchDockWidget::FilterOrderInfo()
 		if (supplierstr == tr("ALL")) {
 			return mOrderInfoList;
 		}
-		for (int i = temporderinfolist.count() - 1; i >= 0; --i) {
-			if (temporderinfolist[i].GetGreyClothSupplier() == supplierstr) {
-				continue;
+		if (checkflag) {
+			for (int i = temporderinfolist.count() - 1; i >= 0; --i) {
+				if (temporderinfolist[i].GetGreyClothSupplier() == supplierstr) {
+					continue;
+				}
+				temporderinfolist.removeAt(i);
 			}
-			temporderinfolist.removeAt(i);
 		}
+		else {
+			foreach (OrderInfo info, mOrderInfoList) {
+				if (info.GetGreyClothSupplier() != supplierstr) {
+					continue;
+				}
+				temporderinfolist.append(info);
+			}
+		}
+		checkflag = true;
 	}
 
 	return temporderinfolist;

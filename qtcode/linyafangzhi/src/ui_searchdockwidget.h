@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ui_searchdockwidget.ui'
 **
-** Created: Sat Aug 20 20:33:36 2016
+** Created: Sat Aug 20 23:31:48 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

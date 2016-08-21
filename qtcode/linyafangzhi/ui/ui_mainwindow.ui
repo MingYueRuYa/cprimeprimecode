@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>958</width>
-    <height>485</height>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,6 +61,11 @@
         <string>颜色</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>门幅</string>
+       </property>
+      </column>
      </widget>
     </item>
     <item>
@@ -70,11 +75,11 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="edt_menfu_2">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -82,7 +87,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>门幅：</string>
+              <string>客要数:</string>
              </property>
             </widget>
            </item>
@@ -117,7 +122,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QLineEdit" name="edt_menfu">
+            <widget class="QLineEdit" name="edt_clientcount">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -151,7 +156,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QLabel" name="edt_menfu_2">
+            <widget class="QLabel" name="label_7">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -159,7 +164,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>客要数:</string>
+              <string>单价:</string>
              </property>
             </widget>
            </item>
@@ -194,7 +199,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QLineEdit" name="edt_clientcount">
+            <widget class="QLineEdit" name="edt_price">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -228,7 +233,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <widget class="QLabel" name="label_7">
+            <widget class="QLabel" name="label_8">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -236,7 +241,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>单价:</string>
+              <string>加工费：</string>
              </property>
             </widget>
            </item>
@@ -271,7 +276,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QLineEdit" name="edt_price">
+            <widget class="QLineEdit" name="edt_processcost">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -339,7 +344,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string/>
+              <string>23</string>
              </property>
             </widget>
            </item>
@@ -376,7 +381,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string/>
+              <string>26</string>
              </property>
             </widget>
            </item>
@@ -400,7 +405,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="edt_greyclothsuppiler_2">
+          <widget class="QLineEdit" name="edt_memory">
            <property name="maximumSize">
             <size>
              <width>16777215</width>

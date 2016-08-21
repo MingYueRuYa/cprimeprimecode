@@ -44,11 +44,8 @@ void MainWindow::UpdateUi()
 	this->addDockWidget(static_cast<Qt::DockWidgetArea>(1), mSearchDockWidget);
 	connect(mSearchDockWidget, SIGNAL(OnOrderInfoSearched()), this, SLOT(DoOrderInfoSearched()));
 
-	tableWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-
-    if (mOrderInfoList.count() < 0) {
-        return;
-    }
+	tableWidget->horizontalHeader()->setStretchLastSection(true);
+	connect(tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(DoTableCellClicked(int, int)));
 
     foreach (OrderInfo info, mOrderInfoList) {
         if (! info.GetDyeWork().isEmpty()) {
@@ -61,7 +58,6 @@ void MainWindow::UpdateUi()
             mSpecificationProducetSet.insert(info.GetSpecificationProduct());
         }
     }
-
 	InsertDataToTable(mOrderInfoList);
 }
 
@@ -79,32 +75,34 @@ bool MainWindow::CreateSample()
 		QMessageBox::information(NULL, APPLICATION_NAME, file.errorString());
         return false;
     }
+	int id = 1;
     while (! file.atEnd()) {
         OrderInfo orderinfo;
         QByteArray line = file.readLine();
         QStringList stringlist = codec->toUnicode(line).split(",");
-		if (stringlist.count() < 6) {
+		if (stringlist.count() < 19) {
 			continue;
 		}
+		orderinfo.SetOrderId(id++);
         orderinfo.SetDyeWork(stringlist[0].trimmed());
         orderinfo.SetOrderDate(stringlist[1]);
         orderinfo.SetClientName(stringlist[2]);
         orderinfo.SetClientContact(stringlist[3]);
         orderinfo.SetSpecificationProduct(stringlist[4].trimmed());
         orderinfo.SetColor(stringlist[5].trimmed());
-        //orderinfo.SetMenFu(stringlist[6].trimmed());
-        //orderinfo.SetCount(stringlist[7].toInt());
-        //orderinfo.SetPrice(stringlist[8].toDouble());
-        //orderinfo.SetProcessCost(stringlist[9].toDouble());
-        //orderinfo.SetIsShangRou(stringlist[10] == "1" ? true : false);
-        //orderinfo.SetOtherCraftwork(stringlist[11]);
-        //orderinfo.SetColorTextilePrintPrice(stringlist[12].toDouble());
-        //orderinfo.SetGradeACount(stringlist[13].toInt());
-        //orderinfo.SetGradeBCount(stringlist[14].toInt());
-        //orderinfo.SetGreyClothSupplier(stringlist[15]);
-        //orderinfo.SetGreyClothCount(stringlist[16].toInt());
-        //orderinfo.SetGreyClothPrice(stringlist[17].toDouble());
-        //orderinfo.SetMemory(stringlist[18].trimmed());
+        orderinfo.SetMenFu(stringlist[6].trimmed());
+        orderinfo.SetCount(stringlist[7].toInt());
+        orderinfo.SetPrice(stringlist[8].toDouble());
+        orderinfo.SetProcessCost(stringlist[9].toDouble());
+        orderinfo.SetIsShangRou(stringlist[10] == "1" ? true : false);
+        orderinfo.SetOtherCraftwork(stringlist[11]);
+        orderinfo.SetColorTextilePrintPrice(stringlist[12].toDouble());
+        orderinfo.SetGradeACount(stringlist[13].toInt());
+        orderinfo.SetGradeBCount(stringlist[14].toInt());
+        orderinfo.SetGreyClothSupplier(stringlist[15]);
+        orderinfo.SetGreyClothCount(stringlist[16].toInt());
+        orderinfo.SetGreyClothPrice(stringlist[17].toDouble());
+        orderinfo.SetMemory(stringlist[18].trimmed());
         mOrderInfoList.append(orderinfo);
     }
     return true;
@@ -214,33 +212,35 @@ void MainWindow::InsertDataToTable(const OrderInfoList &pOrderInfoList)
 	}
 	QTableWidgetItem *widgetitem = NULL;
 	for (int i = 0; i < pOrderInfoList.count(); ++i) {
+		OrderInfo orderinfo = pOrderInfoList[i];
 		int rowcount = tableWidget->rowCount();
 		tableWidget->insertRow(rowcount);
 		widgetitem = new QTableWidgetItem(QString::number(i + 1));
+		widgetitem->setData(Qt::UserRole, orderinfo.GetOrderId());
 		widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		tableWidget->setItem(rowcount, 0, widgetitem);
 
-		widgetitem = new QTableWidgetItem(pOrderInfoList[i].GetDyeWork());
+		widgetitem = new QTableWidgetItem(orderinfo.GetDyeWork());
 		widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		tableWidget->setItem(rowcount, 1, widgetitem);
 
-		widgetitem = new QTableWidgetItem(pOrderInfoList[i].GetOrderDate());
+		widgetitem = new QTableWidgetItem(orderinfo.GetOrderDate());
 		widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		tableWidget->setItem(rowcount, 2, widgetitem);
 
-		widgetitem = new QTableWidgetItem(pOrderInfoList[i].GetClientName());
+		widgetitem = new QTableWidgetItem(orderinfo.GetClientName());
 		widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		tableWidget->setItem(rowcount, 3, widgetitem);
 
-		widgetitem = new QTableWidgetItem(pOrderInfoList[i].GetClientContact());
+		widgetitem = new QTableWidgetItem(orderinfo.GetClientContact());
 		widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		tableWidget->setItem(rowcount, 4, widgetitem);
 
-		widgetitem = new QTableWidgetItem(pOrderInfoList[i].GetSpecificationProduct());
+		widgetitem = new QTableWidgetItem(orderinfo.GetSpecificationProduct());
 		widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		tableWidget->setItem(rowcount, 5, widgetitem);
 
-		widgetitem = new QTableWidgetItem(pOrderInfoList[i].GetColor());
+		widgetitem = new QTableWidgetItem(orderinfo.GetColor());
 		widgetitem->setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		tableWidget->setItem(rowcount, 6, widgetitem);
 	}
@@ -276,15 +276,43 @@ void MainWindow::DoComSpecficationProductsChanged(const QString &pSepificationPr
     }
 }
 
+void MainWindow::DoOrderInfoSearched()
+{
+	OrderInfoList temporderinfolist = mSearchDockWidget->FilterOrderInfo();
+	InsertDataToTable(temporderinfolist);
+}
+
 void MainWindow::DoImport()
 {
 
 }
 
-void MainWindow::DoOrderInfoSearched()
+void MainWindow::DoTableCellClicked(const int &pRow, const int &pColumn)
 {
-	OrderInfoList temporderinfolist = mSearchDockWidget->FilterOrderInfo();
-	InsertDataToTable(temporderinfolist);
+	if (pRow < 0 || pRow > tableWidget->rowCount()) {
+		return;
+	}
+	int orderid = tableWidget->item(pRow, 0)->data(Qt::UserRole).toInt();
+	OrderInfo orderinfo;
+	foreach (OrderInfo info, mOrderInfoList) {
+		if (info.GetOrderId() != orderid) {
+			continue;
+		}
+		orderinfo = info;
+		break;
+	}
+	edt_clientcount->setText(QString::number(orderinfo.GetCount()));
+	edt_price->setText(QString::number(orderinfo.GetPrice()));
+	edt_processcost->setText(QString::number(orderinfo.GetProcessCost()));
+	edt_isshangrou->setText(orderinfo.GetIsShangRou() == true ? tr("yes") : tr("no"));
+	edt_othercraftwork->setText(orderinfo.GetOtherCraftwork());
+	edt_colortextilprintprice->setText(QString::number(orderinfo.GetColorTextilePrintPrice()));
+	edt_gradeacount->setText(QString::number(orderinfo.GetGradeACount()));
+	edt_gradebcount->setText(QString::number(orderinfo.GetGradeBCount()));
+	edt_greyclothsuppiler->setText(orderinfo.GetGreyClothSupplier());
+	edt_greyclothcount->setText(QString::number(orderinfo.GetGreyClothCount()));
+	edt_greyclothprice->setText(QString::number(orderinfo.GetGreyClothPrice()));
+	edt_memory->setText(orderinfo.GetMemory());
 }
 
 #include "moc_mainwindow.cpp"

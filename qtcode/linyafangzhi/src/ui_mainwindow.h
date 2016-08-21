@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ui_mainwindow.ui'
 **
-** Created: Sat Aug 20 20:33:36 2016
+** Created: Sat Aug 20 23:31:48 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -45,29 +45,29 @@ public:
     QTableWidget *tableWidget;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout_9;
-    QHBoxLayout *horizontalLayout_5;
+    QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout;
-    QLabel *label_5;
+    QLabel *edt_menfu_2;
     QLabel *label_18;
     QLabel *label_23;
     QVBoxLayout *verticalLayout_2;
-    QLineEdit *edt_menfu;
+    QLineEdit *edt_clientcount;
     QLineEdit *edt_othercraftwork;
     QLineEdit *edt_greyclothsuppiler;
     QVBoxLayout *verticalLayout_3;
-    QLabel *edt_menfu_2;
+    QLabel *label_7;
     QLabel *label_17;
     QLabel *label_22;
     QVBoxLayout *verticalLayout_4;
-    QLineEdit *edt_clientcount;
+    QLineEdit *edt_price;
     QLineEdit *edt_colortextilprintprice;
     QLineEdit *edt_greyclothcount;
     QVBoxLayout *verticalLayout_5;
-    QLabel *label_7;
+    QLabel *label_8;
     QLabel *label_20;
     QLabel *label_24;
     QVBoxLayout *verticalLayout_6;
-    QLineEdit *edt_price;
+    QLineEdit *edt_processcost;
     QLineEdit *edt_gradeacount;
     QLineEdit *edt_greyclothprice;
     QVBoxLayout *verticalLayout_7;
@@ -80,7 +80,7 @@ public:
     QLabel *label_26;
     QHBoxLayout *horizontalLayout_6;
     QLabel *label_27;
-    QLineEdit *edt_greyclothsuppiler_2;
+    QLineEdit *edt_memory;
     QMenuBar *menuBar;
     QMenu *menu;
     QMenu *menu_2;
@@ -91,7 +91,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(958, 485);
+        MainWindow->resize(958, 564);
         action_exit = new QAction(MainWindow);
         action_exit->setObjectName(QString::fromUtf8("action_exit"));
         action_export = new QAction(MainWindow);
@@ -117,8 +117,8 @@ public:
         verticalLayout_10->setContentsMargins(11, 11, 11, 11);
         verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
         tableWidget = new QTableWidget(centralWidget);
-        if (tableWidget->columnCount() < 7)
-            tableWidget->setColumnCount(7);
+        if (tableWidget->columnCount() < 8)
+            tableWidget->setColumnCount(8);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -133,6 +133,8 @@ public:
         tableWidget->setHorizontalHeaderItem(5, __qtablewidgetitem5);
         QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(6, __qtablewidgetitem6);
+        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(7, __qtablewidgetitem7);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
         tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
         tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -146,21 +148,21 @@ public:
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setContentsMargins(11, 11, 11, 11);
         verticalLayout_9->setObjectName(QString::fromUtf8("verticalLayout_9"));
-        horizontalLayout_5 = new QHBoxLayout();
-        horizontalLayout_5->setSpacing(6);
-        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        label_5 = new QLabel(groupBox);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
+        edt_menfu_2 = new QLabel(groupBox);
+        edt_menfu_2->setObjectName(QString::fromUtf8("edt_menfu_2"));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
-        label_5->setSizePolicy(sizePolicy);
+        sizePolicy.setHeightForWidth(edt_menfu_2->sizePolicy().hasHeightForWidth());
+        edt_menfu_2->setSizePolicy(sizePolicy);
 
-        verticalLayout->addWidget(label_5);
+        verticalLayout->addWidget(edt_menfu_2);
 
         label_18 = new QLabel(groupBox);
         label_18->setObjectName(QString::fromUtf8("label_18"));
@@ -177,16 +179,16 @@ public:
         verticalLayout->addWidget(label_23);
 
 
-        horizontalLayout_5->addLayout(verticalLayout);
+        horizontalLayout->addLayout(verticalLayout);
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        edt_menfu = new QLineEdit(groupBox);
-        edt_menfu->setObjectName(QString::fromUtf8("edt_menfu"));
-        edt_menfu->setMaximumSize(QSize(16777215, 16777215));
+        edt_clientcount = new QLineEdit(groupBox);
+        edt_clientcount->setObjectName(QString::fromUtf8("edt_clientcount"));
+        edt_clientcount->setMaximumSize(QSize(16777215, 16777215));
 
-        verticalLayout_2->addWidget(edt_menfu);
+        verticalLayout_2->addWidget(edt_clientcount);
 
         edt_othercraftwork = new QLineEdit(groupBox);
         edt_othercraftwork->setObjectName(QString::fromUtf8("edt_othercraftwork"));
@@ -201,17 +203,17 @@ public:
         verticalLayout_2->addWidget(edt_greyclothsuppiler);
 
 
-        horizontalLayout_5->addLayout(verticalLayout_2);
+        horizontalLayout->addLayout(verticalLayout_2);
 
         verticalLayout_3 = new QVBoxLayout();
         verticalLayout_3->setSpacing(6);
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        edt_menfu_2 = new QLabel(groupBox);
-        edt_menfu_2->setObjectName(QString::fromUtf8("edt_menfu_2"));
-        sizePolicy.setHeightForWidth(edt_menfu_2->sizePolicy().hasHeightForWidth());
-        edt_menfu_2->setSizePolicy(sizePolicy);
+        label_7 = new QLabel(groupBox);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+        sizePolicy.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
+        label_7->setSizePolicy(sizePolicy);
 
-        verticalLayout_3->addWidget(edt_menfu_2);
+        verticalLayout_3->addWidget(label_7);
 
         label_17 = new QLabel(groupBox);
         label_17->setObjectName(QString::fromUtf8("label_17"));
@@ -228,16 +230,16 @@ public:
         verticalLayout_3->addWidget(label_22);
 
 
-        horizontalLayout_5->addLayout(verticalLayout_3);
+        horizontalLayout->addLayout(verticalLayout_3);
 
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
-        edt_clientcount = new QLineEdit(groupBox);
-        edt_clientcount->setObjectName(QString::fromUtf8("edt_clientcount"));
-        edt_clientcount->setMaximumSize(QSize(16777215, 16777215));
+        edt_price = new QLineEdit(groupBox);
+        edt_price->setObjectName(QString::fromUtf8("edt_price"));
+        edt_price->setMaximumSize(QSize(16777215, 16777215));
 
-        verticalLayout_4->addWidget(edt_clientcount);
+        verticalLayout_4->addWidget(edt_price);
 
         edt_colortextilprintprice = new QLineEdit(groupBox);
         edt_colortextilprintprice->setObjectName(QString::fromUtf8("edt_colortextilprintprice"));
@@ -252,17 +254,17 @@ public:
         verticalLayout_4->addWidget(edt_greyclothcount);
 
 
-        horizontalLayout_5->addLayout(verticalLayout_4);
+        horizontalLayout->addLayout(verticalLayout_4);
 
         verticalLayout_5 = new QVBoxLayout();
         verticalLayout_5->setSpacing(6);
         verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
-        label_7 = new QLabel(groupBox);
-        label_7->setObjectName(QString::fromUtf8("label_7"));
-        sizePolicy.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
-        label_7->setSizePolicy(sizePolicy);
+        label_8 = new QLabel(groupBox);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+        sizePolicy.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
+        label_8->setSizePolicy(sizePolicy);
 
-        verticalLayout_5->addWidget(label_7);
+        verticalLayout_5->addWidget(label_8);
 
         label_20 = new QLabel(groupBox);
         label_20->setObjectName(QString::fromUtf8("label_20"));
@@ -279,16 +281,16 @@ public:
         verticalLayout_5->addWidget(label_24);
 
 
-        horizontalLayout_5->addLayout(verticalLayout_5);
+        horizontalLayout->addLayout(verticalLayout_5);
 
         verticalLayout_6 = new QVBoxLayout();
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
-        edt_price = new QLineEdit(groupBox);
-        edt_price->setObjectName(QString::fromUtf8("edt_price"));
-        edt_price->setMaximumSize(QSize(16777215, 16777215));
+        edt_processcost = new QLineEdit(groupBox);
+        edt_processcost->setObjectName(QString::fromUtf8("edt_processcost"));
+        edt_processcost->setMaximumSize(QSize(16777215, 16777215));
 
-        verticalLayout_6->addWidget(edt_price);
+        verticalLayout_6->addWidget(edt_processcost);
 
         edt_gradeacount = new QLineEdit(groupBox);
         edt_gradeacount->setObjectName(QString::fromUtf8("edt_gradeacount"));
@@ -303,7 +305,7 @@ public:
         verticalLayout_6->addWidget(edt_greyclothprice);
 
 
-        horizontalLayout_5->addLayout(verticalLayout_6);
+        horizontalLayout->addLayout(verticalLayout_6);
 
         verticalLayout_7 = new QVBoxLayout();
         verticalLayout_7->setSpacing(6);
@@ -330,7 +332,7 @@ public:
         verticalLayout_7->addWidget(label_25);
 
 
-        horizontalLayout_5->addLayout(verticalLayout_7);
+        horizontalLayout->addLayout(verticalLayout_7);
 
         verticalLayout_8 = new QVBoxLayout();
         verticalLayout_8->setSpacing(6);
@@ -355,10 +357,10 @@ public:
         verticalLayout_8->addWidget(label_26);
 
 
-        horizontalLayout_5->addLayout(verticalLayout_8);
+        horizontalLayout->addLayout(verticalLayout_8);
 
 
-        verticalLayout_9->addLayout(horizontalLayout_5);
+        verticalLayout_9->addLayout(horizontalLayout);
 
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setSpacing(6);
@@ -370,11 +372,11 @@ public:
 
         horizontalLayout_6->addWidget(label_27);
 
-        edt_greyclothsuppiler_2 = new QLineEdit(groupBox);
-        edt_greyclothsuppiler_2->setObjectName(QString::fromUtf8("edt_greyclothsuppiler_2"));
-        edt_greyclothsuppiler_2->setMaximumSize(QSize(16777215, 16777215));
+        edt_memory = new QLineEdit(groupBox);
+        edt_memory->setObjectName(QString::fromUtf8("edt_memory"));
+        edt_memory->setMaximumSize(QSize(16777215, 16777215));
 
-        horizontalLayout_6->addWidget(edt_greyclothsuppiler_2);
+        horizontalLayout_6->addWidget(edt_memory);
 
 
         verticalLayout_9->addLayout(horizontalLayout_6);
@@ -443,20 +445,22 @@ public:
         ___qtablewidgetitem5->setText(QApplication::translate("MainWindow", "\345\223\201\345\220\215\350\247\204\346\240\274", 0, QApplication::UnicodeUTF8));
         QTableWidgetItem *___qtablewidgetitem6 = tableWidget->horizontalHeaderItem(6);
         ___qtablewidgetitem6->setText(QApplication::translate("MainWindow", "\351\242\234\350\211\262", 0, QApplication::UnicodeUTF8));
+        QTableWidgetItem *___qtablewidgetitem7 = tableWidget->horizontalHeaderItem(7);
+        ___qtablewidgetitem7->setText(QApplication::translate("MainWindow", "\351\227\250\345\271\205", 0, QApplication::UnicodeUTF8));
         groupBox->setTitle(QString());
-        label_5->setText(QApplication::translate("MainWindow", "\351\227\250\345\271\205\357\274\232", 0, QApplication::UnicodeUTF8));
+        edt_menfu_2->setText(QApplication::translate("MainWindow", "\345\256\242\350\246\201\346\225\260:", 0, QApplication::UnicodeUTF8));
         label_18->setText(QApplication::translate("MainWindow", "\345\205\266\344\273\226\345\267\245\350\211\272:", 0, QApplication::UnicodeUTF8));
         label_23->setText(QApplication::translate("MainWindow", "\345\235\257\345\270\203\344\276\233\345\272\224\345\225\206:", 0, QApplication::UnicodeUTF8));
-        edt_menfu_2->setText(QApplication::translate("MainWindow", "\345\256\242\350\246\201\346\225\260:", 0, QApplication::UnicodeUTF8));
+        label_7->setText(QApplication::translate("MainWindow", "\345\215\225\344\273\267:", 0, QApplication::UnicodeUTF8));
         label_17->setText(QApplication::translate("MainWindow", "\346\237\223\350\211\262/\345\215\260\350\212\261\345\215\225\344\273\267:", 0, QApplication::UnicodeUTF8));
         label_22->setText(QApplication::translate("MainWindow", "\345\235\257\345\270\203\346\225\260\351\207\217:", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("MainWindow", "\345\215\225\344\273\267:", 0, QApplication::UnicodeUTF8));
+        label_8->setText(QApplication::translate("MainWindow", "\345\212\240\345\267\245\350\264\271\357\274\232", 0, QApplication::UnicodeUTF8));
         label_20->setText(QApplication::translate("MainWindow", "\346\210\220\345\223\201(\344\270\200\347\255\211):", 0, QApplication::UnicodeUTF8));
         label_24->setText(QApplication::translate("MainWindow", "\345\235\257\345\270\203\345\215\225\344\273\267\357\274\232", 0, QApplication::UnicodeUTF8));
         label_19->setText(QApplication::translate("MainWindow", "\346\230\257\345\220\246\344\270\212\346\237\224:", 0, QApplication::UnicodeUTF8));
         label_21->setText(QApplication::translate("MainWindow", "\346\254\241\345\223\201\346\225\260:", 0, QApplication::UnicodeUTF8));
-        label_25->setText(QString());
-        label_26->setText(QString());
+        label_25->setText(QApplication::translate("MainWindow", "23", 0, QApplication::UnicodeUTF8));
+        label_26->setText(QApplication::translate("MainWindow", "26", 0, QApplication::UnicodeUTF8));
         label_27->setText(QApplication::translate("MainWindow", "\345\244\207\346\263\250:           ", 0, QApplication::UnicodeUTF8));
         menu->setTitle(QApplication::translate("MainWindow", "\347\263\273\347\273\237", 0, QApplication::UnicodeUTF8));
         menu_2->setTitle(QApplication::translate("MainWindow", "\346\223\215\344\275\234", 0, QApplication::UnicodeUTF8));

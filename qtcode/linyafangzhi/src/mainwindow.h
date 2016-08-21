@@ -50,6 +50,8 @@ protected slots:
 
     void DoImport();
 
+	void DoTableCellClicked(const int &pRow, const int &pColumn);
+
 private:
 	SearchDockWidget *mSearchDockWidget;
 
