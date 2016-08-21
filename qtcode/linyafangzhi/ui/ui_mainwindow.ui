@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>林亚纺织</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
+  <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_10">
     <item>
      <widget class="QTableWidget" name="tableWidget">
@@ -344,7 +344,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>23</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -381,7 +381,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>26</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -421,7 +421,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -434,6 +434,7 @@
     <property name="title">
      <string>系统</string>
     </property>
+    <addaction name="action_save"/>
     <addaction name="action_exit"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -466,22 +467,49 @@
    <addaction name="menu_3"/>
    <addaction name="menu_4"/>
   </widget>
+  <widget class="QToolBar" name="mToolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
   <action name="action_exit">
+   <property name="icon">
+    <iconset resource="../res/linyafangzhi.qrc">
+     <normaloff>:/images/exit.png</normaloff>:/images/exit.png</iconset>
+   </property>
    <property name="text">
     <string>退出</string>
    </property>
   </action>
   <action name="action_export">
+   <property name="icon">
+    <iconset resource="../res/linyafangzhi.qrc">
+     <normaloff>:/images/export.png</normaloff>:/images/export.png</iconset>
+   </property>
    <property name="text">
     <string>导入文件</string>
    </property>
   </action>
   <action name="action_import">
+   <property name="icon">
+    <iconset resource="../res/linyafangzhi.qrc">
+     <normaloff>:/images/import.png</normaloff>:/images/import.png</iconset>
+   </property>
    <property name="text">
     <string>导出文件</string>
    </property>
   </action>
   <action name="action_quickguide">
+   <property name="icon">
+    <iconset resource="../res/linyafangzhi.qrc">
+     <normaloff>:/images/help_about.png</normaloff>:/images/help_about.png</iconset>
+   </property>
    <property name="text">
     <string>快速指导</string>
    </property>
@@ -497,22 +525,45 @@
    </property>
   </action>
   <action name="action_addorder">
+   <property name="icon">
+    <iconset resource="../res/linyafangzhi.qrc">
+     <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
+   </property>
    <property name="text">
     <string>增加记录</string>
    </property>
   </action>
   <action name="action_deleteorder">
+   <property name="icon">
+    <iconset resource="../res/linyafangzhi.qrc">
+     <normaloff>:/images/del.png</normaloff>:/images/del.png</iconset>
+   </property>
    <property name="text">
     <string>删除记录</string>
    </property>
   </action>
   <action name="action_option">
+   <property name="icon">
+    <iconset resource="../res/linyafangzhi.qrc">
+     <normaloff>:/images/gear.png</normaloff>:/images/gear.png</iconset>
+   </property>
    <property name="text">
     <string>选项</string>
    </property>
   </action>
+  <action name="action_save">
+   <property name="icon">
+    <iconset resource="../res/linyafangzhi.qrc">
+     <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../res/linyafangzhi.qrc"/>
+ </resources>
  <connections/>
 </ui>

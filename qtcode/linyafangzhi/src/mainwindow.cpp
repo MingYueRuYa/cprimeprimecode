@@ -34,6 +34,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::resizeEvent(QResizeEvent *)
 {
+	QHeaderView *headerview = tableWidget->horizontalHeader();
+	//headerview->resizeSection(0, width() * 0.10);
+	//headerview->resizeSection(1, width() * 0.15);
+	//headerview->resizeSection(2, width() * 0.15);
+	//headerview->resizeSection(3, width() * 0.15);
+	//headerview->resizeSection(4, width() * 0.15);
+	//headerview->resizeSection(5, width() * 0.15);
+	headerview->resizeSection(5, width() * 0.20);
+	mQuickGuideWidget->setGeometry(rect());
+	mQuickGuideWidget->show();
 }
 
 void MainWindow::UpdateUi()
@@ -47,18 +57,24 @@ void MainWindow::UpdateUi()
 	tableWidget->horizontalHeader()->setStretchLastSection(true);
 	connect(tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(DoTableCellClicked(int, int)));
 
-    foreach (OrderInfo info, mOrderInfoList) {
-        if (! info.GetDyeWork().isEmpty()) {
-            mDyeWorkSet.insert(info.GetDyeWork());
-        }
-        if (! info.GetClientName().isEmpty()) {
-            mClientNameSet.insert(info.GetClientName());
-        }
-        if (! info.GetSpecificationProduct().isEmpty()) {
-            mSpecificationProducetSet.insert(info.GetSpecificationProduct());
-        }
-    }
+	CreateAction();
+
+    //foreach (OrderInfo info, mOrderInfoList) {
+    //    if (! info.GetDyeWork().isEmpty()) {
+    //        mDyeWorkSet.insert(info.GetDyeWork());
+    //    }
+    //    if (! info.GetClientName().isEmpty()) {
+    //        mClientNameSet.insert(info.GetClientName());
+    //    }
+    //    if (! info.GetSpecificationProduct().isEmpty()) {
+    //        mSpecificationProducetSet.insert(info.GetSpecificationProduct());
+    //    }
+    //}
 	InsertDataToTable(mOrderInfoList);
+
+	//快速使用指导。
+	mQuickGuideWidget = new QuickGuideWidget(this, this);
+	mQuickGuideWidget->hide();
 }
 
 bool MainWindow::CreateSample()
@@ -246,6 +262,20 @@ void MainWindow::InsertDataToTable(const OrderInfoList &pOrderInfoList)
 	}
 }
 
+void MainWindow::CreateAction()
+{
+	connect(action_exit, SIGNAL(triggered()), this, SLOT(DoExit()));
+
+	connect(action_quickguide, SIGNAL(triggered()), this, SLOT(DoQuickGuide()));
+
+	mToolBar->addAction(action_save);
+	mToolBar->addAction(action_import);
+	mToolBar->addAction(action_export);
+	mToolBar->addAction(action_addorder);
+	mToolBar->addAction(action_deleteorder);
+	mToolBar->addAction(action_quickguide);
+}
+
 void MainWindow::DoComDyeWorkChanged(const QString &pDyeWorkName)
 {
     if (G_ALL == pDyeWorkName) {
@@ -313,6 +343,17 @@ void MainWindow::DoTableCellClicked(const int &pRow, const int &pColumn)
 	edt_greyclothcount->setText(QString::number(orderinfo.GetGreyClothCount()));
 	edt_greyclothprice->setText(QString::number(orderinfo.GetGreyClothPrice()));
 	edt_memory->setText(orderinfo.GetMemory());
+}
+
+void MainWindow::DoExit()
+{
+	qApp->exit();
+}
+
+void MainWindow::DoQuickGuide()
+{
+	mQuickGuideWidget->raise();
+	mQuickGuideWidget->show();
 }
 
 #include "moc_mainwindow.cpp"

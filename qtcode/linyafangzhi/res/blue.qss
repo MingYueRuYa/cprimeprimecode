@@ -205,7 +205,7 @@ margin:2px;
 }
 
 QMenu::item{
-padding:3px 10px 3px 10px;
+padding:5px 25px 5px 25px;
 }
 
 QMenu::indicator{
@@ -223,6 +223,7 @@ QMenu::separator{
 height:1px;
 background:#C0DCF2;
 }
+
 
 QProgressBar{
 background:#DEF0FE;

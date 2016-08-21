@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ui_mainwindow.ui'
 **
-** Created: Sat Aug 20 23:31:48 2016
+** Created: Sun Aug 21 17:58:53 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -23,6 +23,7 @@
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
 #include <QtGui/QTableWidget>
+#include <QtGui/QToolBar>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
@@ -40,7 +41,8 @@ public:
     QAction *action_addorder;
     QAction *action_deleteorder;
     QAction *action_option;
-    QWidget *centralWidget;
+    QAction *action_save;
+    QWidget *centralwidget;
     QVBoxLayout *verticalLayout_10;
     QTableWidget *tableWidget;
     QGroupBox *groupBox;
@@ -81,11 +83,12 @@ public:
     QHBoxLayout *horizontalLayout_6;
     QLabel *label_27;
     QLineEdit *edt_memory;
-    QMenuBar *menuBar;
+    QMenuBar *menubar;
     QMenu *menu;
     QMenu *menu_2;
     QMenu *menu_3;
     QMenu *menu_4;
+    QToolBar *mToolBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -94,29 +97,55 @@ public:
         MainWindow->resize(958, 564);
         action_exit = new QAction(MainWindow);
         action_exit->setObjectName(QString::fromUtf8("action_exit"));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/images/exit.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_exit->setIcon(icon);
         action_export = new QAction(MainWindow);
         action_export->setObjectName(QString::fromUtf8("action_export"));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/images/export.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_export->setIcon(icon1);
         action_import = new QAction(MainWindow);
         action_import->setObjectName(QString::fromUtf8("action_import"));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/images/import.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_import->setIcon(icon2);
         action_quickguide = new QAction(MainWindow);
         action_quickguide->setObjectName(QString::fromUtf8("action_quickguide"));
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/images/help_about.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_quickguide->setIcon(icon3);
         action_about = new QAction(MainWindow);
         action_about->setObjectName(QString::fromUtf8("action_about"));
         action_opensearchdialog = new QAction(MainWindow);
         action_opensearchdialog->setObjectName(QString::fromUtf8("action_opensearchdialog"));
         action_addorder = new QAction(MainWindow);
         action_addorder->setObjectName(QString::fromUtf8("action_addorder"));
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/images/add.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_addorder->setIcon(icon4);
         action_deleteorder = new QAction(MainWindow);
         action_deleteorder->setObjectName(QString::fromUtf8("action_deleteorder"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/images/del.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_deleteorder->setIcon(icon5);
         action_option = new QAction(MainWindow);
         action_option->setObjectName(QString::fromUtf8("action_option"));
-        centralWidget = new QWidget(MainWindow);
-        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        verticalLayout_10 = new QVBoxLayout(centralWidget);
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/images/gear.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_option->setIcon(icon6);
+        action_save = new QAction(MainWindow);
+        action_save->setObjectName(QString::fromUtf8("action_save"));
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/images/save.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_save->setIcon(icon7);
+        centralwidget = new QWidget(MainWindow);
+        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        verticalLayout_10 = new QVBoxLayout(centralwidget);
         verticalLayout_10->setSpacing(6);
         verticalLayout_10->setContentsMargins(11, 11, 11, 11);
         verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
-        tableWidget = new QTableWidget(centralWidget);
+        tableWidget = new QTableWidget(centralwidget);
         if (tableWidget->columnCount() < 8)
             tableWidget->setColumnCount(8);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
@@ -142,7 +171,7 @@ public:
 
         verticalLayout_10->addWidget(tableWidget);
 
-        groupBox = new QGroupBox(centralWidget);
+        groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         verticalLayout_9 = new QVBoxLayout(groupBox);
         verticalLayout_9->setSpacing(6);
@@ -384,24 +413,28 @@ public:
 
         verticalLayout_10->addWidget(groupBox);
 
-        MainWindow->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 958, 21));
-        menu = new QMenu(menuBar);
+        MainWindow->setCentralWidget(centralwidget);
+        menubar = new QMenuBar(MainWindow);
+        menubar->setObjectName(QString::fromUtf8("menubar"));
+        menubar->setGeometry(QRect(0, 0, 958, 21));
+        menu = new QMenu(menubar);
         menu->setObjectName(QString::fromUtf8("menu"));
-        menu_2 = new QMenu(menuBar);
+        menu_2 = new QMenu(menubar);
         menu_2->setObjectName(QString::fromUtf8("menu_2"));
-        menu_3 = new QMenu(menuBar);
+        menu_3 = new QMenu(menubar);
         menu_3->setObjectName(QString::fromUtf8("menu_3"));
-        menu_4 = new QMenu(menuBar);
+        menu_4 = new QMenu(menubar);
         menu_4->setObjectName(QString::fromUtf8("menu_4"));
-        MainWindow->setMenuBar(menuBar);
+        MainWindow->setMenuBar(menubar);
+        mToolBar = new QToolBar(MainWindow);
+        mToolBar->setObjectName(QString::fromUtf8("mToolBar"));
+        MainWindow->addToolBar(Qt::TopToolBarArea, mToolBar);
 
-        menuBar->addAction(menu->menuAction());
-        menuBar->addAction(menu_2->menuAction());
-        menuBar->addAction(menu_3->menuAction());
-        menuBar->addAction(menu_4->menuAction());
+        menubar->addAction(menu->menuAction());
+        menubar->addAction(menu_2->menuAction());
+        menubar->addAction(menu_3->menuAction());
+        menubar->addAction(menu_4->menuAction());
+        menu->addAction(action_save);
         menu->addAction(action_exit);
         menu_2->addAction(action_export);
         menu_2->addAction(action_import);
@@ -431,6 +464,7 @@ public:
         action_addorder->setText(QApplication::translate("MainWindow", "\345\242\236\345\212\240\350\256\260\345\275\225", 0, QApplication::UnicodeUTF8));
         action_deleteorder->setText(QApplication::translate("MainWindow", "\345\210\240\351\231\244\350\256\260\345\275\225", 0, QApplication::UnicodeUTF8));
         action_option->setText(QApplication::translate("MainWindow", "\351\200\211\351\241\271", 0, QApplication::UnicodeUTF8));
+        action_save->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230", 0, QApplication::UnicodeUTF8));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "\347\274\226\345\217\267", 0, QApplication::UnicodeUTF8));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
@@ -459,13 +493,14 @@ public:
         label_24->setText(QApplication::translate("MainWindow", "\345\235\257\345\270\203\345\215\225\344\273\267\357\274\232", 0, QApplication::UnicodeUTF8));
         label_19->setText(QApplication::translate("MainWindow", "\346\230\257\345\220\246\344\270\212\346\237\224:", 0, QApplication::UnicodeUTF8));
         label_21->setText(QApplication::translate("MainWindow", "\346\254\241\345\223\201\346\225\260:", 0, QApplication::UnicodeUTF8));
-        label_25->setText(QApplication::translate("MainWindow", "23", 0, QApplication::UnicodeUTF8));
-        label_26->setText(QApplication::translate("MainWindow", "26", 0, QApplication::UnicodeUTF8));
+        label_25->setText(QString());
+        label_26->setText(QString());
         label_27->setText(QApplication::translate("MainWindow", "\345\244\207\346\263\250:           ", 0, QApplication::UnicodeUTF8));
         menu->setTitle(QApplication::translate("MainWindow", "\347\263\273\347\273\237", 0, QApplication::UnicodeUTF8));
         menu_2->setTitle(QApplication::translate("MainWindow", "\346\223\215\344\275\234", 0, QApplication::UnicodeUTF8));
         menu_3->setTitle(QApplication::translate("MainWindow", "\351\205\215\347\275\256", 0, QApplication::UnicodeUTF8));
         menu_4->setTitle(QApplication::translate("MainWindow", "\345\205\263\344\272\216", 0, QApplication::UnicodeUTF8));
+        mToolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

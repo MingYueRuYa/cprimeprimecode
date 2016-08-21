@@ -8,5 +8,14 @@
 		<file>images/sub-line_vertical.png</file>
 		<file>images/checkbox_checked.png</file>
 		<file>images/checkbox_unchecked.png</file>
+		<file>images/add.png</file>
+		<file>images/del.png</file>
+		<file>images/exit.png</file>
+		<file>images/gear.png</file>
+		<file>images/configure.png</file>
+		<file>images/help_about.png</file>
+		<file>images/save.png</file>
+		<file>images/import.png</file>
+		<file>images/export.png</file>
 	</qresource>
 </RCC>

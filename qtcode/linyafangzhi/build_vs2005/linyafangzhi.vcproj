@@ -189,6 +189,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\quickguidewidget.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\searchdockwidget.cpp"
 				>
 			</File>
@@ -247,7 +251,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\searchdockwidget.h"
+				RelativePath="..\src\quickguidewidget.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -264,6 +268,28 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\searchdockwidget.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
