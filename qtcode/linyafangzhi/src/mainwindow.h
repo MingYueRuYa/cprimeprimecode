@@ -61,6 +61,8 @@ protected slots:
 
 	void DoQuickGuide();
 
+	void DoOpenSearchWidget();
+
 private:
 	SearchDockWidget *mSearchDockWidget;
 

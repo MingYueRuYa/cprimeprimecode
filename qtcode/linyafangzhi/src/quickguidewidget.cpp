@@ -38,17 +38,18 @@ void QuickGuideWidget::paintEvent(QPaintEvent *event)
 	QPainter painter(this);
 	QPoint startpos, endpos;
 
-	//比赛计时。
+	//菜单栏
 	startpos = mMainWindow->mToolBar->geometry().center();
 	endpos.setX(startpos.x());
 	endpos.setY(startpos.y() + 20);
 	PaintBubble(painter, startpos, endpos, this->width() / 7, tr("Menu tools"));
 
+	//搜索栏
 	startpos = mMainWindow->mSearchDockWidget->geometry().center();
 	startpos.setX(startpos.x());
 	endpos.setX(startpos.x() + 30);
 	endpos.setY(startpos.y() - 20);
-	PaintBubble(painter, startpos, endpos, this->width() / 5, tr("Search Window, you can join search."));
+	PaintBubble(painter, startpos, endpos, this->width() / 5, tr("Search Window, you can join search with select checkbox."));
 
 	//订单信息
 	startpos = mMainWindow->tableWidget->geometry().center();

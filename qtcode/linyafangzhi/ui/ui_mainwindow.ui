@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>林亚纺织</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../res/linyafangzhi.qrc">
+    <normaloff>:/icons/bird_black.ico</normaloff>:/icons/bird_black.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_10">
     <item>

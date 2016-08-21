@@ -13,13 +13,6 @@
 
 class MainWindow;
 
-/*! \brief QuickGuideWidget
- 	\author tony (tonixinot@gmail.com)
- 	\version 0.01
- 	\date 2011.01.19
- 	
-	通过在主窗口上叠加显示信息，达到快速使用指导的效果。
-*/
 class QuickGuideWidget : public QWidget
 {
 	Q_OBJECT

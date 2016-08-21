@@ -9,6 +9,7 @@
 #define application_h
 
 #include <QtGui/QApplication>
+#include <QtCore/QTranslator>
 
 #include "config.h"
 
@@ -25,6 +26,9 @@ public:
 		初始化系统。
 	*/
 	bool Initialize();
+
+private:
+	QTranslator mChineseSimplifiedTranslator;
 };
 
 #endif //application_h

@@ -15,6 +15,9 @@
 Application::Application(int &argc, char **argv)
 	: QApplication(argc, argv)
 {
+	mChineseSimplifiedTranslator.load("linyafangzhi_zh_CN", ":/i18n");
+	qApp->installTranslator(&mChineseSimplifiedTranslator);
+	
 }
 
 Application::~Application()

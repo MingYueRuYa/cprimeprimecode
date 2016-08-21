@@ -43,7 +43,6 @@ void MainWindow::resizeEvent(QResizeEvent *)
 	//headerview->resizeSection(5, width() * 0.15);
 	headerview->resizeSection(5, width() * 0.20);
 	mQuickGuideWidget->setGeometry(rect());
-	mQuickGuideWidget->show();
 }
 
 void MainWindow::UpdateUi()
@@ -74,7 +73,7 @@ void MainWindow::UpdateUi()
 
 	//快速使用指导。
 	mQuickGuideWidget = new QuickGuideWidget(this, this);
-	mQuickGuideWidget->hide();
+	mQuickGuideWidget->show();
 }
 
 bool MainWindow::CreateSample()
@@ -268,6 +267,8 @@ void MainWindow::CreateAction()
 
 	connect(action_quickguide, SIGNAL(triggered()), this, SLOT(DoQuickGuide()));
 
+	connect(action_opensearchdialog, SIGNAL(triggered()), this, SLOT(DoOpenSearchWidget()));
+
 	mToolBar->addAction(action_save);
 	mToolBar->addAction(action_import);
 	mToolBar->addAction(action_export);
@@ -353,7 +354,13 @@ void MainWindow::DoExit()
 void MainWindow::DoQuickGuide()
 {
 	mQuickGuideWidget->raise();
-	mQuickGuideWidget->show();
+	mQuickGuideWidget->show(); 
+}
+
+void MainWindow::DoOpenSearchWidget()
+{
+	mSearchDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea);
+	mSearchDockWidget->show();
 }
 
 #include "moc_mainwindow.cpp"

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ui_mainwindow.ui'
 **
-** Created: Sun Aug 21 17:58:53 2016
+** Created: Sun Aug 21 20:45:29 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -95,50 +95,53 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(958, 564);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/icons/bird_black.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        MainWindow->setWindowIcon(icon);
         action_exit = new QAction(MainWindow);
         action_exit->setObjectName(QString::fromUtf8("action_exit"));
-        QIcon icon;
-        icon.addFile(QString::fromUtf8(":/images/exit.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action_exit->setIcon(icon);
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/images/exit.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_exit->setIcon(icon1);
         action_export = new QAction(MainWindow);
         action_export->setObjectName(QString::fromUtf8("action_export"));
-        QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/images/export.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action_export->setIcon(icon1);
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/images/export.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_export->setIcon(icon2);
         action_import = new QAction(MainWindow);
         action_import->setObjectName(QString::fromUtf8("action_import"));
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/images/import.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action_import->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/images/import.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_import->setIcon(icon3);
         action_quickguide = new QAction(MainWindow);
         action_quickguide->setObjectName(QString::fromUtf8("action_quickguide"));
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/images/help_about.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action_quickguide->setIcon(icon3);
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/images/help_about.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_quickguide->setIcon(icon4);
         action_about = new QAction(MainWindow);
         action_about->setObjectName(QString::fromUtf8("action_about"));
         action_opensearchdialog = new QAction(MainWindow);
         action_opensearchdialog->setObjectName(QString::fromUtf8("action_opensearchdialog"));
         action_addorder = new QAction(MainWindow);
         action_addorder->setObjectName(QString::fromUtf8("action_addorder"));
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/images/add.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action_addorder->setIcon(icon4);
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/images/add.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_addorder->setIcon(icon5);
         action_deleteorder = new QAction(MainWindow);
         action_deleteorder->setObjectName(QString::fromUtf8("action_deleteorder"));
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/images/del.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action_deleteorder->setIcon(icon5);
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/images/del.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_deleteorder->setIcon(icon6);
         action_option = new QAction(MainWindow);
         action_option->setObjectName(QString::fromUtf8("action_option"));
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8(":/images/gear.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action_option->setIcon(icon6);
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/images/gear.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_option->setIcon(icon7);
         action_save = new QAction(MainWindow);
         action_save->setObjectName(QString::fromUtf8("action_save"));
-        QIcon icon7;
-        icon7.addFile(QString::fromUtf8(":/images/save.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action_save->setIcon(icon7);
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/images/save.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action_save->setIcon(icon8);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout_10 = new QVBoxLayout(centralwidget);

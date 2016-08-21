@@ -17,5 +17,11 @@
 		<file>images/save.png</file>
 		<file>images/import.png</file>
 		<file>images/export.png</file>
+		<file>images/bird_black.png</file>
+		<file>i18n/linyafangzhi_zh_CN.qm</file>
+		<file>icons/bird_black.ico</file>
+		<file>icons/Basketball.ico</file>
+		
+		
 	</qresource>
 </RCC>

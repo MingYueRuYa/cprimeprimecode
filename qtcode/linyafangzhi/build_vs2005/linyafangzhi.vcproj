@@ -258,7 +258,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -267,10 +267,14 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\resource.h"
+				>
 			</File>
 			<File
 				RelativePath="..\src\searchdockwidget.h"
@@ -322,6 +326,14 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath=".\linya.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\linyafangzhi.rc"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="db"
