@@ -12,24 +12,38 @@
 using std::cout;
 using std::endl;
 
+void *BaseThread::Run(void *pArg)
+{
+	BaseThread *basethread = (BaseThread *)(pArg);
+	basethread->Execute();
+	pthread_exit(0);
+}
+
 BaseThread::BaseThread()
 {
-	cout << "BaseThread..." << endl;
+	mPid = -1;
 }
 
 BaseThread::~BaseThread()
 {
-	cout << "~BaseThread..." << endl;
+	Stop();
 }
 
-void BaseThread::Start()
+unsigned int BaseThread::Start()
 {
+	return pthread_create(&mPid, NULL, Run, this);
 }
 
 void BaseThread::Stop()
 {
+	if (mPid < 0) {
+		return;
+	}
+	//kill thread
+	pthread_join(mPid, NULL);
 }
 
-void BaseThread::Run()
+unsigned int BaseThread::GetPid()
 {
+	return mPid;
 }

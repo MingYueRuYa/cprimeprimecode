@@ -4,7 +4,7 @@ CFALGS := -Wall -g -std=c++11
 SOURCE := $(wildcard *.cpp)
 OBJ := $(patsubst %.cpp, %.o, $(SOURCE))
 ALL:$(OBJ)
-	$(CC) $(CFALGS) $(OBJ) -o $(BIN)
+	$(CC) $(CFALGS) $(OBJ) -lpthread -o $(BIN)
 
 $(OBJ):$(SOURCE)
 	$(CC) $(CFALGS) $^ -c

@@ -9,13 +9,18 @@
 
 #include "childthread.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
 
-int main(int argc, char *argv[])
+ChildThread::ChildThread()
 {
-	ChildThread childthread;
-	childthread.Start();
-	childthread.Stop();
+}
 
-	return 0;
+ChildThread::~ChildThread()
+{
+}
+
+void ChildThread::Execute()
+{
+	cout << "this test thread..." << endl;
 }

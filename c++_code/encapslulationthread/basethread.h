@@ -14,16 +14,24 @@
 class BaseThread
 {
 public:
+	static void *Run(void *pArg);
+
+public:
 	BaseThread();
 
-	~BaseThread();
+	virtual ~BaseThread();
 
-	void Start();
+	unsigned int Start();
 
 	void Stop();
 
+	unsigned int GetPid();
+
 protected:
-	virtual void Run();
+	virtual void Execute() = 0;
+
+private:
+	pthread_t mPid;
 
 };
 
