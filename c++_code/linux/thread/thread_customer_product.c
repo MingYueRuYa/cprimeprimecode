@@ -24,8 +24,8 @@ pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
 void *customer_routine(void *arg)
 {
-	pthread_mutex_lock(&mutex);
 		while (1) {
+			pthread_mutex_lock(&mutex);
 			while (global_count == 0) {
 				printf("customer %d wait.\n", (int)arg);
 				pthread_cond_wait(&cond, &mutex);
@@ -33,8 +33,8 @@ void *customer_routine(void *arg)
 			}
 			global_count--;
 			printf("cusotmer %d custom.\n", (int)arg);
+			pthread_mutex_unlock(&mutex);
 		}
-	pthread_mutex_unlock(&mutex);
 	sleep(1);
 	pthread_exit(NULL);
 }
