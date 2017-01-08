@@ -1,0 +1,11 @@
+connect_timeout函数的几个点？
+
+进程通信
+	边界和异常情况的处理才是重点，不是API函数。
+
+select 三种模型
+	封装超时(connect, accept, read, write) API
+	优化客户端(stdin, connfd)
+	优化服务器(单进程管理多个IO)
+	
+
