@@ -32,5 +32,11 @@ void print(const T& pFirstArg, const Types &... pTypes)
 int main(int argc, char *argv[])
 {
 	print(1, 2.0, bitset<16>(16), "hello world!!!");	
+	//print result
+	//1-------- 3
+	//2-------- 2
+	//0000000000010000-------- 1
+	//hello world!!!-------- 0
+
 	return 0;
 }
