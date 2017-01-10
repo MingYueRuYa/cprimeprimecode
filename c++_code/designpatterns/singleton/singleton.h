@@ -1,24 +1,30 @@
 /*
  * 单例模式
  * */
-#include <mutex>
+//#include <mutex>
 
 class Singleton
 {
 public:
-	static Singleton *GetInstance();
+	//static Singleton *GetInstance();
 
-private:
-	Singleton();
+	static Singleton &GetInstance();
 
 	~Singleton();
 
 private:
-	static Singleton *mThis;
+	Singleton();
 
-	static std::mutex *mMutex;
+	Singleton(const Singleton &pSingleton);
 
-private:
-	std::mutex mTempMutex;
+	Singleton& operator=(const Singleton &pSingleton);
+
+//private:
+//	static Singleton *mThis;
+//
+//	static std::mutex *mMutex;
+
+//private:
+//	std::mutex mTempMutex;
 };
 
