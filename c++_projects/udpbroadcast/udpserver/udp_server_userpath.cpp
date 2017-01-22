@@ -5,12 +5,19 @@
  **
  ***************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
+#include "udp_server_userpath.h"
 
-int main(int argc, char *argv[])
+UdpServerUserPath::UdpServerUserPath()
 {
-	return 0;
+
+}
+
+UdpServerUserPath::~UdpServerUserPath()
+{
+
+}
+
+string UdpServerUserPath::GetUserPath()
+{
+	return "";
 }
