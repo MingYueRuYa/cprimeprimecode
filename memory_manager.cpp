@@ -273,11 +273,146 @@ void test_per_class_allocator_1()
 }
 }
 
+
+//------------------------------------------------------------------------------------------------
+namespace demo05
+{
+//ref. Effective C++ 2e, item 10
+class AirPlane
+{
+private:
+	struct AirPlaneRep {
+		unsigned long miles;
+		char type;
+	};
+
+private:
+	union {
+		AirPlaneRep rep;	//此针对 used object
+		AirPlane *next;		//此针对 free list
+	};
+
+public:	
+	unsigned long getMiles() { return rep.miles; }
+	char getType() { return rep.type; }
+
+	void set(const unsigned long m, char t)
+	{
+		rep.miles = m;
+		rep.type = t;
+	}
+
+public:
+	static void *operator new(size_t size);
+	static void operator delete(void *deadObject, size_t size);
+
+private:
+	static const int BLOCK_SIZE;
+	static AirPlane *headOfFreeList;
+};
+
+AirPlane *AirPlane::headOfFreeList = NULL;
+const int AirPlane::BLOCK_SIZE = 512;
+
+void *AirPlane::operator new(size_t size)
+{
+	//如果大小错误，转交给::operator new()
+	if (size != sizeof(AirPlane)) {
+		return ::operator new(size);
+	}
+
+	AirPlane *p = headOfFreeList;
+	//如果p有效，就把list头部往下移一个元素
+	if (NULL != p) {
+		headOfFreeList = p->next;
+	} else {
+		//free list 已空，配置一块内存
+		//令足够容纳BLOCK_SIZE个AirPlane
+		AirPlane *newBlock = static_cast<AirPlane *>(::operator new(BLOCK_SIZE*sizeof(AirPlane)));
+		for (size_t i=0; i<BLOCK_SIZE; ++i) {
+			newBlock[i].next = &newBlock[i+1];
+		}
+		//设置最后一个为NULL
+		newBlock[BLOCK_SIZE-1].next = NULL;
+		//让p指向第一个元素
+		p = newBlock;
+		//headOfFreeList指向下一个元素
+		headOfFreeList = p->next;
+	}
+	return p;
+}
+
+void AirPlane::operator delete(void *deadObject, size_t size)
+{
+	if (NULL == deadObject) { return; }
+
+	if (size != sizeof(AirPlane)) {
+		::operator delete(deadObject);
+		return;
+	}
+
+	//插入headOfFreeList之前，回收内存
+	AirPlane *plane = static_cast<AirPlane *>(deadObject);
+	plane->next = headOfFreeList;
+	headOfFreeList = plane;
+}
+
+//---------------------
+void test_per_class_allocator_2()
+{
+	cout << "\ntest_per_class_allocator_2\n";
+
+	cout << sizeof(AirPlane) << endl;	//8
+
+	size_t const N = 100;
+	AirPlane *p[N];
+
+	for (size_t i=0; i<N; ++i) {
+		p[i] = new AirPlane();
+	}
+
+	//随机测试object是否正常
+	p[1]->set(100, 'A');
+	p[5]->set(10000, 'B');
+	p[9]->set(1000000, 'C');
+
+	cout << p[1] << ' ' << p[1]->getType() << ' ' << p[1]->getMiles() << endl;
+	cout << p[5] << ' ' << p[5]->getType() << ' ' << p[5]->getMiles() << endl;
+	cout << p[9] << ' ' << p[9]->getType() << ' ' << p[9]->getMiles() << endl;
+	//result:
+		//	0x85dc010 A 100
+		//	0x85dc030 B 10000
+		//	0x85dc050 C 1000000
+
+	//输出前10个pointers，用以比较其间隔
+	for (size_t i=0; i<10; ++i) {
+		cout << p[i] << endl;
+	}
+	//result:	间隔为8，中间没有cookie
+		//	0x85dc008
+		//	0x85dc010
+		//	0x85dc018
+		//	0x85dc020
+		//	0x85dc028
+		//	0x85dc030
+		//	0x85dc038
+		//	0x85dc040
+		//	0x85dc048
+		//	0x85dc050
+
+	for (size_t i=0; i<N; ++i) {
+		delete p[i];
+	}
+
+}
+};
+
 int main(int argc, char *argv[])
 {
 //	demo01::test_primitives();
 //	demo02::test_call_ctor_directory();
 //	demo03::test_array_new_and_placement_new();
-	demo04::test_per_class_allocator_1();
+//	demo04::test_per_class_allocator_1();
+	demo05::test_per_class_allocator_2();
 	return 0;
 }
