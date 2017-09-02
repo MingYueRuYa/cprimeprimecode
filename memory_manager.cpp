@@ -407,12 +407,98 @@ void test_per_class_allocator_2()
 }
 };
 
+//------------------------------------------------------------------------------------------------
+namespace demo06
+{
+class Foo
+{
+public:
+	int _id;
+	long _data;
+	string _str;
+
+public:
+	static void *operator new(size_t size);
+	static void operator delete(void *deadObject, size_t size);
+	static void *operator new[](size_t size);
+	static void operator delete[](void *deadObject, size_t size);
+
+	Foo():_id(0) { cout << "default ctor, this=" << this << " id=" << _id << endl; }
+	Foo(int i):_id(i) { cout << "ctor, this=" << this << " id=" << _id << endl; }
+	//virtual
+	~Foo() { cout << "dtor, this=" << this << " id=" << _id << endl; }
+	//不加 virtual dtor, sizeof=12, new Foo[5] => operator new[]()的size参数是64(在pi为68)
+	//加了virtual dtor, sizeof=16, new Foo[5] => operator new[]()的size参数是84(在pi为88)
+	//上述二例，多出来的4(在pi下为8)可能是 size_t 用来放置array size
+
+};
+
+	void *Foo::operator new(size_t size)
+	{
+		Foo *p = (Foo *)malloc(size);
+		cout << "Foo::operator new(), size=" << size << "\t return: " << p << endl;
+		return p;
+	}
+
+	void Foo::operator delete(void *deadObject, size_t size)
+	{
+		if (NULL == deadObject) { return; }
+
+		cout << "Foo::operator delete(), pdead=" << deadObject << " size= " << size << endl;
+		free(deadObject);
+	}
+
+	void *Foo::operator new[](size_t size)
+	{
+		Foo *p = (Foo *) malloc(size);
+		cout << "Foo::operator new[](), size=" << size << "\t return: " << p << endl;
+		return p;
+	}
+
+	void Foo::operator delete[](void *deadObject, size_t size)
+	{
+		if (NULL == deadObject) { return; }
+
+		cout << "Foo::operator delete[](), pdead=" << deadObject << " size= " << size << endl;
+		free(deadObject);
+	}
+
+//---------------------------------
+void test_overload_operator_new_and_array_new()
+{
+	cout << "\ntest_overload_operator_new_and_array_new().......\n";
+
+	cout << "sizeof(Foo)= " << sizeof(Foo) << endl;
+	{
+		Foo *p = new Foo(7);
+		delete p;
+
+
+		Foo *pArray = new Foo[5];	//无法给array elements 以initializer
+		delete []pArray;
+	}
+
+	{
+		cout << "testing global expression ::new and ::new[] \n";
+		//这回绕过overload new(), delete(), new[](), delete[]();
+		//当然ctor，dtor都会被正常调用
+		Foo *p = ::new Foo(7);
+		::delete p;
+
+		Foo *pArray = ::new Foo[5];
+		::delete [] pArray;
+	}
+}
+
+}
+
 int main(int argc, char *argv[])
 {
 //	demo01::test_primitives();
 //	demo02::test_call_ctor_directory();
 //	demo03::test_array_new_and_placement_new();
 //	demo04::test_per_class_allocator_1();
-	demo05::test_per_class_allocator_2();
+//	demo05::test_per_class_allocator_2();
+	demo06::test_overload_operator_new_and_array_new();
 	return 0;
 }
