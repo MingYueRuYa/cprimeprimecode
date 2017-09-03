@@ -407,7 +407,10 @@ void test_per_class_allocator_2()
 }
 };
 
-//------------------------------------------------------------------------------------------------
+/* !
+ *
+ *	测试 重载new和delete，以及new[]，以及delete[]
+ * */
 namespace demo06
 {
 class Foo
@@ -488,6 +491,108 @@ void test_overload_operator_new_and_array_new()
 		Foo *pArray = ::new Foo[5];
 		::delete [] pArray;
 	}
+}
+
+}
+
+/* !
+ *
+ *	测试：重载placement new
+ * */
+namespace dome07
+{
+class Bad {};
+
+class Foo
+{
+public:
+	Foo() { cout << "Foo:Foo()" << endl; }
+	
+	Foo(int)
+	{
+		cout << "Foo:Foo(int)" << endl;
+	}
+
+	//(1) 这个就是一般的operator new()的重载
+	void *operator new(size_t size)
+	{
+		cout << "operator new(size_t size), size=" << size << endl;
+		return malloc(size);
+	}
+
+	//(2) 这个就是标准库已经提供的placement new()的重载(形式)
+	//	(所以我也模拟standard placement new的动作，just return ptr)
+	void *operator new(size_t size, void *start)
+	{
+		cout << "operator new(size_t size, void *start), size= " << size << " start=" << start << endl;
+		return start;
+	}
+
+	//(3) 这个才是崭新的placement new
+	void *operator new(size_t size, long extra)
+	{
+		cout << "operator new(size_t size, long extra) size=" << size << " extra:" << extra <<endl;
+		return malloc(size+extra);
+	}
+
+	//(4) 这又是一个placement new
+	void *operator new(size_t size, long extra, char init)
+	{
+		cout << "operator new(size_t size, long extra, char init) size=" << size << " extra= " << extra << " init=" << init;
+		return malloc(size+extra);
+	}
+
+	//(5) 这又是一个placement new,但故意写错第一个参数的type(它必须是 size_t以满足正常的operator new)
+//! 	void *operator new(long extra, char init)
+//! 	{
+//! 		cout << "operator new(long extra, char init) extra=" << extra << " init=" << init;
+//! 		return malloc(extra);
+//! 	}
+//! [Error]: ‘operator new’ takes type ‘size_t’ (‘unsigned int’) as first parameter [-fpermissive]
+//  void *operator new(long extra, char init)
+
+
+	//以下是搭配上述 placement new的各个called placement delete
+	//当ctor发出异常，这儿对应operator (placement) delete就会被唤起
+	//应该是要负责释放其搭档兄弟(placement new)分配所得memory
+	//(1) 这个就是一般的operator delete()的重载
+	void operator delete(void *, size_t)
+	{ cout << "operator delete(void *, size_t)  " << endl; }
+
+	//(2) 对应上述的2
+	void operator delete(void *, void *)
+	{ cout << "operator delete(void *, void *)  " << endl; }
+
+	//(3) 对应上述的3
+	void operator delete(void *, long)
+	{ cout << "operator delete(void *, long)  " << endl; }
+	
+	//(4) 对应上述的4
+	//如果没有一一对应，也不会有任何编译报错
+	void operator delete(void *, long, char)
+	{ cout << "operator delete(void *, long, char)  " << endl; }
+
+private:
+	int m_i;
+
+};
+
+//------------------
+void test_overload_placement_new()
+{
+	cout << "\n\n\ntest_overload_placement_new()..........\n";
+
+	Foo start; 							//Foo:Foo
+	Foo *p1 = new Foo;					//op-new(size_t)
+	Foo *p2 = new (&start)Foo;			//op-new(size_t, void *)
+	Foo *p3 = new (100)Foo;				//op-new(size_t, long)
+	Foo *p4 = new (100, 'a')Foo;		//op-new(size_t, long, char)
+
+	Foo *p5 = new (100) Foo(1);			//op-new(size_t, long) op-del(void *,long)
+	Foo *p6 = new (100, 'a') Foo(2);
+	Foo *p7 = new (&start) Foo(1);
+	Foo *p8 = new Foo(1);
+	
 }
 
 }
