@@ -28,6 +28,34 @@
 
 using namespace std;
 
+/*!
+ *
+ * 测试，内存耗尽，是否调用自定义的_new_handler函数
+ * */
+namespace demo00
+{
+	typedef void(*new_handler)();
+
+	void _new_handler()
+	{
+		cout << "memory out..." << endl;
+		abort();
+	}
+
+	void test_set_new_handle()
+	{
+		new_handler old_handler = set_new_handler(_new_handler); 
+
+		//分配海量内存，造成内存耗尽
+		int *array = new int[1000000000];
+		//result:	
+			//memory out...
+			//abort
+		cout << "end...." << endl;
+	}
+}
+
+
 //------------------------------------------------------------------------------------------------
 namespace demo01
 {
@@ -499,7 +527,7 @@ void test_overload_operator_new_and_array_new()
  *
  *	测试：重载placement new
  * */
-namespace dome07
+namespace demo07
 {
 class Bad {};
 
@@ -511,6 +539,7 @@ public:
 	Foo(int)
 	{
 		cout << "Foo:Foo(int)" << endl;
+		throw Bad();
 	}
 
 	//(1) 这个就是一般的operator new()的重载
@@ -538,7 +567,7 @@ public:
 	//(4) 这又是一个placement new
 	void *operator new(size_t size, long extra, char init)
 	{
-		cout << "operator new(size_t size, long extra, char init) size=" << size << " extra= " << extra << " init=" << init;
+		cout << "operator new(size_t size, long extra, char init) size=" << size << " extra= " << extra << " init=" << init << endl;
 		return malloc(size+extra);
 	}
 
@@ -583,27 +612,77 @@ void test_overload_placement_new()
 	cout << "\n\n\ntest_overload_placement_new()..........\n";
 
 	Foo start; 							//Foo:Foo
+	cout << "Foo start" << endl;
+
 	Foo *p1 = new Foo;					//op-new(size_t)
+	cout << "new Foo" << endl;
+
 	Foo *p2 = new (&start)Foo;			//op-new(size_t, void *)
+	cout << "new (&start)Foo" << endl;
+
 	Foo *p3 = new (100)Foo;				//op-new(size_t, long)
-	Foo *p4 = new (100, 'a')Foo;		//op-new(size_t, long, char)
+	cout << "new (100)Foo" << endl;
+
+  	Foo *p4 = new (100, 'a')Foo;		//op-new(size_t, long, char)
+	cout << "new (100, 'a')Foo" << endl;
 
 	Foo *p5 = new (100) Foo(1);			//op-new(size_t, long) op-del(void *,long)
+	cout << "new (100) Foo(1)" << endl;
+
 	Foo *p6 = new (100, 'a') Foo(2);
+	cout << "new (100, 'a') Foo(2)" << endl;
+
 	Foo *p7 = new (&start) Foo(1);
+	cout << "new (&start) Foo(1)" << endl;
+
 	Foo *p8 = new Foo(1);
-	
+	cout << "new Foo(1)" << endl;
+	//result:
+		// test_overload_placement_new()..........
+		// Foo:Foo()
+		// Foo start
+		// operator new(size_t size), size=4
+		// Foo:Foo()
+		// new Foo
+		// operator new(size_t size, void *start), size= 4 start=0x7e95e58c
+		// Foo:Foo()
+		// new (&start)Foo
+		// operator new(size_t size, long extra) size=4 extra:100
+		// Foo:Foo()
+		// new (100)Foo
+		// operator new(size_t size, long extra, char init) size=4 extra= 100 init=a
+		// Foo:Foo()
+		// new (100, 'a')Foo
+		// operator new(size_t size, long extra) size=4 extra:100
+		// Foo:Foo(int)
+		// new (100) Foo(1)
+		// operator new(size_t size, long extra, char init) size=4 extra= 100 init=a
+		// Foo:Foo(int)
+		// new (100, 'a') Foo(2)
+		// operator new(size_t size, void *start), size= 4 start=0x7e95e58c
+		// Foo:Foo(int)
+		// new (&start) Foo(1)
+		// operator new(size_t size), size=4
+		// Foo:Foo(int)
+		// new Foo(1)
+		// [notice:在4.9上当ctor爆出异常时G4.9没有调用对应的operator delete(void *, long)]
+		// [但在G2.9确实是可以的]
+		// terminate called after throwing an instance of 'demo07::Bad'
+		// Aborted
 }
 
 }
 
 int main(int argc, char *argv[])
 {
+	demo00::test_set_new_handle();
+	
 //	demo01::test_primitives();
 //	demo02::test_call_ctor_directory();
 //	demo03::test_array_new_and_placement_new();
 //	demo04::test_per_class_allocator_1();
 //	demo05::test_per_class_allocator_2();
-	demo06::test_overload_operator_new_and_array_new();
+//	demo06::test_overload_operator_new_and_array_new();
+//	demo07::test_overload_placement_new();
 	return 0;
 }
