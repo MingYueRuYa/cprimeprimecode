@@ -675,7 +675,7 @@ void test_overload_placement_new()
 
 int main(int argc, char *argv[])
 {
-	demo00::test_set_new_handle();
+//	demo00::test_set_new_handle();
 	
 //	demo01::test_primitives();
 //	demo02::test_call_ctor_directory();
