@@ -6,27 +6,21 @@
 ****************************************************************************/
 
 /*
- * 简单工厂模式：在工厂类中做判断，从而创造对应的产品。当前增加新的产品时，就需要修改工厂类。简单工厂用于构建一个对象，抽象工厂模式用于一系列对象
- * 缺点：当前增加新的产品时，就需要修改工厂类。违反了开放封闭原则
+ * 工厂模式：是指定义一个用于创建对象的接口，让子类决定实例化哪一个类，
+ * 缺点：解决简单工厂方法违反了开发封闭原则，但是也来一个缺点就是，如果新的产品就要增加一个工厂需要定义更多的类
  *
  */
 
-#ifndef simple_factory_h
-#define simple_factory_h
+#ifndef factory_h
+#define factory_h
 
 #include <iostream>
 
 using std::cout;
 using std::endl;
 
-namespace simplefactory 
+namespace factory 
 {
-typedef enum _CoreType
-{
-    CoreA,
-    CoreB
-} CoreType;
-
 class SingleCore
 {
 public:
@@ -54,31 +48,35 @@ public:
 class Factory
 {
 public:    
-    static SingleCore *CreateSingleCore(const CoreType pCoreType)
-    {
-        if (pCoreType == CoreA) {
-            return new SingleCoreA();
-        } else if (pCoreType == CoreB) {
-            return new SingleCoreB();
-        } else {
-            return NULL;
-        }
-    }
+    virtual SingleCore *CreateSingleCore() = 0;
 };
 
-static void test_simple_factory()
+class FactoryA : public Factory
+{
+public:
+    SingleCore *CreateSingleCore() { return new SingleCoreA(); }
+};
+
+class FactoryB : public Factory
+{
+public:
+    SingleCore *CreateSingleCore() { return new SingleCoreB(); }
+};
+
+static void test_factory()
 {
     cout << "######################################\n" \
-            "##  this is simple factory demo...  ##\n" \
+            "##  this is factory demo...         ##\n" \
             "##                                  ##\n" \
             "######################################"   \
             << endl;
-    SingleCore *basecore1 = Factory::CreateSingleCore(CoreA);
+    
+    SingleCore *basecore1 = (new FactoryA())->CreateSingleCore();
     basecore1->Show();
-    SingleCore *basecore2 = Factory::CreateSingleCore(CoreB);
+    SingleCore *basecore2 = (new FactoryB())->CreateSingleCore();
     basecore2->Show();
 }
 
 };
 
-#endif //simple_factory_h
+#endif //factory_h

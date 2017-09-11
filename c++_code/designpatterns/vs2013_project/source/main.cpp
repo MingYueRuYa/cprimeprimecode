@@ -5,11 +5,25 @@
 **
 ****************************************************************************/
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 #include "simple_factory.cpp"
+#include "factory.cpp"
+#include "abstract_factory.cpp"
 
 int main(int argc, char *argv[])
 {
-    simple_factory::test_simple_factory();
+    simplefactory::test_simple_factory();
+    cout << "----------------------------------------------" << endl;
+
+    factory::test_factory();
+    cout << "----------------------------------------------" << endl;
+
+    abstractfactory::test_abstract_factory();
+    cout << "----------------------------------------------" << endl;
 
     system("pause");
     return 0;
