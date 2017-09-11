@@ -7,12 +7,10 @@
 
 #include <iostream>
 
+#include "designpatternpack.h"
+
 using std::cout;
 using std::endl;
-
-#include "simple_factory.cpp"
-#include "factory.cpp"
-#include "abstract_factory.cpp"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +21,9 @@ int main(int argc, char *argv[])
     cout << "----------------------------------------------" << endl;
 
     abstractfactory::test_abstract_factory();
+    cout << "----------------------------------------------" << endl;
+
+    strategy::test_strategy();
     cout << "----------------------------------------------" << endl;
 
     system("pause");
