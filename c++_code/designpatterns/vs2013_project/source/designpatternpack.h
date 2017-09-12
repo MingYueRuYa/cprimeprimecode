@@ -12,5 +12,6 @@
 #include "factory.cpp"
 #include "abstract_factory.cpp"
 #include "strategy.cpp"
+#include "adapter.cpp"
 
 #endif //designpatternpack_h

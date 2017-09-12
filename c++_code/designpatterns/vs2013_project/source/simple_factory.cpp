@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 liushixiongcpp@163.com (http://www.2144.cn)
+** Copyright (C) 2017 liushixiongcpp@163.com
 ** All rights reserved.
 **
 ****************************************************************************/
@@ -19,7 +19,7 @@
 using std::cout;
 using std::endl;
 
-namespace simplefactory 
+namespace simple_factory 
 {
 typedef enum _CoreType
 {

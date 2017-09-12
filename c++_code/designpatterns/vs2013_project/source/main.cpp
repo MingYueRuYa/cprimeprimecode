@@ -14,16 +14,19 @@ using std::endl;
 
 int main(int argc, char *argv[])
 {
-    simplefactory::test_simple_factory();
+    simple_factory::test_simple_factory();
     cout << "----------------------------------------------" << endl;
 
     factory::test_factory();
     cout << "----------------------------------------------" << endl;
 
-    abstractfactory::test_abstract_factory();
+    abstract_factory::test_abstract_factory();
     cout << "----------------------------------------------" << endl;
 
     strategy::test_strategy();
+    cout << "----------------------------------------------" << endl;
+
+    adapter::test_adapter();
     cout << "----------------------------------------------" << endl;
 
     system("pause");
