@@ -86,6 +86,7 @@
     <ClCompile Include="..\source\adapter.cpp" />
     <ClCompile Include="..\source\factory.cpp" />
     <ClCompile Include="..\source\main.cpp" />
+    <ClCompile Include="..\source\prototype.cpp" />
     <ClCompile Include="..\source\simple_factory.cpp" />
     <ClCompile Include="..\source\strategy.cpp" />
   </ItemGroup>

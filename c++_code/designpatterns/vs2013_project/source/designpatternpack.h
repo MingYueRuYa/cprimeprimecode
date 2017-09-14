@@ -13,5 +13,6 @@
 #include "abstract_factory.cpp"
 #include "strategy.cpp"
 #include "adapter.cpp"
+#include "prototype.cpp"
 
 #endif //designpatternpack_h

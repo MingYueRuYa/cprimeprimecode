@@ -29,6 +29,9 @@ int main(int argc, char *argv[])
     adapter::test_adapter();
     cout << "----------------------------------------------" << endl;
 
+    prototype::test_prototype();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }
