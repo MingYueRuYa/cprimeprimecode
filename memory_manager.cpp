@@ -673,6 +673,95 @@ void test_overload_placement_new()
 
 }
 
+/* ! 
+ *
+ * 重载全局的new, delete, new[], delete[]
+ * */
+namespace global_new_delete
+{
+#define test_global_operator_new_delete
+
+class Foo
+{
+public:
+	Foo()
+	{
+		cout << "Foo ctor..." << this <<  endl;
+	}
+
+	~Foo()
+	{
+		cout << "Foo dctor..." << this <<  endl;
+	}
+};
+
+//重载全局的new,delete不能放在namespace中
+//void *operator new(size_t size)
+//{
+//	cout << "global operator new..." << endl;
+//	return malloc(size);
+//}
+//
+//void *operator new[](size_t size)
+//{
+//	cout << "global operator new[]..." << endl;
+//	return malloc(size);
+//}
+//
+//void operator delete(void *start)
+//{
+//	cout << "global operator delete..." << endl;
+//	free(start);
+//}
+//
+//void operator delete[](void *start)
+//{
+//	cout << "global operator delete[]..." << endl;
+//	free(start);
+//}
+
+void test_global_new_delete()
+{
+	Foo *foo = new Foo();
+	delete foo;
+	foo = NULL;
+
+	Foo *arrayfoo = new Foo[10];
+	delete []arrayfoo;
+	arrayfoo = NULL;
+}
+
+//#undef test_global_operator_new_delete
+
+};
+
+#ifdef test_global_operator_new_delete
+
+void *operator new(size_t size)
+{
+	cout << "global operator new..." << endl;
+	return malloc(size);
+}
+
+void *operator new[](size_t size)
+{
+	cout << "global operator new[]..." << endl;
+	return malloc(size);
+}
+
+void operator delete(void *start)
+{
+	cout << "global operator delete..." << endl;
+	free(start);
+}
+
+void operator delete[](void *start)
+{
+	cout << "global operator delete[]..." << endl;
+	free(start);
+}
+#endif //test_global_operator_new_delete
+
 int main(int argc, char *argv[])
 {
 //	demo00::test_set_new_handle();
@@ -684,5 +773,6 @@ int main(int argc, char *argv[])
 //	demo05::test_per_class_allocator_2();
 //	demo06::test_overload_operator_new_and_array_new();
 //	demo07::test_overload_placement_new();
+	global_new_delete::test_global_new_delete();
 	return 0;
 }
