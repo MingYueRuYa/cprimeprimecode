@@ -12,10 +12,13 @@
 #include <thread>
 #include <chrono>
 #include <mutex>
+#include <queue>
+#include <condition_variable>
 
 using std::cout;
 using std::endl;
 using std::thread;
+using std::queue;
 
 namespace use_thread
 {
@@ -141,11 +144,65 @@ static void synchronize_thread()
     cout << "----------------synchronisze thread--------------------" << endl;
 }
 
+static const int max_product_size = 5;
+static std::mutex product_consume_mutex; //生产者，消费者同步锁
+static std::condition_variable producter, consumer;
+static queue<int> produte_queue;
+
+static void Consumer()
+{
+    while (1) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+        //RAII,会自动释放资源
+        std::unique_lock<std::mutex> lock(product_consume_mutex);
+        // wait(block) consumer until q.size() != 0 is true
+        if (produte_queue.empty()) {
+            cout << "-------------------- queue empty --------------------" << endl;
+            consumer.wait(lock);
+        }
+
+        int number = produte_queue.front();
+        produte_queue.pop();
+        cout << "<---- consumer " << std::hex << std::this_thread::get_id() << " product id:" << number << " queue size:" << produte_queue.size() << endl;
+        //通知缓冲区的内容不为空
+        producter.notify_all();
+    }
+}
+
+static void Product()
+{
+    while (1) {
+       std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
+       std::unique_lock<std::mutex> lock(product_consume_mutex);
+
+       if (produte_queue.size() == max_product_size) {
+           cout << "-------------------- queue full --------------------" << endl;
+           producter.wait(lock);
+       }
+
+       static int number = 0;
+       produte_queue.push(++number);
+       cout << "----> product " << std::hex << std::this_thread::get_id() << " product id:" << number << " queue size:" << produte_queue.size();
+       consumer.notify_all();
+    }
+}
+
+static void test_productr_consumer()
+{
+    thread producter_thread(Product), consumer_thread(Consumer);
+
+    producter_thread.join();
+    consumer_thread.join();
+}
+
 static void test_thread()
 {
     cout << "**********************test thread**********************" << endl;
-    //test_useage_thread();
+    test_useage_thread();
     synchronize_thread();
+    test_productr_consumer();
     cout << "**********************test thread**********************" << endl;
 }
 
