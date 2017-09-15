@@ -84,11 +84,13 @@
   <ItemGroup>
     <ClCompile Include="..\source\abstract_factory.cpp" />
     <ClCompile Include="..\source\adapter.cpp" />
+    <ClCompile Include="..\source\builder.cpp" />
     <ClCompile Include="..\source\factory.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\prototype.cpp" />
     <ClCompile Include="..\source\simple_factory.cpp" />
     <ClCompile Include="..\source\strategy.cpp" />
+    <ClCompile Include="..\source\template.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

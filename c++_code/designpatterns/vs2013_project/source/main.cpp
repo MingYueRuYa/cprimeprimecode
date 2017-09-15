@@ -32,6 +32,12 @@ int main(int argc, char *argv[])
     prototype::test_prototype();
     cout << "----------------------------------------------" << endl;
 
+    template_method::test_template_method();
+    cout << "----------------------------------------------" << endl;
+
+    builder::test_builder();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }

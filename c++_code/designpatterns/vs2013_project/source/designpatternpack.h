@@ -5,8 +5,8 @@
 **
 ****************************************************************************/
 
-#ifndef designpatternpack_h
-#define designpatternpack_h
+#ifndef design_pattern_pack_h
+#define design_pattern_pack_h
 
 #include "simple_factory.cpp"
 #include "factory.cpp"
@@ -14,5 +14,7 @@
 #include "strategy.cpp"
 #include "adapter.cpp"
 #include "prototype.cpp"
+#include "template.cpp"
+#include "builder.cpp"
 
-#endif //designpatternpack_h
+#endif //design_pattern_pack_h
