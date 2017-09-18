@@ -44,6 +44,10 @@ int main(int argc, char *argv[])
     composite::test_composite();
     cout << "----------------------------------------------" << endl;
 
+    proxy::test_proxy();
+    cout << "----------------------------------------------" << endl;
+
+
     system("pause");
     return 0;
 }

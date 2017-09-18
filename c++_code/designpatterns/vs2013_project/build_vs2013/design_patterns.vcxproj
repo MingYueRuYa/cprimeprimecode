@@ -90,6 +90,7 @@
     <ClCompile Include="..\source\factory.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\prototype.cpp" />
+    <ClCompile Include="..\source\proxy.cpp" />
     <ClCompile Include="..\source\simple_factory.cpp" />
     <ClCompile Include="..\source\strategy.cpp" />
     <ClCompile Include="..\source\template.cpp" />

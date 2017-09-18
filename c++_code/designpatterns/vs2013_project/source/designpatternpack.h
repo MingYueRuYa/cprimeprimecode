@@ -18,5 +18,6 @@
 #include "builder.cpp"
 #include "facade.cpp"
 #include "composite.cpp"
+#include "proxy.cpp"
 
 #endif //design_pattern_pack_h
