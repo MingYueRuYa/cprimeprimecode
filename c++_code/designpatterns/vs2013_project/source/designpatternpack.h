@@ -16,5 +16,7 @@
 #include "prototype.cpp"
 #include "template.cpp"
 #include "builder.cpp"
+#include "facade.cpp"
+#include "composite.cpp"
 
 #endif //design_pattern_pack_h

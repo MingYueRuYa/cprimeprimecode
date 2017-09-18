@@ -38,6 +38,12 @@ int main(int argc, char *argv[])
     builder::test_builder();
     cout << "----------------------------------------------" << endl;
 
+    facade::test_facade();
+    cout << "----------------------------------------------" << endl;
+
+    composite::test_composite();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }
