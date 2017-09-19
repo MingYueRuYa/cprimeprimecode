@@ -19,5 +19,7 @@
 #include "facade.cpp"
 #include "composite.cpp"
 #include "proxy.cpp"
+#include "flyweight.cpp"
+#include "bridge.cpp"
 
 #endif //design_pattern_pack_h

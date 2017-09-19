@@ -47,6 +47,11 @@ int main(int argc, char *argv[])
     proxy::test_proxy();
     cout << "----------------------------------------------" << endl;
 
+    flyweight::test_flyweight();
+    cout << "----------------------------------------------" << endl;
+
+    bridge::test_bridge();
+    cout << "----------------------------------------------" << endl;
 
     system("pause");
     return 0;
