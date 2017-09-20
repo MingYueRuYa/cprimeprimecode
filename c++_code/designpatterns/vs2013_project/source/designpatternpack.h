@@ -21,5 +21,6 @@
 #include "proxy.cpp"
 #include "flyweight.cpp"
 #include "bridge.cpp"
+#include "decorator.cpp"
 
 #endif //design_pattern_pack_h

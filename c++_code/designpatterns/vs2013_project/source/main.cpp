@@ -53,6 +53,9 @@ int main(int argc, char *argv[])
     bridge::test_bridge();
     cout << "----------------------------------------------" << endl;
 
+    decorator::test_decorator();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }

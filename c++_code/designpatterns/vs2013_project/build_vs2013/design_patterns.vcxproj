@@ -87,6 +87,7 @@
     <ClCompile Include="..\source\bridge.cpp" />
     <ClCompile Include="..\source\builder.cpp" />
     <ClCompile Include="..\source\composite.cpp" />
+    <ClCompile Include="..\source\decorator.cpp" />
     <ClCompile Include="..\source\facade.cpp" />
     <ClCompile Include="..\source\factory.cpp" />
     <ClCompile Include="..\source\flyweight.cpp" />
