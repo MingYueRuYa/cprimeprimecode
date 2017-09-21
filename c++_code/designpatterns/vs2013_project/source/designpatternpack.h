@@ -22,5 +22,7 @@
 #include "flyweight.cpp"
 #include "bridge.cpp"
 #include "decorator.cpp"
+#include "state.cpp"
+#include "mediator.cpp"
 
 #endif //design_pattern_pack_h
