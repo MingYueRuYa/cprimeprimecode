@@ -56,6 +56,12 @@ int main(int argc, char *argv[])
     decorator::test_decorator();
     cout << "----------------------------------------------" << endl;
 
+    state::test_state();
+    cout << "----------------------------------------------" << endl;
+
+    mediator::test_mediator();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }
