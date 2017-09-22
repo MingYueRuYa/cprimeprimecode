@@ -24,5 +24,7 @@
 #include "decorator.cpp"
 #include "state.cpp"
 #include "mediator.cpp"
+#include "chain_of_responsibility.cpp"
+#include "observer_event.cpp"
 
 #endif //design_pattern_pack_h

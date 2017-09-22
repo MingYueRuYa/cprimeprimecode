@@ -62,6 +62,12 @@ int main(int argc, char *argv[])
     mediator::test_mediator();
     cout << "----------------------------------------------" << endl;
 
+    chain_of_responsibility::test_chain_of_responsibility();
+    cout << "----------------------------------------------" << endl;
+
+    observer_event::test_observer_event();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }
