@@ -762,6 +762,102 @@ void operator delete[](void *start)
 }
 #endif //test_global_operator_new_delete
 
+namespace custom_allocator
+{
+class allocator
+{
+public:
+	typedef struct object {
+		object *next;
+	} object;
+
+public:
+	allocator() {}
+
+	~allocator() {}
+
+	void *alloc(const size_t size)
+	{
+		object *p = NULL;
+		if (NULL == freeHead) {
+			p = freeHead = (object *)malloc(chunksize*size);
+			for (int i=0; i<chunksize-1; ++i) {
+				p->next = (object *)((char *)p+size);
+				p = p->next;
+			}
+			p->next = NULL; //last
+		}
+		p = freeHead;
+		freeHead = freeHead->next;
+		return p;
+	}
+
+	void dealloc(void *dead, const size_t size)
+	{
+		((object *)dead)->next = freeHead;
+		freeHead = (object *)dead;
+	}
+
+private:
+	const int chunksize = 5;
+
+	object *freeHead = NULL;
+
+};
+
+class Foo	//attention: 怪异，如果Foo的为空类，则自定义的allocator会shutdown
+{
+public:
+	Foo() { cout << "address:" << this << endl; }
+
+	~Foo() {}
+
+	static allocator cus_alloc;
+
+	static void *operator new(size_t size)
+	{
+		return cus_alloc.alloc(size);
+	}
+
+	static void operator delete(void *start, size_t size)
+	{
+		cus_alloc.dealloc(start, size);
+	}
+private:
+	int i = 0;
+};
+
+allocator Foo::cus_alloc;
+
+void test_custom_allocator()
+{
+	cout << "Foo size:" << sizeof(Foo) << endl;
+
+	Foo  *fooarray[100];
+	for (int i=0; i<13; ++i) {
+		fooarray[i] = new Foo();
+	}
+//	result:
+//	Foo size:4
+//	address:0x2bf008
+//	address:0x2bf00c
+//	address:0x2bf010
+//	address:0x2bf014
+//	address:0x2bf018
+//
+//	address:0x2bf020
+//	address:0x2bf024
+//	address:0x2bf028
+//	address:0x2bf02c
+//	address:0x2bf030
+//
+//	address:0x2bf038
+//	address:0x2bf03c
+//	address:0x2bf040
+}
+
+};
+
 int main(int argc, char *argv[])
 {
 //	demo00::test_set_new_handle();
@@ -773,6 +869,7 @@ int main(int argc, char *argv[])
 //	demo05::test_per_class_allocator_2();
 //	demo06::test_overload_operator_new_and_array_new();
 //	demo07::test_overload_placement_new();
-	global_new_delete::test_global_new_delete();
+//	global_new_delete::test_global_new_delete();
+	custom_allocator::test_custom_allocator();
 	return 0;
 }
