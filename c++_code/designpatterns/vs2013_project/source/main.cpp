@@ -56,9 +56,6 @@ int main(int argc, char *argv[])
     decorator::test_decorator();
     cout << "----------------------------------------------" << endl;
 
-    state::test_state();
-    cout << "----------------------------------------------" << endl;
-
     mediator::test_mediator();
     cout << "----------------------------------------------" << endl;
 
@@ -66,6 +63,12 @@ int main(int argc, char *argv[])
     cout << "----------------------------------------------" << endl;
 
     observer_event::test_observer_event();
+    cout << "----------------------------------------------" << endl;
+
+    memento::test_memento();
+    cout << "----------------------------------------------" << endl;
+
+    state::test_state();
     cout << "----------------------------------------------" << endl;
 
     system("pause");

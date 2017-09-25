@@ -94,6 +94,7 @@
     <ClCompile Include="..\source\flyweight.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\mediator.cpp" />
+    <ClCompile Include="..\source\memento.cpp" />
     <ClCompile Include="..\source\observer_event.cpp" />
     <ClCompile Include="..\source\prototype.cpp" />
     <ClCompile Include="..\source\proxy.cpp" />

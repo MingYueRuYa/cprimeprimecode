@@ -6,8 +6,8 @@
 ****************************************************************************/
 
 /*
-* 状态模式：在不破坏的封装的前提下，捕获一个对象的内部状态。并在改对象之外保存该状态。
-* 	在需要的时候在恢复到原先的状态
+* 状态模式：允许一个对象在内部状态发生变化时影响其行为
+*   和责任链模式很相似，但是状态模式维护的一个条状态链，类似状态机的模式
 *
 */
 
@@ -16,11 +16,6 @@
 
 #include <iostream>
 #include <string>
-#include <map>
-
-using std::map;
-using std::pair;
-
 using std::cout;
 using std::endl;
 
@@ -28,113 +23,124 @@ using std::string;
 
 namespace state
 {
-class Memento
+class War;    
+
+class State
 {
 public:
-    Memento() 
-    {
-        mVitality = -1;
-        mAttack   = -1;
-        mDefense  = -1;
-    }
+    State() = default;
+    virtual ~State() = default;
 
-    Memento(const int &pVitality, const int &pAttack, const int &pDefense) :
-        mVitality(pVitality), mAttack(pAttack), mDefense(pDefense) 
-    {}
+    virtual void Prophase() {}
 
-    ~Memento() = default;
+    virtual void Metaphase() {}
 
-    Memento(const Memento &pMemento)
-    {
-        CopyValue(pMemento);
-    }
+    virtual void Anaphase() {}
 
-    Memento &operator= (const Memento &pMemento)
-    {
-        CopyValue(pMemento);
-        return *this;
-    }
+    virtual void End() {}
 
-    void SetVitality(const int &pVitality) { mVitality = pVitality; }
-    int GetVitality() const { return mVitality; }
-
-    void SetAttack(const int &pAttack) { mAttack = pAttack; }
-    int GetAttack() const { return mAttack; }
-
-    void SetDefense(const int &pDefense) { mDefense = pDefense; }
-    int GetDefense() const { return mDefense; }
-
-private:
-    void CopyValue(const Memento &pMemento)
-    {
-        mVitality = pMemento.mVitality;
-        mAttack = pMemento.mAttack;
-        mDefense = pMemento.mDefense;
-    }
-
-private:
-    int mVitality;
-    int mAttack;
-    int mDefense;
+    virtual void CurrentState(War *pWar) {}
 
 };
 
-class GameRole
+class War
 {
-
 public:
-    GameRole(const int &pVitality, const int &pAttack, const int &pDefense) : 
-        mMemento(pVitality, pAttack, pDefense) 
-    {}
-
-    ~GameRole() = default;
-
-    void Load(const Memento &pMemento) { mMemento = pMemento; }
-
-    Memento Save()
+    War(State *pState) : mState(pState), mDays(0) {}
+    ~War() 
     {
-       return mMemento;
+        if (nullptr == mState) { return; }
+        delete mState;
+        mState = nullptr;
     }
 
-    void Vitality(const int pVitality)
+    int GetDays() const { return mDays; }
+    void SetDays(const int &pDays) { mDays = pDays; }
+
+    void SetState(State *pState)
     {
-        mMemento.SetVitality(mMemento.GetVitality() - (-pVitality));
+        if (nullptr != mState) {
+            delete mState;
+            mState = nullptr;
+        }
+
+        mState = pState;
     }
 
-    void Attack(const int pAttackVal)
-    {
-        mMemento.SetAttack(mMemento.GetAttack() - (-pAttackVal));
-    }
-
-    void Defense(const int pDefense)
-    {
-        mMemento.SetDefense(mMemento.GetDefense() - (-pDefense));
-    }
-
-    void Show()
-    {
-        cout << "vitality:" << mMemento.GetVitality() << " attack:" << mMemento.GetAttack() << " defense:" << mMemento.GetDefense() << endl;
-    }
+    void GetState() { mState->CurrentState(this); }
 
 private:
-    Memento mMemento;
+    State *mState;
+    
+    int mDays;  //战争持续的时间
 
 };
 
-class CareTake
+class EndState : public State //战争结束
 {
 public:
-    CareTake() = default;
+    EndState() = default;
+    ~EndState() = default;
 
-    ~CareTake() = default;
+    void End(War *pWar) { cout << "war is end." << endl; }
 
-    Memento GetMemento(const string &pName) { return mStrMementoMap[pName]; }
+    void CurrentState(War *pWar) { End(pWar); }
+};
 
-    void SaveMemento(const string &pName, const Memento &pMemento) { mStrMementoMap[pName] = pMemento; }
+class AnaphaseState : public State
+{
+public:
+    AnaphaseState() = default;
+    ~AnaphaseState() = default;
 
-private: 
-    map<string, Memento> mStrMementoMap;
+    void Anaphase(War *pWar)
+    {
+        if (pWar->GetDays() < 30) { cout << "the " << pWar->GetDays() << " day " << "anaphase." << endl;}
+        else {
+            pWar->SetState(new EndState());
+            pWar->GetState();
+        }
+    }
 
+    void CurrentState(War *pWar) { Anaphase(pWar); }
+
+};
+
+class MetaphaseState : public State
+{
+public:
+    MetaphaseState() = default;
+    ~MetaphaseState() = default;
+
+    void Metaphase(War *pWar)
+    {
+        if (pWar->GetDays() < 20)  { cout << "the " << pWar->GetDays() << " day " << "metaphase." << endl;}
+        else {
+            pWar->SetState(new AnaphaseState());
+            pWar->GetState();
+        }
+    }
+
+    void CurrentState(War *pWar) { Metaphase(pWar); };
+
+};
+
+class ProphaseState : public State
+{
+public:
+    ProphaseState() = default;
+    ~ProphaseState() = default;
+
+    void prophase(War *pWar)
+    {
+        if (pWar->GetDays() < 10) { cout << "the " << pWar->GetDays() << " day " << " prophase." << endl;}
+        else {
+            pWar->SetState(new MetaphaseState());
+            pWar->GetState();
+        }
+    }
+    
+    void CurrentState(War *pWar) { prophase(pWar); }
 };
 
     static void test_state()
@@ -145,26 +151,15 @@ private:
                 "######################################"   \
              << endl;
 
-        //封装的还不够好，客户端的责任比较重。需要知道GameRole和CareTake两个class。目前是按照GOF的UML图实现功能
-        GameRole role(10, 20, 20);
-        CareTake caretake; 
-        caretake.SaveMemento("1", role.Save());
-        role.Show();
+        War *war = new War(new ProphaseState());
 
-        role.Attack(-5);
-        role.Vitality(5);
-        role.Defense(2);
-        caretake.SaveMemento("2", role.Save());
-        role.Show();
-        
-        //恢复1状态
-        role.Load(caretake.GetMemento("1"));
-        role.Show();
+        for (int i=0; i<40; ++i) {
+            war->SetDays(i);
+            war->GetState();
+        }
 
-        //恢复2状态
-        role.Load(caretake.GetMemento("2"));
-        role.Show();
-
+        delete war;
+        war = nullptr;
     }
 
 };

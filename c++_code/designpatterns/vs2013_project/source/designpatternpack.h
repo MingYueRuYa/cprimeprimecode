@@ -26,5 +26,6 @@
 #include "mediator.cpp"
 #include "chain_of_responsibility.cpp"
 #include "observer_event.cpp"
+#include "memento.cpp"
 
 #endif //design_pattern_pack_h
