@@ -739,6 +739,192 @@ void operator delete[](void *start)
 }
 #endif //test_global_operator_new_delete
 
+namespace custom_allocator
+{
+class allocator
+{
+public:
+	typedef struct object {
+		object *next;
+	} object;
+
+public:
+	allocator() {}
+
+	~allocator() {}
+
+	void *alloc(const size_t size)
+	{
+		object *p = NULL;
+		if (NULL == freeHead) {
+			p = freeHead = (object *)malloc(chunksize*size);
+			for (int i=0; i<chunksize-1; ++i) {
+				p->next = (object *)((char *)p+size);
+				p = p->next;
+			}
+			p->next = NULL; //last
+		}
+		p = freeHead;
+		freeHead = freeHead->next;
+		return p;
+	}
+
+	void dealloc(void *dead, const size_t size)
+	{
+		((object *)dead)->next = freeHead;
+		freeHead = (object *)dead;
+	}
+
+private:
+	const int chunksize = 5;
+
+	object *freeHead = NULL;
+
+};
+
+class Foo	//attention: 怪异，如果Foo的为空类，则自定义的allocator会shutdown
+{
+public:
+	Foo() { cout << "address:" << this << endl; }
+
+	~Foo() {}
+
+	static allocator cus_alloc;
+
+	static void *operator new(size_t size)
+	{
+		return cus_alloc.alloc(size);
+	}
+
+	static void operator delete(void *start, size_t size)
+	{
+		cus_alloc.dealloc(start, size);
+	}
+private:
+	int i = 0;
+};
+
+allocator Foo::cus_alloc;
+
+class Goo
+{
+public:
+	Goo() { cout << "address:" << this << endl; }
+
+	~Goo() {}
+
+	static allocator cus_alloc;
+
+	static void *operator new(size_t size)
+	{
+		return cus_alloc.alloc(size);
+	}
+
+	static void operator delete(void *start, size_t size)
+	{
+		cus_alloc.dealloc(start, size);
+	}
+private:
+	int i = 0;
+};
+
+allocator Goo::cus_alloc;
+
+//上面的allocator写法太麻烦，每个类都要写一遍
+//将固定部分写成宏定义的形式
+#define DECLARE_POOL_ALLOC() \
+	public:	\
+		void *operator new(size_t size) { return myAlloc.alloc(size); } \
+		void operator delete(void *p) { myAlloc.dealloc(p, 0); }	\
+	protected: \
+		static allocator myAlloc;		
+
+#define IMPLEMENT_POOL_ALLOC(class_name)	\
+	allocator class_name::myAlloc;		
+
+class Hoo
+{
+	DECLARE_POOL_ALLOC()
+
+public:
+	Hoo() { cout << "address:" << this << endl; }
+
+	~Hoo() {}
+
+private:
+	int i = 0;
+};
+	IMPLEMENT_POOL_ALLOC(Hoo);
+
+
+void test_custom_allocator()
+{
+	cout << "Foo size:" << sizeof(Foo) << endl;
+
+	Foo  *fooarray[100];
+	for (int i=0; i<13; ++i) {
+		fooarray[i] = new Foo();
+	}
+
+	cout << "Goo size:" << sizeof(Foo) << endl;
+	Goo  *gooarray[100];
+	for (int i=0; i<13; ++i) {
+		gooarray[i] = new Goo();
+	}
+
+	cout << "Hoo size:" << sizeof(Foo) << endl;
+	Hoo  *hooarray[100];
+	for (int i=0; i<13; ++i) {
+		hooarray[i] = new Hoo();
+	}
+
+//result:
+	//	Foo size:4
+	//	address:0x1b17008
+	//	address:0x1b1700c
+	//	address:0x1b17010
+	//	address:0x1b17014
+	//	address:0x1b17018
+	//	address:0x1b17020
+	//	address:0x1b17024
+	//	address:0x1b17028
+	//	address:0x1b1702c
+	//	address:0x1b17030
+	//	address:0x1b17038
+	//	address:0x1b1703c
+	//	address:0x1b17040
+	//	Goo size:4
+	//	address:0x1b17050
+	//	address:0x1b17054
+	//	address:0x1b17058
+	//	address:0x1b1705c
+	//	address:0x1b17060
+	//	address:0x1b17068
+	//	address:0x1b1706c
+	//	address:0x1b17070
+	//	address:0x1b17074
+	//	address:0x1b17078
+	//	address:0x1b17080
+	//	address:0x1b17084
+	//	address:0x1b17088
+	//	Hoo size:4
+	//	address:0x1b17098
+	//	address:0x1b1709c
+	//	address:0x1b170a0
+	//	address:0x1b170a4
+	//	address:0x1b170a8
+	//	address:0x1b170b0
+	//	address:0x1b170b4
+	//	address:0x1b170b8
+	//	address:0x1b170bc
+	//	address:0x1b170c0
+	//	address:0x1b170c8
+	//	address:0x1b170cc
+	//	address:0x1b170d0
+}
+
+};
+
 int main(int argc, char *argv[])
 {
 //	demo00::test_set_new_handle();
@@ -750,6 +936,7 @@ int main(int argc, char *argv[])
 //	demo05::test_per_class_allocator_2();
 //	demo06::test_overload_operator_new_and_array_new();
 //	demo07::test_overload_placement_new();
-	global_new_delete::test_global_new_delete();
+//	global_new_delete::test_global_new_delete();
+	custom_allocator::test_custom_allocator();
 	return 0;
 }

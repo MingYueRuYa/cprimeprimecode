@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2F9154F9-9DB2-43F3-AAFD-E03A722DD317}</ProjectGuid>
+    <ProjectGuid>{CDD61792-57E7-41CD-B1F7-45E812AFDFAB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>design_patterns</RootNamespace>
+    <RootNamespace>c11_feature</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,12 +41,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin_debug</OutDir>
+    <OutDir>..\bin_win32</OutDir>
     <IntDir>debug</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin_release</OutDir>
+    <OutDir>..\bin_win32</OutDir>
     <IntDir>release</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -82,26 +82,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\abstract_factory.cpp" />
-    <ClCompile Include="..\source\adapter.cpp" />
-    <ClCompile Include="..\source\bridge.cpp" />
-    <ClCompile Include="..\source\builder.cpp" />
-    <ClCompile Include="..\source\chain_of_responsibility.cpp" />
-    <ClCompile Include="..\source\composite.cpp" />
-    <ClCompile Include="..\source\decorator.cpp" />
-    <ClCompile Include="..\source\facade.cpp" />
-    <ClCompile Include="..\source\factory.cpp" />
-    <ClCompile Include="..\source\flyweight.cpp" />
-    <ClCompile Include="..\source\main.cpp" />
-    <ClCompile Include="..\source\mediator.cpp" />
-    <ClCompile Include="..\source\memento.cpp" />
-    <ClCompile Include="..\source\observer_event.cpp" />
-    <ClCompile Include="..\source\prototype.cpp" />
-    <ClCompile Include="..\source\proxy.cpp" />
-    <ClCompile Include="..\source\simple_factory.cpp" />
-    <ClCompile Include="..\source\state.cpp" />
-    <ClCompile Include="..\source\strategy.cpp" />
-    <ClCompile Include="..\source\template.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="thread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

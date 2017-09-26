@@ -5,13 +5,27 @@
 **
 ****************************************************************************/
 
-#ifndef designpatternpack_h
-#define designpatternpack_h
+#ifndef design_pattern_pack_h
+#define design_pattern_pack_h
 
 #include "simple_factory.cpp"
 #include "factory.cpp"
 #include "abstract_factory.cpp"
 #include "strategy.cpp"
 #include "adapter.cpp"
+#include "prototype.cpp"
+#include "template.cpp"
+#include "builder.cpp"
+#include "facade.cpp"
+#include "composite.cpp"
+#include "proxy.cpp"
+#include "flyweight.cpp"
+#include "bridge.cpp"
+#include "decorator.cpp"
+#include "state.cpp"
+#include "mediator.cpp"
+#include "chain_of_responsibility.cpp"
+#include "observer_event.cpp"
+#include "memento.cpp"
 
-#endif //designpatternpack_h
+#endif //design_pattern_pack_h

@@ -29,6 +29,48 @@ int main(int argc, char *argv[])
     adapter::test_adapter();
     cout << "----------------------------------------------" << endl;
 
+    prototype::test_prototype();
+    cout << "----------------------------------------------" << endl;
+
+    template_method::test_template_method();
+    cout << "----------------------------------------------" << endl;
+
+    builder::test_builder();
+    cout << "----------------------------------------------" << endl;
+
+    facade::test_facade();
+    cout << "----------------------------------------------" << endl;
+
+    composite::test_composite();
+    cout << "----------------------------------------------" << endl;
+
+    proxy::test_proxy();
+    cout << "----------------------------------------------" << endl;
+
+    flyweight::test_flyweight();
+    cout << "----------------------------------------------" << endl;
+
+    bridge::test_bridge();
+    cout << "----------------------------------------------" << endl;
+
+    decorator::test_decorator();
+    cout << "----------------------------------------------" << endl;
+
+    mediator::test_mediator();
+    cout << "----------------------------------------------" << endl;
+
+    chain_of_responsibility::test_chain_of_responsibility();
+    cout << "----------------------------------------------" << endl;
+
+    observer_event::test_observer_event();
+    cout << "----------------------------------------------" << endl;
+
+    memento::test_memento();
+    cout << "----------------------------------------------" << endl;
+
+    state::test_state();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }
