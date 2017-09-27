@@ -87,11 +87,13 @@
     <ClCompile Include="..\source\bridge.cpp" />
     <ClCompile Include="..\source\builder.cpp" />
     <ClCompile Include="..\source\chain_of_responsibility.cpp" />
+    <ClCompile Include="..\source\command.cpp" />
     <ClCompile Include="..\source\composite.cpp" />
     <ClCompile Include="..\source\decorator.cpp" />
     <ClCompile Include="..\source\facade.cpp" />
     <ClCompile Include="..\source\factory.cpp" />
     <ClCompile Include="..\source\flyweight.cpp" />
+    <ClCompile Include="..\source\iterator.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\mediator.cpp" />
     <ClCompile Include="..\source\memento.cpp" />
@@ -99,6 +101,7 @@
     <ClCompile Include="..\source\prototype.cpp" />
     <ClCompile Include="..\source\proxy.cpp" />
     <ClCompile Include="..\source\simple_factory.cpp" />
+    <ClCompile Include="..\source\singleton.cpp" />
     <ClCompile Include="..\source\state.cpp" />
     <ClCompile Include="..\source\strategy.cpp" />
     <ClCompile Include="..\source\template.cpp" />

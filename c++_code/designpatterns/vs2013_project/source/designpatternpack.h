@@ -8,6 +8,7 @@
 #ifndef design_pattern_pack_h
 #define design_pattern_pack_h
 
+#include "singleton.cpp"
 #include "simple_factory.cpp"
 #include "factory.cpp"
 #include "abstract_factory.cpp"
@@ -27,5 +28,7 @@
 #include "chain_of_responsibility.cpp"
 #include "observer_event.cpp"
 #include "memento.cpp"
+#include "command.cpp"
+#include "iterator.cpp"
 
 #endif //design_pattern_pack_h
