@@ -2,17 +2,23 @@
  * 智能指针
  **/
 
+#include <cstdio>
+
 #include <iostream>
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
+#include <string>
 
 using std::cout;
 using std::endl;
 using std::vector;
-using std::unique_ptr;
+using std::string;
+using std::make_shared;
 using std::shared_ptr;
 using std::make_shared;
+using std::exception;
 
 class Demo
 {
@@ -71,6 +77,15 @@ void test_vector_shared_ptr()
 	//	vector eraser....
 }
 
+void test_shared_ptr()
+{
+	shared_ptr<Demo> demoptr = make_shared<Demo>();	
+	//demoptr = demoptr;
+
+	//throw string("test exception.");
+	throw exception();
+}
+
 
 int main()
 {
@@ -98,7 +113,20 @@ int main()
 	for_each(vp.begin(), vp.end(), show);
 	*/
 
-	test_vector_shared_ptr();
+	//test_vector_shared_ptr();
+
+	//try {
+		test_shared_ptr();
+	//} catch (string &p) {
+		//cout << p << endl;
+	//}
+
+	cout << "main exit..." << endl;
+//result:
+	//demo ctor.
+	//demo dtor.
+	//demo dtor.......test exception.
+	//main exit...
 
 	return 0;
 }
