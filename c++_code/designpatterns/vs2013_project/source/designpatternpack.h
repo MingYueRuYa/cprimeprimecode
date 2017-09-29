@@ -30,5 +30,6 @@
 #include "memento.cpp"
 #include "command.cpp"
 #include "iterator.cpp"
+#include "visitor.cpp"
 
 #endif //design_pattern_pack_h

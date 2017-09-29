@@ -80,6 +80,9 @@ int main(int argc, char *argv[])
     iterator::test_iterator();
     cout << "----------------------------------------------" << endl;
 
+    visitor::test_visitor();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }

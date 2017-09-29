@@ -105,6 +105,7 @@
     <ClCompile Include="..\source\state.cpp" />
     <ClCompile Include="..\source\strategy.cpp" />
     <ClCompile Include="..\source\template.cpp" />
+    <ClCompile Include="..\source\visitor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
