@@ -11,6 +11,9 @@
 using std::cout;
 using std::endl;
 using std::vector;
+using std::unique_ptr;
+using std::shared_ptr;
+using std::make_shared;
 
 class Demo
 {
@@ -66,6 +69,27 @@ void test_share_point()
 	throw "test throw exception.";
 }
 
+vector<shared_ptr<Demo>> g_vector;
+
+void test_vector_shared_ptr()
+{
+//	shared_ptr<Demo> demoptr = make_shared<Demo>();
+//
+//	vector<shared_ptr<Demo>> shared_vector{demoptr};
+
+	//当vector中元素没有用处，使用erase移除元素，智能指针会自动调用析构函数
+	g_vector.push_back(make_shared<Demo>());
+	cout << "vector eraser...." << endl;
+	g_vector.erase(g_vector.begin());
+	cout << "vector eraser...." << endl;
+//result:
+	//	demo ctor.
+	//	vector eraser....
+	//	demo dtor.
+	//	vector eraser....
+}
+
+
 int main()
 {
 	/*
@@ -81,8 +105,23 @@ int main()
 
 	//test_auto_ptr();	
 	//test_unique_ptr();	
+<<<<<<< HEAD
 	test_share_point();
 
+=======
+
+	/*
+	std::vector<std::unique_ptr<int>> vp(5);
+	for (int i=0; i<vp.size(); ++i) {
+		vp[i] = make_int(rand()%1000);		//copy temporary unique_str
+	}
+	vp.push_back(make_int(rand()%1000));		//copy temporary unique_str
+	
+	for_each(vp.begin(), vp.end(), show);
+	*/
+
+	test_vector_shared_ptr();
+>>>>>>> 3e3b2b2f59bf6539b86e39044943d5e59021bac9
 
 	return 0;
 }

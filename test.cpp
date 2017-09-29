@@ -126,6 +126,45 @@ void operator delete(void *start)
 
 int main()
 {
+	char *name = "name";
+	for (int i=0; i<4; ++i) {
+		cout << name[i];
+	}
+	//! name[0] = 'b'; //crash
+
+	cout << "\n";
+	char name1[5] = "name";
+	name1[0] = 'i';
+	for (int i=0; i<4; ++i) {
+		cout << name1[i];
+	}
+
+	cout << "\n";
+	typedef char *pstring;
+	pstring name2 = "name3";
+	cout << name2 << endl;
+
+	//name3 是常量，也就是常量指针
+	const pstring name3 = name1;
+	//但是 *name3是可以修改的，也就是说指向的不是常量字符串
+	//! name3 = name1; //error: name3 readonly
+	name3[0] = 'a';
+	cout << name3 << endl;
+
+	//! const pstring const name4 = "abc"; //error: duplicate ‘const’
+
+	//和上面的name3是行为是一样的，所以const所在的位置没有关系
+	pstring const name5 = name1;
+	*name5 = 'b';
+	cout << name5 << endl;
+
+
+	cout << "\n";
+	return 0;
+}
+
+int main04()
+{
 	Foo *foo = new Foo();
 	delete foo;
 	foo = NULL;

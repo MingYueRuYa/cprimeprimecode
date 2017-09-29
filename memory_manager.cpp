@@ -679,6 +679,7 @@ void test_overload_placement_new()
  * */
 namespace global_new_delete
 {
+//define 没有作用域的概念
 #define test_global_operator_new_delete
 
 class Foo
@@ -695,31 +696,6 @@ public:
 	}
 };
 
-//重载全局的new,delete不能放在namespace中
-//void *operator new(size_t size)
-//{
-//	cout << "global operator new..." << endl;
-//	return malloc(size);
-//}
-//
-//void *operator new[](size_t size)
-//{
-//	cout << "global operator new[]..." << endl;
-//	return malloc(size);
-//}
-//
-//void operator delete(void *start)
-//{
-//	cout << "global operator delete..." << endl;
-//	free(start);
-//}
-//
-//void operator delete[](void *start)
-//{
-//	cout << "global operator delete[]..." << endl;
-//	free(start);
-//}
-
 void test_global_new_delete()
 {
 	Foo *foo = new Foo();
@@ -731,12 +707,13 @@ void test_global_new_delete()
 	arrayfoo = NULL;
 }
 
-//#undef test_global_operator_new_delete
+#undef test_global_operator_new_delete
 
 };
 
 #ifdef test_global_operator_new_delete
 
+//重载全局的new,delete不能放在namespace中
 void *operator new(size_t size)
 {
 	cout << "global operator new..." << endl;

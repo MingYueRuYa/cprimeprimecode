@@ -75,5 +75,14 @@
     <ClCompile Include="..\source\memento.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\singleton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\command.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\iterator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

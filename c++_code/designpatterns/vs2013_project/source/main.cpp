@@ -71,6 +71,15 @@ int main(int argc, char *argv[])
     state::test_state();
     cout << "----------------------------------------------" << endl;
 
+    singleton::test_singleton();
+    cout << "----------------------------------------------" << endl;
+
+    command::test_command();
+    cout << "----------------------------------------------" << endl;
+
+    iterator::test_iterator();
+    cout << "----------------------------------------------" << endl;
+
     system("pause");
     return 0;
 }
