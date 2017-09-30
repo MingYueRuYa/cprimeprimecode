@@ -925,6 +925,45 @@ void test_custom_allocator()
 
 };
 
+#include <ext/pool_allocator.h>
+
+using std::cout;
+using std::endl;
+
+namespace ext_pool_allocator
+{
+	template<typename Alloc>
+	void cookie_test(Alloc alloc, size_t n)
+	{
+		typename Alloc::value_type *p1, *p2, *p3;
+
+		p1 = alloc.allocate(n);
+		p2 = alloc.allocate(n);
+		p3 = alloc.allocate(n);
+
+		std::cout << "p1=" << p1 << "\t" << "p2=" << p2 << "\t" << "p3=" << p3 << "\t" << std::endl;
+
+		alloc.deallocate(p1, sizeof(typename Alloc::value_type));
+		alloc.deallocate(p2, sizeof(typename Alloc::value_type));
+		alloc.deallocate(p3, sizeof(typename Alloc::value_type));
+	}
+
+	void test_pool_alloc()
+	{
+		std::cout << sizeof(__gnu_cxx::__pool_alloc<int>) << std::endl;
+		cookie_test(__gnu_cxx::__pool_alloc<double>(), 1);
+
+		std::cout << sizeof(std::allocator<int>) << std::endl;
+		cookie_test(std::allocator<double>(), 1);
+	}
+	//result:
+	//1
+	//p1=0x8e2e008	p2=0x8e2e010	p3=0x8e2e018	//相距为8，表示没有cookie
+	//1
+	//p1=0x8e2e150	p2=0x8e2e160	p3=0x8e2e170	//相距为16，表示存在cookie	
+};
+
+
 int main(int argc, char *argv[])
 {
 //	demo00::test_set_new_handle();
@@ -937,6 +976,7 @@ int main(int argc, char *argv[])
 //	demo06::test_overload_operator_new_and_array_new();
 //	demo07::test_overload_placement_new();
 //	global_new_delete::test_global_new_delete();
-	custom_allocator::test_custom_allocator();
+//	custom_allocator::test_custom_allocator();
+	ext_pool_allocator::test_pool_alloc();
 	return 0;
 }
