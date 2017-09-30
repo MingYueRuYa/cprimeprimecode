@@ -35,6 +35,8 @@ private:
 
 	int mSockfd;
 
+	int mClientSockfd;
+
 };
 
 #endif //server_sock_h
