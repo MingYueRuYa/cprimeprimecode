@@ -2,18 +2,23 @@
  * 智能指针
  **/
 
+#include <cstdio>
+
 #include <iostream>
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include <exception>
+#include <stdexcept>
+#include <string>
 
 using std::cout;
 using std::endl;
 using std::vector;
-using std::unique_ptr;
+using std::string;
+using std::make_shared;
 using std::shared_ptr;
 using std::make_shared;
+using std::exception;
 
 class Demo
 {
@@ -89,6 +94,15 @@ void test_vector_shared_ptr()
 	//	vector eraser....
 }
 
+void test_shared_ptr()
+{
+	shared_ptr<Demo> demoptr = make_shared<Demo>();	
+	//demoptr = demoptr;
+
+	//throw string("test exception.");
+	throw exception();
+}
+
 
 int main()
 {
@@ -105,10 +119,8 @@ int main()
 
 	//test_auto_ptr();	
 	//test_unique_ptr();	
-<<<<<<< HEAD
-	test_share_point();
+	//test_share_point();
 
-=======
 
 	/*
 	std::vector<std::unique_ptr<int>> vp(5);
@@ -120,8 +132,21 @@ int main()
 	for_each(vp.begin(), vp.end(), show);
 	*/
 
-	test_vector_shared_ptr();
->>>>>>> 3e3b2b2f59bf6539b86e39044943d5e59021bac9
+	//test_vector_shared_ptr();
+	//test_vector_shared_ptr();
+
+	//try {
+		test_shared_ptr();
+	//} catch (string &p) {
+		//cout << p << endl;
+	//}
+
+	cout << "main exit..." << endl;
+//result:
+	//demo ctor.
+	//demo dtor.
+	//demo dtor.......test exception.
+	//main exit...
 
 	return 0;
 }

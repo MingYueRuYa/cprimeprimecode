@@ -10,6 +10,12 @@
  *
  * */
 
+
+/*
+ * 说明：在ubuntu 14.04下RAND_MAX 为2,147,483,647
+ * hash_set, hash_map 在ext目录下，很少用到
+ * */
+
 #include <cstdio>
 #include <cstdlib>
 
@@ -17,6 +23,7 @@
 #include <string>
 
 const long ASIZE = 500000L;
+const long ELEMENT_SIZE = 1000000L;
 
 #define SECONDS(mseconds) ((mseconds)*1.0/CLOCKS_PER_SEC)
 
@@ -113,7 +120,7 @@ namespace test_vector
 		char buf[10];
 		clock_t timestart = clock();
 
-		for (int i=0; i<1000000; ++i) {
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
 			try {
 				snprintf(buf, 10, "%d", rand());
 				c.push_back(string(buf));
@@ -184,7 +191,7 @@ namespace test_list
 		char buf[10];
 		clock_t timestart = clock();
 
-		for (int i=0; i<1000000; ++i) {
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
 			try {
 				snprintf(buf, 10, "%d", rand());
 				c.push_back(string(buf));
@@ -244,7 +251,7 @@ namespace test_forward_list
 		char buf[10];
 		clock_t timestart = clock();
 
-		for (int i=0; i<1000000; ++i) {
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
 			try {
 				snprintf(buf, 10, "%d", rand());
 				c.push_front(string(buf));
@@ -293,7 +300,7 @@ namespace test_deque
 		char buf[10];
 		clock_t timestart = clock();
 
-		for (int i=0; i<1000000; ++i) {
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
 			try {
 				snprintf(buf, 10, "%d", rand());
 				c.push_back(string(buf));
@@ -337,19 +344,385 @@ namespace test_deque
 	}
 };
 
+#include <set>
+
+using std::multiset;
+
+namespace test_multi_set
+{
+	void set_multiset()
+	{
+		std::cout << "............test multiset............" << std::endl;
+		multiset<string> c;
+
+		char buf[10];
+		clock_t timestart = clock();
+
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
+			try {
+				snprintf(buf, 10, "%d", rand()/10000);
+				c.insert(string(buf));
+			}
+			catch(exception &p) {
+				cout << "i=" << i << " " << p.what() << endl;
+				abort();
+			}
+		} //for 
+
+		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "multiset.size()= " << c.size() << endl;
+		cout << "multiset.max_size()= " << c.max_size() << endl;
+		
+		string target = get_a_target_string();
+		{
+			timestart = clock();
+			auto item = find(c.begin(), c.end(), target);
+			cout << "std::find(), seconds:" << SECONDS(clock()-timestart) << endl;
+			if (c.end() != item) { cout << "found, " << *item << endl; }
+			else { cout << "not found! " << endl; }
+		}
+
+		{
+			timestart = clock();
+			auto item = c.find(target);
+			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			if (c.end() == item) {
+				cout << "not found." << endl;
+			}
+			else {
+				cout << "found, " << *item << endl;
+			} // if 
+		}
+
+//result:
+	//............test multiset............
+	//seconds: 1.91099
+	//multiset.size()= 1000000
+	//multiset.max_size()= 214748364
+	//target (0~2147483647): std::find(), seconds:0.01785
+	//found, 12345
+	//find(), seconds:0.000003
+	//found, 12345
+	}
+};
+
+#include <map>
+
+using std::multimap;
+using std::pair;
+
+namespace test_multi_map
+{
+	void set_multimap()
+	{
+		std::cout << "............test set_multimap............" << std::endl;
+		multimap<long, string> c;
+
+		char buf[10];
+		clock_t timestart = clock();
+
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
+			try {
+				snprintf(buf, 10, "%d", rand()/10000);
+				//multimap 不能使用[]做insertion
+				c.insert(pair<long, string>(i, buf));
+			}
+			catch(exception &p) {
+				cout << "i=" << i << " " << p.what() << endl;
+				abort();
+			}
+		} //for 
+
+		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "multimap.size()= " << c.size() << endl;
+		cout << "multimap.max_size()= " << c.max_size() << endl;
+		long target = get_a_target_long();
+		//{
+			//timestart = clock();
+			//error，pair对象没有重载operator==操作符，所以不能使用std::find算法进行查找
+			//auto item = find(c.begin(), c.end(), target);
+		//}
+
+		{
+			timestart = clock();
+			auto item = c.find(target);
+			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			if (c.end() == item) {
+				cout << "not found." << endl;
+			}
+			else {
+				cout << "found, " << item->second << endl;
+			} // if 
+		}
+	//result:		
+	//............test set_multimap............
+	//seconds: 0.807391
+	//multimap.size()= 1000000
+	//multimap.max_size()= 178956970
+	//target (0~2147483647): find(), seconds:0.000006
+	//found, 196384
+	}
+};
+
+#include <unordered_set>
+
+using std::unordered_multiset;
+
+namespace test_unordred_multiset
+{
+	void test_unordred_multiset()
+	{
+		std::cout << "............test unorderedset............" << std::endl;
+
+		srand(time(nullptr));
+
+		unordered_multiset<string> c;
+		char buf[10];
+		clock_t timestart = clock();
+
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
+			try {
+				snprintf(buf, 10, "%d", rand()/1000);
+				c.insert(string(buf));
+			}
+			catch(exception &p) {
+				cout << "i=" << i << " " << p.what() << endl;
+				abort();
+			}
+		} // for
+
+		
+		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "unordered_multiset.size()= " << c.size() << endl;
+		cout << "unordered_multiset.max_size()= " << c.max_size() << endl;
+		cout << "unordered_multiset.bucket_count()= " << c.bucket_count() << endl;
+		cout << "unordered_multiset.load_factor()= " << c.load_factor() << endl;
+		cout << "unordered_multiset.max_load_factor()= " << c.max_load_factor() << endl;
+		cout << "unordered_multiset.max_bucket_count()= " << c.max_bucket_count() << endl;
+
+		for (int i=0; i<20; ++i) {
+			cout << "bucket #" << i << " has " << c.bucket_size(i) << " elements.\n";
+		}
+
+		string target = get_a_target_string();
+		{
+			timestart = clock();
+			auto item = find(c.begin(), c.end(), target);
+			cout << "std::find(), seconds:" << SECONDS(clock()-timestart) << endl;
+			if (c.end() != item) { cout << "found, " << *item << endl; }
+			else { cout << "not found! " << endl; }
+		}
+
+		{
+			timestart = clock();
+			auto item = c.find(target);
+			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			if (c.end() == item) {
+				cout << "not found." << endl;
+			}
+			else {
+				cout << "found, " << *item << endl;
+			} // if 
+		}
+//result:
+//............test unorderedset............
+//seconds: 0.825236
+//unordered_multiset.size()= 1000000
+//unordered_multiset.max_size()= 357913941
+//unordered_multiset.bucket_count()= 1056323
+//unordered_multiset.load_factor()= 0.94668
+//unordered_multiset.max_load_factor()= 1
+//unordered_multiset.max_bucket_count()= 357913941
+//bucket #0 has 2 elements.
+//bucket #1 has 1 elements.
+//bucket #2 has 1 elements.
+//bucket #3 has 0 elements.
+//bucket #4 has 2 elements.
+//bucket #5 has 0 elements.
+//bucket #6 has 0 elements.
+//bucket #7 has 1 elements.
+//bucket #8 has 0 elements.
+//bucket #9 has 1 elements.
+//bucket #10 has 3 elements.
+//bucket #11 has 0 elements.
+//bucket #12 has 1 elements.
+//bucket #13 has 1 elements.
+//bucket #14 has 0 elements.
+//bucket #15 has 2 elements.
+//bucket #16 has 1 elements.
+//bucket #17 has 3 elements.
+//bucket #18 has 4 elements.
+//bucket #19 has 2 elements.
+//target (0~2147483647): std::find(), seconds:0.098153
+//not found! 
+//find(), seconds:0.000001
+//not found.
+	}
+};
+
+#include <ext/slist>
+
+namespace test_slist
+{
+	void test_slist()
+	{
+		std::cout << "............test slist............" << std::endl;
+
+		srand(time(nullptr));
+
+		__gnu_cxx::slist<string> c;
+		char buf[10];
+		clock_t timestart = clock();
+
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
+			try {
+				snprintf(buf, 10, "%d", rand()/1000);
+				c.push_front(string(buf));
+			}
+			catch(exception &p) {
+				cout << "i=" << i << " " << p.what() << endl;
+				abort();
+			}
+		} // for
+
+		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		
+//result:
+//............test unorderedset............
+//seconds: 0.291623
+	}
+
+}
+
+#include <map>
+
+using std::map;
+using std::pair;
+
+namespace test_map
+{
+	void test_map()
+	{
+		std::cout << "............test map............" << std::endl;
+		map<long, string> c;
+
+		char buf[10];
+		clock_t timestart = clock();
+
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
+			try {
+				snprintf(buf, 10, "%d", rand()/10000);
+				//multimap 不能使用[]做insertion，但是mapqueue是可以使用
+				c[i] = buf;
+			}
+			catch(exception &p) {
+				cout << "i=" << i << " " << p.what() << endl;
+				abort();
+			}
+		} //for 
+
+		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "map.size()= " << c.size() << endl;
+		cout << "map.max_size()= " << c.max_size() << endl;
+		long target = get_a_target_long();
+		{
+			timestart = clock();
+			auto item = c.find(target);
+			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			if (c.end() == item) {
+				cout << "not found." << endl;
+			}
+			else {
+				cout << "found, " << item->second << endl;
+			} // if 
+		}
+//result:
+//............test map............
+//seconds: 1.01845
+//map.size()= 1000000
+//map.max_size()= 178956970
+//target (0~2147483647): find(), seconds:0.000005
+//found, 136033
+	}
+};
+
+#include <set>
+
+using std::set;
+
+namespace test_set
+{
+	void test_set()
+	{
+		std::cout << "............test set............" << std::endl;
+		set<string> c;
+
+		char buf[10];
+		clock_t timestart = clock();
+
+		for (int i=0; i<ELEMENT_SIZE; ++i) {
+			try {
+				snprintf(buf, 10, "%d", rand()/10000);
+				c.insert(string(buf));
+			}
+			catch(exception &p) {
+				cout << "i=" << i << " " << p.what() << endl;
+				abort();
+			}
+		} //for 
+
+		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "multiset.size()= " << c.size() << endl;
+		cout << "multiset.max_size()= " << c.max_size() << endl;
+		
+		string target = get_a_target_string();
+		{
+			timestart = clock();
+			auto item = find(c.begin(), c.end(), target);
+			cout << "std::find(), seconds:" << SECONDS(clock()-timestart) << endl;
+			if (c.end() != item) { cout << "found, " << *item << endl; }
+			else { cout << "not found! " << endl; }
+		}
+
+		{
+			timestart = clock();
+			auto item = c.find(target);
+			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			if (c.end() == item) {
+				cout << "not found." << endl;
+			}
+			else {
+				cout << "found, " << *item << endl;
+			} // if 
+		}
+
+//result:
+//............test set............
+//seconds: 1.61553
+//multiset.size()= 212740
+//multiset.max_size()= 214748364
+//target (0~2147483647): std::find(), seconds:0.015326
+//found, 23456
+//find(), seconds:0.000003
+//found, 23456
+	}
+};
+
 int main(int argc, char *argv[])
 {
 	//test_array::test_array();
 	//test_vector::test_vector();
 	//test_list::test_list();
 	//test_forward_list::test_forward_list();
-	test_deque::test_deque();
+	//test_deque::test_deque();
+	//test_multi_set::set_multiset();
+	//test_multi_map::set_multimap();
+	//test_unordred_multiset::test_unordred_multiset();
+	//test_slist::test_slist();
+	//test_map::test_map();
+	test_set::test_set();
 	return 0;
 }
-
-
-
-
 
 
 
