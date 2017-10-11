@@ -2,17 +2,23 @@
  * 智能指针
  **/
 
+#include <cstdio>
+
 #include <iostream>
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
+#include <string>
 
 using std::cout;
 using std::endl;
 using std::vector;
-using std::unique_ptr;
+using std::string;
+using std::make_shared;
 using std::shared_ptr;
 using std::make_shared;
+using std::exception;
 
 class Demo
 {
@@ -49,6 +55,23 @@ void test_unique_ptr()
 										  //‘std::unique_ptr<_Tp, _Dp>::unique_ptr(const std::unique_ptr<_Tp, _Dp>&) [with _Tp = int; _Dp = std::default_delete<int>]’
 	//std::unique_ptr<class> 不允许显式copy，因为copy之后uni1控制权转移给uni2,此时uni1为空。这个编译器检查出有隐患。所以报错
 	//但是unique_ptr比较智能，如果是temporary转为unique_ptr则是允许
+	std::vector<std::unique_ptr<int>> vp(5);
+	for (int i=0; i<vp.size(); ++i) {
+		vp[i] = make_int(rand()%1000);		//copy temporary unique_str
+	}
+	vp.push_back(make_int(rand()%1000));		//copy temporary unique_str
+	
+	for_each(vp.begin(), vp.end(), show);
+}
+
+void free_demo(Demo *pDemo) { cout << "free demo..." << endl; }
+
+void test_share_point()
+{
+	Demo demo;
+	//std::shared_ptr<Demo> demo_ptr(&demo, free_demo);
+	std::shared_ptr<Demo> demo_ptr2(new Demo());
+	throw "test throw exception.";
 }
 
 vector<shared_ptr<Demo>> g_vector;
@@ -71,6 +94,15 @@ void test_vector_shared_ptr()
 	//	vector eraser....
 }
 
+void test_shared_ptr()
+{
+	shared_ptr<Demo> demoptr = make_shared<Demo>();	
+	//demoptr = demoptr;
+
+	//throw string("test exception.");
+	throw exception();
+}
+
 
 int main()
 {
@@ -87,6 +119,8 @@ int main()
 
 	//test_auto_ptr();	
 	//test_unique_ptr();	
+	//test_share_point();
+
 
 	/*
 	std::vector<std::unique_ptr<int>> vp(5);
@@ -98,7 +132,21 @@ int main()
 	for_each(vp.begin(), vp.end(), show);
 	*/
 
-	test_vector_shared_ptr();
+	//test_vector_shared_ptr();
+	//test_vector_shared_ptr();
+
+	//try {
+		test_shared_ptr();
+	//} catch (string &p) {
+		//cout << p << endl;
+	//}
+
+	cout << "main exit..." << endl;
+//result:
+	//demo ctor.
+	//demo dtor.
+	//demo dtor.......test exception.
+	//main exit...
 
 	return 0;
 }
