@@ -141,19 +141,19 @@ void test_mem_fun_layout()
 	//ClassC vtbl[5]=0x8048d14 
 
 	cout << endl;
-	cout << &a << endl;				//0xbf8f0cbc
-	cout << &(a.m_data1) << endl;	//0xbf8f0cc0
-	cout << &(a.m_data2) << endl;	//0xbf8f0cc4
-	cout << &b << endl;				//0xbf8f0cc8
-	cout << &(b.m_data1) << endl;	//0xbf8f0ccc
-	cout << &(b.m_data2) << endl;	//0xbf8f0cd0
-	cout << &(b.m_data3) << endl;	//0xbf8f0cd4
-	cout << &c << endl;				//0xbf8f0cd8
-	cout << &(c.ClassA::m_data1) << endl;	//0xbf8f0cdc
-	cout << &(c.m_data2) << endl;	//0xbf8f0ce0
-	cout << &(c.m_data3) << endl;	//0xbf8f0ce4
-	cout << &(c.m_data1) << endl;	//0xbf8f0ce8
-	cout << &(c.m_data4) << endl;	//0xbf8f0cec
+	cout << &a << endl;				
+	cout << &(a.m_data1) << endl;	
+	cout << &(a.m_data2) << endl;	
+	cout << &b << endl;				
+	cout << &(b.m_data1) << endl;	
+	cout << &(b.m_data2) << endl;	
+	cout << &(b.m_data3) << endl;	
+	cout << &c << endl;				
+	cout << &(c.ClassA::m_data1) << endl;	
+	cout << &(c.m_data2) << endl;	
+	cout << &(c.m_data3) << endl;	
+	cout << &(c.m_data1) << endl;	
+	cout << &(c.m_data4) << endl;	
 	//从上面的地址来看，地址都是连续的
 
 }
@@ -168,5 +168,6 @@ int main(int argc, char *argv[])
 
 	mem_fun_layout::test_mem_fun_layout();
 
+    system("pause");
 	return 0;
 }
