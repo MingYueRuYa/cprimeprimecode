@@ -83,11 +83,9 @@ public:
         return *mInstance;
     }
 
-    void Show() { cout << "singleton show someting..." << endl; }
-
 protected:
     Singleton(void) {}
-    ~Singleton(void) {}
+    virtual ~Singleton(void) {}
 
 private:
     Singleton(const Singleton& rhs) {}
@@ -115,6 +113,7 @@ class DemoSingleton : public Singleton<DemoSingleton>
 {
 public:
     void Show() { cout << "this is demo singleton." << endl; }
+    void Test() { cout << "this is test test demo singleton." << endl; }
 };
     
     static void test_singleton()
@@ -126,6 +125,7 @@ public:
              << endl;
 
         DemoSingleton::Instance().Show();
+        DemoSingleton::Instance().Test();
     }
 };
 
