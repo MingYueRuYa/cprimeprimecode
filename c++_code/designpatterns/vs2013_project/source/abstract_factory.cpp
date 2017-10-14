@@ -21,6 +21,9 @@ using std::endl;
 
 namespace abstract_factory 
 {
+    
+#define DELETE_POINT(object) if (nullptr != object) { delete object; object = nullptr; }
+
 class SingleCore
 {
 public:
@@ -111,6 +114,11 @@ static void test_abstract_factory()
 
     MultiCore *multicore2 = Bfactory->CreateMultiCore();
     multicore2->Show();
+
+    DELETE_POINT(Afactory);
+    DELETE_POINT(basecore1);
+    DELETE_POINT(Bfactory);
+    DELETE_POINT(basecore2);
 }
 
 };

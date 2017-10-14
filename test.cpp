@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <iostream>
 
+#include <list>
+
+using std::list;
+
 using namespace std;
 
 class Foo
@@ -125,6 +129,16 @@ void operator delete(void *start)
 }
 
 int main()
+{
+	cout << "list<T> size:" << sizeof(list<int>) << endl;
+	int i(6);
+	cout <<"++++i = "  << ++++i << endl;
+	i = 6;
+	//cout <<"i++++ = "  << i++++ << endl; //error
+	return 0;
+}
+
+int main05()
 {
 	char *name = "name";
 	for (int i=0; i<4; ++i) {

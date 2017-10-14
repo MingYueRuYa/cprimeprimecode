@@ -3,8 +3,14 @@ test/
 *.o
 tags
 .*
-
-
 app
+*Debug
+*.sdf
+*.suo
+*.opensdf
+ipch
+*release
+bin_win32
+bin_linux
+*.aps
 
-build*Debug

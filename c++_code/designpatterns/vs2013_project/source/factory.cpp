@@ -75,6 +75,12 @@ static void test_factory()
     basecore1->Show();
     SingleCore *basecore2 = (new FactoryB())->CreateSingleCore();
     basecore2->Show();
+
+    delete basecore1;
+    basecore1 = nullptr;
+    delete basecore2;
+    basecore2 = nullptr;
+
 }
 
 };
