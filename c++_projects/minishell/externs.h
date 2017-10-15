@@ -14,5 +14,6 @@ extern COMMAND cmd[PIPELINE];
 extern int cmd_count;
 extern int backgnd;
 extern int append;
+extern int lastpid;
 
 #endif //_EXTERNS_H

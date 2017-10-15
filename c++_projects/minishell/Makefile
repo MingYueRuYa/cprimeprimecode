@@ -2,7 +2,7 @@
 CC=gcc
 CFLAGS=-Wall -g
 BIN=minishell
-OBJS=main.o parse.o init.o
+OBJS=main.o parse.o init.o execute.o builtin.o
 $(BIN):$(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@
 %.o:%.c

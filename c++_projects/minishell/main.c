@@ -13,6 +13,7 @@ COMMAND cmd[PIPELINE];
 int cmd_count;
 int backgnd;
 int append;
+int lastpid;
 
 int main(int argc, char *argv[])
 {

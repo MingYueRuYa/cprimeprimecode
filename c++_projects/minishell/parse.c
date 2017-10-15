@@ -1,16 +1,20 @@
 #include "init.h"
 #include "parse.h"
 #include "externs.h"
+#include "execute.h"
+#include "builtin.h"
 
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <linux/limits.h>
+#include <fcntl.h>
 
 void get_command(int i);
-int check(const char *str);
 void getname(char *name);
 void print_command();
+//void forkexec(COMMAND *pcmd);
 
 /*
  * shell主循环
@@ -18,8 +22,6 @@ void print_command();
 void shell_loop(void)
 {
     while (1) {
-        printf("[minishell]$ ");
-        fflush(stdout);
         init();
         if (read_command() == -1) {
             break;
@@ -58,7 +60,12 @@ int parse_command(void)
     if (check("\n")) {
         return 0;
     }
-
+    
+    //判断是否内部命令并执行它
+    if (builtin()) {
+        return 0;
+    }
+    
     /* 1、解析第一条命令 */
     get_command(0);
     /* 2、判定是否有输入重定向符 */
@@ -99,20 +106,10 @@ int parse_command(void)
  * 执行命令
  * 成功返回0，失败返回-1
  * */
-int execute_command()
+int execute_command(void)
 {
-    //fork处一个子进程去执行命令
-    //pid_t pid = fork();
-    //if (-1 == pid) {
-        //ERR_EXIT("fork");
-    //}
-
-    //if (0 == pid) {
-        //execvp(cmd.args[0], cmd.args);
-    //}
-
-    //wait(NULL);
-    return 0;
+	execute_disk_command();
+	return 0;
 }
 
 void print_command()
@@ -235,5 +232,4 @@ void getname(char *name)
     }
     *name = '\0';
 }
-
 
