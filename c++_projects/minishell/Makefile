@@ -1,4 +1,4 @@
-.PHONE:clean
+.PHONY:clean
 CC=gcc
 CFLAGS=-Wall -g
 BIN=minishell
@@ -9,4 +9,4 @@ $(BIN):$(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf *.o $(BIN)
+	rm -f *.o $(BIN)
