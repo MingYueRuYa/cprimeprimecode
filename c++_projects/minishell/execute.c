@@ -71,7 +71,7 @@ int execute_disk_command(void)
     //如果命令为空，直接返回，不做任何动作
     if (cmd_count == 0) {
         return 0;
-    }
+    //}
 
     if (infile[0] != '\0') {
         cmd[0].infd = open(infile, O_RDONLY);
