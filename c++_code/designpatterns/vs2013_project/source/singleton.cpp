@@ -70,10 +70,10 @@ class Singleton
 public:
     static T& Instance() //1.为什么返回引用类型 --> 此内存是由Singleton自己管理，外界不需要知道具体的细节问题
     {
-        if (mInstance == NULL)
+        if (NULL == mInstance )
         {
             mMutex.lock();
-            if (mInstance == NULL) {
+            if (NULL == mInstance) {
                 mInstance = new T();
                 atexit(Destroy); //3.为什么调用atexit函数 --> 一是为了能释放资源，二是减轻用户责任不要用户在手动调用释放资源的函数
             }
