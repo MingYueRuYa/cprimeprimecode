@@ -17,6 +17,13 @@ using std::list;
 using std::list;
 using std::pair;
 
+
+/*
+ * 测试发现 uninitialized_fill uninitialized_copy uninitialized_fill_n
+ * 调用是copy ctor.
+ * */
+
+
 //Demo不是POD类型数据
 //POD 就是简单数据类型的组成struct或class
 //何为简单：就是没有ctor，dtor，virtual，权限修饰符只有一种
@@ -67,6 +74,39 @@ void test_uninitialized_fill()
 int main(void)
 {
 	test_uninitialized_fill();
+	//result:	
+		//ctor.
+		//ctor.
+		//ctor.
+		//ctor.
+		//ctor.
+		//ctor.
+		//ctor.
+		//ctor.
+		//ctor.
+		//ctor.
+		//ctor.
+		//copy ctor...
+		//copy ctor...
+		//copy ctor...
+		//copy ctor...
+		//copy ctor...
+		//copy ctor...
+		//copy ctor...
+		//copy ctor...
+		//copy ctor...
+		//copy ctor...
+		//dtor.
+		//dtor.
+		//dtor.
+		//dtor.
+		//dtor.
+		//dtor.
+		//dtor.
+		//dtor.
+		//dtor.
+		//dtor.
+		//dtor.
 	return 0;
 }
 
