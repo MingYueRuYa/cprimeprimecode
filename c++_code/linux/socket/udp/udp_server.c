@@ -39,7 +39,13 @@ void echo_srv(int sockfd)
 			int ret = 0;	
 			fputs(recvbuf, stdout);
 			ret = sendto(sockfd, recvbuf, n, 0, (struct sockaddr *)&peeraddr, peerlen);
+			//收到quit时退出
+			if (0 == strncasecmp(recvbuf, "quit", strlen("quit"))) {
+				exit(0);
+			}
 		}
+		//每次清空缓冲区的内容
+		memset(recvbuf, 0, sizeof(recvbuf));
 	}
 	close(sockfd);
 }
