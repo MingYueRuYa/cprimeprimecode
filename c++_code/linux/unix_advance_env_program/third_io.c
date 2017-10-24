@@ -11,6 +11,12 @@
 #include "apue.h"
 #include "error.c"
 
+int g_argc = 0;
+char **g_argv = NULL;
+
+//flags are file status flags to turn on
+static void set_file_flag(int fd, int flags);
+
 void test_read_from_stdin()
 {
 	char buffer[1024] = {0};
@@ -81,15 +87,79 @@ void test_read_write()
 	}	
 }
 
+void test_get_file_flag()
+{
+	int accmode = 0, val = 0;
+	if (g_argc < 2) {
+		err_quit("usage: a.out <descriptor#>");
+	}
+
+	if ( (val = fcntl(atoi(g_argv[1]), F_GETFL, 0)) < 0 ) {
+		err_sys("fcntl error for fd %d", atoi(g_argv[1]));
+	}
+
+	accmode = val & O_ACCMODE;
+	if (accmode == O_RDONLY) {
+		printf("read only");
+	} else if (accmode == O_WRONLY) {
+		printf("write only");
+	} else if (accmode == O_WRONLY) {
+       printf("write only");
+	} else if (accmode == O_RDWR) {
+       printf("read write");
+	} else {
+		err_dump("unknown access mode");
+	}
+
+	if (val & O_APPEND) {
+       printf(", append");
+	} 
+   	if (val & O_NONBLOCK) {
+       printf(", nonblock");
+	}
+
+#if !defined(_POSIX_SOURCE) && defined(O_SYNC)
+	if (val & O_SYNC) {
+		printf(", synchronous writes.");
+	}
+#endif
+
+	putchar('\n');
+}     
+
+static void
+set_file_flag(int fd, int flags, int isopen)
+{
+	int val = 0;
+	if ( (val = fcntl(fd, F_GETFL, 0)) < 0 ) {
+		err_sys("fcntl F_GETFL error.");
+	}
+
+	if (1 == isopen) {
+		val |= flags;
+	} else {
+		val &= ~flags;
+	}
+
+	if (fcntl(fd, F_SETFL, val) < 0 ) {
+		err_sys("fctnl F_SETFL error.");
+	}
+}
+
 int main(int argc, char *argv[])
 {
+	g_argc = argc;
+	g_argv = argv;
+
 	//test_read_from_stdin();
 
-	test_lseek();
+	//test_lseek();
 
 	//test_create_file_hole();
 
 	//test_read_write();
+
+	test_get_file_flag();
 
 	return 0;
 }

@@ -24,7 +24,7 @@ err_sys(const char *fmt, ...)
  * Print a message and return to caller.
  * Caller specifies "errnoflag".
  * */
-void
+static void
 err_doit(int errnoflag, int error, const char *fmt, va_list ap)
 {
 	char buf[MAXLINE];
@@ -38,4 +38,30 @@ err_doit(int errnoflag, int error, const char *fmt, va_list ap)
 	fflush(NULL); //flushes all stdio ouput streams
 }
 
+/*
+ * Fatal error related to a system call.
+ * Print Message, dump core, and terminate
+ * */
+void
+err_dump(const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	err_doit(1, errno, fmt, ap);
+	va_end(ap);
+	abort();	//dump core and terminate
+	exit(1);	//shouldn't get here	
+}
 
+/*
+ * Print a message and return to caller.
+ * Caller specifies "errnoflag".
+ * */
+void err_quit(const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	err_doit(0, 0, fmt, ap);
+	va_end(ap);
+	exit(1);
+}
