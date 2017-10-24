@@ -22,11 +22,11 @@ void test_read_from_stdin()
 
 /*
  * lseek对于pipo和fifo文件不能定位
- * 实际测试时，如果输入的文件是pipe，程序就会卡主的问题
+ * 实际测试时，如果输入的文件是管道，cannot seek
+ * 如果是FIFO文件的测试会卡主
  * */
 void test_lseek()
 {
-	printf("test lessk...\n");
 	if (-1 == lseek(STDIN_FILENO, 0, SEEK_CUR)) {
 		printf("cannot seek.\n");
 	} else {
@@ -85,11 +85,11 @@ int main(int argc, char *argv[])
 {
 	//test_read_from_stdin();
 
-	//test_lseek();
+	test_lseek();
 
 	//test_create_file_hole();
 
-	test_read_write();
+	//test_read_write();
 
 	return 0;
 }
