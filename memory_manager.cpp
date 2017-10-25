@@ -5,13 +5,8 @@
  **
  ***************************************************************/
 
-//测试环境 Linux raspberrypi 4.4.13-v7+ #894 SMP Mon Jun 13 13:13:27 BST 2016 armv7l GNU/Linux
-//Using built-in specs.
-//COLLECT_GCC=g++
-//COLLECT_LTO_WRAPPER=/usr/lib/gcc/arm-linux-gnueabihf/4.9/lto-wrapper
-//Target: arm-linux-gnueabihf
-//Configured with: ../src/configure -v --with-pkgversion='Raspbian 4.9.2-10' --with-bugurl=file:///usr/share/doc/gcc-4.9/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.9 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.9 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libitm --disable-libquadmath --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.9-armhf/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.9-armhf --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.9-armhf --with-arch-directory=arm --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-sjlj-exceptions --with-arch=armv6 --with-fpu=vfp --with-float=hard --enable-checking=release --build=arm-linux-gnueabihf --host=arm-linux-gnueabihf --target=arm-linux-gnueabihf
-//Thread model: posix
+//测试环境 Linux raspberrypi 4.4.13-v7+ #894 SMP Mon Jun 13 13:13:27 BST 2016 
+//armv7l GNU/Linux
 //gcc version 4.9.2 (Raspbian 4.9.2-10) 
 
 /*
@@ -56,7 +51,7 @@ namespace demo00
 }
 
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 namespace demo01
 {
 void test_primitives()
@@ -104,7 +99,7 @@ void test_primitives()
 }
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 namespace demo02
 {
 class A
@@ -122,22 +117,26 @@ void test_call_ctor_directory()
 	cout << "\ntest_call_ctor_directory().......\n";
 	string *pstr = new string("liushixiong like program!");
 	cout << "str= " << *pstr << endl;
-	//! pstr->string::string("demo2"); [Error] 'class std::basic_string<char>' has no member named 'string'
+	//! pstr->string::string("demo2"); 
+	//[Error] 'class std::basic_string<char>' has no member named 'string'
  
-	pstr->~string(); //crash ----其语法语义是正确的，crash只因为上一行被remark起来[侯捷]，但是实际情况在pi环境下测试并没有crash，此处灰色地带
+	pstr->~string(); //crash ----其语法语义是正确的，
+					 //crash只因为上一行被remark起来[侯捷]，
+					 //但是实际情况在pi环境下测试并没有crash，此处灰色地带
 
 	A *pA = new A(1); //ctor. this=0x16d8048 id=1
 	cout << pA->id << endl; // 1
 	//! pA->A::A(3); //in VC6 : ctor, this0013FF60 id 3
 					 //in vs2013 : ctor, this0013FF60 id 3
-					 //in GCC : [Error] cannot call constructor ‘demo02::A::A’ directly
+		 //in GCC : [Error] cannot call constructor ‘demo02::A::A’ directly
 
-	cout << pA->id << endl; 		//in VC6 : 3
-									//in GCC : 1
-	pA->~A(); 						//dtor, this=0xd37048 id=1，手动调用析构函数
-	cout << pA->id << endl; 		//测试内存是否被手动调用析构函数释放，但其实内存并没有释放
+	cout << pA->id << endl; 	//in VC6 : 3
+								//in GCC : 1
+	pA->~A(); 					//dtor, this=0xd37048 id=1，手动调用析构函数
+	cout << pA->id << endl; 	//测试内存是否被手动调用析构函数释放，\
+								//但其实内存并没有释放
 
-	delete pA;						// dtor, this=0x16d8048 id=1
+	delete pA;					// dtor, this=0x16d8048 id=1
 
 	//simulate new
 	void *p = ::operator new(sizeof(A));
@@ -146,6 +145,7 @@ void test_call_ctor_directory()
 	//! pA->A(2); 					//[Error]: invalid use of ‘demo02::A::A’
 	//!	pA->A::A(2);				//in VC6 : ctor. this=000307A8 id=2
 									//in GCC : [Error] cannot call constructor 'demo02::A::A' directly 
+
 	cout << pA->id << endl;			//in VC6 : 2
 									//in GCC : 0
 
@@ -155,8 +155,8 @@ void test_call_ctor_directory()
 }
 }
 
-//------------------------------------------------------------------------------------------------
-//placement new
+//----------------------------------------------------------------------------
+//placement new ----> call copy constructor
 #include <new>
 namespace demo03
 {
@@ -173,7 +173,7 @@ void test_array_new_and_placement_new()
 	cout << "buf=" << buf << " temp=" << temp << endl;
 
 	for (int i=0; i<size; ++i) {
-		new(temp++) A(i);	//3次 ctor
+		new(temp++) A(i);	//3次 copy ctor
 	}
 	//! delete [] buf; //crash . why?
 					   //因为这其实个char array, 看到 delete [] buf; 编译器会企图唤起多次A::~A()
@@ -207,6 +207,24 @@ void test_array_new_and_placement_new()
 //事实上 memory pool 形式如demo04::test
 }
 }
+//result:
+	//test_placement_new()............... 
+	//buf=0x9e5d008 temp=0x9e5d008
+	//ctor. this=0x9e5d008 id=0
+	//ctor. this=0x9e5d00c id=1
+	//ctor. this=0x9e5d010 id=2
+	//dtor, this=0x9e5d008 id=0
+	//default ctor. this=0x9e5d01c id=0
+	//default ctor. this=0x9e5d020 id=0
+	//default ctor. this=0x9e5d024 id=0
+	//buf=0x9e5d01c temp=0x9e5d01c
+	//ctor. this=0x9e5d01c id=0
+	//ctor. this=0x9e5d020 id=1
+	//ctor. this=0x9e5d024 id=2
+	//buf=0x9e5d01c temp=0x9e5d028
+	//dtor, this=0x9e5d024 id=2
+	//dtor, this=0x9e5d020 id=1
+	//dtor, this=0x9e5d01c id=0
 }
 
 //------------------------------------------------------------------------------------------------
@@ -302,7 +320,7 @@ void test_per_class_allocator_1()
 }
 
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 namespace demo05
 {
 //ref. Effective C++ 2e, item 10
@@ -970,13 +988,13 @@ int main(int argc, char *argv[])
 	
 //	demo01::test_primitives();
 //	demo02::test_call_ctor_directory();
-//	demo03::test_array_new_and_placement_new();
+	demo03::test_array_new_and_placement_new();
 //	demo04::test_per_class_allocator_1();
 //	demo05::test_per_class_allocator_2();
 //	demo06::test_overload_operator_new_and_array_new();
 //	demo07::test_overload_placement_new();
 //	global_new_delete::test_global_new_delete();
 //	custom_allocator::test_custom_allocator();
-	ext_pool_allocator::test_pool_alloc();
+//	ext_pool_allocator::test_pool_alloc();
 	return 0;
 }
