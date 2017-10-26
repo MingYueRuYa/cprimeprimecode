@@ -747,7 +747,7 @@ operator+(Dist n, const reverse_iterator<RandomAccessIter, T, Ref, Dist>& x) {
 template <class T, class Distance = ptrdiff_t> 
 class istream_iterator {
   friend bool
-  operator== __STL_NULL_TMPL_ARGS (const istream_iterator<T, Distance>& x,
+  operator== <> (const istream_iterator<T, Distance>& x,
                                    const istream_iterator<T, Distance>& y);
 protected:
   istream* stream;

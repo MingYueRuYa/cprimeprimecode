@@ -280,11 +280,10 @@ public:
   typedef reverse_iterator<const_iterator> const_reverse_iterator;
   typedef reverse_iterator<iterator> reverse_iterator;
 #else /* __STL_CLASS_PARTIAL_SPECIALIZATION */
-  //  TODO: comment by liushixiong
-//  typedef reverse_iterator<const_iterator, value_type, const_reference, 
-//                           difference_type> const_reverse_iterator;
-//  typedef reverse_iterator<iterator, value_type, reference, difference_type>
-//          reverse_iterator;
+  typedef reverse_iterator<const_iterator, value_type, const_reference, 
+                           difference_type> const_reverse_iterator;
+  typedef reverse_iterator<iterator, value_type, reference, difference_type>
+          _reverse_iterator;
 #endif /* __STL_CLASS_PARTIAL_SPECIALIZATION */
 
 protected:
@@ -385,15 +384,14 @@ public:
   iterator end() { return finish; }
   const_iterator end() const { return finish; }
 
-  //  TODO: comment by liushixiong
-//  reverse_iterator rbegin() { return reverse_iterator(end()); }
-//  const_reverse_iterator rbegin() const { 
-//    return const_reverse_iterator(end()); 
-//  }
-//  reverse_iterator rend() { return reverse_iterator(begin()); }
-//  const_reverse_iterator rend() const { 
-//    return const_reverse_iterator(begin()); 
-//  }
+  _reverse_iterator rbegin() { return _reverse_iterator(end()); }
+  const_reverse_iterator rbegin() const { 
+    return const_reverse_iterator(end()); 
+  }
+  _reverse_iterator rend() { return _reverse_iterator(begin()); }
+  const_reverse_iterator rend() const { 
+    return const_reverse_iterator(begin()); 
+  }
 
   size_type size() const { return size_type(end() - begin()); }
   size_type max_size() const { return size_type(-1); }
