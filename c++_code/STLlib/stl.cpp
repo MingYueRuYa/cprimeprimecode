@@ -708,6 +708,42 @@ namespace test_set
 	}
 };
 
+#include <bits/stl_tree.h>
+#include <bits/stl_function.h>
+using std::_Rb_tree;
+using std::_Identity;
+using std::less;
+
+/*
+ * 直接使用rb_tree底层的数据结构
+ * */
+namespace test_rb_tree
+{
+
+void test_rb_tree()
+{
+	_Rb_tree<int, int, _Identity<int>, less<int>> itree;
+	cout << itree.empty() << endl;	// 1
+	cout << itree.size() << endl;	// 0
+	itree._M_insert_unique(3);
+	itree._M_insert_unique(8);
+	itree._M_insert_unique(5);
+	itree._M_insert_unique(9);
+	itree._M_insert_unique(13);
+	itree._M_insert_unique(5);	//no effect, since using _M_insert_equal().
+
+	cout << itree.empty() << endl;	// 0
+	cout << itree.size() << endl;	// 5
+	cout << itree.count(5) << endl;	// 1
+
+	itree._M_insert_equal(5);
+	itree._M_insert_equal(5);
+	cout << itree.size() << endl;	// 7
+	cout << itree.count(5) << endl;	// 3
+}
+
+};
+
 int main(int argc, char *argv[])
 {
 	//test_array::test_array();
@@ -720,9 +756,8 @@ int main(int argc, char *argv[])
 	//test_unordred_multiset::test_unordred_multiset();
 	//test_slist::test_slist();
 	//test_map::test_map();
-	test_set::test_set();
+	//test_set::test_set();
+	test_rb_tree::test_rb_tree();
 	return 0;
 }
-
-
 

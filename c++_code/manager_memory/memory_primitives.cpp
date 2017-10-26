@@ -6,6 +6,25 @@
 #include <iostream>
 
 using std::complex;
+using std::cout;
+using std::endl;
+
+class Complex
+{
+public:
+	Complex()
+	{
+		cout << "Complex ctor..." << endl;
+	}
+	Complex(int x, int y)
+	{
+		cout << "Complex ctor..." << "x:" << x << " y:" << y <<  endl;
+	}
+	~Complex()
+	{
+		cout << "Complex dector..." <<endl;
+	}
+};
 
 int main(int argc, char *argv[])
 {
@@ -37,6 +56,18 @@ int main(int argc, char *argv[])
 	void *p4 = alloc::allocate(512);
 	alloc::deallocate(p4, 512);
 #endif //__GUNC__
+
+	Complex *com = new Complex();
+	cout << "com address " << std::hex << com << endl;
+
+	Complex *com1 = new (com)Complex(1, 2);
+	cout << "com1 address " << std::hex << com << endl;
+
+//	result:
+//	Complex ctor...
+//	com address 0x14f6008
+//	Complex ctor...x:1 y:2
+//	com1 address 0x14f6008
 
 	return 0;
 }
