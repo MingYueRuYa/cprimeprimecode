@@ -1,9 +1,11 @@
 /*
  * 第三章：关于File IO
- * 测试环境：Linux 4.4.0-31-generic #50~14.04.1-Ubuntu SMP Wed Jul 13 01:06:37 UTC 2016 i686 i686 i686 GNU/Linux
+ * 测试环境：Linux 4.4.0-31-generic #50~14.04.1-Ubuntu SMP Wed Jul 13 
+ * 01:06:37 UTC 2016 i686 i686 i686 GNU/Linux
  * */
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -11,11 +13,15 @@
 #include "apue.h"
 #include "error.c"
 
-int g_argc = 0;
-char **g_argv = NULL;
+#define VERSION "0.01"
+
+int  g_argc 		= 0;
+char **g_argv 		= NULL;
+char command[1024] 	= {0};
+char *g_filename 	= NULL;
 
 //flags are file status flags to turn on
-static void set_file_flag(int fd, int flags);
+//static void set_file_flag(int fd, int flags);
 
 void test_read_from_stdin()
 {
@@ -87,7 +93,8 @@ void test_read_write()
 	}	
 }
 
-void test_get_file_flag()
+void 
+get_file_flag()
 {
 	int accmode = 0, val = 0;
 	if (g_argc < 2) {
@@ -103,8 +110,6 @@ void test_get_file_flag()
 		printf("read only");
 	} else if (accmode == O_WRONLY) {
 		printf("write only");
-	} else if (accmode == O_WRONLY) {
-       printf("write only");
 	} else if (accmode == O_RDWR) {
        printf("read write");
 	} else {
@@ -117,9 +122,12 @@ void test_get_file_flag()
    	if (val & O_NONBLOCK) {
        printf(", nonblock");
 	}
-
-#if !defined(_POSIX_SOURCE) && defined(O_SYNC)
 	if (val & O_SYNC) {
+       printf(", synchronous writes.");
+	}
+
+#if !defined(_POSIX_SOURCE) && defined(O_FSYNC) && (O_FSYNC != O_SYNC)
+	if (val & O_FSYNC) {
 		printf(", synchronous writes.");
 	}
 #endif
@@ -127,7 +135,7 @@ void test_get_file_flag()
 	putchar('\n');
 }     
 
-static void
+void
 set_file_flag(int fd, int flags, int isopen)
 {
 	int val = 0;
@@ -146,6 +154,62 @@ set_file_flag(int fd, int flags, int isopen)
 	}
 }
 
+void 
+PrintHelp()
+{
+	printf("io file discriptor tools: can get and set fd status flags.\n"); 
+	printf("	-h show help.\n");	 
+	printf("	-f file pathname.\n"); 
+	printf("	-a add fd flags.\n"); 
+	printf("	-A get fd flags.\n"); 
+	printf("	-e get fd status flags.\n");	 
+	printf("	-E erase fd status flags.\n");	 
+	printf("	-s set fd status flags.\n");	 
+	printf("	-S append fd status flags.\n");	 
+	printf("	O_CLOEXCL(0) O_RDONLY(1) O_WRONLY(2) O_RDWR(3)\n");	 
+	printf("	O_EXEC(4)    O_SEARCH(5) O_APPEND(6) O_NONBLOCK(7)\n");	 
+	printf("	O_SYNC(8)    O_DSYNC(9)  O_RSYNC(10) O_FSYNC(11)\n");	 
+	printf("	O_ASYNC(12)\n");
+	printf("	example: ./exeucte\n");
+	printf("	input:   --> S1 (append O_RDONLY status flag to fd.)\n");
+}
+
+int Parse()
+{
+	char tempcommand = command[0];
+	//char *filename = command+1;
+	g_filename = command+1;
+	//去除'\n'
+	while ('\n' != *g_filename) {
+		++g_filename;
+	}
+	if ('\n' == *g_filename) {
+		//更好的做法是尽量不要修改原始数据
+		*g_filename = '\0';
+		g_filename = command+1;
+	}
+
+	switch(tempcommand)
+	{
+		case 'h':
+			PrintHelp();
+			return 0;
+		case 'f':
+		{
+			printf("--> file name is:%s.\n", filename);
+			fflush(stdout);
+			return 0;
+		}
+		case 'q':
+			printf("exit\n");
+			exit(0);
+			return 0;
+		defualt:
+			return -1;
+	}
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
 	g_argc = argc;
@@ -159,7 +223,36 @@ int main(int argc, char *argv[])
 
 	//test_read_write();
 
-	test_get_file_flag();
+	//test_get_file_flag();
+
+	PrintHelp();
+
+	while (1) {
+		printf("--> ");
+		fflush(stdout);
+		char input[1024] = {0};
+		if( NULL == fgets(input, sizeof(input), stdin)) {
+			break;
+		}
+
+		//去掉前面的空格
+		char *tempinput = input;
+		while (*tempinput == ' ' || *tempinput =='\t') {
+			++tempinput;
+		}
+
+		//只复制一个字节
+		strncpy(command, tempinput, strlen(tempinput));	
+		
+		if ('\n' == command[0]) {
+			continue;
+		}	
+
+		//printf("--> %c\n", command[0]);
+		
+		Parse();
+		memset(command, 0, sizeof(command));
+	}
 
 	return 0;
 }
