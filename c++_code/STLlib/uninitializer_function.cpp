@@ -16,6 +16,7 @@ using std::string;
 using std::list;
 using std::list;
 using std::pair;
+using std::uninitialized_fill;
 
 
 /*
@@ -52,11 +53,11 @@ private:
 int main03(void)
 {
 	//get block of uninitialized memory:
-	std::pair<Demo*, std::ptrdiff_t> result = std::get_temporary_buffer<Demo>(3);
+	pair<Demo*, std::ptrdiff_t> result = std::get_temporary_buffer<Demo>(3);
 
 	Demo demo;
 	if (result.second>0) {
-		std::uninitialized_fill ( result.first, result.first+result.second, demo );
+		uninitialized_fill(result.first, result.first+result.second, demo);
 	}
 	std::return_temporary_buffer(result.first);
 	return 0;
@@ -68,7 +69,7 @@ void test_uninitialized_fill()
 	demolist.resize(10);
 	
 	Demo demo;
-	std::uninitialized_fill(demolist.begin(), demolist.end(), demo);
+	uninitialized_fill(demolist.begin(), demolist.end(), demo);
 }
 
 int main(void)
