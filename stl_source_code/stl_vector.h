@@ -218,6 +218,7 @@ public:
     destroy(finish);	// 全域函式，建構/解構基本工具。
   }
   // 將迭代器 position 所指之元素移除
+  // notice:erase只调用对象的析构函数，其实内部的空间没有做释放动作
   iterator erase(iterator position) {
     //先要释放准备释放的对象
     destroy(position);	// 全域函式，建構/解構基本工具。
@@ -266,7 +267,8 @@ protected:
 #ifdef __STL_MEMBER_TEMPLATES
   template <class ForwardIterator>
   iterator allocate_and_copy(size_type n,
-                             ForwardIterator first, ForwardIterator last) {
+                             ForwardIterator first, 
+							 ForwardIterator last) {
     iterator result = data_allocator::allocate(n);
     __STL_TRY {
       uninitialized_copy(first, last, result);
@@ -276,7 +278,8 @@ protected:
   }
 #else /* __STL_MEMBER_TEMPLATES */
   iterator allocate_and_copy(size_type n,
-                             const_iterator first, const_iterator last) {
+                             const_iterator first, 
+							 const_iterator last) {
     iterator result = data_allocator::allocate(n);
     __STL_TRY {
       uninitialized_copy(first, last, result);
@@ -289,7 +292,8 @@ protected:
 
 #ifdef __STL_MEMBER_TEMPLATES
   template <class InputIterator>
-  void range_initialize(InputIterator first, InputIterator last,
+  void range_initialize(InputIterator first, 
+		  				InputIterator last,
                         input_iterator_tag) {
     for ( ; first != last; ++first)
       push_back(*first);
@@ -488,6 +492,10 @@ template <class T, class Alloc> template <class InputIterator>
 void vector<T, Alloc>::range_insert(iterator pos,
                                     InputIterator first, InputIterator last,
                                     input_iterator_tag) {
+  //TODO comment by liushixiong
+  //这里这样插入的效率感觉不高，可以考虑既然是范围
+  //可以一次性将原来的位置都移到指定的位置
+  //再将剩下的要插入的元素复制进去
   for ( ; first != last; ++first) {
     pos = insert(pos, *first);
     ++pos;
@@ -502,13 +510,18 @@ void vector<T, Alloc>::range_insert(iterator position,
   if (first != last) {
     size_type n = 0;
     distance(first, last, n);
+	//剩余的容量end_of_storage-finish于要插入的空间
     if (size_type(end_of_storage - finish) >= n) {
       const size_type elems_after = finish - position;
       iterator old_finish = finish;
+	  //插入的位置距离大于插入的元素个数
       if (elems_after > n) {
+		//初始化内存空间----拷贝构造
         uninitialized_copy(finish - n, finish, finish);
         finish += n;
+		//将现有的元素后移----赋值构造
         copy_backward(position, old_finish - n, old_finish);
+		//copy要输入的元素到指定位置----赋值构造
         copy(first, last, position);
       }
       else {
@@ -556,31 +569,45 @@ void vector<T, Alloc>::insert(iterator position,
   if (first != last) {
     size_type n = 0;
     distance(first, last, n);
+	//剩余的容量end_of_storage-finish于要插入的空间
     if (size_type(end_of_storage - finish) >= n) {
       const size_type elems_after = finish - position;
       iterator old_finish = finish;
+	  //插入的位置距离大于插入的元素个数
       if (elems_after > n) {
+		//初始化内存空间----拷贝构造
         uninitialized_copy(finish - n, finish, finish);
         finish += n;
+		//将现有的元素后移----赋值构造
         copy_backward(position, old_finish - n, old_finish);
+		//copy要输入的元素到指定位置----赋值构造
         copy(first, last, position);
       }
       else {
+		//先复制elems_after个元素到finish之后的位置
         uninitialized_copy(first + elems_after, last, finish);
+		//水位上调
         finish += n - elems_after;
+		//再将原来的数据复制到已经增加过的finish位置上
         uninitialized_copy(position, old_finish, finish);
+		//水位上调
         finish += elems_after;
+		//再将剩余的元素复制到已有元素的位置上----赋值构造
         copy(first, first + elems_after, position);
       }
     }
-    else {
+    else {	//插入的空间不够，需要重新分配
       const size_type old_size = size();
       const size_type len = old_size + max(old_size, n);
       iterator new_start = data_allocator::allocate(len);
       iterator new_finish = new_start;
       __STL_TRY {
+		//分成3段copy，前半段，中间，后半段
+		//前半段
         new_finish = uninitialized_copy(start, position, new_start);
+		//中间
         new_finish = uninitialized_copy(first, last, new_finish);
+		//后半段
         new_finish = uninitialized_copy(position, finish, new_finish);
       }
 #         ifdef __STL_USE_EXCEPTIONS
