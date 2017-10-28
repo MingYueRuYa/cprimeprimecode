@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "vector"
+#include "list"
 
 using std::cout;
 using std::endl;
@@ -153,9 +154,21 @@ void test_vector()
 #		endif //TEST_VECTOR_INSERT	
 }
 
+namespace test_list
+{
+void test_list()
+{
+	list<Object *> objlist;
+	objlist.push_back(new Object(0));
+}
+};
+
+
 int main(int argc, char *argv[])
 {
-	test_vector();
+	//test_vector();
+
+	test_list::test_list();	
 
 	return 0;
 }

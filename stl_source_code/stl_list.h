@@ -60,18 +60,20 @@ struct __list_iterator { // 未繼承 std::iterator
   typedef T value_type; 			// (2)
   typedef Ptr pointer; 			// (3)
   typedef Ref reference; 			// (4)
+  typedef ptrdiff_t difference_type; // (5)
   typedef __list_node<T>* link_type;
   typedef size_t size_type;
-  typedef ptrdiff_t difference_type; // (5)
 
   link_type node;  // 保持與容器的聯結
 
   // 以下 ctor 如有參數，便根據參數設定迭代器與容器之間的聯結關係
   __list_iterator(link_type x) : node(x) {}
   __list_iterator() {}
+  // 拷贝构造函数
   __list_iterator(const iterator& x) : node(x.node) {}
 
   // 迭代器必要的操作行為
+  // 赋值构造函数
   bool operator==(const self& x) const { return node == x.node; }
   bool operator!=(const self& x) const { return node != x.node; }
   // 關鍵：對迭代器取值（dereference），取的是節點的資料值。

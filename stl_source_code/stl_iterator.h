@@ -156,6 +156,7 @@ iterator_category(const Iterator&) {
 }
 
 // 這個函式可以很方便地決定某個迭代器的 distance type
+// 为什么需要返回difference_type的指针类型
 template <class Iterator>
 inline typename iterator_traits<Iterator>::difference_type*
 distance_type(const Iterator&) {
@@ -163,6 +164,7 @@ distance_type(const Iterator&) {
 }
 
 // 這個函式可以很方便地決定某個迭代器的 value type
+// 为什么需要返回value_type的指针类型
 template <class Iterator>
 inline typename iterator_traits<Iterator>::value_type*
 value_type(const Iterator&) {
