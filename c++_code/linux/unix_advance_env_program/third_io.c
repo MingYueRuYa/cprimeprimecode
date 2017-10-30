@@ -196,7 +196,7 @@ int Parse()
 			return 0;
 		case 'f':
 		{
-			printf("--> file name is:%s.\n", filename);
+			printf("--> file name is:%s.\n", g_filename);
 			fflush(stdout);
 			return 0;
 		}
@@ -210,21 +210,9 @@ int Parse()
 	return 0;
 }
 
-int main(int argc, char *argv[])
+void
+loop(void)
 {
-	g_argc = argc;
-	g_argv = argv;
-
-	//test_read_from_stdin();
-
-	//test_lseek();
-
-	//test_create_file_hole();
-
-	//test_read_write();
-
-	//test_get_file_flag();
-
 	PrintHelp();
 
 	while (1) {
@@ -253,6 +241,60 @@ int main(int argc, char *argv[])
 		Parse();
 		memset(command, 0, sizeof(command));
 	}
+}
+
+/*
+ * 测试lseek对write有没有影响
+ * 结果是没有影响的，lseek只印象读的位置
+ * */
+void 
+test_lseek_write(void)
+{
+	int fd = -1;
+	if (0 > (fd = open("./test", O_RDWR | O_CREAT | O_TRUNC , 0666)) ) {
+		err_sys("open file error.");
+	}
+
+	char buff[] = "liushixiong";
+	if (strlen(buff) != write(fd, buff, strlen(buff))) {
+		err_sys("write file error.");
+	}
+
+	//先移动位置
+	if (0 > lseek(fd, 10, SEEK_SET)) {
+		err_sys("lseek file error.");
+	}
+
+	//开始读文件
+	char readbuf[1024] = {0};
+	if (0 > read(fd, readbuf, sizeof(readbuf))) {
+		err_sys("read file error.");
+	}
+	printf("read content:%s.\n", readbuf);
+
+	//写文件
+	if (strlen(buff) != write(fd, buff, strlen(buff))) {
+		err_sys("write file error.");
+	}
+	//实际结果lseek移动位置只会影响read操作，不会影响write的操作
+}
+
+int main(int argc, char *argv[])
+{
+	g_argc = argc;
+	g_argv = argv;
+
+	//test_read_from_stdin();
+
+	//test_lseek();
+
+	//test_create_file_hole();
+
+	//test_read_write();
+
+	//test_get_file_flag();
+
+	test_lseek_write();
 
 	return 0;
 }
