@@ -26,7 +26,7 @@ typedef void Sigfunc(int);
 #define max(a, b) ((a) > (b) ? : (a) : (b))
 
 //prototypes for our own functions
-char *path_alloc(int *);
+char *path_alloc(size_t *);
 int	 open_max(void);
 void clr_fl(int, int);
 void set_fl(int, int);
