@@ -56,24 +56,29 @@ struct __list_iterator { // 未繼承 std::iterator
   typedef __list_iterator<T, Ref, Ptr>           self;
 
   // 未繼承 std::iterator，所以必須自行撰寫五個必要的迭代器相應型別
-  typedef bidirectional_iterator_tag iterator_category;	 // (1)
-  typedef T value_type; 			// (2)
-  typedef Ptr pointer; 			// (3)
-  typedef Ref reference; 			// (4)
-  typedef ptrdiff_t difference_type; // (5)
+  // 如果继承std::iterator 下面的5个就没有必要
+  typedef bidirectional_iterator_tag iterator_category;	 	// (1)
+  typedef T value_type;										// (2)
+  typedef Ptr pointer; 										// (3)
+  typedef Ref reference; 									// (4)
+  typedef ptrdiff_t difference_type;						// (5)
   typedef __list_node<T>* link_type;
   typedef size_t size_type;
 
   link_type node;  // 保持與容器的聯結
 
   // 以下 ctor 如有參數，便根據參數設定迭代器與容器之間的聯結關係
+  // 存在隐式类型转换，将节点指针转化为iterator对象
   __list_iterator(link_type x) : node(x) {}
   __list_iterator() {}
   // 拷贝构造函数
-  __list_iterator(const iterator& x) : node(x.node) {}
+  __list_iterator(const iterator& x) : node(x.node) {
+	  //TODO add by liushixiong
+	  std::cout << "iterator copy ctor." << std::endl;
+  }
+  // TODO: 没有operator=函数 ??? --> 可能是没有必要
 
   // 迭代器必要的操作行為
-  // 赋值构造函数
   bool operator==(const self& x) const { return node == x.node; }
   bool operator!=(const self& x) const { return node != x.node; }
   // 關鍵：對迭代器取值（dereference），取的是節點的資料值。
@@ -94,6 +99,7 @@ struct __list_iterator { // 未繼承 std::iterator
   // 后置++返回的不是引用
   self operator++(int) { 
     self tmp = *this;
+	// 调用前置++
     ++*this;
     return tmp;
   }
@@ -104,6 +110,7 @@ struct __list_iterator { // 未繼承 std::iterator
   }
   self operator--(int) { 
     self tmp = *this;
+	// 调用前置--
     --*this;
     return tmp;
   }
@@ -131,6 +138,10 @@ distance_type(const __list_iterator<T, Ref, Ptr>&) {
 // 編譯器不支援 partial specialization 時，才需以上定義
 #endif /* __STL_CLASS_PARTIAL_SPECIALIZATION */
 
+// list中指保存一个头节点，没有保存iterator对象
+// 将link_node 通过隐式转换为iterator对象
+// 奇怪为什么不保存一个iterator对象而是保存一个头节点？？？
+// 需要接着看
 template <class T, class Alloc = alloc> // 預設使用 alloc 為配置器
 class list {
 protected:
@@ -175,8 +186,10 @@ protected:
 
   // 產生（配置並建構）一個節點，帶有元素值
   link_type create_node(const T& x) {
+	// 分配内存返回
     link_type p = get_node();
     __STL_TRY {
+	  // 调用copy ctor
       construct(&p->data, x);	// 全域函式，建構/解構基本工具。
     }
     __STL_UNWIND(put_node(p));
@@ -275,6 +288,7 @@ public:
     tmp->prev = position.node->prev;
     (link_type(position.node->prev))->next = tmp;
     position.node->prev = tmp;
+	//隐式类型转换
     return tmp;
   }
   iterator insert(iterator position) { return insert(position, T()); }
@@ -283,6 +297,7 @@ public:
   void insert(iterator position, InputIterator first, InputIterator last);
 #else /* __STL_MEMBER_TEMPLATES */
   void insert(iterator position, const T* first, const T* last);
+
   void insert(iterator position,
               const_iterator first, const_iterator last);
 #endif /* __STL_MEMBER_TEMPLATES */

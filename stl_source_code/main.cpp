@@ -2,9 +2,10 @@
  * 学习3.0版本的stl source code.
  * */
 
-#include <iostream>
-#include "vector"
 #include "list"
+#include "vector"
+#include "algorithm"
+#include <iostream>
 
 using std::cout;
 using std::endl;
@@ -172,16 +173,17 @@ void test_list()
 	}
 	cout << "----------------list insert-------------------" << endl;
 
+	cout << "----------------list erase-------------------" << endl;
+	objlist.erase(objlist.begin());
+	cout << "----------------list erase-------------------" << endl;
+
 	list<Object>::iterator ibeg = objlist.begin();
 	for (; ibeg != objlist.end(); ++ibeg) {
 		cout << ibeg->mID << " ";
 	}
-
-	list<Object>::iterator ibeg1 = objlist.begin();
-	list<Object>::iterator ite = ibeg1;
-
-
 	cout << endl;
+	list<Object>::iterator pos = objlist.begin(); 
+	advance(pos, 2);
 }
 };
 

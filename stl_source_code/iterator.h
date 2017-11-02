@@ -28,21 +28,21 @@
 #define __SGI_STL_ITERATOR_H
 
 #ifndef __SGI_STL_FUNCTION_H
-#include <function.h>
+#include "function.h"
 #endif
-#include <stddef.h>
-#include <iostream.h>
+#include "stddef.h"
+#include <iostream>
 #ifndef __SGI_STL_INTERNAL_ITERATOR_H
-#include <stl_iterator.h>
+#include "stl_iterator.h"
 #endif
 #ifndef __TYPE_TRAITS_H
-#include <type_traits.h>
+#include "type_traits.h"
 #endif
 #ifndef __SGI_STL_INTERNAL_CONSTRUCT_H
-#include <stl_construct.h>
+#include "stl_construct.h"
 #endif
 #ifndef __SGI_STL_INTERNAL_RAW_STORAGE_ITERATOR_H
-#include <stl_raw_storage_iter.h>
+#include "stl_raw_storage_iter.h"
 #endif
 
 #ifdef __STL_USE_NAMESPACES
