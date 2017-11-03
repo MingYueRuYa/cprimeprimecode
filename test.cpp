@@ -70,6 +70,7 @@ public:
 	}
 };
 
+
 int main03()
 {
 	cout << "Demo size: " << sizeof(Demo) << endl;
@@ -116,6 +117,7 @@ int main03()
   return  0;
 }
 
+/*
 void *operator new(size_t size)
 {
 	cout << "global operator new..." << endl;
@@ -127,8 +129,37 @@ void operator delete(void *start)
 	cout << "global operator delete..." << endl;
 	free(start);
 }
+*/
+template <typename T>
+const T min(const T& T1, const T& T2)
+{
+	return T1 < T2 ? T1 : T2;	
+}
+
+template <typename T>
+T *min<T*, T*>(T*T1, T*T2)
+{
+	return *T1 < *T2 ? T1 : T2;	
+}
+
 
 int main()
+{
+	int minvalue = ::min<int>(6, 5);
+	cout << "min value:" << minvalue << endl;
+
+	int *p1 = new int(5);
+	int *p2 = new int(3);
+
+	printf("p1:%x, p2=%x.\n", p1, p2);
+
+	int *tempminvalue = ::min<int*>(p1, p2);
+	printf("min:%x, %d.\n", tempminvalue, *tempminvalue);	
+
+	return 0;
+}
+
+int main06()
 {
 	cout << "list<T> size:" << sizeof(list<int>) << endl;
 	int i(6);

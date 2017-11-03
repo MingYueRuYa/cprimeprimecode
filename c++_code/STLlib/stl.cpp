@@ -744,6 +744,138 @@ void test_rb_tree()
 
 };
 
+
+#include <iostream>
+#include <iterator>
+#include <typeinfo>
+#include <unordered_set>
+#include <unordered_map>
+//#include <unordered_multiset>
+//#include <unordered_multimap>
+
+using std::unordered_set;
+using std::unordered_map;
+using std::unordered_multiset;
+using std::unordered_multimap;
+
+using std::iterator_traits;
+using std::input_iterator_tag;
+using std::output_iterator_tag;
+using std::forward_iterator_tag;
+using std::random_access_iterator_tag;
+using std::bidirectional_iterator_tag;
+using std::istream_iterator;
+using std::ostream_iterator;
+
+namespace display_category
+{
+void _display_catetory(random_access_iterator_tag)	{
+	cout << "random_access_iterator_tag" << endl;
+}
+
+void _display_catetory(bidirectional_iterator_tag)	{
+	cout << "bidirectional_iterator_tag" << endl;
+}
+
+void _display_catetory(forward_iterator_tag)	{
+	cout << "forward_iterator_tag" << endl;
+}
+
+void _display_catetory(output_iterator_tag)	{
+	cout << "output_iterator_tag" << endl;
+}
+
+void _display_catetory(input_iterator_tag)	{
+	cout << "input_iterator_tag" << endl;
+}
+
+template <typename I>
+void display_category(I itr) {
+	typename iterator_traits<I>::iterator_category category;
+	_display_catetory(category);
+	cout << "typeid(itr).name()=" << typeid(itr).name() << endl;
+}
+
+void test_display_iterator_category()
+{
+	display_category(array<int, 10>::iterator());
+	cout << "-------------array-----------" << endl;
+	display_category(vector<int>::iterator());
+	cout << "-------------vector-----------" << endl;
+	display_category(list<int>::iterator());
+	cout << "--------------list------------" << endl;
+	display_category(forward_list<int>::iterator());
+	cout << "---------forward_list---------" << endl;
+
+
+	display_category(set<int>::iterator());
+	cout << "-------------set---------------" << endl;
+	display_category(map<int, int>::iterator());
+	cout << "-------------map--------------" << endl;
+	display_category(multiset<int>::iterator());
+	cout << "-----------multiset-----------" << endl;
+	display_category(multimap<int, int>::iterator());
+	cout << "-----------multimap-----------" << endl;
+	display_category(unordered_set<int>::iterator());
+	cout << "---------unordered_set---------" << endl;
+	display_category(unordered_map<int, int>::iterator());
+	cout << "---------unordered_map--------" << endl;
+	display_category(unordered_multiset<int>::iterator());
+	cout << "------unordered_multiset------" << endl;
+	display_category(unordered_multimap<int, int>::iterator());
+	cout << "------unordered_multimap------" << endl;
+
+	display_category(istream_iterator<int>());
+	cout << "------istream_iterator--------" << endl;
+	display_category(ostream_iterator<int>(cout, ""));
+	cout << "------ostream_iterator--------" << endl;
+//result:
+	//random_access_iterator_tag
+	//typeid(itr).name()=Pi
+	//-------------array-----------
+	//random_access_iterator_tag
+	//typeid(itr).name()=N9__gnu_cxx17__normal_iteratorIPiSt6vectorIiSaIiEEEE
+	//-------------vector-----------
+	//bidirectional_iterator_tag
+	//typeid(itr).name()=St14_List_iteratorIiE
+	//--------------list------------
+	//forward_iterator_tag
+	//typeid(itr).name()=St18_Fwd_list_iteratorIiE
+	//---------forward_list---------
+	//bidirectional_iterator_tag
+	//typeid(itr).name()=St23_Rb_tree_const_iteratorIiE
+	//-------------set---------------
+	//bidirectional_iterator_tag
+	//typeid(itr).name()=St17_Rb_tree_iteratorISt4pairIKiiEE
+	//-------------map--------------
+	//bidirectional_iterator_tag
+	//typeid(itr).name()=St23_Rb_tree_const_iteratorIiE
+	//-----------multiset-----------
+	//bidirectional_iterator_tag
+	//typeid(itr).name()=St17_Rb_tree_iteratorISt4pairIKiiEE
+	//-----------multimap-----------
+	//forward_iterator_tag
+	//typeid(itr).name()=NSt8__detail14_Node_iteratorIiLb1ELb0EEE
+	//---------unordered_set---------
+	//forward_iterator_tag
+	//typeid(itr).name()=NSt8__detail14_Node_iteratorISt4pairIKiiELb0ELb0EEE
+	//---------unordered_map--------
+	//forward_iterator_tag
+	//typeid(itr).name()=NSt8__detail14_Node_iteratorIiLb1ELb0EEE
+	//------unordered_multiset------
+	//forward_iterator_tag
+	//typeid(itr).name()=NSt8__detail14_Node_iteratorISt4pairIKiiELb0ELb0EEE
+	//------unordered_multimap------
+	//input_iterator_tag
+	//typeid(itr).name()=St16istream_iteratorIicSt11char_traitsIcEiE
+	//------istream_iterator--------
+	//output_iterator_tag
+	//typeid(itr).name()=St16ostream_iteratorIicSt11char_traitsIcEE
+	//------ostream_iterator--------
+}
+
+};
+
 int main(int argc, char *argv[])
 {
 	//test_array::test_array();
@@ -757,7 +889,8 @@ int main(int argc, char *argv[])
 	//test_slist::test_slist();
 	//test_map::test_map();
 	//test_set::test_set();
-	test_rb_tree::test_rb_tree();
+	//test_rb_tree::test_rb_tree();
+	display_category::test_display_iterator_category();	
 	return 0;
 }
 

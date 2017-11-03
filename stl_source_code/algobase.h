@@ -27,16 +27,16 @@
 #define __SGI_STL_ALGOBASE_H
 
 #ifndef __SGI_STL_PAIR_H
-#include <pair.h>
+#include "pair.h"
 #endif
 #ifndef __SGI_STL_ITERATOR_H
-#include <iterator.h>
+#include "iterator.h"
 #endif
 #ifndef __SGI_STL_INTERNAL_ALGOBASE_H
-#include <stl_algobase.h>
+#include "stl_algobase.h"
 #endif
 #ifndef __SGI_STL_INTERNAL_UNINITIALIZED_H
-#include <stl_uninitialized.h>
+#include "stl_uninitialized.h"
 #endif
 
 #ifdef __STL_USE_NAMESPACES

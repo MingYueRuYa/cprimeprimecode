@@ -2,16 +2,19 @@
  * 学习3.0版本的stl source code.
  * */
 
-#include <iostream>
-#include "vector"
 #include "list"
+#include "vector"
+#include "algorithm"
+#include <iostream>
 
 using std::cout;
 using std::endl;
 
 class Object {
 public:
-	Object(int ID): mID(ID) { cout << "object ctor... id: " << mID << endl; }
+	Object(int ID): mID(ID) { 
+		cout << "object ctor... id: " << mID << endl; 
+	}
 	Object(const Object &pObj) { 
 		mID = pObj.mID;
 		cout << "object copy ctor... id : " << mID << endl; 
@@ -158,8 +161,29 @@ namespace test_list
 {
 void test_list()
 {
-	list<Object *> objlist;
-	objlist.push_back(new Object(0));
+	list<Object> objlist;
+	cout << "-----------------list size--------------------" << endl;
+	cout << "list object size:" << sizeof(objlist) << endl;
+	cout << "list  size:" << objlist.size() << endl;
+	cout << "-----------------list size--------------------" << endl;
+
+	cout << "----------------list insert-------------------" << endl;
+	for (int i=0; i<10; ++i) {
+		objlist.insert(objlist.begin(), Object(i));
+	}
+	cout << "----------------list insert-------------------" << endl;
+
+	cout << "----------------list erase-------------------" << endl;
+	objlist.erase(objlist.begin());
+	cout << "----------------list erase-------------------" << endl;
+
+	list<Object>::iterator ibeg = objlist.begin();
+	for (; ibeg != objlist.end(); ++ibeg) {
+		cout << ibeg->mID << " ";
+	}
+	cout << endl;
+	list<Object>::iterator pos = objlist.begin(); 
+	advance(pos, 2);
 }
 };
 

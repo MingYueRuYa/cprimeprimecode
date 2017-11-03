@@ -27,10 +27,10 @@
 #ifndef __SGI_STL_ALGORITHM
 #define __SGI_STL_ALGORITHM
 
-#include <stl_algobase.h>
-#include <stl_construct.h>
-#include <stl_tempbuf.h>
-#include <stl_algo.h>
+#include "stl_algobase.h"
+#include "stl_construct.h"
+#include "stl_tempbuf.h"
+#include "stl_algo.h"
 
 #endif /* __SGI_STL_ALGORITHM */
 
