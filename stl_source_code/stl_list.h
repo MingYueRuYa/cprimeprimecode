@@ -56,24 +56,26 @@ struct __list_iterator { // 未繼承 std::iterator
   typedef __list_iterator<T, Ref, Ptr>           self;
 
   // 未繼承 std::iterator，所以必須自行撰寫五個必要的迭代器相應型別
-  typedef bidirectional_iterator_tag iterator_category;	 // (1)
-  typedef T value_type; 			// (2)
-  typedef Ptr pointer; 			// (3)
-  typedef Ref reference; 			// (4)
-  typedef ptrdiff_t difference_type; // (5)
+  // 如果继承std::iterator 下面的5个就没有必要
+  typedef bidirectional_iterator_tag iterator_category;	 	// (1)
+  typedef T value_type;										// (2)
+  typedef Ptr pointer; 										// (3)
+  typedef Ref reference; 									// (4)
+  typedef ptrdiff_t difference_type;						// (5)
   typedef __list_node<T>* link_type;
   typedef size_t size_type;
 
   link_type node;  // 保持與容器的聯結
 
   // 以下 ctor 如有參數，便根據參數設定迭代器與容器之間的聯結關係
+  // 存在隐式类型转换，将节点指针转化为iterator对象
   __list_iterator(link_type x) : node(x) {}
   __list_iterator() {}
   // 拷贝构造函数
   __list_iterator(const iterator& x) : node(x.node) {}
+  // TODO: 没有operator=函数 ??? --> 可能是没有必要
 
   // 迭代器必要的操作行為
-  // 赋值构造函数
   bool operator==(const self& x) const { return node == x.node; }
   bool operator!=(const self& x) const { return node != x.node; }
   // 關鍵：對迭代器取值（dereference），取的是節點的資料值。
@@ -94,6 +96,7 @@ struct __list_iterator { // 未繼承 std::iterator
   // 后置++返回的不是引用
   self operator++(int) { 
     self tmp = *this;
+	// 调用前置++
     ++*this;
     return tmp;
   }
@@ -104,6 +107,7 @@ struct __list_iterator { // 未繼承 std::iterator
   }
   self operator--(int) { 
     self tmp = *this;
+	// 调用前置--
     --*this;
     return tmp;
   }
@@ -131,6 +135,10 @@ distance_type(const __list_iterator<T, Ref, Ptr>&) {
 // 編譯器不支援 partial specialization 時，才需以上定義
 #endif /* __STL_CLASS_PARTIAL_SPECIALIZATION */
 
+// list中指保存一个头节点，没有保存iterator对象
+// 将link_node 通过隐式转换为iterator对象
+// 奇怪为什么不保存一个iterator对象而是保存一个头节点？？？
+// 需要接着看
 template <class T, class Alloc = alloc> // 預設使用 alloc 為配置器
 class list {
 protected:
@@ -175,8 +183,10 @@ protected:
 
   // 產生（配置並建構）一個節點，帶有元素值
   link_type create_node(const T& x) {
+	// 分配内存返回
     link_type p = get_node();
     __STL_TRY {
+	  // 调用copy ctor
       construct(&p->data, x);	// 全域函式，建構/解構基本工具。
     }
     __STL_UNWIND(put_node(p));
@@ -184,7 +194,7 @@ protected:
   }
   // 摧毀（解構並釋放）一個節點
   void destroy_node(link_type p) {
-    destroy(&p->data); 		// 全域函式，建構/解構基本工具。
+    destroy(&(p->data)); 		// 全域函式，建構/解構基本工具。
     put_node(p);
   }
 
@@ -275,6 +285,7 @@ public:
     tmp->prev = position.node->prev;
     (link_type(position.node->prev))->next = tmp;
     position.node->prev = tmp;
+	//隐式类型转换
     return tmp;
   }
   iterator insert(iterator position) { return insert(position, T()); }
@@ -283,6 +294,7 @@ public:
   void insert(iterator position, InputIterator first, InputIterator last);
 #else /* __STL_MEMBER_TEMPLATES */
   void insert(iterator position, const T* first, const T* last);
+
   void insert(iterator position,
               const_iterator first, const_iterator last);
 #endif /* __STL_MEMBER_TEMPLATES */
@@ -301,8 +313,11 @@ public:
 
   // 移除迭代器 position 所指節點
   iterator erase(iterator position) {
+	// 获取position节点的下一个节点
     link_type next_node = link_type(position.node->next);
+	// 获取position节点的上一个节点
     link_type prev_node = link_type(position.node->prev);
+	// 设置节点指针
     prev_node->next = next_node;
     next_node->prev = prev_node;
     destroy_node(position.node);
@@ -349,6 +364,11 @@ public:
 protected:
   // 將 [first,last) 內的所有元素搬移到position 處。
   void transfer(iterator position, iterator first, iterator last) {
+//	TODO: 这种写法更好 comment by liushixiong
+//	if (position == last) {
+//		return;
+//	}
+	// 将position插入到last后面，需要破掉被合并的环结构
     if (position != last) {
       (*(link_type((*last.node).prev))).next = position.node;	// (1)
       (*(link_type((*first.node).prev))).next = last.node;		// (2)
@@ -472,10 +492,12 @@ void list<T, Alloc>::resize(size_type new_size, const T& x)
   size_type len = 0;
   for ( ; i != end() && len < new_size; ++i, ++len)
     ;
-  if (len == new_size)
+  //如果list的size>new_size，缩小空间
+  if (len == new_size) {
     erase(i, end());
-  else                          // i == end()
+  } else {                          // i == end()
     insert(end(), new_size - len, x);
+  }
 }
 
 // 清除所有節點（整個串列）
@@ -484,7 +506,9 @@ void list<T, Alloc>::clear()
 {
   link_type cur = (link_type) node->next; // begin()
   while (cur != node) {	// 巡訪每一個節點
+	// 将要删除的节点保存为tmp
     link_type tmp = cur;
+	// 在将当前的节点移动到下一个位置并赋值给cur
     cur = (link_type) cur->next;
     destroy_node(tmp); 	// 摧毀（解構並釋放）一個節點
   }
@@ -495,15 +519,18 @@ void list<T, Alloc>::clear()
 
 template <class T, class Alloc>
 list<T, Alloc>& list<T, Alloc>::operator=(const list<T, Alloc>& x) {
+  // 判断是不是自己
   if (this != &x) {
     iterator first1 = begin();
-    iterator last1 = end();
+    iterator last1  = end();
     const_iterator first2 = x.begin();
-    const_iterator last2 = x.end();
+    const_iterator last2  = x.end();
+	// 先拷贝两个链表元素个数是一样的
     while (first1 != last1 && first2 != last2) *first1++ = *first2++;
+	// 链表2已经复制完，链表1有剩余，将剩余erase掉
     if (first2 == last2)
       erase(first1, last1);
-    else
+    else	// 链表1到头了，链表2有剩余，需要insert
       insert(last1, first2, last2);
   }
   return *this;
@@ -527,33 +554,39 @@ template <class T, class Alloc>
 void list<T, Alloc>::unique() {
   iterator first = begin();
   iterator last = end();
+  // 这段可以不需要
   if (first == last) return;
   iterator next = first;
   while (++next != last) {
-    if (*first == *next)
+    if (*first == *next)	//值相同就进行erase操作
+	  // list 进行 erase insert 迭代器不会失效的
+	  // 而vector则有可能会失效
       erase(next);
-    else
+    else	//如果*first != *next 就将next指针赋值给first
       first = next;
+	//将first再赋值给next，因为first.next指针可能发生变化
     next = first;
   }
 }
 
 // 將 x 合併到 *this 身上。兩個 lists 的內容都必須先經過遞增排序。
+// merge是合并两个已经经过递增排序的集合
 template <class T, class Alloc>
 void list<T, Alloc>::merge(list<T, Alloc>& x) {
   iterator first1 = begin();
-  iterator last1 = end();
+  iterator last1  = end();
   iterator first2 = x.begin();
-  iterator last2 = x.end();
+  iterator last2  = x.end();
 
   // 注意：前提是，兩個 lists 都已經過遞增排序，
   while (first1 != last1 && first2 != last2)
+    // 找出*first2<*first1然后插入到list链表中
     if (*first2 < *first1) {
       iterator next = first2;
       transfer(first1, first2, ++next);
       first2 = next;
     }
-    else
+    else	// 不小于让first1增长
       ++first1;
   if (first2 != last2) transfer(last1, first2, last2);
 }

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <iostream>
 
 using namespace std;
@@ -18,12 +19,14 @@ public:
 
 typedef void (*Fun)();
 
-int main02(void)
+int test_single_inherint(void)
 {
+	cout << "------------test_single_inherint------------";
 	Base b;
 	Fun pFun = NULL;
 	cout << "virtual table address:" << (int *)*(int *)(&b) << endl;
-	cout << "virtual table first function address:" << (int *)*(int *)*(int *)(&b) << endl;
+	cout << "virtual table first function address:" 
+		 << (int *)*(int *)*(int *)(&b) << endl;
 	
 
 	pFun = (Fun)*((int *)*(int *)(&b) + 0);
@@ -53,6 +56,7 @@ int main02(void)
 	
 	//this also invoke drived f function.
 	(static_cast<Base *>(&d))->f();
+	cout << "------------test_single_inherint------------";
 
 //result:	
 	//	virtual table address:0xbfe8bbd4
@@ -67,6 +71,27 @@ int main02(void)
 	//	Drived::f
 
 	return 0;
+}
+
+void test_print_func_address(void)
+{
+	cout << "------------test_print_func_address------------" << endl;
+	printf("base::f : %x.\n", (&Base::f));
+	printf("base::g : %x.\n", (&Base::g));
+	printf("base::h : %x.\n", (&Base::h));
+	printf("drive::f : %x.\n", (&Drived::f));
+	printf("drive::g : %x.\n", (&Drived::g));
+	printf("drive::h : %x.\n", (&Drived::h));
+	cout << "------------test_print_func_address------------" << endl;
+	//result:
+		//------------test_print_func_address------------
+		//base::f : 1.
+		//base::g : 5.
+		//base::h : 9.
+		//drive::f : 1.
+		//drive::g : 5.
+		//drive::h : 9.
+		//------------test_print_func_address------------
 }
 
 class Base1 {
@@ -98,8 +123,9 @@ public:
 	//virtual void g() { cout << "Devive:g" << endl;};
 };
 
-int main(void)
+void test_multi_inherint()
 {
+	cout << "------------test_multi_inherint------------";
 	Fun pFun = NULL;
 	Derive d;
 	int **pVtab = (int **)&d;
@@ -142,6 +168,14 @@ int main(void)
 
 	pFun = (Fun)pVtab[2][3];
 	cout << pFun << endl;
+	cout << "------------test_multi_inherint------------";
+}
+
+int main(void)
+{
+//	test_multi_inherint();
+//	test_single_inherint();
+	test_print_func_address();
 	return 0;
 }
 

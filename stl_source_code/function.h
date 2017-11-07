@@ -28,14 +28,14 @@
 #define __SGI_STL_FUNCTION_H
 
 #ifndef __STL_CONFIG_H
-#include <stl_config.h>
+#include "stl_config.h"
 #endif
 #ifndef __SGI_STL_INTERNAL_RELOPS
-#include <stl_relops.h>
+#include "stl_relops.h"
 #endif
-#include <stddef.h>
+#include "stddef.h"
 #ifndef __SGI_STL_INTERNAL_FUNCTION_H
-#include <stl_function.h>
+#include "stl_function.h"
 #endif
 
 #ifdef __STL_USE_NAMESPACE_FOR_RELOPS
