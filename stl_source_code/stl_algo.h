@@ -31,7 +31,7 @@
 #ifndef __SGI_STL_INTERNAL_ALGO_H
 #define __SGI_STL_INTERNAL_ALGO_H
 
-#include <stl_heap.h>
+#include "stl_heap.h"
 
 __STL_BEGIN_NAMESPACE
 
