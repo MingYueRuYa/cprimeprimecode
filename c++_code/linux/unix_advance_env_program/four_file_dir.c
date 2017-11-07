@@ -9,8 +9,8 @@
 #include "error.c"
 #include "pathalloc.c"
 
-int  g_argc 	= 0;
-char **g_argv 	= NULL;
+int  g_argc		= 0;
+char **g_argv	= NULL;
 
 // 递归目录
 typedef int MyFunc(const char *, const struct stat *, int);
@@ -48,9 +48,28 @@ void test_unlink();
 void test_utime();
 
 /*
+ * 测试chdir getcwd
+ * 设置当前进程路径，获取当前进程路径
+ * */
+void test_chdir_getcwd();
+
+/*
+ * 测试设备的设备号
+ * 每个文件都有主，次设备号。
+ * 只有字符设备，块设备才有次设备号
+ * */
+void test_dev_rdev_num();
+
+/*
  * 递归搜索目录
+ * 计算各类文件的所占比率
  * */
 int test_recurse_dir();
+
+/*
+ * 测试 opendir readdir
+ * */
+void test_open_read_dir();
 
 int
 main(int argc, char *argv[])
@@ -61,15 +80,19 @@ main(int argc, char *argv[])
 //	test_umask();
 //	test_chmod();
 //	test_unlink();
-	test_utime();
+//	test_utime();
+//	test_chdir_getcwd();
+//	test_dev_rdev_num();
+//	test_recurse_dir();
+	test_open_read_dir();
 	return 0;
 }
 
 void 
 test_file_type()
 {
-	int 		i = 0;
-	char 		*ptr;
+	int			i = 0;
+	char		*ptr;
 	struct stat buf;
 	for (i=1; i<g_argc; ++i) {
 		printf("%s:", g_argv[i]);
@@ -89,12 +112,12 @@ test_file_type()
 			ptr = "fifo.";
 		}
 #ifdef S_ISLNK
-	   	else if (S_ISLNK(buf.st_mode)) {
+		else if (S_ISLNK(buf.st_mode)) {
 			ptr = "symbolic special.";
 		}
 #endif
 #ifdef S_ISSOCK
-	   	else if (S_ISSOCK(buf.st_mode)) {
+		else if (S_ISSOCK(buf.st_mode)) {
 			ptr = "socket.";
 		}
 #endif
@@ -171,9 +194,9 @@ test_unlink()
 void 
 test_utime()
 {
-	int 			i = 1;	
-	struct stat 	statbuf;
-	struct utimbuf 	timebuf;
+	int				i = 1;	
+	struct stat		statbuf;
+	struct utimbuf	timebuf;
 	for (i=1; i<g_argc; ++i) {
 		if (stat(g_argv[i], &statbuf) < 0) {	//fetch current time
 			err_ret("%s: stat error", g_argv[i]);
@@ -208,13 +231,13 @@ test_recurse_dir()
 		ntot = 1;	
 	}
 
-	printf("regular files  = %7ld, %5.2f %%\n", nreg,   nreg*100.0/ntot);	
-	printf("directories    = %7ld, %5.2f %%\n", ndir,   ndir*100.0/ntot);	
-	printf("block special  = %7ld, %5.2f %%\n", nblk,   nblk*100.0/ntot);	
-	printf("char special   = %7ld, %5.2f %%\n", nchr,   nchr*100.0/ntot);	
-	printf("FIFIO 		   = %7ld, %5.2f %%\n", nfifo,  nfifo*100.0/ntot);	
-	printf("symbolic links = %7ld, %5.2f %%\n", nslink, nreg*100.0/ntot);	
-	printf("sockets		   = %7ld, %5.2f %%\n", nsock,  nsock*100.0/ntot);	
+	printf("regular files  = %5ld, %5.2f %%\n", nreg,   nreg*100.0/ntot);	
+	printf("directories    = %5ld, %5.2f %%\n", ndir,   ndir*100.0/ntot);	
+	printf("block special  = %5ld, %5.2f %%\n", nblk,   nblk*100.0/ntot);	
+	printf("char special   = %5ld, %5.2f %%\n", nchr,   nchr*100.0/ntot);	
+	printf("FIFIO          = %5ld, %5.2f %%\n", nfifo,  nfifo*100.0/ntot);	
+	printf("symbolic links = %5ld, %5.2f %%\n", nslink, nslink*100.0/ntot);	
+	printf("sockets        = %5ld, %5.2f %%\n", nsock,  nsock*100.0/ntot);	
 	exit(ret);
 }
 
@@ -228,15 +251,30 @@ test_recurse_dir()
 #define FTW_NDR 3	//directory that can't be read
 #define FTW_NS	4	//file that we can't stat
 
-static char 	*fullpath;	//contains full pathname for every file
-static size_t 	pathlen;
+static char		*fullpath;	//contains full pathname for every file
+static size_t	pathlen;
 
 static int
 myftw(char *pathname, MyFunc *func)
 {
-	fullpath = path_alloc(NULL);	//malloc's for PATH_MAX+1 bytes
+	fullpath = path_alloc(&pathlen);	//malloc's for PATH_MAX+1 bytes
+	if (pathlen <= strlen(pathname)) {
+		pathlen = strlen(pathname)*2;
+		if ( (fullpath = realloc(fullpath, pathlen)) == NULL ) {
+			err_sys("realloc failed.");
+		}
+	}
 	strcpy(fullpath, pathname);
 	return (dopath(func));
+	//input: ./four_file_dir /dev/
+	//result:
+	//regular files  =     1,  0.11 %
+	//directories    =   480, 51.28 %
+	//block special  =    29,  3.10 %
+	//char special   =   194, 20.73 %
+	//FIFIO          =     0,  0.00 %
+	//symbolic links =   231, 24.68 %
+	//sockets        =     1,  0.11 %
 }
 
 /*
@@ -251,7 +289,7 @@ dopath(MyFunc *func)
 	struct stat		statbuf;
 	struct dirent	*dirp;
 	DIR				*dp;
-	int 			ret, n;
+	int				ret, n;
 	
 	if (lstat(fullpath, &statbuf) < 0) {	//stat error
 		return (func(fullpath, &statbuf, FTW_NS));
@@ -277,6 +315,7 @@ dopath(MyFunc *func)
 		} //if
 	} //if
 	
+	//将路劲复制过来 变成这种形式 /xxxx/xxx/
 	fullpath[n++] = '/';
 	fullpath[n]	  = 0;
 
@@ -334,11 +373,79 @@ myfunc(const char *pathname, const struct stat *statptr, int type)
 	return 0;
 }
 
+void
+test_chdir_getcwd()
+{
+	if (g_argc < 2) {
+		printf("usage: a.out arg1 arg2.\n");
+		return;
+	}
 
+	if (chdir(g_argv[1]) < 0) {
+		err_sys("chdir failed");
+	}
 
+	printf("chdir to %s successded\n", g_argv[1]);
 
+	char *ptr;
+	size_t size;
+	ptr = path_alloc(&size);
+	if (NULL == getcwd(ptr, size)) {
+		err_sys("getcwd failed");
+	}
+	printf("cwd = %s.\n", ptr);
+}
 
+void 
+test_dev_rdev_num()
+{
+	int			i;
+	struct stat buf;
+	for (i=1; i<g_argc; ++i) {
+		printf("%s: ", g_argv[i]);
+		if (lstat(g_argv[i], &buf) < 0) {
+			err_ret("lstat error");
+			continue;
+		} //if
+		printf("dev = %d/%d", major(buf.st_dev), minor(buf.st_dev));
 
+		if ( S_ISCHR(buf.st_mode) || (S_ISBLK(buf.st_mode)) ) {
+			printf(" (%s) rdev = %d/%d", 
+					(S_ISCHR(buf.st_mode)) ? "character" : "block",
+					major(buf.st_rdev), minor(buf.st_rdev)
+					);
+		} //if
+		printf("\n");
 
+	} //for
 
+//result:
+	// /: dev = 8/1
+	// /home/liushixiong: dev = 8/1
+	// /dev/tty0: dev = 0/6 (character) rdev = 4/0
+	// /dev/tty1: dev = 0/6 (character) rdev = 4/1
+
+}
+
+void 
+test_open_read_dir()
+{
+	if (g_argc != 2) {
+		err_quit("usage: app <starting-pathname>");
+	}
+
+	DIR *dirp;
+	if ( (dirp = opendir(g_argv[1])) == NULL) {
+		err_sys("open dir %s error.", g_argv[1]);
+	}	
+
+	struct dirent *direntp;
+	while ( (direntp = readdir(dirp)) != NULL ) {
+		if (strcmp(".", direntp->d_name) == 0 ||
+			strcmp("..", direntp->d_name) == 0) {
+			continue;
+		}
+		printf("%s/%s \n", g_argv[1], direntp->d_name);
+	} //while
+}
 
