@@ -5,6 +5,7 @@
 #include "list"
 #include "vector"
 #include "algorithm"
+
 #include <iostream>
 
 using std::cout;
@@ -21,6 +22,10 @@ public:
 	}
 
 	Object& operator=(const Object &pObj) {
+		if (this == &pObj) {
+			return *this;
+		}
+
 		mID = pObj.mID;
 		cout << "operator= object... id : " << mID << endl; 
 		return *this;
@@ -32,6 +37,22 @@ public:
 
 	virtual void Show() { 
 		cout << std::hex << this << std::dec << " id: " << mID; 
+	}
+
+	bool operator==(const Object &pObj)
+	{
+		if (this->mID != pObj.mID) {
+			return false;
+		} //if
+		return true;
+	}
+
+	bool operator<(const Object &pObj)
+	{
+		if (this->mID < pObj.mID) {
+			return true;
+		} //if
+		return false;
 	}
 
 public:
@@ -174,16 +195,97 @@ void test_list()
 	cout << "----------------list insert-------------------" << endl;
 
 	cout << "----------------list erase-------------------" << endl;
-	objlist.erase(objlist.begin());
-	cout << "----------------list erase-------------------" << endl;
-
-	list<Object>::iterator ibeg = objlist.begin();
+	cout << "----------------erase position" << endl;
+	list<Object>::iterator ibeg = objlist.erase(objlist.begin());
 	for (; ibeg != objlist.end(); ++ibeg) {
 		cout << ibeg->mID << " ";
 	}
+	cout << "----------------erase position" << endl;
+
+	cout << "----------------erase first last" << endl;
+	list<Object>::iterator lastitr = objlist.begin();
+	// 步进迭代器5个
+	advance(lastitr, 5);
+	int step = 0;
+	distance(objlist.begin(), lastitr, step);
+	cout << "distance:" << step << endl;
+	list<Object>::iterator startitr = objlist.erase(objlist.begin(), lastitr);
+	
+	for (; startitr != objlist.end(); ++startitr) {
+		cout << startitr->mID << " ";
+	}
+	cout << "----------------erase first last" << endl;
+	cout << "----------------list erase-------------------" << endl;
+
+
+	cout << "----------------list unique-------------------" << endl;
+	
+	objlist.push_back(Object(6));
+	objlist.push_back(Object(6));
+	objlist.push_back(Object(6));
+	objlist.insert(objlist.begin(), Object(6));
+
+	objlist.unique();
+
+	startitr = objlist.begin();
+	for (; startitr != objlist.end(); ++startitr) {
+		cout << startitr->mID << " ";
+	}
+
+	cout << "----------------list unique-------------------" << endl;
+
+
+	cout << "----------------list merge-------------------" << endl;
+	list<Object> merge1list;
+	merge1list.push_back(Object(5));
+	merge1list.push_back(Object(3));
+	merge1list.push_back(Object(4));
+	list<Object> merge2list;
+	merge2list.push_back(Object(2));
+	merge2list.push_back(Object(3));
+	merge2list.push_back(Object(4));
+	merge2list.push_back(Object(6));
+	merge1list.merge(merge2list);
+
+	startitr = merge1list.begin();
+	for (; startitr != merge1list.end(); ++startitr) {
+		cout << startitr->mID << " ";
+	}
 	cout << endl;
-	list<Object>::iterator pos = objlist.begin(); 
-	advance(pos, 2);
+	merge1list.clear();	
+	cout << "----------------list merge-------------------" << endl;
+
+	cout << "----------------list splice------------------" << endl;
+	merge1list.push_back(Object(5));
+	merge1list.push_back(Object(3));
+	merge1list.push_back(Object(4));
+
+	merge2list.push_back(Object(2));
+	merge2list.push_back(Object(3));
+	merge2list.push_back(Object(4));
+	merge2list.push_back(Object(6));
+
+	startitr = merge1list.begin();
+	advance(startitr, 1);
+	// list参数其实没有用到，可能就是为了表示迭代器可以指向本身
+	merge1list.splice(merge1list.begin(), merge1list, startitr); 
+	startitr = merge1list.begin();
+	for (; startitr != merge1list.end(); ++startitr) {
+		cout << startitr->mID << " ";
+	}
+	cout << endl;
+
+	merge1list.splice(merge1list.begin(), merge1list, 
+						merge2list.begin(),
+						merge2list.end()); 
+	startitr = merge1list.begin();
+	for (; startitr != merge1list.end(); ++startitr) {
+		cout << startitr->mID << " ";
+	}
+	cout << endl;
+	
+	cout << "----------------list splice------------------" << endl; 
+
 }
 };
 
