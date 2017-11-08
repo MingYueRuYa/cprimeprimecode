@@ -277,7 +277,7 @@ public:                         // Iterators
                            difference_type>  
           const_reverse_iterator;
   typedef reverse_iterator<iterator, value_type, reference, difference_type>
-          reverse_iterator; 
+          deque_reverse_iterator; 
 #endif /* __STL_CLASS_PARTIAL_SPECIALIZATION */
 
 protected:                      // Internal typedefs
@@ -303,8 +303,8 @@ public:                         // Basic accessors
   const_iterator begin() const { return start; }
   const_iterator end() const { return finish; }
 
-  reverse_iterator rbegin() { return reverse_iterator(finish); }
-  reverse_iterator rend() { return reverse_iterator(start); }
+  deque_reverse_iterator rbegin() { return deque_reverse_iterator(finish); }
+  deque_reverse_iterator rend() { return deque_reverse_iterator(start); }
   const_reverse_iterator rbegin() const {
     return const_reverse_iterator(finish);
   }
@@ -735,7 +735,7 @@ void deque<T, Alloc, BufSize>::insert(iterator pos,
 #endif /* __STL_MEMBER_TEMPLATES */
 
 template <class T, class Alloc, size_t BufSize>
-deque<T, Alloc, BufSize>::iterator 
+typename deque<T, Alloc, BufSize>::iterator 
 deque<T, Alloc, BufSize>::erase(iterator first, iterator last) {
   if (first == start && last == finish) {
     clear();

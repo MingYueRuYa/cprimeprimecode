@@ -27,11 +27,11 @@
 #ifndef __SGI_STL_DEQUE
 #define __SGI_STL_DEQUE
 
-#include <stl_algobase.h>
-#include <stl_alloc.h>
-#include <stl_construct.h>
-#include <stl_uninitialized.h>
-#include <stl_deque.h>
+#include "stl_algobase.h"
+#include "stl_alloc.h"
+#include "stl_construct.h"
+#include "stl_uninitialized.h"
+#include "stl_deque.h"
 
 #endif /* __SGI_STL_DEQUE */
 
