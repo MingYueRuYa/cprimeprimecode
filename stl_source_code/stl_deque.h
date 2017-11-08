@@ -31,53 +31,46 @@
 #ifndef __SGI_STL_INTERNAL_DEQUE_H
 #define __SGI_STL_INTERNAL_DEQUE_H
 
-/* Class invariants:
- *  For any nonsingular iterator i:
- *    i.node is the address of an element in the map array.  The
- *      contents of i.node is a pointer to the beginning of a node.
+/* Class 的恆長特性（invariants）:
+ *  對於任何 nonsingular iterator I：
+ *    i.node 是 map array 中的某個元素的位址。
+ *      i.node 所指內容則是一個指標，指向某個節點（緩衝區）的頭。
  *    i.first == *(i.node) 
- *    i.last  == i.first + node_size
- *    i.cur is a pointer in the range [i.first, i.last).  NOTE:
- *      the implication of this is that i.cur is always a dereferenceable
- *      pointer, even if i is a past-the-end iterator.
- *  Start and Finish are always nonsingular iterators.  NOTE: this means
- *    that an empty deque must have one node, and that a deque
- *    with N elements, where N is the buffer size, must have two nodes.
- *  For every node other than start.node and finish.node, every element
- *    in the node is an initialized object.  If start.node == finish.node,
- *    then [start.cur, finish.cur) are initialized objects, and
- *    the elements outside that range are uninitialized storage.  Otherwise,
- *    [start.cur, start.last) and [finish.first, finish.cur) are initialized
- *    objects, and [start.first, start.cur) and [finish.cur, finish.last)
- *    are uninitialized storage.
- *  [map, map + map_size) is a valid, non-empty range.  
- *  [start.node, finish.node] is a valid range contained within 
- *    [map, map + map_size).  
- *  A pointer in the range [map, map + map_size) points to an allocated
- *    node if and only if the pointer is in the range [start.node, finish.node].
+ *    i.last  == i.first + node_size（也就是 buffer_size()）
+ *    i.cur 是一個指標，指向範圍 [i.first, i.last) 之間。注意：
+ *      這意味 i.cur 永遠是一個 dereferenceable pointer,
+ *      縱使 i 是一個 past-the-end iterator.
+ *  Start 和 Finish 總是 nonsingular iterators。注意：這意味
+ *    empty deque 一定會有一個node，而一個具有N個元素的deque，
+ *    （N 表示緩衝區大小），一定會有兩個nodes。
+ *  對於start.node 和finish.node 以外的每一個node，其中的每一個元素
+ *    都是一個經過初始化的物件。如果 start.node == finish.node，
+ *    那麼 [start.cur, finish.cur) 都是經過初始化的物件，而該範圍以外
+ *    元素則是未經初始化的空間。否則，[start.cur, start.last) 和
+ *    [finish.first, finish.cur) 是經過初始化的物件，而
+ *    [start.first, start.cur) 和 [finish.cur, finish.last)
+ *    則是未經初始化的空間
+ *  [map, map + map_size) 是一個有效的，non-empty 的範圍。  
+ *  [start.node, finish.node] 是一個有效的範圍，內含於 
+ *    [map, map + map_size) 之內。  
+ *  範圍 [map, map + map_size) 內的任何一個指標會指向一個經過配置的
+ *    node — 若且唯若該指標在範圍 [start.node, finish.node] 之內。
  */
-
 
 /*
- * In previous versions of deque, node_size was fixed by the 
- * implementation.  In this version, however, users can select
- * the node size.  Deque has three template parameters; the third,
- * a number of type size_t, is the number of elements per node.
- * If the third template parameter is 0 (which is the default), 
- * then deque will use a default node size.
+ * 在前一版的deque中，node_size 由編譯器定死。這個版本允許使用者選擇節點 
+ * （node）的大小。Deque 有三個 template 參數，其中第三個是一個型別為 size_t 
+ * 的數值，代表每個節點（node）內含的元素個數。如果第三個 template 參數為0
+ * （那是預設值），deque 就使用預設的節點大小。
  *
- * The only reason for using an alternate node size is if your application
- * requires a different performance tradeoff than the default.  If,
- * for example, your program contains many deques each of which contains
- * only a few elements, then you might want to save memory (possibly
- * by sacrificing some speed) by using smaller nodes.
+ * 使用不同的節點大小的唯一理由是，或許你的程式需要不同的效率並願意付出其他方
+ * 面的代價。例如，假設你的程式內含許多deques，每一個都只內含一些元素，那麼
+ * 你可以使用較小的 nodes 來節省記憶體（或許會因此犧牲速度）。
  *
- * Unfortunately, some compilers have trouble with non-type template 
- * parameters; stl_config.h defines __STL_NON_TYPE_TMPL_PARAM_BUG if
- * that is the case.  If your compiler is one of them, then you will
- * not be able to use alternate node sizes; you will have to use the
- * default value.
- */
+ * 不幸的是，某些編譯器面對 non-type template 參數會有問題。stl_config.h 之
+ * 中為此定義了一個 __STL_NON_TYPE_TMPL_PARAM_BUG。如果你的編譯器正是如
+ * 此，你就無法使用不同的節點大小，你必須使用預設大小。
+*/
 
 __STL_BEGIN_NAMESPACE 
 
@@ -85,8 +78,12 @@ __STL_BEGIN_NAMESPACE
 #pragma set woff 1174
 #endif
 
-// Note: this function is simply a kludge to work around several compilers'
-//  bugs in handling constant expressions.
+// 注意：下面這個函式是七拼八湊的產品，只是為了閃避數家編譯器在處理常數算式
+// （constant expressions）時的臭蟲。
+// 如果 n 不為 0，傳回 n，表示 buffer size 由使用者自定。
+// 如果 n 為 0，表示buffer size 使用預設值，那麼
+//   如果 sz（元素大小，sizeof(value_type)）小於 512，傳回 512/sz，
+//   如果 sz 不小於 512，傳回 1。
 inline size_t __deque_buf_size(size_t n, size_t sz)
 {
   return n != 0 ? n : (sz < 512 ? size_t(512 / sz) : size_t(1));
@@ -94,31 +91,33 @@ inline size_t __deque_buf_size(size_t n, size_t sz)
 
 #ifndef __STL_NON_TYPE_TMPL_PARAM_BUG
 template <class T, class Ref, class Ptr, size_t BufSiz>
-struct __deque_iterator {
-  typedef __deque_iterator<T, T&, T*, BufSiz>             iterator;
+struct __deque_iterator { 	// 未繼承 std::iterator
+  typedef __deque_iterator<T, T&, T*, BufSiz>      iterator;
   typedef __deque_iterator<T, const T&, const T*, BufSiz> const_iterator;
   static size_t buffer_size() {return __deque_buf_size(BufSiz, sizeof(T)); }
 #else /* __STL_NON_TYPE_TMPL_PARAM_BUG */
 template <class T, class Ref, class Ptr>
-struct __deque_iterator {
+struct __deque_iterator { 	// 未繼承 std::iterator
   typedef __deque_iterator<T, T&, T*>             iterator;
   typedef __deque_iterator<T, const T&, const T*> const_iterator;
   static size_t buffer_size() {return __deque_buf_size(0, sizeof(T)); }
 #endif
 
-  typedef random_access_iterator_tag iterator_category;
-  typedef T value_type;
-  typedef Ptr pointer;
-  typedef Ref reference;
+  // 未繼承 std::iterator，所以必須自行撰寫五個必要的迭代器相應型別
+  typedef random_access_iterator_tag iterator_category; // (1)
+  typedef T value_type; 				// (2)
+  typedef Ptr pointer; 				// (3)
+  typedef Ref reference; 				// (4)
   typedef size_t size_type;
-  typedef ptrdiff_t difference_type;
+  typedef ptrdiff_t difference_type; 	// (5)
   typedef T** map_pointer;
 
   typedef __deque_iterator self;
 
-  T* cur;
-  T* first;
-  T* last;
+  // 保持與容器的聯結
+  T* cur;	// 此迭代器所指之緩衝區中的現行（current）元素
+  T* first;	// 此迭代器所指之緩衝區的頭
+  T* last;	// 此迭代器所指之緩衝區的尾（含備用空間）
   map_pointer node;
 
   __deque_iterator(T* x, map_pointer y) 
@@ -126,6 +125,9 @@ struct __deque_iterator {
   __deque_iterator() : cur(0), first(0), last(0), node(0) {}
   __deque_iterator(const iterator& x)
     : cur(x.cur), first(x.first), last(x.last), node(x.node) {}
+
+
+// 以下各個多載化運算子是 __deque_iterator<> 成功運作的關鍵。
 
   reference operator*() const { return *cur; }
 #ifndef __SGI_STL_NO_ARROW_OPERATOR
@@ -136,12 +138,14 @@ struct __deque_iterator {
     return difference_type(buffer_size()) * (node - x.node - 1) +
       (cur - first) + (x.last - x.cur);
   }
-
+  
+  // 參考 More Effective C++, item6: Distinguish between prefix and
+  // postfix forms of increment and decrement operators.
   self& operator++() {
-    ++cur;
-    if (cur == last) {
-      set_node(node + 1);
-      cur = first;
+    ++cur;				// 切換至下一個元素。
+    if (cur == last) {		// 如果已達所在緩衝區的尾端，
+      set_node(node + 1);	// 就切換至下一個節點（亦即緩衝區）
+      cur = first;			//   的第一個元素。
     }
     return *this; 
   }
@@ -150,13 +154,12 @@ struct __deque_iterator {
     ++*this;
     return tmp;
   }
-
   self& operator--() {
-    if (cur == first) {
-      set_node(node - 1);
-      cur = last;
+    if (cur == first) {	// 如果已達所在緩衝區的頭端，
+      set_node(node - 1);	// 就切換至前一個節點（亦即緩衝區）
+      cur = last;			//   的最後一個元素。
     }
-    --cur;
+    --cur;				// 切換至前一個元素。
     return *this;
   }
   self operator--(int) {
@@ -168,30 +171,40 @@ struct __deque_iterator {
   self& operator+=(difference_type n) {
     difference_type offset = n + (cur - first);
     if (offset >= 0 && offset < difference_type(buffer_size()))
+      // 目標位置在同一緩衝區內
       cur += n;
     else {
+      // 目標位置不在同一緩衝區內
       difference_type node_offset =
         offset > 0 ? offset / difference_type(buffer_size())
                    : -difference_type((-offset - 1) / buffer_size()) - 1;
+      // 切換至正確的節點（亦即緩衝區）
       set_node(node + node_offset);
+      // 切換至正確的元素
       cur = first + (offset - node_offset * difference_type(buffer_size()));
     }
     return *this;
   }
 
+  // 參考 More Effective C++, item22: Consider using op= instead of  
+  // stand-alone op.
   self operator+(difference_type n) const {
     self tmp = *this;
-    return tmp += n;
+    return tmp += n; // 喚起operator+=
   }
 
   self& operator-=(difference_type n) { return *this += -n; }
- 
+  // 以上利用operator+= 來完成 operator-=
+
+  // 參考 More Effective C++, item22: Consider using op= instead of  
+  // stand-alone op.
   self operator-(difference_type n) const {
     self tmp = *this;
-    return tmp -= n;
+    return tmp -= n; // 喚起operator-=
   }
 
   reference operator[](difference_type n) const { return *(*this + n); }
+  // 以上喚起operator*, operator+
 
   bool operator==(const self& x) const { return cur == x.cur; }
   bool operator!=(const self& x) const { return !(*this == x); }
@@ -207,7 +220,7 @@ struct __deque_iterator {
 };
 
 #ifndef __STL_CLASS_PARTIAL_SPECIALIZATION
-
+// 編譯器不支援 partial specialization 時，才需以下定義
 #ifndef __STL_NON_TYPE_TMPL_PARAM_BUG
 
 template <class T, class Ref, class Ptr, size_t BufSiz>
@@ -243,12 +256,12 @@ inline ptrdiff_t* distance_type(const __deque_iterator<T, Ref, Ptr>&) {
 }
 
 #endif /* __STL_NON_TYPE_TMPL_PARAM_BUG */
-
+// 編譯器不支援 partial specialization 時，才需以上定義
 #endif /* __STL_CLASS_PARTIAL_SPECIALIZATION */
 
-// See __deque_buf_size().  The only reason that the default value is 0
-//  is as a workaround for bugs in the way that some compilers handle
-//  constant expressions.
+// 見 __deque_buf_size()。BufSize 預設值為 0 的唯一理由是為了閃避某些
+//  編譯器在處理常數算式（constant expressions）時的臭蟲。
+// 預設使用 alloc 為配置器
 template <class T, class Alloc = alloc, size_t BufSiz = 0> 
 class deque {
 public:                         // Basic types
@@ -277,12 +290,15 @@ public:                         // Iterators
                            difference_type>  
           const_reverse_iterator;
   typedef reverse_iterator<iterator, value_type, reference, difference_type>
-          reverse_iterator; 
+          deque_reverse_iterator; 
 #endif /* __STL_CLASS_PARTIAL_SPECIALIZATION */
 
 protected:                      // Internal typedefs
-  typedef pointer* map_pointer;
+  // 元素的指標的指標（pointer of pointer of T）
+  typedef pointer* map_pointer;	
+  // 專屬之空間配置器，每次配置一個元素大小
   typedef simple_alloc<value_type, Alloc> data_allocator;
+  // 專屬之空間配置器，每次配置一個指標大小
   typedef simple_alloc<pointer, Alloc> map_allocator;
 
   static size_type buffer_size() {
@@ -291,11 +307,12 @@ protected:                      // Internal typedefs
   static size_type initial_map_size() { return 8; }
 
 protected:                      // Data members
-  iterator start;
-  iterator finish;
+  iterator start;		// 表現第一個節點。
+  iterator finish;	// 表現最後一個節點。
 
-  map_pointer map;
-  size_type map_size;
+  map_pointer map;	// 指向map，map是塊連續空間，
+                          // 其內的每個元素都是一個指標（稱為節點），指向一塊緩衝區。
+  size_type map_size;	// map內可容納多少指標。
 
 public:                         // Basic accessors
   iterator begin() { return start; }
@@ -303,8 +320,8 @@ public:                         // Basic accessors
   const_iterator begin() const { return start; }
   const_iterator end() const { return finish; }
 
-  reverse_iterator rbegin() { return reverse_iterator(finish); }
-  reverse_iterator rend() { return reverse_iterator(start); }
+  deque_reverse_iterator rbegin() { return deque_reverse_iterator(finish); }
+  deque_reverse_iterator rend() { return deque_reverse_iterator(start); }
   const_reverse_iterator rbegin() const {
     return const_reverse_iterator(finish);
   }
@@ -312,16 +329,20 @@ public:                         // Basic accessors
     return const_reverse_iterator(start);
   }
 
-  reference operator[](size_type n) { return start[difference_type(n)]; }
+  reference operator[](size_type n) {
+    return start[difference_type(n)]; // 喚起 __deque_iterator<>::operator[]
+  }
   const_reference operator[](size_type n) const {
     return start[difference_type(n)];
   }
 
-  reference front() { return *start; }
+  reference front() { return *start; } // 喚起 __deque_iterator<>::operator*
   reference back() {
-    iterator tmp = finish;
-    --tmp;
-    return *tmp;
+    iterator tmp = finish;	
+    --tmp;	// 喚起 __deque_iterator<>::operator--
+    return *tmp; 	// 喚起 __deque_iterator<>::operator*
+    // 以上三行何不改為：return *(finish-1);
+    // 因為 __deque_iterator<> 沒有為 (finish-1) 定義運算子。待查!
   }
   const_reference front() const { return *start; }
   const_reference back() const {
@@ -330,13 +351,17 @@ public:                         // Basic accessors
     return *tmp;
   }
 
-  size_type size() const { return finish - start;; }
+  // 下行最後有兩個 ‘;’，雖奇怪但合乎語法。
+  size_type size() const { return finish - start;; } 
+  // 以上喚起iterator::operator-
   size_type max_size() const { return size_type(-1); }
   bool empty() const { return finish == start; }
 
 public:                         // Constructor, destructor.
   deque()
     : start(), finish(), map(0), map_size(0)
+    // 以上 start() 和 finish() 喚起 iterator（亦即 __deque_iterator）
+    // 的 default ctor，於是令其 cur, first, last, node 皆為0。
   {
     create_map_and_nodes(0);
   }
@@ -437,56 +462,63 @@ public:                         // Constructor, destructor.
 public:                         // push_* and pop_*
   
   void push_back(const value_type& t) {
-    if (finish.cur != finish.last - 1) {
-      construct(finish.cur, t);
-      ++finish.cur;
+    if (finish.cur != finish.last - 1) { 
+      // 最後緩衝區尚有一個以上的備用空間
+      construct(finish.cur, t);	// 直接在備用空間上建構元素
+      ++finish.cur;	// 調整最後緩衝區的使用狀態
     }
-    else
+    else  // 最後緩衝區已無（或只剩一個）元素備用空間。
       push_back_aux(t);
   }
 
   void push_front(const value_type& t) {
-    if (start.cur != start.first) {
-      construct(start.cur - 1, t);
-      --start.cur;
+    if (start.cur != start.first) { 	// 第一緩衝區尚有備用空間
+      construct(start.cur - 1, t); 	// 直接在備用空間上建構元素
+      --start.cur;		// 調整第一緩衝區的使用狀態
     }
-    else
+    else // 第一緩衝區已無備用空間
       push_front_aux(t);
   }
 
   void pop_back() {
     if (finish.cur != finish.first) {
-      --finish.cur;
-      destroy(finish.cur);
+      // 最後緩衝區有一個（或更多）元素
+
+      --finish.cur;		// 調整指標，相當於排除了最後元素
+      destroy(finish.cur);	// 將最後元素解構
     }
     else
-      pop_back_aux();
+      // 最後緩衝區沒有任何元素
+      pop_back_aux();		// 這裡將進行緩衝區的釋放工作
   }
 
   void pop_front() {
     if (start.cur != start.last - 1) {
-      destroy(start.cur);
-      ++start.cur;
+      // 第一緩衝區有一個（或更多）元素
+      destroy(start.cur);	// 將第一元素解構
+      ++start.cur;			// 調整指標，相當於排除了第一元素
     }
     else 
-      pop_front_aux();
+      // 第一緩衝區僅有一個元素
+      pop_front_aux();		// 這裡將進行緩衝區的釋放工作
   }
 
 public:                         // Insert
 
+  // 在position 處安插一個元素，其值為 x
   iterator insert(iterator position, const value_type& x) {
-    if (position.cur == start.cur) {
-      push_front(x);
+    if (position.cur == start.cur) {	// 如果安插點是deque 最前端
+      push_front(x);				// 交給push_front 去做
       return start;
     }
-    else if (position.cur == finish.cur) {
-      push_back(x);
+    else if (position.cur == finish.cur) { // 如果安插點是deque 最尾端
+      push_back(x);					  // 交給push_back 去做
       iterator tmp = finish;
       --tmp;
       return tmp;
     }
     else {
-      return insert_aux(position, x);
+      return insert_aux(position, x);	 	// 交給 insert_aux 去做
     }
   }
 
@@ -526,17 +558,18 @@ public:                         // Insert
   void resize(size_type new_size) { resize(new_size, value_type()); }
 
 public:                         // Erase
+  // 清除 pos 所指的元素。pos 為清除點。
   iterator erase(iterator pos) {
     iterator next = pos;
     ++next;
-    difference_type index = pos - start;
-    if (index < (size() >> 1)) {
-      copy_backward(start, pos, next);
-      pop_front();
+    difference_type index = pos - start;	// 清除點之前的元素個數
+    if (index < (size() >> 1)) {			// 如果清除點之前的元素比較少，
+      copy_backward(start, pos, next);	// 就搬移清除點之前的元素
+      pop_front();				// 搬移完畢，最前一個元素贅餘，去除之
     }
-    else {
-      copy(next, finish, pos);
-      pop_back();
+    else {					// 清除點之後的元素比較少，
+      copy(next, finish, pos);	// 就搬移清除點之後的元素
+      pop_back();				// 搬移完畢，最後一個元素贅餘，去除之
     }
     return start + index;
   }
@@ -631,12 +664,16 @@ protected:                      // Allocation of map and nodes
 
   void reserve_map_at_back (size_type nodes_to_add = 1) {
     if (nodes_to_add + 1 > map_size - (finish.node - map))
-      reallocate_map(nodes_to_add, false);
+      // 如果 map 尾端的節點備用空間不足
+      // 符合以上條件則必須重換一個map（配置更大的，拷貝原來的，釋放原來的）
+      reallocate_map(nodes_to_add, false); 
   }
 
   void reserve_map_at_front (size_type nodes_to_add = 1) {
     if (nodes_to_add > start.node - map)
-      reallocate_map(nodes_to_add, true);
+      // 如果 map 前端的節點備用空間不足
+      // 符合以上條件則必須重換一個map（配置更大的，拷貝原來的，釋放原來的）
+      reallocate_map(nodes_to_add, true);	
   }
 
   void reallocate_map(size_type nodes_to_add, bool add_at_front);
@@ -735,70 +772,88 @@ void deque<T, Alloc, BufSize>::insert(iterator pos,
 #endif /* __STL_MEMBER_TEMPLATES */
 
 template <class T, class Alloc, size_t BufSize>
-deque<T, Alloc, BufSize>::iterator 
+typename deque<T, Alloc, BufSize>::iterator 
 deque<T, Alloc, BufSize>::erase(iterator first, iterator last) {
-  if (first == start && last == finish) {
-    clear();
+  if (first == start && last == finish) { // 如果清除區間就是整個 deque
+    clear();							// 直接呼叫 clear() 即可
     return finish;
   }
   else {
-    difference_type n = last - first;
-    difference_type elems_before = first - start;
-    if (elems_before < (size() - n) / 2) {
-      copy_backward(start, first, last);
-      iterator new_start = start + n;
-      destroy(start, new_start);
+    difference_type n = last - first;			// 清除區間的長度
+    difference_type elems_before = first - start;	// 清除區間前方的元素個數
+    if (elems_before < (size() - n) / 2) {		// 如果前方的元素比較少，
+      copy_backward(start, first, last);		// 向後搬移前方元素（覆蓋清除區間）
+      iterator new_start = start + n;			// 標記 deque 的新起點
+      destroy(start, new_start);				// 搬移完畢，將贅餘的元素解構
+      // 以下將贅餘的緩衝區釋放
       for (map_pointer cur = start.node; cur < new_start.node; ++cur)
         data_allocator::deallocate(*cur, buffer_size());
-      start = new_start;
+      start = new_start;	// 設定 deque 的新起點
     }
-    else {
-      copy(last, finish, first);
-      iterator new_finish = finish - n;
-      destroy(new_finish, finish);
+    else {	// 如果清除區間後方的元素比較少
+      copy(last, finish, first);			// 向前搬移後方元素（覆蓋清除區間）
+      iterator new_finish = finish - n;	// 標記 deque 的新尾點
+      destroy(new_finish, finish);		// 搬移完畢，將贅餘的元素解構
+      // 以下將贅餘的緩衝區釋放
       for (map_pointer cur = new_finish.node + 1; cur <= finish.node; ++cur)
         data_allocator::deallocate(*cur, buffer_size());
-      finish = new_finish;
+      finish = new_finish;	// 設定 deque 的新尾點
     }
     return start + elems_before;
   }
 }
 
+// 注意，最終需要保留一個緩衝區。這是deque 的策略，也是deque 的初始狀態。
 template <class T, class Alloc, size_t BufSize>
 void deque<T, Alloc, BufSize>::clear() {
+  // 以下針對頭尾以外的每一個緩衝區（它們一定都是飽滿的）
   for (map_pointer node = start.node + 1; node < finish.node; ++node) {
+    // 將緩衝區內的所有元素解構。注意，呼叫的是destroy() 第二版本，見2.2.3節
     destroy(*node, *node + buffer_size());
+    // 釋放緩衝區記憶體
     data_allocator::deallocate(*node, buffer_size());
   }
 
-  if (start.node != finish.node) {
-    destroy(start.cur, start.last);
-    destroy(finish.first, finish.cur);
+  if (start.node != finish.node) {	// 至少有頭尾兩個緩衝區
+    destroy(start.cur, start.last);	// 將頭緩衝區的目前所有元素解構
+    destroy(finish.first, finish.cur); // 將尾緩衝區的目前所有元素解構
+    // 以下釋放尾緩衝區。注意，頭緩衝區保留。
     data_allocator::deallocate(finish.first, buffer_size());
   }
-  else
-    destroy(start.cur, finish.cur);
+  else	// 只有一個緩衝區
+    destroy(start.cur, finish.cur);	// 將此唯一緩衝區內的所有元素解構
+    // 注意，並不釋放緩衝區空間。這唯一的緩衝區將保留。
 
-  finish = start;
+  finish = start;	// 調整狀態
 }
 
 template <class T, class Alloc, size_t BufSize>
 void deque<T, Alloc, BufSize>::create_map_and_nodes(size_type num_elements) {
+  // 需要節點數=(元素個數/每個緩衝區可容納的元素個數)+1
+  // 如果剛好整除，會多配一個節點。
   size_type num_nodes = num_elements / buffer_size() + 1;
 
+  // 一個 map 要管理幾個節點。最少8個，最多是 “所需節點數加2”
+  // （前後各預留一個，擴充時可用）。
   map_size = max(initial_map_size(), num_nodes + 2);
   map = map_allocator::allocate(map_size);
+  // 以上配置出一個 “具有 map_size個節點” 的map。
 
+  // 以下令nstart和nfinish指向map所擁有之全部節點的最中央區段。
+  // 保持在最中央，可使頭尾兩端的擴充能量一樣大。每個節點可對應一個緩衝區。
   map_pointer nstart = map + (map_size - num_nodes) / 2;
   map_pointer nfinish = nstart + num_nodes - 1;
     
   map_pointer cur;
   __STL_TRY {
+    // 為map內的每個現用節點配置緩衝區。所有緩衝區加起來就是deque的空間
+   // （最後一個緩衝區可能留有一些餘裕）。
     for (cur = nstart; cur <= nfinish; ++cur)
       *cur = allocate_node();
   }
 #     ifdef  __STL_USE_EXCEPTIONS 
   catch(...) {
+    // "commit or rollback" 語意：若非全部成功，就一個不留。
     for (map_pointer n = nstart; n < cur; ++n)
       deallocate_node(*n);
     map_allocator::deallocate(map, map_size);
@@ -806,10 +861,13 @@ void deque<T, Alloc, BufSize>::create_map_and_nodes(size_type num_elements) {
   }
 #     endif /* __STL_USE_EXCEPTIONS */
 
+  // 為deque內的兩個迭代器start和end 設定正確的內容。
   start.set_node(nstart);
   finish.set_node(nfinish);
-  start.cur = start.first;
+  start.cur = start.first;		// first, cur都是public
   finish.cur = finish.first + num_elements % buffer_size();
+  // 前面說過，如果剛好整除，會多配一個節點。
+  // 此時即令cur指向這多配的一個節點（所對映之緩衝區）的起頭處。
 }
 
 // This is only used as a cleanup function in catch clauses.
@@ -824,15 +882,18 @@ void deque<T, Alloc, BufSize>::destroy_map_and_nodes() {
 template <class T, class Alloc, size_t BufSize>
 void deque<T, Alloc, BufSize>::fill_initialize(size_type n,
                                                const value_type& value) {
-  create_map_and_nodes(n);
+  create_map_and_nodes(n);	 // 把deque的結構都產生並安排好
   map_pointer cur;
   __STL_TRY {
+    // 為每個節點的緩衝區設定初值
     for (cur = start.node; cur < finish.node; ++cur)
       uninitialized_fill(*cur, *cur + buffer_size(), value);
+    // 最後一個節點的設定稍有不同（因為尾端可能有備用空間，不必設初值）
     uninitialized_fill(finish.first, finish.cur, value);
   }
 #       ifdef __STL_USE_EXCEPTIONS
   catch(...) {
+    // "commit or rollback" 語意：若非全部成功，就一個不留。
     for (map_pointer n = start.node; n < cur; ++n)
       destroy(*n, *n + buffer_size());
     destroy_map_and_nodes();
@@ -869,33 +930,36 @@ void deque<T, Alloc, BufSize>::range_initialize(ForwardIterator first,
 
 #endif /* __STL_MEMBER_TEMPLATES */
 
-// Called only if finish.cur == finish.last - 1.
+// 只有當 finish.cur == finish.last – 1 時才會被呼叫。
+// 也就是說只有當最後一個緩衝區只剩一個備用元素空間時才會被呼叫。
 template <class T, class Alloc, size_t BufSize>
 void deque<T, Alloc, BufSize>::push_back_aux(const value_type& t) {
   value_type t_copy = t;
-  reserve_map_at_back();
-  *(finish.node + 1) = allocate_node();
+  reserve_map_at_back();		//  若符合某種條件則必須重換一個map
+  *(finish.node + 1) = allocate_node();	// 配置一個新節點（緩衝區）
   __STL_TRY {
-    construct(finish.cur, t_copy);
-    finish.set_node(finish.node + 1);
-    finish.cur = finish.first;
+    construct(finish.cur, t_copy);		// 針對標的元素設值
+    finish.set_node(finish.node + 1);	// 改變finish，令其指向新節點
+    finish.cur = finish.first;			// 設定 finish 的狀態
   }
   __STL_UNWIND(deallocate_node(*(finish.node + 1)));
 }
 
-// Called only if start.cur == start.first.
+// 只有當start.cur == start.first時才會被呼叫。
+// 也就是說只有當第一個緩衝區沒有任何備用元素時才會被呼叫。
 template <class T, class Alloc, size_t BufSize>
 void deque<T, Alloc, BufSize>::push_front_aux(const value_type& t) {
   value_type t_copy = t;
-  reserve_map_at_front();
-  *(start.node - 1) = allocate_node();
+  reserve_map_at_front();		//  若符合某種條件則必須重換一個map
+  *(start.node - 1) = allocate_node();	// 配置一個新節點（緩衝區）
   __STL_TRY {
-    start.set_node(start.node - 1);
-    start.cur = start.last - 1;
-    construct(start.cur, t_copy);
+    start.set_node(start.node - 1);		// 改變start，令其指向新節點
+    start.cur = start.last - 1;			// 設定 start的狀態
+    construct(start.cur, t_copy);		// 針對標的元素設值
   }
 #     ifdef __STL_USE_EXCEPTIONS
   catch(...) {
+    // "commit or rollback" 語意：若非全部成功，就一個不留。
     start.set_node(start.node + 1);
     start.cur = start.first;
     deallocate_node(*(start.node - 1));
@@ -904,25 +968,22 @@ void deque<T, Alloc, BufSize>::push_front_aux(const value_type& t) {
 #     endif /* __STL_USE_EXCEPTIONS */
 } 
 
-// Called only if finish.cur == finish.first.
+// 只有當finish.cur == finish.first時才會被呼叫。
 template <class T, class Alloc, size_t BufSize>
-void deque<T, Alloc, BufSize>:: pop_back_aux() {
-  deallocate_node(finish.first);
-  finish.set_node(finish.node - 1);
-  finish.cur = finish.last - 1;
-  destroy(finish.cur);
+void deque<T, Alloc, BufSize>::pop_back_aux() {
+  deallocate_node(finish.first);	// 釋放最後一個緩衝區
+  finish.set_node(finish.node - 1);	// 調整 finish 的狀態，使指向
+  finish.cur = finish.last - 1;		//  上一個緩衝區的最後一個元素
+  destroy(finish.cur);				// 將該元素解構。
 }
 
-// Called only if start.cur == start.last - 1.  Note that if the deque
-//  has at least one element (a necessary precondition for this member
-//  function), and if start.cur == start.last, then the deque must have
-//  at least two nodes.
+// 只有當start.cur == start.last - 1時才會被呼叫。
 template <class T, class Alloc, size_t BufSize>
 void deque<T, Alloc, BufSize>::pop_front_aux() {
-  destroy(start.cur);
-  deallocate_node(start.first);
-  start.set_node(start.node + 1);
-  start.cur = start.first;
+  destroy(start.cur);				// 將第一緩衝區的第一個元素解構。
+  deallocate_node(start.first);		// 釋放第一緩衝區。
+  start.set_node(start.node + 1);	// 調整 start 的狀態，使指向
+  start.cur = start.first;			//  下一個緩衝區的第一個元素。
 }      
 
 #ifdef __STL_MEMBER_TEMPLATES  
@@ -968,29 +1029,29 @@ void deque<T, Alloc, BufSize>::insert(iterator pos,
 template <class T, class Alloc, size_t BufSize>
 typename deque<T, Alloc, BufSize>::iterator
 deque<T, Alloc, BufSize>::insert_aux(iterator pos, const value_type& x) {
-  difference_type index = pos - start;
+  difference_type index = pos - start;	// 安插點之前的元素個數
   value_type x_copy = x;
-  if (index < size() / 2) {
-    push_front(front());
-    iterator front1 = start;
+  if (index < size() / 2) {			// 如果安插點之前的元素個數比較少
+    push_front(front());			// 在最前端加入與第一元素同值的元素。
+    iterator front1 = start;		// 以下標示記號，然後進行元素搬移...
     ++front1;
     iterator front2 = front1;
     ++front2;
     pos = start + index;
     iterator pos1 = pos;
     ++pos1;
-    copy(front2, pos1, front1);
+    copy(front2, pos1, front1);		// 元素搬移
   }
-  else {
-    push_back(back());
-    iterator back1 = finish;
+  else {						// 安插點之後的元素個數比較少
+    push_back(back());			// 在最尾端加入與最後元素同值的元素。
+    iterator back1 = finish;	// 以下標示記號，然後進行元素搬移...
     --back1;
     iterator back2 = back1;
     --back2;
     pos = start + index;
-    copy_backward(pos, back2, back1);
+    copy_backward(pos, back2, back1);	// 元素搬移
   }
-  *pos = x_copy;
+  *pos = x_copy;	// 在安插點上設定新值
   return pos;
 }
 
@@ -1278,17 +1339,20 @@ void deque<T, Alloc, BufSize>::reallocate_map(size_type nodes_to_add,
   }
   else {
     size_type new_map_size = map_size + max(map_size, nodes_to_add) + 2;
-
+    // 配置一塊空間，準備給新map使用。
     map_pointer new_map = map_allocator::allocate(new_map_size);
     new_nstart = new_map + (new_map_size - new_num_nodes) / 2
                          + (add_at_front ? nodes_to_add : 0);
+    // 把原map 內容拷貝過來。
     copy(start.node, finish.node + 1, new_nstart);
+    // 釋放原map
     map_allocator::deallocate(map, map_size);
-
+    // 設定新map的起始位址與大小
     map = new_map;
     map_size = new_map_size;
   }
 
+  // 重新設定迭代器 start 和 finish
   start.set_node(new_nstart);
   finish.set_node(new_nstart + old_num_nodes - 1);
 }
@@ -1333,3 +1397,4 @@ __STL_END_NAMESPACE
 // Local Variables:
 // mode:C++
 // End:
+
