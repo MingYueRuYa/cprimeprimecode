@@ -7,6 +7,12 @@ case $1 in
 	B | b)
 		echo "this is B or b."
 		;;
+    y|Y|Yes|YES)
+		echo "yes..."
+		;;
+    n|no|No|NO)
+		echo "NO..."
+		;;
 	*)
 		echo "this is others."
 		;;
