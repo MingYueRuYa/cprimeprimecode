@@ -155,7 +155,16 @@ int main()
 {
 	Son son;
 	Father &father = son;
+	//调用的还是父类的函数，所谓的静态绑定
 	father.PrintName();
+	
+//  result:	
+	//	this is father constructor
+	//	Son construct...
+	//	this is father.
+	//	Son desconstruct...
+	//	Father desconstruct...
+	
 	return 0;
 }
 
