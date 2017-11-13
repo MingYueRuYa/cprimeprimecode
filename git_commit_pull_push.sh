@@ -13,7 +13,7 @@ git commit -m "$1"
 echo -e "\e[4m\e[1;32mgit push\e[0m"
 git push
 
-if [[ $? == 0  ]];then
+if [[ $? == 0 ]]; then
     echo -e "\e[4m\e[1;32mpush successful.\e[0m"
 else
     echo -e "\e[4m\e[1;31mpush failed\e[0m"
