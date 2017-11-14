@@ -220,8 +220,6 @@ public:
   // 將迭代器 position 所指之元素移除
   // notice:erase只调用对象的析构函数，其实内部的空间没有做释放动作
   iterator erase(iterator position) {
-    //先要释放准备释放的对象
-    destroy(position);	// 全域函式，建構/解構基本工具。
     if (position + 1 != end()) {// 如果 p 不是指向最後一個元素
       // 將 p 之後的元素一一向前遞移
 	  // 这里将要准备释放的对象给覆盖
@@ -229,15 +227,12 @@ public:
 	}
 
     --finish;  // 調整水位
-	//TODO: bug 这里每次都是析构最后对象而不是指定位置的对象----liushixiong
-    //destroy(finish);	// 全域函式，建構/解構基本工具。
+    destroy(finish);	// 全域函式，建構/解構基本工具。
     return position; 	// 返回的迭代器指向下一个元素的位置，迭代器本身不变
   }
   iterator erase(iterator first, iterator last) {
-    destroy(first, last);	// 全域函式，建構/解構基本工具。
     iterator i = copy(last, finish, first);
-	//TODO: bug释放的对象是不该释放的对象，放到上面去先调用析构函数
-    //destroy(i, finish);	// 全域函式，建構/解構基本工具。
+    destroy(i, finish);	// 全域函式，建構/解構基本工具。
     finish = finish - (last - first);
     return first;
   }
