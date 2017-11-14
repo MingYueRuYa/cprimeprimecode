@@ -14,74 +14,74 @@ using std::endl;
 
 int main(int argc, char *argv[])
 {
-    simple_factory::test_simple_factory();
-    cout << "----------------------------------------------" << endl;
+//    simple_factory::test_simple_factory();
+//    cout << "----------------------------------------------" << endl;
 
-    factory::test_factory();
-    cout << "----------------------------------------------" << endl;
+//    factory::test_factory();
+//    cout << "----------------------------------------------" << endl;
 
-    abstract_factory::test_abstract_factory();
-    cout << "----------------------------------------------" << endl;
+//    abstract_factory::test_abstract_factory();
+//    cout << "----------------------------------------------" << endl;
 
-    strategy::test_strategy();
-    cout << "----------------------------------------------" << endl;
+//    strategy::test_strategy();
+//    cout << "----------------------------------------------" << endl;
 
-    adapter::test_adapter();
-    cout << "----------------------------------------------" << endl;
+//    adapter::test_adapter();
+//    cout << "----------------------------------------------" << endl;
 
-    prototype::test_prototype();
-    cout << "----------------------------------------------" << endl;
+//    prototype::test_prototype();
+//    cout << "----------------------------------------------" << endl;
 
-    template_method::test_template_method();
-    cout << "----------------------------------------------" << endl;
+//    template_method::test_template_method();
+//    cout << "----------------------------------------------" << endl;
 
-    builder::test_builder();
-    cout << "----------------------------------------------" << endl;
+//    builder::test_builder();
+//    cout << "----------------------------------------------" << endl;
 
-    facade::test_facade();
-    cout << "----------------------------------------------" << endl;
+//    facade::test_facade();
+//    cout << "----------------------------------------------" << endl;
 
-    composite::test_composite();
-    cout << "----------------------------------------------" << endl;
+//    composite::test_composite();
+//    cout << "----------------------------------------------" << endl;
 
-    proxy::test_proxy();
-    cout << "----------------------------------------------" << endl;
+//    proxy::test_proxy();
+//    cout << "----------------------------------------------" << endl;
+//
+//    flyweight::test_flyweight();
+//    cout << "----------------------------------------------" << endl;
+//
+//    bridge::test_bridge();
+//    cout << "----------------------------------------------" << endl;
+//
+//    decorator::test_decorator();
+//    cout << "----------------------------------------------" << endl;
 
-    flyweight::test_flyweight();
-    cout << "----------------------------------------------" << endl;
+//    mediator::test_mediator();
+//    cout << "----------------------------------------------" << endl;
 
-    bridge::test_bridge();
-    cout << "----------------------------------------------" << endl;
+//    chain_of_responsibility::test_chain_of_responsibility();
+//    cout << "----------------------------------------------" << endl;
 
-    decorator::test_decorator();
-    cout << "----------------------------------------------" << endl;
+//    observer_event::test_observer_event();
+//    cout << "----------------------------------------------" << endl;
 
-    mediator::test_mediator();
-    cout << "----------------------------------------------" << endl;
-
-    chain_of_responsibility::test_chain_of_responsibility();
-    cout << "----------------------------------------------" << endl;
-
-    observer_event::test_observer_event();
-    cout << "----------------------------------------------" << endl;
-
-    memento::test_memento();
-    cout << "----------------------------------------------" << endl;
+//    memento::test_memento();
+//    cout << "----------------------------------------------" << endl;
 
     state::test_state();
     cout << "----------------------------------------------" << endl;
 
-    singleton::test_singleton();
-    cout << "----------------------------------------------" << endl;
+//    singleton::test_singleton();
+//    cout << "----------------------------------------------" << endl;
 
-    command::test_command();
-    cout << "----------------------------------------------" << endl;
+//    command::test_command();
+//    cout << "----------------------------------------------" << endl;
 
-    iterator::test_iterator();
-    cout << "----------------------------------------------" << endl;
+//    iterator::test_iterator();
+//    cout << "----------------------------------------------" << endl;
 
-    visitor::test_visitor();
-    cout << "----------------------------------------------" << endl;
+//    visitor::test_visitor();
+//    cout << "----------------------------------------------" << endl;
 
     system("pause");
     return 0;

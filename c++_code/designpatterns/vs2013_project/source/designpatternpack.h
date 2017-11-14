@@ -23,7 +23,7 @@
 #include "flyweight.cpp"
 #include "bridge.cpp"
 #include "decorator.cpp"
-#include "state.cpp"
+#include "stateimpl.cpp"
 #include "mediator.cpp"
 #include "chain_of_responsibility.cpp"
 #include "observer_event.cpp"
