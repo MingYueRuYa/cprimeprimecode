@@ -87,5 +87,13 @@
     <ClCompile Include="..\source\visitor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\stateimpl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\state.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -103,9 +103,13 @@
     <ClCompile Include="..\source\simple_factory.cpp" />
     <ClCompile Include="..\source\singleton.cpp" />
     <ClCompile Include="..\source\state.cpp" />
+    <ClCompile Include="..\source\stateimpl.cpp" />
     <ClCompile Include="..\source\strategy.cpp" />
     <ClCompile Include="..\source\template.cpp" />
     <ClCompile Include="..\source\visitor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\state.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
