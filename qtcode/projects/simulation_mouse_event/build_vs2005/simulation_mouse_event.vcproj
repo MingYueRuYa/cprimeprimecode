@@ -176,11 +176,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\source\smeaddtimerdialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\smemain.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\source\smemainwindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\smetimeinfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\smeviewwindow.cpp"
 				>
 			</File>
 		</Filter>
@@ -190,14 +202,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\source\smemainwindow.h"
+				RelativePath="..\source\smeaddtimerdialog.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="  moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -206,7 +218,73 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="  moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\source\smemainwindow.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\source\smetimeinfo.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\source\smeviewwindow.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs="$(InputDir)/moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="moc -i $(InputDir)/$(InputFileName) -o $(InputDir)/moc_$(InputName).cpp&#x0D;&#x0A;"
 						Outputs="$(InputDir)/moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
