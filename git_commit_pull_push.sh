@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# 不带参数表示pull，带参数的话表示需要提交
+
 echo -e "\e[4m\e[1;32mgit pull...\e[0m"
 git pull
 
