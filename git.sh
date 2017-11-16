@@ -9,6 +9,11 @@ case $1 in
         echo "$0 \"commit message \" mean git pull -> git commit -> git push"
         exit 0
 		;;
+    -s|-statue|s)
+        echo -e "\e[4m\e[1;32mgit pull...\e[0m"
+        git status 
+        exit 0
+		;;
 	*)
 	    :
 		;;
