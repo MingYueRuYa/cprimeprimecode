@@ -2,6 +2,18 @@
 
 # 不带参数表示pull，带参数的话表示需要提交
 
+case $1 in
+    -h|-help|h)
+        echo "usage:"
+        echo "$0 mean git pull "
+        echo "$0 \"commit message \" mean git pull -> git commit -> git push"
+        exit 0
+		;;
+	*)
+	    :
+		;;
+esac
+
 echo -e "\e[4m\e[1;32mgit pull...\e[0m"
 git pull
 
