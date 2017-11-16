@@ -806,6 +806,8 @@ void test_display_iterator_category()
 	cout << "--------------list------------" << endl;
 	display_category(forward_list<int>::iterator());
 	cout << "---------forward_list---------" << endl;
+	display_category(deque<int>::iterator());
+	cout << "------------deque-------------" << endl;
 
 
 	display_category(set<int>::iterator());
@@ -842,6 +844,9 @@ void test_display_iterator_category()
 	//forward_iterator_tag
 	//typeid(itr).name()=St18_Fwd_list_iteratorIiE
 	//---------forward_list---------
+	//random_access_iterator_tag
+	//typeid(itr).name()=St15_Deque_iteratorIiRiPiE
+	//------------deque-------------
 	//bidirectional_iterator_tag
 	//typeid(itr).name()=St23_Rb_tree_const_iteratorIiE
 	//-------------set---------------
