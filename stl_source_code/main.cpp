@@ -1,9 +1,13 @@
 /*
  * 学习3.0版本的stl source code.
+ * 使用stl时一定要注意C++ big three函数
  * */
 
 #include "list"
 #include "vector"
+#include "deque"
+#include "stack"
+#include "queue"
 #include "algorithm"
 
 #include <iostream>
@@ -244,7 +248,7 @@ void test_list()
 	merge2list.push_back(Object(2));
 	merge2list.push_back(Object(3));
 	merge2list.push_back(Object(4));
-	merge2list.push_back(Object(6));
+	merge2list.push_back(Object(9));
 	merge1list.merge(merge2list);
 
 	startitr = merge1list.begin();
@@ -285,16 +289,170 @@ void test_list()
 	cout << endl;
 	
 	cout << "----------------list splice------------------" << endl; 
-
 }
 };
 
+namespace test_deque
+{
+void test_deque()
+{
+	cout << "--------------deque push_front----------------" << endl; 
+	typedef deque<Object, alloc, 3> __deque;
+	__deque objdeq;
+	for (int i=0; i<5; ++i) {
+		objdeq.push_front(Object(i));
+	}
+	__deque::iterator ibeg = objdeq.begin();
+	for (; ibeg != objdeq.end(); ++ibeg) {
+		cout << ibeg->mID << " " << objdeq.size() << " ";
+	}
+	cout << endl;
+	cout << "--------------deque push_front----------------" << endl; 
+
+	cout << "--------------deque push_back----------------" << endl; 
+	__deque objdeq1;
+	for (int i=0; i<5; ++i) {
+		objdeq1.push_back(Object(i));
+	}
+	ibeg = objdeq1.begin();
+	for (; ibeg != objdeq1.end(); ++ibeg) {
+		cout << ibeg->mID << " ";
+	}
+	cout << endl;
+	cout << "--------------deque push_back----------------" << endl; 
+
+	cout << "--------------deque erase----------------" << endl; 
+	cout << "size: " << objdeq1.size() << endl;
+	__deque::iterator ipos = objdeq1.begin();
+	advance(ipos, 3);
+	cout << "object id: " << ipos->mID << endl;
+	objdeq1.erase(ipos);
+
+	ibeg = objdeq1.begin();
+	for (; ibeg != objdeq1.end(); ++ibeg) {
+		cout << ibeg->mID << " ";
+	}
+	cout << "--------------deque erase----------------" << endl; 
+
+	cout << "---------deque<int, alloc, 3>------------" << endl; 
+	typedef deque<int, alloc, 3> _int_deque;
+	_int_deque deque_int_1;
+	for (int i=0; i<10; ++i) {
+		deque_int_1.push_back(i);
+	}
+	cout << "---------deque<int, alloc, 3>------------" << endl; 
+
+	cout << "--------deque<Object, alloc, 3------------" << endl; 
+
+	cout << "--------deque<Object, alloc, 3------------" << endl; 
+}
+
+}; // test_deque
+
+namespace test_stack
+{
+
+void test_stack()
+{
+	cout << "---------------stack----------------" << endl; 
+	stack<int> int_stack;		
+	for (int i=0; i<10; ++i) {
+		int_stack.push(i);
+	}
+	
+	while (! int_stack.empty()) {
+		cout << int_stack.top() << " ";
+		int_stack.pop();
+	}
+	cout << endl;
+	cout << "---------------stack----------------" << endl; 
+	//result:
+		//---------------stack----------------
+		//9 8 7 6 5 4 3 2 1 0 
+		//---------------stack----------------
+}
+
+}; // test_stack
+
+namespace test_queue
+{
+
+void test_queue()
+{
+	cout << "---------------queue----------------" << endl; 
+	queue<int> int_queue;		
+	for (int i=0; i<10; ++i) {
+		int_queue.push(i);
+	}
+
+	cout << "-------------queue fornt------------" << endl; 
+	while (! int_queue.empty()) {
+		cout << int_queue.front() << " ";
+		int_queue.pop();
+	}
+	cout << endl;
+
+	cout << "-------------queue back------------" << endl; 
+	for (int i=0; i<10; ++i) {
+		int_queue.push(i);
+	}
+	while (! int_queue.empty()) {
+		cout << int_queue.back() << " ";
+		int_queue.pop();
+	}
+	cout << endl;
+	cout << "---------------queue----------------" << endl; 
+	//result:
+	//---------------queue----------------
+	//-------------queue fornt------------
+	//0 1 2 3 4 5 6 7 8 9 
+	//-------------queue back------------
+	//9 9 9 9 9 9 9 9 9 9 
+	//---------------queue----------------
+}
+
+}; // test_queue
+
+namespace test_priority_queue
+{
+
+void test_priority_queue()
+{
+	cout << "---------------priority_queue----------------" << endl; 
+	srand(time(NULL));
+	priority_queue<int> int_priority_queue;		
+	// 会进行堆排序从小到大
+	for (int i=0; i<10; ++i) {
+		int_priority_queue.push(rand()%100);
+	}
+
+	cout << "-------------priority_queue fornt------------" << endl; 
+	while (! int_priority_queue.empty()) {
+		cout << int_priority_queue.top() << " ";
+		int_priority_queue.pop();
+	}
+	cout << endl;
+	//result:
+		//---------------priority_queue----------------
+		//-------------priority_queue back------------
+		//96 94 76 72 46 42 28 26 24 10 
+		//---------------priority_queue----------------
+}
+};
 
 int main(int argc, char *argv[])
 {
 	//test_vector();
 
-	test_list::test_list();	
+	//test_list::test_list();	
+
+	//test_deque::test_deque();
+
+	//test_stack::test_stack();
+
+	//test_queue::test_queue();
+	
+	test_priority_queue::test_priority_queue();
 
 	return 0;
 }
