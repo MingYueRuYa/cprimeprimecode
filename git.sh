@@ -10,7 +10,7 @@ case $1 in
         exit 0
 		;;
     -s|-statue|s)
-        echo -e "\e[4m\e[1;32mgit pull...\e[0m"
+        echo -e "\e[4m\e[1;32mgit status...\e[0m"
         git status 
         exit 0
 		;;
