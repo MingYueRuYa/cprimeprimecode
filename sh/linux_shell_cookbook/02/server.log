@@ -1,0 +1,15 @@
+SERVER-1
+[connection1] 192.168.0.1 success
+[connection1] 192.168.0.2 failed 
+[connection1] 192.168.0.3 pending 
+[connection1] 192.168.0.4 failed 
+SERVER-2
+[connection2] 192.168.0.1 success
+[connection2] 192.168.0.2 failed 
+[connection2] 192.168.0.3 pending 
+[connection2] 192.168.0.4 failed 
+SERVER-3
+[connection3] 192.168.0.1 success
+[connection3] 192.168.0.2 failed 
+[connection3] 192.168.0.3 pending 
+[connection3] 192.168.0.4 failed 
