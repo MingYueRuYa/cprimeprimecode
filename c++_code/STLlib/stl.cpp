@@ -83,7 +83,8 @@ namespace test_array
 			c[i] = rand();
 		}
 
-		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC 
+             << endl;
 		cout << "array.size()= " << c.size() << endl;
 		cout << "array.front()= " << c.front() << endl;
 		cout << "array.back()= " << c.back() << endl;
@@ -92,8 +93,14 @@ namespace test_array
 		long target = get_a_target_long();
 		timestart = clock();
 		::qsort(c.data(), ASIZE, sizeof(long), compareLongs);
-		long *item = (long *)::bsearch(&target, (c.data()), ASIZE, sizeof(long), compareLongs);
-		cout << "qsort()+bsearch(), seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		long *item = (long *)::bsearch(&target
+                                        , (c.data())
+                                        , ASIZE 
+                                        , sizeof(long)
+                                        , compareLongs);
+		cout << "qsort()+bsearch(), seconds: " 
+             << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+
 		if (nullptr != item) { cout << "found, " <<*item << endl; }
 		else { cout << "not found! " << endl; }
 
@@ -130,7 +137,8 @@ namespace test_vector
 				abort();
 			}
 		}
-		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "seconds: " 
+             << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
 		cout << "vector.size()= " << c.size() << endl;
 		cout << "vector.max_size()= " << c.max_size() << endl;
 		cout << "vector.front()= " << c.front() << endl;
@@ -141,7 +149,8 @@ namespace test_vector
 		{
 			timestart = clock();
 			auto item = find(c.begin(), c.end(), target);
-			cout << "std::find(), seconds:" << SECONDS(clock()-timestart) << endl;
+			cout << "std::find(), seconds:" 
+                 << SECONDS(clock()-timestart) << endl;
 			if (c.end() != item) { cout << "found, " << *item << endl; }
 			else { cout << "not found! " << endl; }
 		}
@@ -151,7 +160,11 @@ namespace test_vector
 			sort(c.begin(), c.end());
 			cout << "sort(), seconds:" << SECONDS(clock()-timestart) << endl;
 			timestart = clock();
-			string *item = (string *)::bsearch(&target, (c.data()), c.size(), sizeof(string), compareString);
+			string *item = (string *)::bsearch(&target
+                                                , (c.data())
+                                                , c.size()
+                                                , sizeof(string)
+                                                , compareString);
 			//cout << "bsearch, seconds:" << SECONDS(clock()-timestart) << endl;
 			cout << "bsearch, seconds:" << std::fixed << SECONDS(clock()-timestart) << endl; //std::fixed 不使用科学计数法
 			if (nullptr != item) { cout << "found, " << *item << endl; }
@@ -433,20 +446,23 @@ namespace test_multi_map
 			}
 		} //for 
 
-		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "seconds: " 
+			 << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
 		cout << "multimap.size()= " << c.size() << endl;
 		cout << "multimap.max_size()= " << c.max_size() << endl;
 		long target = get_a_target_long();
 		//{
 			//timestart = clock();
-			//error，pair对象没有重载operator==操作符，所以不能使用std::find算法进行查找
+			//error，pair对象没有重载operator==操作符
+			//，所以不能使用std::find算法进行查找
 			//auto item = find(c.begin(), c.end(), target);
 		//}
 
 		{
 			timestart = clock();
 			auto item = c.find(target);
-			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			cout << "find(), seconds:" 
+				 << std::fixed << SECONDS(clock()-timestart) << endl;
 			if (c.end() == item) {
 				cout << "not found." << endl;
 			}
@@ -492,23 +508,30 @@ namespace test_unordred_multiset
 		} // for
 
 		
-		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "seconds: " 
+			 << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
 		cout << "unordered_multiset.size()= " << c.size() << endl;
 		cout << "unordered_multiset.max_size()= " << c.max_size() << endl;
-		cout << "unordered_multiset.bucket_count()= " << c.bucket_count() << endl;
-		cout << "unordered_multiset.load_factor()= " << c.load_factor() << endl;
-		cout << "unordered_multiset.max_load_factor()= " << c.max_load_factor() << endl;
-		cout << "unordered_multiset.max_bucket_count()= " << c.max_bucket_count() << endl;
+		cout << "unordered_multiset.bucket_count()= " 
+			 << c.bucket_count() << endl;
+		cout << "unordered_multiset.load_factor()= " 
+			 << c.load_factor() << endl;
+		cout << "unordered_multiset.max_load_factor()= " 
+			 << c.max_load_factor() << endl;
+		cout << "unordered_multiset.max_bucket_count()= "
+		     << c.max_bucket_count() << endl;
 
 		for (int i=0; i<20; ++i) {
-			cout << "bucket #" << i << " has " << c.bucket_size(i) << " elements.\n";
+			cout << "bucket #" << i << " has " 
+				 << c.bucket_size(i) << " elements.\n";
 		}
 
 		string target = get_a_target_string();
 		{
 			timestart = clock();
 			auto item = find(c.begin(), c.end(), target);
-			cout << "std::find(), seconds:" << SECONDS(clock()-timestart) << endl;
+			cout << "std::find(), seconds:" 
+				 << SECONDS(clock()-timestart) << endl;
 			if (c.end() != item) { cout << "found, " << *item << endl; }
 			else { cout << "not found! " << endl; }
 		}
@@ -516,7 +539,8 @@ namespace test_unordred_multiset
 		{
 			timestart = clock();
 			auto item = c.find(target);
-			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			cout << "find(), seconds:" 
+				 << std::fixed << SECONDS(clock()-timestart) << endl;
 			if (c.end() == item) {
 				cout << "not found." << endl;
 			}
@@ -585,7 +609,8 @@ namespace test_slist
 			}
 		} // for
 
-		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "seconds: " 
+			 << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
 		
 //result:
 //............test unorderedset............
@@ -621,14 +646,16 @@ namespace test_map
 			}
 		} //for 
 
-		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "seconds: " 
+			 << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
 		cout << "map.size()= " << c.size() << endl;
 		cout << "map.max_size()= " << c.max_size() << endl;
 		long target = get_a_target_long();
 		{
 			timestart = clock();
 			auto item = c.find(target);
-			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			cout << "find(), seconds:" 
+				 << std::fixed << SECONDS(clock()-timestart) << endl;
 			if (c.end() == item) {
 				cout << "not found." << endl;
 			}
@@ -671,7 +698,8 @@ namespace test_set
 			}
 		} //for 
 
-		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "seconds: " 
+			 << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
 		cout << "multiset.size()= " << c.size() << endl;
 		cout << "multiset.max_size()= " << c.max_size() << endl;
 		
@@ -679,7 +707,8 @@ namespace test_set
 		{
 			timestart = clock();
 			auto item = find(c.begin(), c.end(), target);
-			cout << "std::find(), seconds:" << SECONDS(clock()-timestart) << endl;
+			cout << "std::find(), seconds:" 
+				 << SECONDS(clock()-timestart) << endl;
 			if (c.end() != item) { cout << "found, " << *item << endl; }
 			else { cout << "not found! " << endl; }
 		}
@@ -687,7 +716,8 @@ namespace test_set
 		{
 			timestart = clock();
 			auto item = c.find(target);
-			cout << "find(), seconds:" << std::fixed << SECONDS(clock()-timestart) << endl;
+			cout << "find(), seconds:" 
+				 << std::fixed << SECONDS(clock()-timestart) << endl;
 			if (c.end() == item) {
 				cout << "not found." << endl;
 			}
@@ -881,6 +911,138 @@ void test_display_iterator_category()
 
 };
 
+#include <algorithm>
+#include <functional>
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+namespace test_algorithm
+{
+
+namespace test_accumulate
+{
+int myfunc(int x, int y) { return x+2*y; }
+
+struct myclass {
+	int operator() (int x, int y) { return x+2*y; }
+} myobj;
+
+void test_accumulate()
+{
+	cout << "test_accumulate()....... \n";
+	int init = 100;
+
+	int nums[] = {10, 20, 30};
+
+	cout << "using default accumulate: ";
+	cout << std::accumulate(nums, nums+3, init) << endl;	//160
+	
+	cout << "using funtional's minus:";
+	cout << std::accumulate(nums, nums+3, init, std::minus<int>()); //40
+	cout << endl;
+
+	cout << "using custom funtion:";
+	cout << std::accumulate(nums, nums+3, init, myfunc); //220
+	cout << endl;
+
+	cout << "using custom object:";
+	cout << std::accumulate(nums, nums+3, init, myclass()); //280
+	cout << endl;
+	//result:
+		//test_accumulate()....... 
+		//using default accumulate: 160
+		//using funtional's minus:40
+		//using custom funtion:220
+		//using custom object:220
+}
+};
+
+namespace test_for_each
+{
+
+void myfunc(int i) { cout << " " << i; } 
+
+struct myclass {
+	void operator() (int i) { cout << " " << i; }
+} myobj;
+
+void test_for_each()
+{
+
+	cout << "\ntest_for_each()...................\n";
+
+	vector<int> myvec;
+	myvec.push_back(10);
+	myvec.push_back(20);
+	myvec.push_back(30);
+
+	cout << "test my custom function:" << endl;
+	for_each(myvec.begin(), myvec.end(), myfunc);	
+	cout << endl;
+
+	cout << "test my custom function object:" << endl;
+	for_each(myvec.begin(), myvec.end(), myobj);	
+	cout << endl;
+
+	for (const auto &elem : myvec) {
+		cout << elem << " ";
+	}
+	cout << endl;
+
+//result:
+	//test_for_each()...................
+	//test my custom function:
+	// 10 20 30
+	//test my custom function object:
+	// 10 20 30
+	//10 20 30 
+}
+};
+
+namespace test_sort
+{
+bool myfunc(int x, int y) { return x < y; }
+
+struct myclass {
+	bool operator() (int x, int y) {
+		return x < y;
+	}
+}myobj;
+
+void test_sort()
+{
+	cout << "test_sort()............\n";
+
+	int myints[] = {32, 71, 12, 45, 26, 80, 53, 33};
+	vector<int> myvec(myints, myints+8);
+
+	// using default comparison (operator <):
+	sort(myvec.begin(), myvec.begin()+4);
+	// (12 32 45 74) 26 80 53 33
+
+	// using function as comp
+	sort(myvec.begin()+4, myvec.end(), myfunc)
+	// 12 32 45 74 (26 33 53 80)
+
+	// using object as comp
+	sort(myvec.begin()+4, myvec.end(), myobj)
+	// 12 32 45 74 (26 33 53 80)
+
+	sort(myvec.rbegin(), myvec.rend());
+	// 80 71 53 45 33 32 16 12
+
+	sort(myvec.begin(), myvec.end(), less<int>());
+	// 12 16 32 33 45 53 71 80
+
+	sort(myvec.begin(), myvec.end(), greater<int>());
+	// 80 71 53 45 33 32 16 12
+}
+};
+
+};
+
 int main(int argc, char *argv[])
 {
 	//test_array::test_array();
@@ -895,7 +1057,9 @@ int main(int argc, char *argv[])
 	//test_map::test_map();
 	//test_set::test_set();
 	//test_rb_tree::test_rb_tree();
-	display_category::test_display_iterator_category();	
+	//display_category::test_display_iterator_category();	
+	//test_algorithm::test_accumulate::test_accumulate();
+	test_algorithm::test_for_each::test_for_each();
 	return 0;
 }
 
