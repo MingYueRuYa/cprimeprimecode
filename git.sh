@@ -14,6 +14,9 @@ case $1 in
         git status 
         exit 0
 		;;
+    -m|-M) # 可以在改进此脚本
+        :
+        ;;
 	*)
 	    :
 		;;
