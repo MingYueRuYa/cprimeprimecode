@@ -341,10 +341,6 @@ void test_deque()
 		deque_int_1.push_back(i);
 	}
 	cout << "---------deque<int, alloc, 3>------------" << endl; 
-
-	cout << "--------deque<Object, alloc, 3------------" << endl; 
-
-	cout << "--------deque<Object, alloc, 3------------" << endl; 
 }
 
 }; // test_deque
@@ -403,12 +399,12 @@ void test_queue()
 	cout << endl;
 	cout << "---------------queue----------------" << endl; 
 	//result:
-	//---------------queue----------------
-	//-------------queue fornt------------
-	//0 1 2 3 4 5 6 7 8 9 
-	//-------------queue back------------
-	//9 9 9 9 9 9 9 9 9 9 
-	//---------------queue----------------
+		//---------------queue----------------
+		//-------------queue fornt------------
+		//0 1 2 3 4 5 6 7 8 9 
+		//-------------queue back------------
+		//9 9 9 9 9 9 9 9 9 9 
+		//---------------queue----------------
 }
 
 }; // test_queue
@@ -440,6 +436,62 @@ void test_priority_queue()
 }
 };
 
+namespace test_reverse_iterator
+{
+void test_reverse_iterator()
+{
+	vector<int> vec;
+	for (int i : {1,3,5,2,7,4} ) {
+		vec.push_back(i);
+	}
+
+	vector<int>::_reverse_iterator ibeg = vec.rbegin();
+	cout << "-------------reverse iterator-------------" << endl;
+	for (; ibeg != vec.rend(); ++ibeg) {
+		cout << *ibeg << " ";
+	}		
+	// 4 7 3 5 3 1
+	cout << "\n-------------reverse iterator-------------" << endl;
+
+	cout << "-------------forward iterator-------------" << endl;
+	for (auto itr : vec) {
+		cout << itr << " ";
+	}
+	// 1 3 5 2 7 4
+	cout << "\n-------------forward iterator-------------" << endl;
+}
+};
+
+// using namespace std::placeholders;
+
+#include <functional>
+#include <algorithm>
+
+namespace test_bind
+{
+double my_divide(double x, double y)
+{
+	return x / y;
+}
+
+struct MyPair {
+	double a;
+	double b;
+	double mulitiply() { return a*b; }
+};
+
+void test_bind()
+{
+	cout << "--------------test_bind--------------" << endl;
+	int ia[7] = {27, 210, 12, 47, 109, 83, 40};
+	vector<int> vi(ia, ia+7);
+	cout << std::count_if(vi.begin(), vi.end(), std::bind1st(less<int>(), 40))
+		 << endl; // 4
+	cout << "--------------test_bind--------------" << endl;
+}
+};
+
+
 int main(int argc, char *argv[])
 {
 	//test_vector();
@@ -452,7 +504,11 @@ int main(int argc, char *argv[])
 
 	//test_queue::test_queue();
 	
-	test_priority_queue::test_priority_queue();
+	//test_priority_queue::test_priority_queue();
+
+	//test_reverse_iterator::test_reverse_iterator();
+
+	test_bind::test_bind();
 
 	return 0;
 }
