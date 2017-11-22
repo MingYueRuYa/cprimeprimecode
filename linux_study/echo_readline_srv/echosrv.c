@@ -3,9 +3,12 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
+
 #include <netinet/in.h>
 #include <netinet/ip.h>
 #include <arpa/inet.h>
@@ -135,9 +138,16 @@ void do_service(int connfd)
     } // while
 }
 
+void signal_sigchld(int signalid)
+{
+    while (waitpid(-1, NULL, WNOHANG)) { ; }
+}
+
 int main(void)
 {
-    //socket
+    // 忽略到子进程退出的消息
+    /* signal(SIGCHLD, SIG_IGN); */
+    signal(SIGCHLD, signal_sigchld);
     int listenfd = socket(PF_INET, SOCK_STREAM, 0);
     /* socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); */
     if (listenfd < 0) {

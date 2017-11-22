@@ -152,25 +152,30 @@ void do_echo(int sockfd)
 
 int main(void)
 {
-    int sockfd = socket(PF_INET, SOCK_STREAM, 0);
-    /* socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); */
-    if (sockfd < 0) {
-        ERR_EXIT("socket");
+    int sock[5];
+    int i = 0;
+    // 测试僵尸进程，产生5个sock连接
+    for (; i<5; ++i) {
+        sock[i] = socket(PF_INET, SOCK_STREAM, 0);
+        /* socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); */
+        if (sock[i] < 0) {
+            ERR_EXIT("socket");
+        }
+
+        struct sockaddr_in clientaddr;
+        clientaddr.sin_family = AF_INET;
+        clientaddr.sin_port   = htons(5188);
+        clientaddr.sin_addr.s_addr = inet_addr("127.0.0.1"); 
+        /* servaddr.sin_addr.s_addr = inet_addr("127.0.0.1"); */
+        /* inet_aton("127.0.0.1", servaddr.sin_addr); */
+        
+        socklen_t socklen = sizeof(clientaddr);
+        if (connect(sock[i]
+                    , (struct sockaddr *)&clientaddr
+                    , socklen) < 0) {
+            ERR_EXIT("connect");
+        }
     }
-
-    struct sockaddr_in clientaddr;
-    clientaddr.sin_family = AF_INET;
-    clientaddr.sin_port   = htons(5188);
-    clientaddr.sin_addr.s_addr = inet_addr("127.0.0.1"); 
-    /* servaddr.sin_addr.s_addr = inet_addr("127.0.0.1"); */
-    /* inet_aton("127.0.0.1", servaddr.sin_addr); */
-    
-    socklen_t socklen = sizeof(clientaddr);
-    if (connect(sockfd, (struct sockaddr *)&clientaddr, socklen) < 0) {
-        ERR_EXIT("connect");
-    }
-
-    do_echo(sockfd);
-
+    do_echo(sock[0]);
     return 0;
 }
