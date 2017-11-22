@@ -15,6 +15,11 @@
 
 #include "common.h"
 
+/*
+ * 测试发现一个问题就是一个客户端不能关闭再打开连接
+ * 出现连接不上的问题
+ * */
+
 ssize_t readn(int fd, void *buff, ssize_t count)
 {
     int     left = count;
@@ -136,6 +141,7 @@ void do_service(int connfd)
             ERR_EXIT("writen");
         }
     } // while
+	close(connfd);
 }
 
 void signal_sigchld(int signalid)

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -131,16 +132,18 @@ void do_echo(int sockfd)
             , ntohs(localaddr.sin_port));
 
     while (fgets(sendbuf, sizeof(sendbuf), stdin) != NULL) {
-        int ret = writen(sockfd, sendbuf, strlen(sendbuf)); 
-        if (ret < 0) {
-            ERR_EXIT("writen");
-        } 
+		// 测试SIGPIPE问题
+		// 第一次接收FIN标志，是可以往里面写数据
+        int ret = writen(sockfd, sendbuf, 1); 
+		// 但是返回RESET标志，在里面写就会发生SIGPIPE信号
+        ret = writen(sockfd, sendbuf+1, strlen(sendbuf)-1); 
         
         ret = readline(sockfd, recvbuf, sizeof(recvbuf));
         if (ret < 0) {
             ERR_EXIT("readnline");
         } else if (ret == 0) {
             printf("server closed.\n");
+			break;
         }
 
         fputs(recvbuf, stdout);
@@ -150,8 +153,15 @@ void do_echo(int sockfd)
     close(sockfd);
 }
 
+void handle_sigpipe(int signalnum)
+{
+	printf("signal num:%d.\n", signalnum);
+}
+
 int main(void)
 {
+	/* signal(SIGPIPE, handle_sigpipe); */
+	signal(SIGPIPE, SIG_IGN);
     int sock = socket(PF_INET, SOCK_STREAM, 0);
     /* socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); */
     if (sock < 0) {
