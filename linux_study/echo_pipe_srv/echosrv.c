@@ -144,16 +144,23 @@ void do_service(int connfd)
 	close(connfd);
 }
 
-void signal_sigchld(int signalid)
+void handle_sigchld(int signalid)
 {
     while (waitpid(-1, NULL, WNOHANG)) { ; }
+}
+
+void handle_sigint(int signalid)
+{
+    printf("server exit\n");
+    exit(0);
 }
 
 int main(void)
 {
     // 忽略到子进程退出的消息
     /* signal(SIGCHLD, SIG_IGN); */
-    signal(SIGCHLD, signal_sigchld);
+    signal(SIGCHLD, handle_sigchld);
+    signal(SIGINT, handle_sigint);
     int listenfd = socket(PF_INET, SOCK_STREAM, 0);
     /* socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); */
     if (listenfd < 0) {
