@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <signal.h>
+#include <stdio.h>
 
 #include <sys/wait.h>
 
@@ -18,6 +19,7 @@
 int main(void)
 {
 	signal(SIGPIPE, SIG_IGN);
+
 	void *handle = NULL;	
 	int connfd = 0;
 	char *data = "linux is very good!";
@@ -42,7 +44,10 @@ int main(void)
 				perror("Getconn error");
 				return ret;
 			}
-			ret = sckClient_send(handle, connfd, (unsigned char *)data, strlen(data));
+			ret = sckClient_send(handle
+                                , connfd
+                                , (unsigned char *)data
+                                , strlen(data));
 			if (0 != ret) {
 				printf("Send error code %d.\n", ret);
 				perror("Send error");

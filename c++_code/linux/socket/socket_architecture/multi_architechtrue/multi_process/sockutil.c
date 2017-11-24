@@ -27,10 +27,16 @@ typedef struct socket_handle{
 	int recvtime;
 }SOCKET_HANDLE;
 
-int sckClient_init(void **pHandle, int connecttime, int sendtime, int recvtime, int nConNum)
+int sckClient_init(void **pHandle
+                    , int connecttime
+                    , int sendtime
+                    , int recvtime
+                    , int nConNum)
 {
 	int ret = 0;
-	if (NULL == pHandle || connecttime < 0 || sendtime < 0 || recvtime < 0 || nConNum < 0) {
+	if ( NULL == pHandle || connecttime < 0 
+            || sendtime < 0 || recvtime < 0 
+            || nConNum < 0 ) {
 		ret = SOCKET_ERROR_PARAMETER;
 		return ret;
 	}
@@ -87,7 +93,9 @@ static int deactivate_nonblock(int pFileDiscripte)
 	return ret;
 }
 
-static int connect_timeout(int sockfd, struct sockaddr *addr, unsigned int conntime)
+static int connect_timeout(int sockfd
+                            , struct sockaddr *addr
+                            , unsigned int conntime)
 {
 	int ret = 0;
 	socklen_t socklen = sizeof(*addr);
@@ -95,16 +103,21 @@ static int connect_timeout(int sockfd, struct sockaddr *addr, unsigned int connt
 		//set sockfd is not block status.
 		activate_nonblock(sockfd);
 	}
+
 	ret = connect(sockfd, addr, socklen);	
-	if (ret < 0 && errno == EINPROGRESS) { //this is explain connect is solving.
+    // this is explain connect is solving.
+	if (ret < 0 && errno == EINPROGRESS) {
 		fd_set connect_fdset;	
-		struct timeval timeout;
 		FD_ZERO(&connect_fdset);
 		FD_SET(sockfd, &connect_fdset);
+
+		struct timeval timeout;
 		timeout.tv_sec = conntime;
 		timeout.tv_usec = 0;
+
 		do {
-			//once connect server, socket could write to server, so connect_fd set to writefds.
+			// once connect server
+            // socket could write to server, so connect_fd set to writefds.
 			ret = select(sockfd + 1, NULL, &connect_fdset, NULL, &timeout);
 		} while (ret < 0 && errno == EINTR);
 
@@ -116,11 +129,18 @@ static int connect_timeout(int sockfd, struct sockaddr *addr, unsigned int connt
 			ret = -1;
 		}
 		else if (1 == ret) {
-			//if ret equal to 1, has two case.One is connect successful, Other is socket error.	
-			//if had occur error, error info not save to errno variable.so we should call getsockopt function to get error info.
+			// if ret equal to 1, has two case.
+            // One is connect successful, Other is socket error.	
+			// if had occur error,
+            // error info not save to errno variable.
+            // so we should call getsockopt function to get error info.
 			int err = 0;
 			socklen_t len = sizeof(err);
-			int sockoptret = getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &err, &len);
+			int sockoptret = getsockopt(sockfd
+                                        , SOL_SOCKET
+                                        , SO_ERROR
+                                        , &err
+                                        , &len);
 			if (-1 == sockoptret) {
 				ret = -1;
 			}
@@ -155,7 +175,9 @@ int sckClient_getconn(void *pHandle, char *ip, unsigned int port, int *confd)
 	addr.sin_port = htons(port); 
 	addr.sin_addr.s_addr = inet_addr(ip);
 
-	int ret = connect_timeout(sockfd, (struct sockaddr *)&addr, (unsigned int)handle->conntime);
+	int ret = connect_timeout(sockfd
+                                , (struct sockaddr *)&addr
+                                , (unsigned int)handle->conntime);
 	if (ret < 0) {
 		if (-1 == ret && errno == ETIMEDOUT) {
 			return SOCKET_ERROR_TIMEOUT;
@@ -222,11 +244,13 @@ int sckClient_send(void *pHandle, int connfd, unsigned char *data, int datalen)
 	}
 	else if (0 == ret) { //ready to write.
 		int writelen = 0;	
-		unsigned char *writedata = (unsigned char *)malloc(sizeof(datalen + 4));
+		unsigned char *writedata = (unsigned char *)malloc(
+                                                        sizeof(datalen + 4));
 		if (NULL == writedata) {
 			ret = SOCKET_ERROR_MALLOC;
 			return ret;
 		}
+        
 //		int netlen = htonl(datalen + 4);
 //		memcpy(writedata, &netlen, 4);
 //	    memcpy(writedata + 4, data, datalen);
@@ -254,14 +278,17 @@ static int read_timeout(int pFd, int pRead_Timeout)
 	int ret = 0;	
 	if (pRead_Timeout > 0) {
 		fd_set read_fdset;
-		struct timeval timeout;
 		FD_ZERO(&read_fdset);
 		FD_SET(pFd, &read_fdset);
+
+		struct timeval timeout;
 		timeout.tv_sec = pRead_Timeout;
 		timeout.tv_usec = 0;
+
 		do {
 			ret = select(pFd + 1, &read_fdset, NULL, NULL, &timeout);
 		} while (ret < 0 && errno == EINTR);
+        
 		//ret has three status:
 		//1.ret equal 0, indicate timeout.
 		//2.ret equal 1, indicate writefd changed.
@@ -280,7 +307,10 @@ static int read_timeout(int pFd, int pRead_Timeout)
 	return ret;
 }
 
-int sckClient_recv(void *pHandle, int connfd, unsigned char *outdata, int datalen)
+int sckClient_recv(void *pHandle
+                    , int connfd
+                    , unsigned char *outdata
+                    , int datalen)
 {
 	SOCKET_HANDLE *handle = (SOCKET_HANDLE *)(pHandle);
 	int ret = read_timeout(connfd, handle->recvtime);
@@ -324,13 +354,19 @@ int sckServer_init(int port, int *pListenfd)
 	}
 	
 	int opt = 1;
-	if (setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, (void *)&opt, sizeof(opt)) < 0) {
+	if (setsockopt(listenfd
+                    , SOL_SOCKET
+                    , SO_REUSEADDR
+                    , (void *)&opt
+                    , sizeof(opt)) < 0) {
 		ret = errno;	
 		printf("setsockopt error.\n");
 		return ret; 
 	}
 
-	if(bind(listenfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) < 0) {
+	if(bind(listenfd
+                , (struct sockaddr *)&serveraddr
+                , sizeof(serveraddr)) < 0) {
 		ret = errno;
 		printf("bind error.\n");
 		return ret;
@@ -352,7 +388,9 @@ int sckServer_init(int port, int *pListenfd)
  * @timeout: 超时时间
  * 成功(未超时)返回返回连接的套接字，错误返回-1且errno为置为ETIMEOUT
  * */
-int accept_timeout(int listenfd, struct sockaddr_in *addr, unsigned int timeout)
+int accept_timeout(int listenfd
+                    , struct sockaddr_in *addr
+                    , unsigned int timeout)
 {
 	int ret = 0;
 	if (timeout > 0) {
@@ -373,6 +411,7 @@ int accept_timeout(int listenfd, struct sockaddr_in *addr, unsigned int timeout)
 			return -1;
 		}
 	}
+
 	//一旦检测到select有事件发生，表示有客户端连接上来了
 	//此时调用accept不用在阻塞了
 	if (NULL == addr) {
@@ -382,6 +421,7 @@ int accept_timeout(int listenfd, struct sockaddr_in *addr, unsigned int timeout)
 		socklen_t len = sizeof(addr);
 		ret = accept(listenfd, (struct sockaddr *)&addr, &len);	
 	}
+
 	return ret;
 }
 
