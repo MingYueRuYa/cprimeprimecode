@@ -16,11 +16,6 @@
 
 #include "common.h"
 
-/*
- * 测试发现一个问题就是一个客户端不能关闭再打开连接
- * 出现连接不上的问题
- * */
-
 ssize_t readn(int fd, void *buff, ssize_t count)
 {
     int     left = count;
@@ -145,16 +140,25 @@ void do_service(int connfd)
 	close(connfd);
 }
 
-void signal_sigchld(int signalid)
+void handle_sigchld(int signalid)
 {
     while (waitpid(-1, NULL, WNOHANG)) { ; }
+}
+
+void handle_sigint(int signalid)
+{
+    printf("server close\n");
+    exit(0);
 }
 
 int main(void)
 {
     // 忽略到子进程退出的消息
     /* signal(SIGCHLD, SIG_IGN); */
-    signal(SIGCHLD, signal_sigchld);
+    signal(SIGPIPE, SIG_IGN);
+    signal(SIGCHLD, handle_sigchld);
+    signal(SIGINT, handle_sigint);
+
     int listenfd = socket(PF_INET, SOCK_STREAM, 0);
     /* socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); */
     if (listenfd < 0) {
@@ -187,6 +191,7 @@ int main(void)
     socklen_t socklen = sizeof(clientaddr);
 
     /*
+
     int connfd = 0;
     pid_t pid  = 0;
     while (1) {
@@ -211,6 +216,7 @@ int main(void)
             close(connfd);  // 不需要监听connfd
         } // if pid
     } // while
+     
     */
 
     // 使用select
@@ -282,8 +288,7 @@ int main(void)
             
             // 有数据来了
             char recvbuf[1024] = {0};
-            // int ret = readline(connfd, recvbuf, sizeof(recvbuf));
-            int ret = read(connfd, recvbuf, sizeof(recvbuf));
+            int ret = readline(connfd, recvbuf, sizeof(recvbuf));
             if (ret < 0) {
                 ERR_EXIT("readline");
             } else if (ret == 0) {
@@ -301,8 +306,7 @@ int main(void)
                 continue;
             }
             fputs(recvbuf, stdout);
-            // writen(connfd, recvbuf, strlen(recvbuf));
-            write(connfd, recvbuf, strlen(recvbuf));
+            writen(connfd, recvbuf, strlen(recvbuf));
             memset(recvbuf, 0, strlen(recvbuf));
             // 所有有变化的fd已经处理完
             if (--ready <= 0) {

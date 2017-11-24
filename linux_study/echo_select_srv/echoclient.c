@@ -196,7 +196,6 @@ void do_echo(int sockfd)
         
         if (FD_ISSET(fd_stdin, &fd_read_set)) {
             if (fgets(sendbuf, sizeof(sendbuf), stdin) == NULL) {
-                ERR_EXIT("fgets");
                 break;
             }
             int ret = writen(sockfd, sendbuf, strlen(sendbuf));
