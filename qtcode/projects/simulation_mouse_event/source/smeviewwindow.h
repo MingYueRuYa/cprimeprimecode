@@ -9,7 +9,7 @@
 
 #define smeviewwindow_h
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QtGui/QMouseEvent>
 
 /*! \brief smeViewWindow

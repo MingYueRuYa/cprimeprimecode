@@ -10,10 +10,10 @@
 
 #include<Windows.h>
 
-#include <QtGui/QMainWindow>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QAction>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QMenu>
-#include <QtGui/QAction>
 
 #include "ui_smemainwindow.h"
 #include "smeviewwindow.h"
