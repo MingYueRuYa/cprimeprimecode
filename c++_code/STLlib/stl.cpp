@@ -1001,6 +1001,8 @@ void test_for_each()
 }
 };
 
+using std::sort;
+
 namespace test_sort
 {
 bool myfunc(int x, int y) { return x < y; }
@@ -1023,23 +1025,210 @@ void test_sort()
 	// (12 32 45 74) 26 80 53 33
 
 	// using function as comp
-	sort(myvec.begin()+4, myvec.end(), myfunc)
+	sort(myvec.begin()+4, myvec.end(), myfunc);
 	// 12 32 45 74 (26 33 53 80)
 
 	// using object as comp
-	sort(myvec.begin()+4, myvec.end(), myobj)
+	sort(myvec.begin()+4, myvec.end(), myobj);
 	// 12 32 45 74 (26 33 53 80)
 
 	sort(myvec.rbegin(), myvec.rend());
 	// 80 71 53 45 33 32 16 12
 
-	sort(myvec.begin(), myvec.end(), less<int>());
+	sort(myvec.begin(), myvec.end(), std::less<int>());
 	// 12 16 32 33 45 53 71 80
 
-	sort(myvec.begin(), myvec.end(), greater<int>());
+	sort(myvec.begin(), myvec.end(), std::greater<int>());
 	// 80 71 53 45 33 32 16 12
 }
 };
+
+};
+
+namespace iterator_adapter
+{
+
+template <typename T>
+struct display : public std::unary_function<T, T>
+{
+	T operator() (const T& t)
+	{
+		cout << t << " ";
+		return t;
+	}
+};
+
+void test_insert_iterator()
+{
+	int intarray[] = {10, 20, 30, 40, 50, 60, 70};
+	vector<int> myvec(7);
+	std::copy(std::begin(intarray), std::end(intarray), myvec.begin());
+	std::for_each(myvec.begin(), myvec.end(), display<int>());
+	// 10 20 30 40 50 60 70 
+	cout << endl;
+
+	vector<int>::iterator itr = myvec.begin();
+	std::advance(itr, 3);
+	// insert iterator 会自动调用容器的insert方法
+	std::copy(std::begin(intarray), std::end(intarray)
+			, std::inserter(myvec, itr));
+	std::for_each(myvec.begin(), myvec.end(), display<int>());
+	cout << endl;
+}
+
+void test_ostream_iterator()
+{
+	int intarray[] = {10, 20, 30, 40, 50, 60, 70};
+	std::ostream_iterator<int> out_it(std::cout, ",");
+	std::copy(std::begin(intarray), std::end(intarray), out_it);
+}
+
+void test_istream_iterator()
+{
+	std::ostream_iterator<int> out_it(std::cout, ",");
+	double val1, val2;
+	std::cout << "Please insert two values:";
+	std::istream_iterator<double> eos;	// end-of-stream iterator
+	std::istream_iterator<double> iit(std::cin);
+	if (iit != eos) {
+		val1 = *iit;
+	}
+
+	++iit;	
+	if (iit != eos) {
+		val2 = *iit;
+	}
+
+	std::cout << val1 << "*" << val2 << "=" << (val1*val2) << endl;
+
+	vector<double> myvec;
+	cout << "Please insert another data:" << endl;
+	std::istream_iterator<double> iit2(std::cin);
+	std::copy(iit2, eos, std::inserter(myvec, myvec.begin()));
+	std::for_each(myvec.begin(), myvec.end(), display<int>());
+}
+
+};
+
+#include <functional>
+
+using std::hash;
+
+namespace test_hash_function
+{
+
+//hash_val 可能现在的stl版本没有纳入进来，所以把source code直接照搬过来
+template <typename T>
+inline void hash_combine(size_t &seed, const T& val)
+{
+	seed ^= std::hash<T>()(val) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+
+template <typename T>
+inline void hash_val(size_t &seed, const T& val)
+{
+	hash_combine(seed, val);
+}
+
+template <typename T, typename... Types>
+inline void hash_val(size_t &seed, const T&val, const Types&... args)
+{
+	hash_combine(seed, val);
+	// recursive call hash_val
+	hash_val(seed, args...);
+}
+
+template <typename... Types>
+inline size_t hash_val(const Types&... args)
+{
+	size_t seed = 0;
+	hash_val(seed, args...);
+	return seed;
+}
+
+class Customer
+{
+public:
+	Customer(string first_name, string last_name, int age)
+		: mfirst_name(first_name), mlast_name(last_name), mage(age)
+	{}
+
+	Customer & operator=(const Customer& customer) = default;
+
+	bool operator==(const Customer& customer) const
+	{
+		return (mfirst_name == customer.mfirst_name) 
+				&& (mlast_name == customer.mlast_name)
+				&& (mage == customer.mage);
+	}
+
+public:
+	string 	mfirst_name;
+	string	mlast_name;
+	int 	mage;
+
+};
+
+class CustomHash
+{
+public:
+	size_t operator() (const Customer& customer) const {
+		return hash_val(customer.mfirst_name
+						, customer.mlast_name
+						, customer.mage);
+	}
+};
+
+void test_hash_function()
+{
+	 CustomHash cushash;
+	 cout << "bucket position of Ace=" 
+	 	 << cushash(Customer("Ace", "Hou", 1L)) % 11 << endl;	// 2
+			
+	cout << "bucket position of Sabri=" 
+		 << cushash(Customer("Sabri", "Hou", 2L)) % 11 << endl;	// 4
+
+	cout << "bucket position of Stacy=" 
+		 << cushash(Customer("Stacy", "Chen", 3L)) % 11 << endl; // 10
+
+	cout << "bucket position of Mike=" 
+		 << cushash(Customer("Mike", "Tseng", 4L)) % 11 << endl; // 2
+
+	cout << "bucket position of Paili=" 
+		 << cushash(Customer("Light", "Shiau", 5L)) % 11 << endl; // 3
+
+	cout << "bucket position of Shally=" 
+		 << cushash(Customer("Shally", "Hwung", 6L)) % 11 << endl; // 10
+
+	std::unordered_set<Customer, CustomHash> set3;
+	set3.insert(Customer("Ace", "Hou", 1L));
+	set3.insert(Customer("Sabri", "Hou", 2L));
+	set3.insert(Customer("Stacy", "Chen", 3L));
+	set3.insert(Customer("Mike", "Tseng", 4L));
+	set3.insert(Customer("Light", "Shiau", 5L));
+	set3.insert(Customer("Shally", "Hwung", 6L));
+
+	cout << "set3 current bucket_count:"
+		 << set3.bucket_count() << endl;
+
+	for (size_t i=0; i<set3.bucket_count(); ++i) {
+		cout << "bucket #" << i << " has " << set3.bucket_size(i) 
+			 << " elements." << endl;
+	}
+	
+	// result:
+		// bucket #0 has 0 elements.
+		// bucket #1 has 0 elements.
+		// bucket #2 has 2 elements.
+		// bucket #3 has 1 elements.
+		// bucket #4 has 1 elements.
+		// bucket #5 has 0 elements.
+		// bucket #6 has 0 elements.
+		// bucket #7 has 0 elements.
+		// bucket #8 has 0 elements.
+		// bucket #9 has 0 elements.
+		// bucket #10 has 2 elements.
+}
 
 };
 
@@ -1059,7 +1248,11 @@ int main(int argc, char *argv[])
 	//test_rb_tree::test_rb_tree();
 	//display_category::test_display_iterator_category();	
 	//test_algorithm::test_accumulate::test_accumulate();
-	test_algorithm::test_for_each::test_for_each();
+	//test_algorithm::test_for_each::test_for_each();
+	//iterator_adapter::test_insert_iterator();
+	//iterator_adapter::test_ostream_iterator();
+	//iterator_adapter::test_istream_iterator();
+	test_hash_function::test_hash_function();
 	return 0;
 }
 
