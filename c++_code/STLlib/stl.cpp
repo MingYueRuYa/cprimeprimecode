@@ -1181,6 +1181,9 @@ public:
 
 void test_hash_function()
 {
+// 自定义类型放到set对象里面时，需要自定义hash function
+// 以及需要重载 operator== 操作符
+
 	 CustomHash cushash;
 	 cout << "bucket position of Ace=" 
 	 	 << cushash(Customer("Ace", "Hou", 1L)) % 11 << endl;	// 2
