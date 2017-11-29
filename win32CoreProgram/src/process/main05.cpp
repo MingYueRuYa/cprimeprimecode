@@ -47,6 +47,9 @@ int main(int argc, CHAR* argv[])
 {
     MSG msg;
     //hStartEvent = ::CreateEvent(0, FALSE, FALSE, 0);
+    //获取分辨率
+    int m_nWindwMetricsX = ::GetSystemMetrics(SM_CXSCREEN);
+    int m_nWindwMetricsY = ::GetSystemMetrics(SM_CYSCREEN);
 
     hStartEvent = ::CreateEvent(0, FALSE, FALSE, 0); //create thread start event
     if (hStartEvent == 0)
