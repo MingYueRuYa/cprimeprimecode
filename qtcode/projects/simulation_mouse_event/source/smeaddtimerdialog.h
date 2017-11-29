@@ -9,7 +9,7 @@
 
 #define smeaddtimerdialog_h
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 #include "ui_smeaddtimerdialog.h"
 

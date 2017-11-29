@@ -47,12 +47,14 @@ public:
   typedef typename Sequence::reference reference;
   typedef typename Sequence::const_reference const_reference;
 protected:
-  Sequence c;
+  Sequence c;	// 底層容器
 public:
+  // 以下完全利用 Sequence c 的操作，完成 stack 的操作。
   bool empty() const { return c.empty(); }
   size_type size() const { return c.size(); }
   reference top() { return c.back(); }
   const_reference top() const { return c.back(); }
+  // deque 是兩頭可進出，stack 是末端進，末端出（所以後進者先出）。
   void push(const value_type& x) { c.push_back(x); }
   void pop() { c.pop_back(); }
 };
@@ -61,6 +63,7 @@ template <class T, class Sequence>
 bool operator==(const stack<T, Sequence>& x, const stack<T, Sequence>& y) {
   return x.c == y.c;
 }
+
 
 template <class T, class Sequence>
 bool operator<(const stack<T, Sequence>& x, const stack<T, Sequence>& y) {
@@ -74,3 +77,4 @@ __STL_END_NAMESPACE
 // Local Variables:
 // mode:C++
 // End:
+

@@ -1,5 +1,5 @@
 CC:=g++
-CFLAGS:=-Wall -g
+CFLAGS:=-Wall -g -std=c++11
 SOURCE:=$(wildcard *.cpp)
 OBJS:=$(patsubst %.cpp, %.o, $(SOURCE))
 BIN:=app origin_main

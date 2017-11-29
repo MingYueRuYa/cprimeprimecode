@@ -588,15 +588,15 @@ protected:
   Iterator current;
 public:
   typedef typename iterator_traits<Iterator>::iterator_category
-          iterator_category;
+          iterator_category;    // 1
   typedef typename iterator_traits<Iterator>::value_type
-          value_type;
+          value_type;   // 2
   typedef typename iterator_traits<Iterator>::difference_type
-          difference_type;
+          difference_type;  // 3
   typedef typename iterator_traits<Iterator>::pointer
-          pointer;
+          pointer;  // 4
   typedef typename iterator_traits<Iterator>::reference
-          reference;
+          reference;    // 5
 
   typedef Iterator iterator_type;
   typedef reverse_iterator<Iterator> self;

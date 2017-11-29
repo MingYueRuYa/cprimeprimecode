@@ -8,7 +8,7 @@
 #include "smemainwindow.h"
 
 smeMainWindow::smeMainWindow(QWidget *pParent)
-: QMainWindow(pParent)
+	: QMainWindow(pParent)
 {
 	setupUi(this);
 	UpdateUi();
@@ -37,7 +37,8 @@ void smeMainWindow::UpdateUi()
 {
 	this->edt_xposition->setPlaceholderText(tr("X Postion"));
 	this->edt_yposition->setPlaceholderText(tr("Y Postion"));
-	this->tablewidget_timerinfo->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+	//this->tablewidget_timerinfo->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+	this->tablewidget_timerinfo->horizontalHeader()->sectionResizeMode(QHeaderView::Stretch);
 	connect(this, SIGNAL(OnPositionUpdated(int, int)), &mDialog, SLOT(DoPositionUpdated(int, int)));
 	connect(&mDialog, SIGNAL(OnTimerAdded()), this, SLOT(DoTimerAdded()));
 }

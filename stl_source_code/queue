@@ -27,16 +27,16 @@
 #ifndef __SGI_STL_QUEUE
 #define __SGI_STL_QUEUE
 
-#include <stl_algobase.h>
-#include <stl_alloc.h>
-#include <stl_construct.h>
-#include <stl_uninitialized.h>
-#include <stl_vector.h>
-#include <stl_bvector.h>
-#include <stl_heap.h>
-#include <stl_deque.h>
-#include <stl_function.h>
-#include <stl_queue.h>
+#include "stl_algobase.h"
+#include "stl_alloc.h"
+#include "stl_construct.h"
+#include "stl_uninitialized.h"
+#include "stl_vector.h"
+#include "stl_bvector.h"
+#include "stl_heap.h"
+#include "stl_deque.h"
+#include "stl_function.h"
+#include "stl_queue.h"
 
 #endif /* __SGI_STL_QUEUE */
 

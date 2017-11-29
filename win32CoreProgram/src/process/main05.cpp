@@ -42,15 +42,46 @@ static UINT WrkThrd(LPVOID lpParam)
     return 0;
 }
 
+class Test
+{
+public:
+	Test(int id)
+	{
+		this->id = id;
+		cout << "ctor, this=" << this << " id=" << id<< endl;
+	}
+
+	~Test()
+	{
+		cout << "dtor, this=" << this << endl;
+	}
+
+private:
+	int id;
+};
+
 
 int main(int argc, CHAR* argv[])
 {
+
+	Test *test = new Test(3);
+	test->Test::Test(2);
+	test->~Test();
+
+	Test test1(3);
+	test1.Test::Test(4);
+	test1.~Test();
+
+	return 0;
     MSG msg;
     //hStartEvent = ::CreateEvent(0, FALSE, FALSE, 0);
+<<<<<<< HEAD
     //获取分辨率
     int m_nWindwMetricsX = ::GetSystemMetrics(SM_CXSCREEN);
     int m_nWindwMetricsY = ::GetSystemMetrics(SM_CYSCREEN);
 
+=======
+>>>>>>> 4d74e25c08a4ce355ed20aaf5df2105e666c53ad
     hStartEvent = ::CreateEvent(0, FALSE, FALSE, 0); //create thread start event
     if (hStartEvent == 0)
     {

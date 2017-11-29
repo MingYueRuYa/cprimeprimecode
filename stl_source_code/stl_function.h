@@ -33,12 +33,14 @@
 
 __STL_BEGIN_NAMESPACE
 
+// C++ Standard 規定，每一個 Adaptable Unary Function 都必須繼承此類別
 template <class Arg, class Result>
 struct unary_function {
     typedef Arg argument_type;
     typedef Result result_type;
 };
 
+// C++ Standard 規定，每一個 Adaptable Binary Function 都必須繼承此類別
 template <class Arg1, class Arg2, class Result>
 struct binary_function {
     typedef Arg1 first_argument_type;
@@ -46,6 +48,7 @@ struct binary_function {
     typedef Result result_type;
 };      
 
+// 以下6個為算術類（Arithmetic）仿函式
 template <class T>
 struct plus : public binary_function<T, T, T> {
     T operator()(const T& x, const T& y) const { return x + y; }
@@ -66,8 +69,13 @@ struct divides : public binary_function<T, T, T> {
     T operator()(const T& x, const T& y) const { return x / y; }
 };
 
+// 所謂運算op的證同元素（identity element）是指，數值A與此元素做op運算，
+// 會得到A自己。
+// 加法的證同元素（identity element）為 0。
 template <class T> inline T identity_element(plus<T>) { return T(0); }
 
+// 乘法的證同元素（identity element）為1
+// 應用於 <stl_numerics.h> 的 power().
 template <class T> inline T identity_element(multiplies<T>) { return T(1); }
 
 template <class T>
@@ -80,6 +88,7 @@ struct negate : public unary_function<T, T> {
     T operator()(const T& x) const { return -x; }
 };
 
+// 以下6個為相對關係類（Relational）仿函式
 template <class T>
 struct equal_to : public binary_function<T, T, bool> {
     bool operator()(const T& x, const T& y) const { return x == y; }
@@ -110,6 +119,7 @@ struct less_equal : public binary_function<T, T, bool> {
     bool operator()(const T& x, const T& y) const { return x <= y; }
 };
 
+// 以下3個為邏輯運算類（Logical）仿函式
 template <class T>
 struct logical_and : public binary_function<T, T, bool> {
     bool operator()(const T& x, const T& y) const { return x && y; }
@@ -125,6 +135,9 @@ struct logical_not : public unary_function<T, bool> {
     bool operator()(const T& x) const { return !x; }
 };
 
+// ---- 以上都是 functor，以下都是 function adapter
+
+// 以下配接器用來表示某個 Adaptable Predicate 的邏輯負值（logical negation）
 template <class Predicate>
 class unary_negate
   : public unary_function<typename Predicate::argument_type, bool> {
@@ -137,80 +150,103 @@ public:
   }
 };
 
+// 輔助函式，使我們得以方便使用 unary_negate<Pred>
 template <class Predicate>
 inline unary_negate<Predicate> not1(const Predicate& pred) {
   return unary_negate<Predicate>(pred);
 }
 
+// 以下配接器用來表示某個 Adaptable Binary Predicate 的邏輯負值
 template <class Predicate> 
 class binary_negate 
   : public binary_function<typename Predicate::first_argument_type,
-                           typename Predicate::second_argument_type,
-                           bool> {
+                                typename Predicate::second_argument_type,
+                                bool> {
 protected:
   Predicate pred;
 public:
   explicit binary_negate(const Predicate& x) : pred(x) {}
   bool operator()(const typename Predicate::first_argument_type& x, 
-                  const typename Predicate::second_argument_type& y) const {
+                     const typename Predicate::second_argument_type& y) const {
     return !pred(x, y); 
   }
 };
 
+// 輔助函式，使我們得以方便使用 bineary_negate<Pred>
 template <class Predicate>
 inline binary_negate<Predicate> not2(const Predicate& pred) {
   return binary_negate<Predicate>(pred);
 }
 
+// 以下配接器用來將某個 Adaptable Binary function 轉換為 Unary Function
 template <class Operation> 
 class binder1st
   : public unary_function<typename Operation::second_argument_type,
-                          typename Operation::result_type> {
+                               typename Operation::result_type> {
 protected:
   Operation op;
   typename Operation::first_argument_type value;
 public:
+  // 以下 ctor 建立 op 和 value。
   binder1st(const Operation& x,
-            const typename Operation::first_argument_type& y)
+              const typename Operation::first_argument_type& y)
       : op(x), value(y) {}
   typename Operation::result_type
   operator()(const typename Operation::second_argument_type& x) const {
-    return op(value, x); 
+    return op(value, x); 	// 將 value 繫結（binding）為第一引數 
+                            // operator() 被呼叫時的引數成為op的第二引數 
   }
 };
 
+// 輔助函式，讓我們得以方便使用 binder1st<Op>
+// 用法：例如 
 template <class Operation, class T>
 inline binder1st<Operation> bind1st(const Operation& op, const T& x) {
   typedef typename Operation::first_argument_type arg1_type;
-  return binder1st<Operation>(op, arg1_type(x));
+  return binder1st<Operation>(op, arg1_type(x)); 
+          // 以上把x當做op的第一引數型別
+          // 語法分析：binder1st<T>() 是產生一個暫時物件，() 之內是ctor參數。
+          // arg1_type() 是強制轉型動作。
 }
 
+// 以下配接器用來將某個 Adaptable Binary function 轉換為 Unary Function
 template <class Operation> 
 class binder2nd
   : public unary_function<typename Operation::first_argument_type,
-                          typename Operation::result_type> {
+                               typename Operation::result_type> {
 protected:
   Operation op;
   typename Operation::second_argument_type value;
 public:
+  // 以下 ctor 建立 op 和 value。
   binder2nd(const Operation& x,
             const typename Operation::second_argument_type& y) 
       : op(x), value(y) {}
   typename Operation::result_type
   operator()(const typename Operation::first_argument_type& x) const {
-    return op(x, value); 
+    return op(x, value); 	// 將 value 繫結（binding）為第二引數
+                            // operator() 被呼叫時的引數，將成為op的第一引數 
   }
 };
 
+// 輔助函式，讓我們得以方便使用 binder2nd<Op>
+// 用法：例如 bind2nd(less<int>(), 5)
 template <class Operation, class T>
 inline binder2nd<Operation> bind2nd(const Operation& op, const T& x) {
   typedef typename Operation::second_argument_type arg2_type;
   return binder2nd<Operation>(op, arg2_type(x));
+          // 以上把x當做op的第二引數型別
+          // 語法分析：binder2nd<T>() 是產生一個暫時物件，() 之內是ctor參數。
+          // arg2_type() 是強制轉型動作。
 }
 
+
+// 已知兩個 Adaptable Unary Functions f,g，以下配接器用來產生一個 h，
+// 使 h(x) = f(g(x))
 template <class Operation1, class Operation2>
-class unary_compose : public unary_function<typename Operation2::argument_type,
-                                            typename Operation1::result_type> {
+class unary_compose
+  : public unary_function<typename Operation2::argument_type,
+                               typename Operation1::result_type> {
 protected:
   Operation1 op1;
   Operation2 op2;
@@ -222,50 +258,60 @@ public:
   }
 };
 
+// 輔助函式，讓我們得以方便使用 unary_compose<Op1,Op2>
 template <class Operation1, class Operation2>
-inline unary_compose<Operation1, Operation2> compose1(const Operation1& op1, 
-                                                      const Operation2& op2) {
+inline unary_compose<Operation1, Operation2> 
+compose1(const Operation1& op1, const Operation2& op2) {
   return unary_compose<Operation1, Operation2>(op1, op2);
 }
 
+// 已知一個 Adaptable Binary Function f 和兩個Adaptable Unary Functions g1,g2，
+// 以下配接器用來產生一個 h，使 h(x) = f(g1(x),g2(x))
 template <class Operation1, class Operation2, class Operation3>
 class binary_compose
   : public unary_function<typename Operation2::argument_type,
-                          typename Operation1::result_type> {
+                               typename Operation1::result_type> {
 protected:
   Operation1 op1;
   Operation2 op2;
   Operation3 op3;
 public:
   binary_compose(const Operation1& x, const Operation2& y, 
-                 const Operation3& z) : op1(x), op2(y), op3(z) { }
+                    const Operation3& z) : op1(x), op2(y), op3(z) { }
   typename Operation1::result_type
   operator()(const typename Operation2::argument_type& x) const {
     return op1(op2(x), op3(x));
   }
 };
 
+// 輔助函式，讓我們得以方便使用 binary_compose<Op1,Op2,Op3>
 template <class Operation1, class Operation2, class Operation3>
 inline binary_compose<Operation1, Operation2, Operation3> 
 compose2(const Operation1& op1, const Operation2& op2, const Operation3& op3) {
   return binary_compose<Operation1, Operation2, Operation3>(op1, op2, op3);
 }
 
+// 以下配接器其實就是把一個一元函式指標包起來；
+// 當仿函式被使用時，就喚起該函式指標
 template <class Arg, class Result>
 class pointer_to_unary_function : public unary_function<Arg, Result> {
 protected:
-  Result (*ptr)(Arg);
+  Result (*ptr)(Arg);	// 函式指標
 public:
   pointer_to_unary_function() {}
   explicit pointer_to_unary_function(Result (*x)(Arg)) : ptr(x) {}
   Result operator()(Arg x) const { return ptr(x); }
 };
 
+// 輔助函式，讓我們得以方便使用 pointer_to_unary_function
 template <class Arg, class Result>
-inline pointer_to_unary_function<Arg, Result> ptr_fun(Result (*x)(Arg)) {
+inline pointer_to_unary_function<Arg, Result> 
+ptr_fun(Result (*x)(Arg)) {
   return pointer_to_unary_function<Arg, Result>(x);
 }
 
+// 以下配接器其實就是把一個二元函式指標包起來；
+// 當仿函式被使用時，就喚起該函式指標
 template <class Arg1, class Arg2, class Result>
 class pointer_to_binary_function : public binary_function<Arg1, Arg2, Result> {
 protected:
@@ -276,17 +322,21 @@ public:
     Result operator()(Arg1 x, Arg2 y) const { return ptr(x, y); }
 };
 
+// 輔助函式，讓我們得以方便使用 pointer_to_binary_function
 template <class Arg1, class Arg2, class Result>
 inline pointer_to_binary_function<Arg1, Arg2, Result> 
 ptr_fun(Result (*x)(Arg1, Arg2)) {
   return pointer_to_binary_function<Arg1, Arg2, Result>(x);
 }
 
+// 證同函式（identity function）。任何數值通過此函式後，不會有任何改變。
+// 此式運用於 <stl_set.h>，用來指定 RB-tree 所需的 KeyOfValue op. 
 template <class T>
 struct identity : public unary_function<T, T> {
   const T& operator()(const T& x) const { return x; }
 };
 
+// 選擇函式：接受一個pair，傳回其第一元素
 template <class Pair>
 struct select1st : public unary_function<Pair, typename Pair::first_type> {
   const typename Pair::first_type& operator()(const Pair& x) const
@@ -295,6 +345,7 @@ struct select1st : public unary_function<Pair, typename Pair::first_type> {
   }
 };
 
+// 選擇函式：接受一個pair，傳回其第二元素
 template <class Pair>
 struct select2nd : public unary_function<Pair, typename Pair::second_type> {
   const typename Pair::second_type& operator()(const Pair& x) const
@@ -303,11 +354,13 @@ struct select2nd : public unary_function<Pair, typename Pair::second_type> {
   }
 };
 
+// 投射函式：傳回第一引數，忽略第二引數
 template <class Arg1, class Arg2>
 struct project1st : public binary_function<Arg1, Arg2, Arg1> {
   Arg1 operator()(const Arg1& x, const Arg2&) const { return x; }
 };
 
+// 投射函式：傳回第二引數，忽略第一引數
 template <class Arg1, class Arg2>
 struct project2nd : public binary_function<Arg1, Arg2, Arg2> {
   Arg2 operator()(const Arg1&, const Arg2& y) const { return y; }
@@ -402,31 +455,26 @@ public:
 };
 
 
-// Adaptor function objects: pointers to member functions.
+// Adapter function objects: pointers to member functions.
 
-// There are a total of 16 = 2^4 function objects in this family.
-//  (1) Member functions taking no arguments vs member functions taking
-//       one argument.
-//  (2) Call through pointer vs call through reference.
-//  (3) Member function with void return type vs member function with
-//      non-void return type.
-//  (4) Const vs non-const member function.
+// 這個族群一共有16 = 2^4 個function objects。
+//  (1) 「無任何引數」vs 「有一個引數」
+//  (2) 「透過 pointer 呼叫」vs「透過 reference 呼叫」
+//  (3) 「void 回返型別」vs「non-void 回返型別」
+//  (4) 「const成員函式」vs「non-const成員函式」
 
-// Note that choice (4) is not present in the 8/97 draft C++ standard, 
-//  which only allows these adaptors to be used with non-const functions.
-//  This is likely to be recified before the standard becomes final.
-// Note also that choice (3) is nothing more than a workaround: according
-//  to the draft, compilers should handle void and non-void the same way.
-//  This feature is not yet widely implemented, though.  You can only use
-//  member functions returning void if your compiler supports partial
-//  specialization.
+// 注意，(4) 並未出現於 8/97 C++ 標準草案中。草案只允許這些配接器用於 
+//  non-const 函式身上。這很可能會在C++ 標準定案之前被修正。
+// 注意，(3) 其實只是個workaround: 就草案之規範而言，編譯器應該以
+//  相同的方式處理void 和 non-void，不過此一性質尚未能夠被廣為實現。
+//  如果你的編譯器支援partial specialization，那麼你可以只使用
+//  那些傳回值為void 的 member functions。 
 
-// All of this complexity is in the function objects themselves.  You can
-//  ignore it by using the helper function mem_fun, mem_fun_ref,
-//  mem_fun1, and mem_fun1_ref, which create whichever type of adaptor
-//  is appropriate.
+// 所有的複雜都只存在於function objects 內部。你可以忽略它們，只使用
+//  輔助函式 mem_fun, mem_fun_ref, mem_fun1 和 mem_fun1_ref，
+//  它們會產生適當的配接器。
 
-
+// 「無任何引數」、「透過 pointer 呼叫」、「non-const成員函式」
 template <class S, class T>
 class mem_fun_t : public unary_function<T*, S> {
 public:
@@ -436,6 +484,7 @@ private:
   S (T::*f)();
 };
 
+// 「無任何引數」、「透過 pointer 呼叫」、「const成員函式」
 template <class S, class T>
 class const_mem_fun_t : public unary_function<const T*, S> {
 public:
@@ -445,7 +494,7 @@ private:
   S (T::*f)() const;
 };
 
-
+// 「無任何引數」、「透過 reference 呼叫」、「non-const成員函式」
 template <class S, class T>
 class mem_fun_ref_t : public unary_function<T, S> {
 public:
@@ -455,6 +504,7 @@ private:
   S (T::*f)();
 };
 
+// 「無任何引數」、「透過 reference 呼叫」、「const成員函式」
 template <class S, class T>
 class const_mem_fun_ref_t : public unary_function<T, S> {
 public:
@@ -464,6 +514,7 @@ private:
   S (T::*f)() const;
 };
 
+// 「有一個引數」、「透過 pointer 呼叫」、「non-const成員函式」
 template <class S, class T, class A>
 class mem_fun1_t : public binary_function<T*, A, S> {
 public:
@@ -473,6 +524,7 @@ private:
   S (T::*f)(A);
 };
 
+// 「有一個引數」、「透過 pointer 呼叫」、「const成員函式」
 template <class S, class T, class A>
 class const_mem_fun1_t : public binary_function<const T*, A, S> {
 public:
@@ -482,6 +534,7 @@ private:
   S (T::*f)(A) const;
 };
 
+// 「有一個引數」、「透過 reference 呼叫」、「non-const成員函式」
 template <class S, class T, class A>
 class mem_fun1_ref_t : public binary_function<T, A, S> {
 public:
@@ -491,6 +544,7 @@ private:
   S (T::*f)(A);
 };
 
+// 「有一個引數」、「透過 reference 呼叫」、「const成員函式」
 template <class S, class T, class A>
 class const_mem_fun1_ref_t : public binary_function<T, A, S> {
 public:
@@ -576,7 +630,7 @@ private:
 
 #endif /* __STL_CLASS_PARTIAL_SPECIALIZATION */
 
-// Mem_fun adaptor helper functions.  There are only four:
+// Mem_fun adapter 的輔助函式。只有四個：
 //  mem_fun, mem_fun_ref, mem_fun1, mem_fun1_ref.
 
 template <class S, class T>
@@ -599,6 +653,10 @@ inline const_mem_fun_ref_t<S,T> mem_fun_ref(S (T::*f)() const) {
   return const_mem_fun_ref_t<S,T>(f);
 }
 
+// 注意：以下四個函式，其實可以採用和先前四個函式相同的名稱（函式多載化）。
+// 事實上C++ 標準也是這麼做。我手上的G++ 2.91.57 並未遵循標準，不過只要
+// 把 mem_fun1() 改名為 mem_fun()，把 mem_fun1_ref() 改名為 mem_fun()，
+// 即可符合標準。
 template <class S, class T, class A>
 inline mem_fun1_t<S,T,A> mem_fun1(S (T::*f)(A)) { 
   return mem_fun1_t<S,T,A>(f);
@@ -626,3 +684,4 @@ __STL_END_NAMESPACE
 // Local Variables:
 // mode:C++
 // End:
+

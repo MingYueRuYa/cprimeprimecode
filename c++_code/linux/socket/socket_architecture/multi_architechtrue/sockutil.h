@@ -17,15 +17,25 @@ extern 'C'
 #define SOCKET_ERROR_PEER_CLOSED (SOCKET_BASE_ERROR + 3)
 #define SOCKET_ERROR_MALLOC (SOCKET_BASE_ERROR + 4)
 
-int sckClient_init(void **pHandle, int connecttime, int sendtime, int recvtime, int nConNum);
+int sckClient_init(void **pHandle
+                    , int connecttime
+                    , int sendtime
+                    , int recvtime
+                    , int nConNum);
 
 int sckClient_getconn(void *pHandle, char *ip, unsigned int port, int *confd);
 
 int sckClient_closeconn(int *connfd);
 
-int sckClient_send(void *pHandle, int connfd, unsigned char *data, int datalen);
+int sckClient_send(void *pHandle
+                    , int connfd
+                    , unsigned char *data
+                    , int datalen);
 
-int sckClient_recv(void *pHandle, int connfd, unsigned char *outdata, int datalen);
+int sckClient_recv(void *pHandle
+                    , int connfd
+                    , unsigned char *outdata
+                    , int datalen);
 
 int sckClient_destory(void **pHandle);
 
