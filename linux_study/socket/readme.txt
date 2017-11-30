@@ -85,7 +85,8 @@ TCP是个流协议
 		select,poll内核都要遍历所有文件描述符，
 		直到找到发生时间的文件描述符
 		
-	可以查看/proc/sys/fs/file-max 一个系统最多可以打开多少的描述符，和内存相关 1G->100,000 10G->百万级别
+	可以查看/proc/sys/fs/file-max 一个系统最多可以打开多少的描述符，
+        和内存相关 1G->100,000 10G->百万级别
 
         epoll与select，poll区别
         1.相比于select与poll，
