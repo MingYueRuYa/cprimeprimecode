@@ -88,13 +88,18 @@ TCP是个流协议
 	可以查看/proc/sys/fs/file-max 一个系统最多可以打开多少的描述符，和内存相关 1G->100,000 10G->百万级别
 
         epoll与select，poll区别
-        1.相比于select与poll，epoll最大的好处在于它不会随着监听fd数目的增加而降低效率
-        内核中的select与poll的实现是采用轮询来处理的，轮询的fd数目越多，效率越低
-        2.epoll的实现是基于回调的，如果fd有期望的事件发生就通过回调函数将其加入epoll的就绪队列中，也就是说他只关心
-        活跃的放到， 与fd数目多少没有关系
-        3.内核/用户空间内存拷贝问题，如何让内核把fd消息通知给用户空间？在这个问题上select/poll采用了内存拷贝方式，
-        而epoll采用了共享内存的方式
-        4.epoll不仅会告诉应用程序有I/O事件，因此根据这些信息应用程序就能直接定位到事件，而不必遍历整个fd集合
+        1.相比于select与poll，
+            epoll最大的好处在于它不会随着监听fd数目的增加而降低效率
+        内核中的select与poll的实现是采用轮询来处理的，
+            轮询的fd数目越多，效率越低
+        2.epoll的实现是基于回调的，如果fd有期望的事件发生就通过回调函数
+            将其加入epoll的就绪队列中，也就是说他只关心活跃的放到
+            ， 与fd数目多少没有关系
+        3.内核/用户空间内存拷贝问题，如何让内核把fd消息通知给用户空间？
+            在这个问题上select/poll采用了内存拷贝方式
+            ，而epoll采用了共享内存的方式
+        4.epoll不仅会告诉应用程序有I/O事件，
+            因此根据这些信息应用程序就能直接定位到事件，而不必遍历整个fd集合
 
 
 第十四章：
@@ -112,7 +117,8 @@ TCP是个流协议
         4.UDP协议数据报文截断
         5.recvfrom返回0，不代表连接关闭，因为udp是无连接
         6.ICMP异步错误
-            这个错误不会返回给未连接的socket套接口，所以recvfrom不会收到错误返回的信息，所以udp客户端也要调用connect就会收到一个ICMP信息
+            这个错误不会返回给未连接的socket套接口，所以recvfrom不会收到错误返
+            回的信息，所以udp客户端也要调用connect就会收到一个ICMP信息
         7.UDP connect
         8.UDP外出接口的确定
 
@@ -133,5 +139,21 @@ TCP是个流协议
 		
 第十六章：
 socketpair
+    功能：创建一个全双工的流管道，具有血缘关系的进程(父子进程)
+
+    原型：
+        int socketpair(int domain, int type, int protocal, int sv[2])
+    参数：
+        domain:协议家族
+        type:套接字类型
+        protocal:协议类型
+        sv:返回套接字对
+    返回值：
+        成功返回0，失败返回-1
 sendmsg/recvmsg
+    ssize_t sendmsg(int sockfd, const struct msghdr *msg, int flags);
+    ssize_t recvmsg(int sockfd, const struct msghdr *msg, int flags);
+    writev
 unix域协议传递描述符字
+    父子进程之间可以传递，没有关系的进程也可以传递但是只能使用unix域协议
+    不能使用socketpair进行
