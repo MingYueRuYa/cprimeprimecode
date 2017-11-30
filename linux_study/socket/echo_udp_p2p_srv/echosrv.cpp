@@ -25,6 +25,7 @@ USER_LIST client_list;
 void do_login(MESSAGE &msg, int sock, struct sockaddr_in *cliaddr);
 void do_logout(MESSAGE &msg, int sock, struct sockaddr_in *cliaddr);
 void do_sendlist(int sock, MESSAGE &msg, struct sockaddr_in *cliaddr);
+void do_exit(int sock);
 
 void do_srv(int sockfd)
 {
@@ -218,6 +219,11 @@ void do_sendlist(int sock, MESSAGE &msg, struct sockaddr_in *cliaddr)
         sendto(sock, &*it, sizeof(USER_INFO), 0
                 , (struct sockaddr *)cliaddr, socklen);
     } // for it
+}
+
+void do_exit(int sock)
+{
+    //TODO 服务器端退出，通知所有的客户端也要退出
 }
 
 int main(int argc, char *argv[])

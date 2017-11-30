@@ -23,6 +23,10 @@
 
 char username[16]   = {0};
 
+struct sockaddr_in addr;
+
+int serverfd = 0;
+
 USER_LIST client_list;
 
 void do_someone_login(MESSAGE &msg);
@@ -34,13 +38,17 @@ void do_exit(int sock, struct sockaddr_in *servaddr);
 void parse_cmd(char *cmdline, int sock, struct sockaddr_in *servaddr);
 bool sendmsgto(int sock, char *username, char *msg);
 
+void TipMessage();
+
 void do_client(/*int sockfd*/)
 {
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) {
         ERR_EXIT("socket");        
     }
-    struct sockaddr_in addr;
+    serverfd = sockfd;
+
+    memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_port   = htons(PORT);
     addr.sin_addr.s_addr = inet_addr(IP);
@@ -101,11 +109,7 @@ void do_client(/*int sockfd*/)
                 , ntohs(user.port));
     }
 
-    printf("\nCommand are:\n");
-    printf("send name msg:\n");
-    printf("list\n");
-    printf("exit\n");
-    printf("\n");
+    TipMessage();
 
     fd_set rset;
     FD_ZERO(&rset);
@@ -150,11 +154,7 @@ void do_client(/*int sockfd*/)
                     printf("unkown command, cmd:%d!\n", cmd);
                     break;
             } // switch
-            printf("\nCommand are:\n");
-            printf("send name msg:\n");
-            printf("list\n");
-            printf("exit\n");
-            printf("\n");
+            TipMessage();
         } // if FD_ISSET
 
         if (FD_ISSET(STDIN_FILENO, &rset)) {
@@ -249,6 +249,7 @@ void do_exit(int sock, struct sockaddr_in *servaddr)
             , (struct sockaddr *)servaddr, socklen) < 0) {
         ERR_EXIT("sendto");
     }
+    printf("client exit\n");
     exit(EXIT_SUCCESS);
 }
 
@@ -277,11 +278,7 @@ void parse_cmd(char *cmdline, int sock, struct sockaddr_in *servaddr)
         char *p2;
         p2 = strchr(p, ' ');
         if (p2 == NULL) {
-            printf("\nCommand are:\n");
-            printf("send name msg:\n");
-            printf("list\n");
-            printf("exit\n");
-            printf("\n");
+            TipMessage();
             return;
         }
         *p2 = '\0';
@@ -299,11 +296,7 @@ void parse_cmd(char *cmdline, int sock, struct sockaddr_in *servaddr)
             ERR_EXIT("sendto");
         }
     } else {
-        printf("\nCommand are:\n");
-        printf("send name msg:\n");
-        printf("list\n");
-        printf("exit\n");
-        printf("\n");
+        TipMessage();
     }
 }
 
@@ -359,7 +352,16 @@ bool sendmsgto(int sock, char *name, char *msg)
 
 void handle_sigint(int signum)
 {
-    //do_exit();
+    do_exit(serverfd, &addr);
+}
+
+void TipMessage()
+{
+    printf("\nCommand are:\n");
+    printf("send name msg:\n");
+    printf("list\n");
+    printf("exit\n");
+    printf("\n");
 }
 
 int main(int argc, char *argv[])

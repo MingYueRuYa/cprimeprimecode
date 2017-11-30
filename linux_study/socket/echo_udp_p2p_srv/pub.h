@@ -21,14 +21,17 @@ using std::list;
 #define MSG_LEN             512 
 
 //S2C
-#define S2C_LOGIN_OK        0x04
-#define S2C_ALREADY_LOGINED 0x05
-#define S2C_SOMEONE_ONLINE  0x06
-#define S2C_SOMEONE_LOGOUT  0x07
-#define S2C_ONLINE_USER     0x08
+#define S2C_BASE            0x200
+#define S2C_LOGIN_OK        S2C_BASE+1
+#define S2C_ALREADY_LOGINED S2C_BASE+2
+#define S2C_SOMEONE_ONLINE  S2C_BASE+3
+#define S2C_SOMEONE_LOGOUT  S2C_BASE+4
+#define S2C_ONLINE_USER     S2C_BASE+5
+#define S2C_SERVER_LOGOUT   S2C_BASE+6
 
 //C2C
-#define C2C_CHAT            0x09
+#define C2C_BASE            0x400
+#define C2C_CHAT            C2C_BASE+1
 
 typedef struct message 
 {
