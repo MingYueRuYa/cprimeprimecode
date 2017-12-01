@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY:all clean
 CC=gcc
 CFLAGS=-Wall -g -std=c99
 BIN=message_queue
@@ -7,5 +7,5 @@ all:$(BIN)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rv *.o $(BIN)
+	rm -rf *.o $(BIN)
 

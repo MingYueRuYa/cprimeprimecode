@@ -5,87 +5,19 @@
 **
 ****************************************************************************/
 
+#include "message_queue.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
-#include <stdbool.h>
 #include <getopt.h>
 
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
+static Args_Info  args_info;
+static char buf[MSGMAX];
 
-#define APPLICATION_NAME "msgqueue"
-
-#define ERR_EXIT(message)   \
-    do { \
-        perror(message);   \
-        exit(EXIT_FAILURE); \
-    } while(0)
-
-typedef struct msg_queue_info {
-    int mode;
-    unsigned long current_bytes; 
-    unsigned long current_number; 
-    unsigned long max_bytes;
-} msg_queue_info; 
-
-typedef struct msgbuf {
-    long mtype;
-    char mtext[1];
-} msgbuf;
-
-typedef struct ARGSINFO {
-    key_t msgkey;
-    int creat;
-    int open;
-    int flag;
-    int type;
-    int opt;
-    int mode;
-
-    bool isopen;
-    bool iscreat;
-    bool issend;
-} Args_Info;
-
-Args_Info  args_info;
-
-/*
- *  创建消息队列
- * */
-int create_message(key_t messageid, int msgflag);
-
-/*
- * 打开消息队列
- * */
-int open_message(key_t messageid, int msgflag);
-
-/*
- * 获取消息队列属性
- * */
-int get_message_queue_info(key_t msgid, msg_queue_info *info);
-
-/*
- * 设置消息队列内容
- * */
-int set_message_queue_info(key_t msgid, msg_queue_info *info);
-
-/*
- * 发送消息
- * */
-int send_message(key_t msgid, long msgtype, const char *msginfo);
-
-/*
- * 接收消息
- * */
-int recv_message(key_t msgid, long msgtype, size_t length, char *msginfo);
-
-void print(msg_queue_info *msgqueue);
-
-void print_help();
+//TODO 阻塞未完成
 
 int test_creat_set_msgqueue()
 {
@@ -106,7 +38,7 @@ int test_creat_set_msgqueue()
     if (get_message_queue_info(retid, &info) < 0) {
         ERR_EXIT("get_message_queue_info");
     }
-    print(&info);
+    print_message_info();
 
     info.mode = 0444;
     info.current_bytes  = 10;
@@ -116,7 +48,8 @@ int test_creat_set_msgqueue()
     if (set_message_queue_info(retid, &info) < 0) {
         ERR_EXIT("set_message_queue_info");
     }
-    print(&info);
+
+    print_message_info();
 
 //result:
     // open message queue 196608
@@ -134,110 +67,64 @@ int test_creat_set_msgqueue()
     return 0;
 }
 
+void parse_cmd(int argc, char *argv[]);
+
+void init_arg_info();
+
 int main(int argc, char *argv[])
 {
     // test_creat_set_msgqueue();
 
+	init_arg_info();	
 
-    int opt = -1;
-    while (1) {
-        opt = getopt(argc, argv, "m:hc:o:nr:s:");
-        if (opt == '?') {
-            exit(EXIT_FAILURE);
-        } else if (opt == -1) {
-            break;
-        }
-
-        switch(opt) {
-            case 'h':
-                print_help();
-                exit(EXIT_FAILURE);
-                break;
-            case 'm':
-                args_info.msgkey = atoi(optarg);
-                break;
-            case 'c':
-                args_info.iscreat = true;
-                sscanf(optarg, "%o", &args_info.mode);
-                break;
-            case 'o':
-                args_info.isopen = true;
-                if (NULL != optarg) {
-                    sscanf(optarg, "%o", &args_info.mode);
-                }
-                break;
-            case 'n':
-                args_info.flag |= IPC_NOWAIT;
-                break;
-            case 's':
-                args_info.type    = atoi(optarg);
-                args_info.issend  = true;
-                break;
-            default:
-                break;
-        } 
-    } //while
+	parse_cmd(argc, argv);
 
     if (args_info.msgkey < 0) {
         printf("message key value not specify\n");
         exit(EXIT_FAILURE); 
     }
 
-    int msgid = -1;
     if (args_info.iscreat) {
-        msgid = create_message(args_info.msgkey
-                , args_info.mode | args_info.flag);
-        if (msgid < 0) {
+        args_info.msgid = create_message(args_info.msgkey
+                , args_info.mode | IPC_CREAT);
+        if (args_info.msgid < 0) {
             ERR_EXIT("create_message");
         }
     }
 
     if (args_info.isopen) {
-        msgid = open_message(args_info.msgkey, args_info.mode);
-        if (msgid < 0) {
+        args_info.msgid = open_message(args_info.msgkey
+										, args_info.mode | args_info.flag);
+        if (args_info.msgid < 0) {
             ERR_EXIT("open_message");
         }
     }
 
-    if (msgid < 0) {
+    if (args_info.msgid < 0) {
         printf("please create or open message queue\n");
         exit(EXIT_FAILURE);
     }
 
+
     int ret = 0;
 
     if (args_info.issend) {
-        ret = send_message(msgid, args_info.type, "linux");
+        ret = send_message(args_info.msgid, args_info.type, "linux");
         if (ret < 0) {
             ERR_EXIT("send_message");
         }
     }
 
-    return;
+	if (args_info.isrecv) {
+		char msg[1024] = {0};
+		ret = recv_message(args_info.msgid
+				, args_info.recvtype, MSGMAX, msg);
+		if (ret < 0) {
+			ERR_EXIT("recv_message");
+		}
+	}
 
-    struct msg_queue_info info;
-    memset(&info, 0, sizeof(info));
-    ret = get_message_queue_info(msgid, &info);
-    if (ret < 0) {
-        ERR_EXIT("get_message_queue_info");
-    }
-
-    printf("-------------------set_message_queue_info-------------------\n");
-    print(&info);
-
-    char msg[1024] = {0};
-    ret = recv_message(msgid, 1234, 5, msg);
-    if (ret < 0) {
-        ERR_EXIT("recv_message");
-    }
-
-    ret = get_message_queue_info(msgid, &info);
-    if (ret < 0) {
-        ERR_EXIT("get_message_queue_info");
-    }
-
-    printf("-------------------set_message_queue_info-------------------\n");
-    print(&info);
+	print_message_info();
 
     return 0;
 }
@@ -250,8 +137,7 @@ int create_message(key_t messageid, int msgflag)
 
 int open_message(key_t messageid, int msgflag)
 {
-    int openflag = msgflag < 0 ? 0 : msgflag;
-    return msgget(messageid, openflag);
+    return msgget(messageid, msgflag);
 }
 
 int get_message_queue_info(key_t msgid, msg_queue_info *info)
@@ -339,18 +225,25 @@ int recv_message(key_t msgid, long msgtype, size_t length, char *msginfo)
     return 0;
 }
 
-void print(msg_queue_info *info)
+void print_message_info()
 {
-    printf("mode            = %-10o\n",  info->mode);
-    printf("current bytes   = %-10lu\n", info->current_bytes);
-    printf("current nums    = %-10lu\n", info->current_number);
-    printf("current bytes   = %-10lu\n", info->max_bytes);
+    struct msg_queue_info info;
+    memset(&info, 0, sizeof(info));
+    int ret = get_message_queue_info(args_info.msgid, &info);
+    if (ret < 0) {
+        ERR_EXIT("get_message_queue_info");
+    }
+
+    printf("mode            = %-10o\n",  info.mode);
+    printf("current bytes   = %-10lu\n", info.current_bytes);
+    printf("current nums    = %-10lu\n", info.current_number);
+    printf("current bytes   = %-10lu\n", info.max_bytes);
 }
 
 void print_help()
 {
-    printf("%s [mcotn]\n", APPLICATION_NAME);
-    printf("    -m specify message key\n");
+    printf("%s [kcotn]\n", APPLICATION_NAME);
+    printf("    -k specify message key\n");
     printf("    -c create with mode\n");
     printf("    -o open with mode, "
             "if mode=-1 means open origin permission.\n");
@@ -360,3 +253,76 @@ void print_help()
     printf("for example:\n");
     printf("%s -c 666 creat message queue with 666 mode\n", APPLICATION_NAME);
 }
+
+void parse_cmd(int argc, char *argv[])
+{
+    int opt = -1;
+    while (1) {
+        opt = getopt(argc, argv, "k:hc:o:nr:s:");
+        if (opt == '?') {
+            exit(EXIT_FAILURE);
+        } else if (opt == -1) {
+            break;
+        }
+
+        switch(opt) {
+            case 'h':
+                print_help();
+                exit(EXIT_FAILURE);
+                break;
+            case 'k':
+                if (NULL != optarg) {
+                	args_info.msgkey = atoi(optarg);
+				}
+                break;
+            case 'c':
+                args_info.iscreat = true;
+                if (NULL != optarg) {
+                	sscanf(optarg, "%o", &args_info.mode);
+				}
+                break;
+            case 'o':
+                args_info.isopen = true;
+                if (NULL != optarg) {
+                    sscanf(optarg, "%o", &args_info.mode);
+                }
+                break;
+            case 'n':
+                args_info.flag |= IPC_NOWAIT;
+                break;
+            case 's':
+                if (NULL != optarg) {
+                	args_info.type = atoi(optarg);
+				}
+                args_info.issend = true;
+                break;
+			case 'r':
+                if (NULL != optarg) {
+                	args_info.recvtype = atoi(optarg);
+				}
+				args_info.isrecv = true;
+				break;
+            default:
+                break;
+        } 
+    } //while
+}
+
+void init_arg_info()
+{
+	memset(&args_info, 0, sizeof(args_info));
+	args_info.msgid		= -1;
+    args_info. msgkey 	= -1;
+    args_info.creat 	= -1;
+    args_info.type		= -1;
+    args_info.recvtype	= -1;
+
+    args_info.flag 		= 0;
+    args_info.mode		= 0;
+
+    args_info.isopen 	= false;
+    args_info.iscreat 	= false;
+    args_info.issend 	= false;
+	args_info.isrecv	= false;
+}
+
