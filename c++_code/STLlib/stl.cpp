@@ -1235,6 +1235,116 @@ void test_hash_function()
 
 };
 
+#include <complex>
+#include <tuple>
+
+using std::complex;
+using std::tuple;
+using std::get;
+
+namespace test_tuple
+{
+void test_tuple()
+{
+	cout << "string, sizeof=" << sizeof(string) << endl;	//4
+	cout << "double, sizeof=" << sizeof(double) << endl;	//8
+	cout << "float, sizeof="  << sizeof(float)  << endl;	//4
+	cout << "complex<double>, sizeof=" 
+		 << sizeof(complex<double>) << endl;	// 16
+	
+	//tuples
+	tuple<string, int, int, complex<double> >t;
+	cout << "tuple<string, int, int, complex<double> > sizeof=" 
+		 << sizeof(t) << endl;	//28
+
+	//create and initialize a tuple explicitly
+	tuple<int, float, string>t1(41, 6.3, "nico");
+	cout << "t1:" << get<0>(t1) << " " 
+				  << get<1>(t1) << " " 
+				  << get<2>(t1) << endl;
+	// t1:41 6.3 nico
+
+	auto t2 = std::make_tuple(22, 44, "stacy");
+
+	get<1>(t1) = get<1>(t2);
+
+	cout << "t1:" << get<0>(t1) << " " 
+				  << get<1>(t1) << " " 
+				  << get<2>(t1) << endl;
+	// t1:41 44 nico
+
+	if (t1 < t2) {	// compares value for value
+		cout << "t1 < t2" << endl;
+	} else {
+		cout << "t1 > t2" << endl;
+	}
+	// t1 > t2
+
+	t1 = t2;
+	cout << "t1:" << get<0>(t1) << " " 
+				  << get<1>(t1) << " " 
+				  << get<2>(t1) << endl;
+
+	tuple<int, float, string> t3(77, 1.10, "more light");
+	int i1;
+	float f1;
+	string s1;
+
+	tie(i1, f1, s1) = t3;	// assigns values of t to i, f, s
+
+	cout << "i1 " << i1 << " f1 " << f1 << " s1 " << s1 << endl;
+	// 77 1.1 more light
+
+	typedef tuple<int, float, string> TupleType;
+	cout << std::tuple_size<TupleType>::value << endl;	// 3
+	std::tuple_element<1, TupleType>::type f2 = 1.0;	// yield float 
+
+	typedef std::tuple_element<1, TupleType>::type T;
+}
+};
+
+#include <type_traits>
+
+namespace test_type_traits
+{
+
+template<typename T>
+void type_traits_output(const T&x)
+{
+	cout << "\ntype traits for type: " << typeid(T).name() << endl;
+	cout << "is_void\t" << std::is_void<T>::value << endl;
+	cout << "is_integral\t" << std::is_integral<T>::value << endl;
+	cout << "is_floating_point\t" << std::is_floating_point<T>::value << endl;
+	cout << "is_arithmetic\t" << std::is_arithmetic<T>::value << endl;
+	cout << "is_signed\t" << std::is_signed<T>::value << endl;
+	cout << "is_unsigned\t" << std::is_unsigned<T>::value << endl;
+	cout << "is_const\t" << std::is_signed<T>::is_const << endl;
+	cout << "is_volatile\t" << std::is_volatile<T>::value << endl;
+	cout << "is_class\t" << std::is_class<T>::value << endl;
+	cout << "is_function\t" << std::is_function<T>::value << endl;
+	cout << "is_reference\t" << std::is_reference<T>::value << endl;
+	cout << "is_lvalue_reference\t" 
+		 << std::is_lvalue_reference<T>::value << endl;
+	cout << "is_rvalue_reference\t" 
+		 << std::is_rvalue_reference<T>::value << endl;
+	cout << "is_pointer\t" << std::is_pointer<T>::value << endl;
+	cout << "is_member_pointer\t" << std::is_member_pointer<T>::value << endl;
+	cout << "is_member_object_pointer\t" 
+		 << std::is_member_object_pointer<T>::value << endl;
+	cout << "is_member_function_pointer\t" 
+		 << std::is_member_function_pointer<T>::value << endl;
+	cout << "is_fundamental\t" << std::is_fundamental<T>::value << endl;
+	cout << "is_scalar\t" << std::is_scalar<T>::value << endl;
+	cout << "is_object\t" << std::is_object<T>::value << endl;
+	cout << "is_compound\t" << std::is_compound<T>::value << endl;
+}
+
+void test_type_traits()
+{
+		
+}
+};
+
 int main(int argc, char *argv[])
 {
 	//test_array::test_array();
@@ -1255,7 +1365,8 @@ int main(int argc, char *argv[])
 	//iterator_adapter::test_insert_iterator();
 	//iterator_adapter::test_ostream_iterator();
 	//iterator_adapter::test_istream_iterator();
-	test_hash_function::test_hash_function();
+	//test_hash_function::test_hash_function();
+	//test_tuple::test_tuple();
 	return 0;
 }
 
