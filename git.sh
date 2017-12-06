@@ -2,12 +2,16 @@
 
 # 不带参数表示pull，带参数的话表示需要提交
 
+function help {
+    echo "usage:"
+    echo "$0 mean git pull "
+    echo "$0 \"commit message \" mean git pull -> git commit -> git push"
+    exit 0
+}
+
 case $1 in
     -h|-help|h)
-        echo "usage:"
-        echo "$0 mean git pull "
-        echo "$0 \"commit message \" mean git pull -> git commit -> git push"
-        exit 0
+        help
 		;;
     -s|-statue|s)
         echo -e "\e[4m\e[1;32mgit status...\e[0m"
