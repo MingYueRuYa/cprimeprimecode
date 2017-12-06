@@ -39,6 +39,8 @@ typedef struct ARGSINFO {
     bool iscreat;
     bool issend;
 	bool isrecv;
+	bool isdelete;
+	bool isgetmsg;
 } Args_Info;
 
 typedef struct msg_queue_info {
@@ -50,7 +52,7 @@ typedef struct msg_queue_info {
 
 typedef struct msgbuf {
     long mtype;
-    char mtext[1];
+    char mtext[MSGMAX];
 } msgbuf;
 
 /*

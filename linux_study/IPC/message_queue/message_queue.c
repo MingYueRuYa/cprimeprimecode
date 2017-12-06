@@ -105,7 +105,6 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-
     int ret = 0;
 
     if (args_info.issend) {
@@ -122,9 +121,19 @@ int main(int argc, char *argv[])
 		if (ret < 0) {
 			ERR_EXIT("recv_message");
 		}
+		printf("\nrecive message %s\n", buf);
 	}
 
-	print_message_info();
+	if (args_info.isdelete) {
+		ret = msgctl(args_info.msgid, IPC_RMID, NULL);
+		if (ret < 0) {
+			ERR_EXIT("recv_message");
+		}
+	}
+
+	if (! args_info.isdelete) {
+		print_message_info();
+	}
 
     return 0;
 }
@@ -191,16 +200,17 @@ int send_message(key_t msgid, long msgtype, const char *msginfo)
         return -1;
     }
 
-    struct msgbuf *buf;
-    buf = (struct msgbuf *)malloc(sizeof(long)+strlen(msginfo));
-    buf->mtype = msgtype;
-
-    if (msgsnd(msgid, buf, strlen(msginfo), 0) < 0) {
+    struct msgbuf *sendbuf;
+    sendbuf = (struct msgbuf *)malloc(sizeof(*sendbuf));
+    sendbuf->mtype = msgtype;
+	strncpy(sendbuf->mtext, buf, strlen(buf));
+		
+    if (msgsnd(msgid, sendbuf, strlen(buf), 0) < 0) {
         return -1;
     }
 
-    free(buf);
-    buf = NULL;
+    free(sendbuf);
+    sendbuf = NULL;
     return 0;
 }
 
@@ -211,16 +221,19 @@ int recv_message(key_t msgid, long msgtype, size_t length, char *msginfo)
         return -1;
     }
 
-    struct msgbuf *buf;
-    buf = (struct msgbuf *)malloc(sizeof(long)+length);
-    buf->mtype = msgtype;
+    struct msgbuf *recvbuf;
+    recvbuf = (struct msgbuf *)malloc(sizeof(*recvbuf));
+    recvbuf->mtype = msgtype;
 
-    if (msgrcv(msgid, buf, length, msgtype, 0) < 0) {
+    if (msgrcv(msgid, recvbuf, MSGMAX, msgtype, args_info.flag) < 0) {
         return -1;
     }
 
-    free(buf);
-    buf = NULL;
+	memset(buf, 0, strlen(buf));
+	strncpy(buf, recvbuf->mtext, strlen(recvbuf->mtext));
+
+    free(recvbuf);
+    recvbuf = NULL;
 
     return 0;
 }
@@ -246,10 +259,13 @@ void print_help()
     printf("    -k specify message key\n");
     printf("    -c create with mode\n");
     printf("    -o open with mode, "
-            "if mode=-1 means open origin permission.\n");
+            "if mode=-1 means open origin permission\n");
     printf("    -r recvie message with type\n");
     printf("    -s send message with type\n");
+    printf("    -d delete message queue\n");
     printf("    -n with no wait\n");
+    printf("    -m send message info\n");
+    printf("    -g get message info\n");
     printf("for example:\n");
     printf("%s -c 666 creat message queue with 666 mode\n", APPLICATION_NAME);
 }
@@ -258,7 +274,7 @@ void parse_cmd(int argc, char *argv[])
 {
     int opt = -1;
     while (1) {
-        opt = getopt(argc, argv, "k:hc:o:nr:s:");
+        opt = getopt(argc, argv, "k:hc:o:nr:s:dm:");
         if (opt == '?') {
             exit(EXIT_FAILURE);
         } else if (opt == -1) {
@@ -302,6 +318,17 @@ void parse_cmd(int argc, char *argv[])
 				}
 				args_info.isrecv = true;
 				break;
+			case 'd':
+				args_info.isdelete = true;
+				break;
+			case 'm':
+				//TODO 这里需要改进，从命令读取消息时，不能含有空格
+				//		想到的解决方法是指定文件然后从文件中读取
+                if (NULL != optarg) {
+					memset(buf, 0, strlen(buf));
+                	sscanf(optarg,"%s", buf);	
+				}
+				break;
             default:
                 break;
         } 
@@ -325,4 +352,3 @@ void init_arg_info()
     args_info.issend 	= false;
 	args_info.isrecv	= false;
 }
-
