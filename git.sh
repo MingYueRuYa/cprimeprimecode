@@ -26,6 +26,7 @@ echo -e "\e[4m\e[1;32mgit pull...\e[0m"
 git pull
 
 if [ $# -eq 0 ]; then
+	logger "git pull from github"
     exit 0 
 fi
 
@@ -40,4 +41,5 @@ if [[ $? == 0 ]]; then
 else
     echo -e "\e[4m\e[1;31mpush failed\e[0m"
 fi
+
 
