@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     int isdel   = -1;
     char filebuf[1024] = {0};
     while (1) {
+        // c create r read d delte f send message 
         opt = getopt(argc, argv, "c:r:df:");
         if (opt == '?') {
             exit(EXIT_FAILURE);
