@@ -77,7 +77,9 @@ int sem_del(const int semid)
 
 int sem_p(const int semid)
 {
-    struct sembuf sb = {0, -1, 0};
+    // SEM_UNDO 进程退出资源自动加+1
+    // IPC_NOWAIT 如果没有资源，立即退出不会阻塞，并这是errno=EAGAIN
+    struct sembuf sb = {0, -1,  0 /* IPC_NOWAIT | SEM_UNO */};
     int ret = semop(semid, &sb, 1);
     if (ret < 0) {
         ERR_EXIT("sem_p");
