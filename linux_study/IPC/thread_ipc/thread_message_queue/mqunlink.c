@@ -15,6 +15,7 @@
 
 #include "common.h"
 
+
 int main(int argc, char *argv[])
 {
     // 编译时需要连接runtime库 -lrt
@@ -30,5 +31,10 @@ int main(int argc, char *argv[])
     }
     printf("#max_msg=%ld, #max_bytes=%ld, #current_on_queue=%ld\n"
             , attr.mq_maxmsg, attr.mq_msgsize, attr.mq_curmsgs);
+
+    if (mq_unlink("/abc") == -1) {
+        ERR_EXIT("mq_unlink");
+    }
+    printf("unlink seccussful\n");
     return 0;
 }
