@@ -1,20 +1,20 @@
 .PHONY:all clean
 CC=gcc
 CFLAGS=-Wall -g -std=c99
-BIN=shmopen
+BIN=shmopen shmwrite shmread
 all:$(BIN)
 %.o:%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 shmopen:shmopen.o
 	$(CC) $(CFLAGS)  $< -o $@ -lrt
-# 
-# mqsend:mqsend.o
-# 	$(CC) $(CFLAGS)  $< -o $@ -lrt
-# 
-# mqrecv:mqrecv.o
-# 	$(CC) $(CFLAGS)  $< -o $@ -lrt
-# 
+ 
+shmwrite:shmwrite.o
+	$(CC) $(CFLAGS)  $< -o $@ -lrt
+ 
+shmread:shmread.o
+	$(CC) $(CFLAGS)  $< -o $@ -lrt
+ 
 # mqnotify:mqnotify.o
 # 	$(CC) $(CFLAGS)  $< -o $@ -lrt
 # 
