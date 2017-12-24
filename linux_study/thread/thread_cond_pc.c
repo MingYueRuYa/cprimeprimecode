@@ -49,6 +49,9 @@ void *custom(void *arg)
         while (g_product == 0) {
             printf("%d begin wait a condition...\n", index);
             pthread_cond_wait(&g_cond, &g_mutex);
+            //1.进入阻塞之后，会对g_mutex进行解锁
+            //2.等待条件，将其唤醒
+            //3.条件满足，在对g_mutex加锁
         }
         printf("%d end wait condition...\n", index);
         --g_product;

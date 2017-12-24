@@ -53,4 +53,15 @@ waitpid                 pthread_join
 kill                    pthread_cancle      //他杀
 
 
+线程的条件变量
+pthread_cond_wait 做了三件事？
+1.对mutex进行解锁
+2.等待条件变量，直到有线程向它发起通知
+3.对mutex进行加锁
+
+pthread_cond_signal
+1.向第一个等待的线程发起通知，如果没有任何一个的线程处于等待条件的状态，这个通知忽略
+
+pthread_con_broadcase
+1.向所有等待的线程发起通知
 
