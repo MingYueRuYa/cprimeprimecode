@@ -5,15 +5,16 @@
 **
 *****************************************************************************/
 
+#include "thread_pool.h"
+
+#include <time.h>
 #include <stdio.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <pthread.h>
 #include <string.h>
-#include <errno.h>
-#include <time.h>
+#include <pthread.h>
 
-#include "thread_pool.h"
 #include "condition.h"
 
 void *thread_routine(void *arg)
@@ -24,6 +25,7 @@ void *thread_routine(void *arg)
     while (1) {
        timeout = 0; 
        condition_lock(&pool->ready);
+	   // 此时线程已创建，idle空闲线程+1
        pool->idle++;
        // 等待队列有任务到来或者线程池销毁通知
        while (pool->first == NULL && ! pool->quit) {
@@ -46,6 +48,7 @@ void *thread_routine(void *arg)
             // 队头取出任务
             task_t *t = pool->first;
             pool->first = t->next;
+			// TODO: notice 1
             // 执行任务需要一定的时间，所以要现解锁，以便生产者线程
             // 能够往队列中添加任务，其他消费者线程能够进入等待任务
             condition_unlock(&pool->ready);
@@ -69,6 +72,9 @@ void *thread_routine(void *arg)
         // timeout and task finished
         if (timeout && pool->first == NULL) {
             pool->counter--;
+            if (pool->counter == 0) {
+                condition_signal(&pool->ready);
+            }
             condition_unlock(&pool->ready);
             // break 之前一定要解锁
             break;
@@ -92,7 +98,7 @@ void threadpool_init(threadpool_t *pool, int threads)
     pool->max_threads   = threads;
 }
 
-//往线程池中添加任务
+// 往线程池中添加任务
 void threadpool_add_task(threadpool_t *pool
                             , void *(*run)(void *arg)
                             , void *arg)
@@ -134,7 +140,7 @@ void threadpool_destroy(threadpool_t *pool)
     condition_lock(&pool->ready);
     pool->quit = 1;
 
-    // one is processing thread, one of is idle thread
+    // one of is processing thread, one of is idle thread
     if (pool->counter > 0) {
         if (pool->idle > 0) {   // idle thread
             condition_broadcast(&pool->ready);
