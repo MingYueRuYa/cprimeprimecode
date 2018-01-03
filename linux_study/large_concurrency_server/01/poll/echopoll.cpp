@@ -4,10 +4,12 @@
 #include <string.h>
 #include <poll.h>
 #include <signal.h>
+#include <fcntl.h>
 
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
 #include <arpa/inet.h>          /* See NOTES */
+#include <sys/stat.h>
 #include <netinet/in.h>
 
 #include <vector>
@@ -31,7 +33,11 @@ int main(int argc, char *argv[])
 
 	SetupSignal();
 
-	int listenfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    int idlefd = open("/dev/null", O_RDONLY | O_CLOEXEC);
+
+	int listenfd = socket(AF_INET
+                            , SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC
+                            , IPPROTO_TCP);
 	if (listenfd == -1) {
 		ERR_EXIT("socket");	
 	}
@@ -67,8 +73,14 @@ int main(int argc, char *argv[])
 	while (1) {
 		readfd = poll(&*pollfds.begin(), pollfds.size(), -1);
 		if (readfd == -1) {
-			if (errno == EINTR) {
+			if (EINTR == errno) {
 				continue;
+            } else if (EMFILE == errno) {   // 达到最大文件描述符限制
+                close(idlefd);  // 先关闭原先事先准备的空闲描述符
+                idlefd = accept(listenfd, NULL, NULL);  // 接受一个请求
+                close(idlefd);  // 立即将这个新的请求描述符关闭
+                // 再打开空闲描述符，以便下次在替换新的描述符
+                idlefd = open("/dev/null", O_RDONLY | O_CLOEXEC);
 			} else {
 				ERR_EXIT("poll");
 			}
@@ -79,7 +91,6 @@ int main(int argc, char *argv[])
 		}
 
 		if (pollfds[0].revents & POLLIN) {	//新的套接字
-			cout << "ready " << readfd << endl;
 			peerlen = sizeof(peeraddr);
 			int connfd = accept4(pollfds[0].fd, (struct sockaddr *)&peeraddr
 									, &peerlen, SOCK_NONBLOCK | SOCK_CLOEXEC);	
@@ -94,7 +105,7 @@ int main(int argc, char *argv[])
 			--readfd;
 			cout << "ip:" << inet_ntoa(peeraddr.sin_addr)
 				 << " port:" << ntohs(peeraddr.sin_port)
-				 << endl;
+				 << " count:" << pollfds.size() << endl;
 		}
 
 		for (PollFdList::iterator ibeg = pollfds.begin()+1;
