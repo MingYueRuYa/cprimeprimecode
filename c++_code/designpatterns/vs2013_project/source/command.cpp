@@ -115,8 +115,8 @@ private:
 
         Barbecur *barbecur = new Barbecur();
 
-        BakeMuttonCommand *muttoncommand = new BakeMuttonCommand(barbecur);
-        BakeChickenWingCommand *chickencommand = new BakeChickenWingCommand(barbecur);
+        BakeMuttonCommand 		*muttoncommand 	= new BakeMuttonCommand(barbecur);
+        BakeChickenWingCommand 	*chickencommand = new BakeChickenWingCommand(barbecur);
 
         Waiter *waiter = new Waiter();
         waiter->SetOrder(muttoncommand);
