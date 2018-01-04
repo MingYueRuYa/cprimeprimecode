@@ -62,6 +62,308 @@ int compareString(const void *a, const void *b)
 	else { return 0; }
 }
 
+#include <cstring>
+
+// 一下测试MyString是为了测试containers with moveable elements
+class MyString {
+public:
+	static size_t DCtor;	// default-ctor
+	static size_t Ctor;		// ctor
+	static size_t CCtor;	// copy ctor
+	static size_t CAsgn;	// copy assignment
+	static size_t MCtor;	// move ctor
+	static size_t MAsgn;	// move-asgn
+	static size_t Dtor;		// dtor
+
+public:
+	// default ctor
+	MyString() : _data(NULL), _len(0) { ++DCtor; }
+
+	// ctor
+	MyString(const char *p) : _len(strlen(p)) {
+		++Ctor;
+		_init_data(p);
+	}
+
+	// copy ctor
+	MyString(const MyString &str) : _len(str._len) {
+		++CCtor;
+		_init_data(str._data);
+	}
+
+	MyString(MyString &&str) noexcept : _data(str._data), _len(str._len) {
+		++MCtor;
+		str._len  = 0;
+		str._data = NULL;
+	}
+
+	MyString &operator =(const MyString &str) {
+		++CAsgn;
+		if (this == &str) {
+			return *this;	
+		}
+
+		if (_data) {
+			delete _data;
+			_data = NULL;
+		}
+
+		_len = str._len;
+		_init_data(str._data);
+	}
+
+	MyString &operator =(MyString &&str) {
+		++MAsgn;
+		if (this == &str) {
+			return *this;	
+		}
+
+		if (_data) {
+			delete _data;
+			_data = NULL;
+		}
+		_len  = str._len;
+		_data = str._data;
+		str._len  = 0;
+		str._data = NULL;
+	}
+
+	virtual ~MyString() {
+		++Dtor;
+		if (NULL != _data) {
+			delete _data;
+			_data = NULL;
+		}
+	}
+
+	bool
+	operator <(const MyString &rhs) const
+	{
+		// 借用string比较大小
+		return std::string(this->_data) < std::string(rhs._data);
+	}
+
+	bool
+	operator ==(const MyString &rhs) const
+	{
+		// 借用string比较大小
+		return std::string(this->_data) == std::string(rhs._data);
+	}
+
+	char *get() const { return _data; }
+
+
+private:
+	char *_data;
+	size_t _len;
+
+	void _init_data(const char *s) {
+		_data = new char[_len+1];
+		memcpy(_data, s, _len);
+		_data[_len] = '\0';
+	}
+
+};
+
+size_t MyString::DCtor = 0;
+size_t MyString::Ctor  = 0;
+size_t MyString::CCtor = 0;
+size_t MyString::CAsgn = 0;
+size_t MyString::MCtor = 0;
+size_t MyString::MAsgn = 0;
+size_t MyString::Dtor  = 0;
+
+class MyStrNoMove {
+public:
+	static size_t DCtor;	// default-ctor
+	static size_t Ctor;		// ctor
+	static size_t CCtor;	// copy ctor
+	static size_t CAsgn;	// copy assignment
+	static size_t MCtor;	// move ctor
+	static size_t MAsgn;	// move-asgn
+	static size_t Dtor;		// dtor
+
+public:
+	// default ctor
+	MyStrNoMove() : _data(NULL), _len(0) { ++DCtor; }
+
+	// ctor
+	MyStrNoMove(const char *p) : _len(strlen(p)) {
+		++Ctor;
+		_init_data(p);
+	}
+
+	// copy ctor
+	MyStrNoMove(const MyStrNoMove &str) : _len(str._len) {
+		++CCtor;
+		_init_data(str._data);
+	}
+
+	MyStrNoMove &operator =(const MyStrNoMove &str) {
+		++CAsgn;
+		if (this == &str) {
+			return *this;	
+		}
+
+		if (_data) {
+			delete _data;
+			_data = NULL;
+		}
+
+		_len = str._len;
+		_init_data(str._data);
+	}
+
+	virtual ~MyStrNoMove() {
+		++Dtor;
+		if (NULL != _data) {
+			delete _data;
+			_data = NULL;
+		}
+	}
+
+	bool
+	operator <(const MyStrNoMove &rhs) const
+	{
+		// 借用string比较大小
+		return std::string(this->_data) < std::string(rhs._data);
+	}
+
+	bool
+	operator ==(const MyStrNoMove &rhs) const
+	{
+		// 借用string比较大小
+		return std::string(this->_data) == std::string(rhs._data);
+	}
+
+	char *get() const { return _data; }
+
+
+private:
+	char *_data;
+	size_t _len;
+
+	void _init_data(const char *s) {
+		_data = new char[_len+1];
+		memcpy(_data, s, _len);
+		_data[_len] = '\0';
+	}
+
+};
+
+size_t MyStrNoMove::DCtor = 0;
+size_t MyStrNoMove::Ctor  = 0;
+size_t MyStrNoMove::CCtor = 0;
+size_t MyStrNoMove::CAsgn = 0;
+size_t MyStrNoMove::MCtor = 0;
+size_t MyStrNoMove::MAsgn = 0;
+size_t MyStrNoMove::Dtor  = 0;
+
+#include <list>
+#include <forward_list>
+#include <functional>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using std::max;
+using std::min;
+using std::string;
+using std::hash;
+
+namespace std
+{
+
+template<>
+struct hash<MyString>
+{
+    size_t operator()(const MyString& s) const noexcept
+    {
+        return hash<string>()(string(s.get()));
+    }
+};
+
+};
+
+namespace test_misc
+{
+bool strLonger(const string &s1, const string &s2)
+{
+	return s1.size() < s2.size();
+}
+
+void test_misc()
+{
+	cout << "\ntest_misc()..................\n";
+	// 以下这些都是标准库的众多容器的max_size()计算方式
+	cout << size_t(-1) << endl;	// 4294967295
+	cout << size_t(-1)/sizeof(long) << endl;	// 1073741823
+	cout << size_t(-1)/sizeof(string) << endl;	// 1073741823
+ 	cout << size_t(-1)/sizeof(std::_List_node<string>) << endl;	// 357913941
+ 	cout << size_t(-1)/sizeof(std::_Fwd_list_node<string>) 
+		 << endl; // 536870911
+
+	cout << "RAND_MAX=" << RAND_MAX << endl;	// RAND_MAX=2147483647
+
+    cout << std::min( {2, 5, 8, 9, 45, 0, 81} ) << endl;	// 0
+    cout << std::max( {2, 5, 8, 9, 45, 0, 81} ) << endl;	// 81
+
+    std::vector<int> vint {2, 5, 8, 9, 45, 0, 81};
+
+    cout << "max of zoo and hello:"
+         << max(string("zoo"), string("hello")) << endl;	// zoo
+
+    cout << "max of zoo and hello:"
+         << max(string("zoo"), string("hello"), strLonger) << endl;	// hello
+
+    cout << std::hash<MyString>()(MyString("Ace")) << endl;	// 1765813650
+    cout << std::hash<MyString>()(MyString("Stacy")) << endl;	// 2790324277
+    cout << "MyString(zoo) < MyString(hello) ==> "
+         << (MyString("zoo") < MyString("hello")) << endl;	// 0
+    cout << "MyString(zoo) == MyString(hello) ==> "
+         << (MyString("zoo") == MyString("hello")) << endl;	// 0
+    cout << "MyStrNoMove(zoo) < MyStrNoMove(hello) ==> "
+         << (MyStrNoMove("zoo") < MyStrNoMove("hello")) << endl;	// 0
+    cout << "MyStrNoMove(zoo) == MyStrNoMove(hello) ==> "
+         << (MyStrNoMove("zoo") == MyStrNoMove("hello")) << endl;	// 0
+
+}
+
+};
+
+#include <typeinfo>
+
+namespace test_moveable
+{
+
+template<typename T>
+void output_static_data(const T&str)
+{
+	cout << typeid(str).name() << "  -- " << endl;
+	cout << "CCtor="   << T::Ctor
+		 << " MCtor="  << T::MCtor
+		 << " CAsgn="  << T::CAsgn
+		 << " MAsgn="  << T::MAsgn
+		 << " Dtor="   << T::DCtor
+		 << " Ctor="   << T::Ctor
+		 << " DCtor="  << T::DCtor
+		 << endl;
+}
+
+template<typename M, typename NM>
+void test_moveable(M c1, NM c2, long &value)
+{
+	char buf[10];
+
+	// 测试move
+	cout << "\n\ntest, with moveable elements" << endl;
+	typedef typename std::iterator_traits<typename M::iterator>::value_type \
+		V1Type;	
+
+
+}
+
+}
 
 //-------------------------------------------------
 #include <ctime>
@@ -187,6 +489,7 @@ namespace test_vector
 		//sort(), seconds:1.26775
 		//bsearch, seconds:0.000005
 		//not found! 
+
 	}
 
 };
@@ -215,7 +518,8 @@ namespace test_list
 			}
 		} //for 
 
-		cout << "seconds: " << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
+		cout << "seconds: " 
+             << (double)(clock()-timestart)/CLOCKS_PER_SEC << endl;
 		cout << "list.size()= " << c.size() << endl;
 		cout << "list.max_size()= " << c.max_size() << endl;
 		cout << "list.front()= " << c.front() << endl;
@@ -225,7 +529,8 @@ namespace test_list
 		{
 			timestart = clock();
 			auto item = find(c.begin(), c.end(), target);
-			cout << "std::find(), seconds:" << SECONDS(clock()-timestart) << endl;
+			cout << "std::find(), seconds:" 
+                 << SECONDS(clock()-timestart) << endl;
 			if (c.end() != item) { cout << "found, " << *item << endl; }
 			else { cout << "not found! " << endl; }
 		}
@@ -451,6 +756,7 @@ namespace test_multi_map
 		cout << "multimap.size()= " << c.size() << endl;
 		cout << "multimap.max_size()= " << c.max_size() << endl;
 		long target = get_a_target_long();
+		
 		//{
 			//timestart = clock();
 			//error，pair对象没有重载operator==操作符
@@ -470,6 +776,7 @@ namespace test_multi_map
 				cout << "found, " << item->second << endl;
 			} // if 
 		}
+		
 	//result:		
 	//............test set_multimap............
 	//seconds: 0.807391
@@ -1341,7 +1648,6 @@ void type_traits_output(const T&x)
 
 void test_type_traits()
 {
-		
 }
 };
 
@@ -1367,6 +1673,7 @@ int main(int argc, char *argv[])
 	//iterator_adapter::test_istream_iterator();
 	//test_hash_function::test_hash_function();
 	//test_tuple::test_tuple();
+    test_misc::test_misc();
 	return 0;
 }
 
