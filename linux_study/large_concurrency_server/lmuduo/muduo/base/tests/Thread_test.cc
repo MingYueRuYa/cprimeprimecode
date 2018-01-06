@@ -4,6 +4,7 @@
 #include <string>
 #include <boost/bind.hpp>
 #include <stdio.h>
+#include <iostream>
 
 void threadFunc()
 {
@@ -43,9 +44,12 @@ int main()
 {
   printf("pid=%d, tid=%d\n", ::getpid(), muduo::CurrentThread::tid());
 
-  muduo::Thread t1(threadFunc);
+  printf("main programe name %s\n", muduo::CurrentThread::t_threadName);
+
+  muduo::Thread t1(threadFunc, "t1");
   t1.start();
   t1.join();
+  std::cout << "t1 name " << t1.name() << std::endl;
 
   muduo::Thread t2(boost::bind(threadFunc2, 42),
                    "thread for free function with argument");
@@ -59,9 +63,11 @@ int main()
   t3.start();
   t3.join();
 
-  muduo::Thread t4(boost::bind(&Foo::memberFunc2, boost::ref(foo), std::string("Shuo Chen")));
+  muduo::Thread t4(boost::bind(&Foo::memberFunc2, boost::ref(foo)
+                     , std::string("Shuo Chen")));
   t4.start();
   t4.join();
 
   printf("number of created threads %d\n", muduo::Thread::numCreated());
+  return 0;
 }

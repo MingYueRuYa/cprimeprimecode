@@ -8,3 +8,9 @@ target_link_libraries(deadlock_test1 pthread)
 
 add_executable(deadlock_test2 deadlock_test2.cc)
 target_link_libraries(deadlock_test2 pthread)
+
+add_executable(CountDownLatch_test1 CountDownLatch_test1.cc)
+target_link_libraries(CountDownLatch_test1 muduo_base)
+
+add_executable(CountDownLatch_test2 CountDownLatch_test2.cc)
+target_link_libraries(CountDownLatch_test2 muduo_base)
