@@ -65,3 +65,10 @@ pthread_cond_signal
 pthread_con_broadcase
 1.向所有等待的线程发起通知
 
+
+线程私有数据
+1.__thread 可以指定此类数据时thread独立的，可以参考muduo的thread封装，__thread
+只能时POD类型的数据
+2.tsd数据，可以跨函数使用
+
+
