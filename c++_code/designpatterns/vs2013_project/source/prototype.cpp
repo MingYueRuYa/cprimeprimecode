@@ -29,6 +29,8 @@
 #ifndef prototype_h
 #define prototype_h
 
+#include <string.h>
+
 #include <iostream>
 
 using std::cout;
@@ -78,7 +80,7 @@ public:
         } else {
             int length = strlen(pName) + 1;
             name = new char[length];
-            strcpy_s(name, length, pName);
+            strncpy(name, pName, length);
         }
     }
 
@@ -90,7 +92,7 @@ public:
         } else {
             int length = strlen(pResume.name) + 1;
             name = new char[length];
-            strcpy_s(name, length, pResume.name);
+            strncpy(name, pResume.name, length);
         }
     }
 
@@ -125,7 +127,7 @@ public:
         else {
             int length = strlen(pName) + 1;
             name = new char[length];
-            strcpy_s(name, length, pName);
+            strncpy(name, pName, length);
         }
     }
 
@@ -138,7 +140,7 @@ public:
         else {
             int length = strlen(pResume.name) + 1;
             name = new char[length];
-            strcpy_s(name, length, pResume.name);
+            strncpy(name, pResume.name, length);
         }
     }
 

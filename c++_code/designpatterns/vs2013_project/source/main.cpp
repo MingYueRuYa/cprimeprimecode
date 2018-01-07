@@ -5,6 +5,8 @@
 **
 ****************************************************************************/
 
+// 2018年 01月 06日 星期六 21:46:53 CST
+
 #include <iostream>
 
 #include "designpatternpack.h"
@@ -14,8 +16,8 @@ using std::endl;
 
 int main(int argc, char *argv[])
 {
-//    simple_factory::test_simple_factory();
-//    cout << "----------------------------------------------" << endl;
+    simple_factory::test_simple_factory();
+    cout << "----------------------------------------------" << endl;
 
 //    factory::test_factory();
 //    cout << "----------------------------------------------" << endl;
@@ -68,8 +70,8 @@ int main(int argc, char *argv[])
 //    memento::test_memento();
 //    cout << "----------------------------------------------" << endl;
 
-    state::test_state();
-    cout << "----------------------------------------------" << endl;
+//    state::test_state();
+//    cout << "----------------------------------------------" << endl;
 
 //    singleton::test_singleton();
 //    cout << "----------------------------------------------" << endl;
@@ -83,6 +85,6 @@ int main(int argc, char *argv[])
 //    visitor::test_visitor();
 //    cout << "----------------------------------------------" << endl;
 
-    system("pause");
+    getchar();
     return 0;
 }
