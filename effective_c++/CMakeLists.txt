@@ -26,3 +26,6 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 add_executable(08_prevent_exceptions_from_leaving_destructors
 	08_prevent_exceptions_from_leaving_destructors.cpp)
+
+add_executable(25_consider_support_for_a_non_throwing_swap
+	25_consider_support_for_a_non_throwing_swap.cpp)
