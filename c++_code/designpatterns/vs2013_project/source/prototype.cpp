@@ -25,7 +25,6 @@
     2、实现原型模式每个派生类都必须实现 Clone接口。 
     3、逃避构造函数的约束。
  */
-
 #ifndef prototype_h
 #define prototype_h
 
