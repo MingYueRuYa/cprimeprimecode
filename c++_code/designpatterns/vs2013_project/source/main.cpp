@@ -86,6 +86,8 @@ int main(int argc, char *argv[])
 
     int index = 0;
     while (1) {
+        cout << "**********************************************" << endl;
+		cout << "please input index:";
         cin >> index;
         if (0 == index) {
             break;
@@ -96,9 +98,7 @@ int main(int argc, char *argv[])
         } else {
             fun();
         }
-        cout << "----------------------------------------------" << endl;
-        cout << "----------------------------------------------" << endl;
-        cout << "----------------------------------------------" << endl;
+        cout << "**********************************************" << endl;
         Print();
     }
  
