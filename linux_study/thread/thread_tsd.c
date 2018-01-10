@@ -26,7 +26,9 @@ pthread_once_t once_control = PTHREAD_ONCE_INIT;
 
 void destroy_routine(void *value)
 {
-    printf("destroy...%d\n", pthread_self());
+    printf("destroy...%p, value %p\n", 
+			(unsigned int)pthread_self(), 
+			(unsigned int)value);
     free(value);
     value = NULL;
 }
