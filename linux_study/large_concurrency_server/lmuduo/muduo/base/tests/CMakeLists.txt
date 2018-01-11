@@ -13,6 +13,12 @@ target_link_libraries(boundedblockingqueue muduo_base)
 add_executable(Exception_test Exception_test.cc)
 target_link_libraries(Exception_test muduo_base)
 
+#add_executable(LogStream_test LogStream_test.cc)
+#target_link_libraries(LogStream_test muduo_base)
+
+#add_executable(LogStream_bench LogStream_bench.cc)
+#target_link_libraries(LogStream_bench muduo_base)
+
 add_executable(Mutex_test Mutex_test.cc)
 target_link_libraries(Mutex_test muduo_base)
 

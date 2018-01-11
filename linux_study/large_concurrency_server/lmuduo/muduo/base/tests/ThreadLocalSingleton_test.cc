@@ -66,7 +66,6 @@ int main()
 
   pthread_exit(0);
   // result:
-
   // tid=8851, constructing 0x9954028
   // tid=8853, constructing 0xb6300468
   // tid=8853, 0xb6300468 name=
