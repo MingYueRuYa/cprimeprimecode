@@ -24,6 +24,9 @@ set(CMAKE_CXX_COMPILER "g++")
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+add_executable(03_use_const_whenever_possible
+	03_use_const_whenever_possible.cpp)
+
 add_executable(08_prevent_exceptions_from_leaving_destructors
 	08_prevent_exceptions_from_leaving_destructors.cpp)
 
