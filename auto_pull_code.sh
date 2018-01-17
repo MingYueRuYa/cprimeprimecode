@@ -1,3 +1,3 @@
 #!/bin/bash
-    cd /home/liushixiong/code/cprimeprimecode/
+    cd /home/liushixiong/cprimeprimecode/
     ./git.sh | logger
