@@ -1,5 +1,8 @@
 /*
  * item 13 以对象管理资源
+ * TODO: 1.注意copy and copy assign 行为
+ *       2.A.不允许copy，B.采用reference counting
+ *       3.RAII技术
  * */
 
 #include <iostream>
@@ -58,9 +61,24 @@ Resource *CreateResource()
     return new Resource();
 }
 
+/*
+ * 1.返回值无所谓 2.必须要有一个参数
+ * 自定义shared_ptr deleter
+ * 因为shared_ptr默认的是delete pointer，但是有时候我们管理的资源并不是
+ * 指针类型的数据，比如mutex...
+ * */
+bool test_custom_shared_deleter(Resource *pResource)
+{
+    cout << "customer deleter..." << endl;
+    delete pResource;
+    pResource = NULL;
+}
+
 void test_share_pointer()
 {
     std::shared_ptr<Resource> resptr(CreateResource());
+    std::shared_ptr<Resource> cusresptr(CreateResource(), 
+                                        test_custom_shared_deleter);
 }
 
 }

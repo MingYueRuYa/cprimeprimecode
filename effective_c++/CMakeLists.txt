@@ -32,3 +32,6 @@ add_executable(08_prevent_exceptions_from_leaving_destructors
 
 add_executable(25_consider_support_for_a_non_throwing_swap
 	25_consider_support_for_a_non_throwing_swap.cpp)
+
+add_executable(13_user_objects_to_manager_resource
+	13_user_objects_to_manager_resource.cpp)
