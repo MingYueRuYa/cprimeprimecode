@@ -14,13 +14,13 @@
 static void activate_nonblock(int fd)
 {
     int ret     = -1;
-    int flags   =  fcntl(fd, GET_FL);
+    int flags   =  fcntl(fd, F_GETFL);
     if (-1 == flags) {
         ERR_EXIT("fcntl");
     }
 
     flags |= O_NONBLOCK;
-    ret = fcntl(fd, SET_FL, flags);
+    ret = fcntl(fd, F_SETFL, flags);
     if (-1 == flags) {
         ERR_EXIT("fcntl");
     }
