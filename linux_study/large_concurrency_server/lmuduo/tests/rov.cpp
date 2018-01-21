@@ -23,5 +23,9 @@ Object RetObj()
 int main(int argc, char *argv[])
 {
     RetObj();
+    // result:只有一次构造函数和析构函数的调用
+    // Object ctor...
+    // ~Object dtor...
+
     return 0;
 }
