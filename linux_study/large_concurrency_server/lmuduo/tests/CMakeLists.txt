@@ -21,4 +21,13 @@ target_link_libraries(Log_test1 muduo_base)
 add_executable(Log_test2 Log_test2.cc)
 target_link_libraries(Log_test2 muduo_base)
 
+add_executable(Reactor_test01 Reactor_test01.cc)
+target_link_libraries(Reactor_test01 muduo_net)
+
+add_executable(Reactor_test02 Reactor_test02.cc)
+target_link_libraries(Reactor_test02 muduo_net)
+
+add_executable(Reactor_test03 Reactor_test03.cc)
+target_link_libraries(Reactor_test03 muduo_net)
+
 add_executable(rov rov.cpp)
