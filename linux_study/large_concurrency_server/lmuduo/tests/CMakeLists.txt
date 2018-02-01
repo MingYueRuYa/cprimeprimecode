@@ -33,6 +33,9 @@ target_link_libraries(Reactor_test03 muduo_net)
 add_executable(Reactor_test04 Reactor_test04.cc)
 target_link_libraries(Reactor_test04 muduo_net)
 
+add_executable(Reactor_test05 Reactor_test05.cc)
+target_link_libraries(Reactor_test05 muduo_net)
+
 add_executable(Test_lower_bound_upper_bound 
 				Test_lower_bound_upper_bound.cpp)
 target_link_libraries(Test_lower_bound_upper_bound muduo_net)
