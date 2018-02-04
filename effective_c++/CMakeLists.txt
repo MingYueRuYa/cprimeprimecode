@@ -35,3 +35,6 @@ add_executable(25_consider_support_for_a_non_throwing_swap
 
 add_executable(13_user_objects_to_manager_resource
 	13_user_objects_to_manager_resource.cpp)
+
+add_executable(54_familiarize_yourself_with_the_stl
+	54_familiarize_yourself_with_the_stl.cpp)
