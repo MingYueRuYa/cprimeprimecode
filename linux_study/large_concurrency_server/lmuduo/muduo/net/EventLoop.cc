@@ -148,17 +148,13 @@ void EventLoop::runInLoop(const Functor& cb)
 void EventLoop::queueInLoop(const Functor& cb)
 {
   {
-    // 使用的锁的范围尽量的小，保证效率不受多大的影响
-    MutexLockGuard lock(mutex_);
-    pendingFunctors_.push_back(cb);
+  MutexLockGuard lock(mutex_);
+  pendingFunctors_.push_back(cb);
   }
 
   // 调用queueInLoop的线程不是IO线程需要唤醒
   // 或者调用queueInLoop的线程是IO线程，并且此时正在调用pending functor，需要唤醒
-  // 因为正在调用pending functor时，当pending functor调用完毕之后
-  // 又会进入阻塞的状态所以才需要唤醒操作
   // 只有IO线程的事件回调中调用queueInLoop才不需要唤醒
-  // 让异步调用尽量的及时
   if (!isInLoopThread() || callingPendingFunctors_)
   {
     wakeup();
