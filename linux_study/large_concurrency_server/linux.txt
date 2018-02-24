@@ -63,6 +63,12 @@ C编程风格，注册是哪个全局函数到网络库，网络库通过函数�
 
 server主动关闭会返回POLLHUB和POLLIN事件
 
+大流量：
+    不断生成数据，然后发送（conn->send）
+    如果对等方接受不及时，受到通告窗口的控制，内核发送缓冲不足，这个时候，就会将会用户数据添加到应用层缓冲区（output buffer）可能会撑爆output buffer
+    解决办法就是，调整发送频率
+    关注WriteCompleteCallback
+    所有数据都发送完成，WriteComplateCallback回调，然后继续发送
 
-
+    CHARGEN服务协议可以了解下，muduo simple中有实例代码
 
