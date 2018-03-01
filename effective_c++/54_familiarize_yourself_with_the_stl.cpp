@@ -4,6 +4,10 @@
 using std::cout;
 using std::endl;
 
+/*
+ * 测试智能指针，环形引用的解决方案
+ * */
+
 namespace test_share_ptr
 {
 class B;
