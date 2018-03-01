@@ -221,7 +221,13 @@ template <typename T>
 class NewHandlerSupport
 {
 public:
-    static std::new_handler set_new_handler(std::new_handler p) throw();
+    static std::new_handler set_new_handler(std::new_handler p) throw()
+    {
+        std::new_handler oldhandler = mCurrentHandler;
+        mCurrentHandler = p;
+        return oldhandler;
+    }
+
     static void *operator new(size_t size)
     {
         NewHandlerHolder holder(std::set_new_handler(mCurrentHandler)); 
@@ -234,31 +240,16 @@ private:
 };
 
 template <typename T>
-std::new_handler NewHandlerSupport<T>::set_new_handler(std::new_handler p)
-    throw()
-{
-    std::new_handler oldhandler = mCurrentHandler;
-    mCurrentHandler = p;
-    return oldhandler;
-}
-
-//template <typename T>
-//void *operator new(size_t size)
-//{
-//    NewHandlerHolder holder(std::set_new_handler(mCurHandler)); 
-//    return ::operator new(size);
-//}
-
-template <typename T>
 std::new_handler NewHandlerSupport<T>::mCurrentHandler = NULL;
 
 class Widget : public NewHandlerSupport<Widget>
 {
 public:
-    Widget() {}
+    Widget() { set_new_handler(OutOfMem); } // 调用继承模板的函数
+
     ~Widget() {}
 
-    static void OutofMem()
+    static void OutOfMem()
     {
         std::cerr << "Unable to satisfy request of for "
                      "memory to widget class\n";
@@ -269,10 +260,14 @@ private:
     int mID;
 };
 
+void test_new_handler_fun()
+{
+    abort();
+}
+
 void test_template_new_handler()
 {
-    // 如何获取class的静态函数地址
-    // Widget::set_new_handler(&(Widget::OutOfMem)); 
+    Widget::set_new_handler(test_new_handler_fun);
     Widget *widget = new Widget(); 
 }
 
@@ -287,6 +282,8 @@ int main(int argc, char *argv[])
     // normal_handler::test_B_normal_handler();
 
     // enhance_new_handler::test_enhance_new_handler();
+
+    template_new_handler::test_template_new_handler();
 
     return 0;
 }
