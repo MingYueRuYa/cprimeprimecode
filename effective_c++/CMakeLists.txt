@@ -27,6 +27,9 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 add_executable(03_use_const_whenever_possible
 	03_use_const_whenever_possible.cpp)
 
+add_executable(09_never_call_virtual_function_during_ctor_or_dtor
+	09_never_call_virtual_function_during_ctor_or_dtor.cpp)
+
 add_executable(08_prevent_exceptions_from_leaving_destructors
 	08_prevent_exceptions_from_leaving_destructors.cpp)
 
