@@ -33,11 +33,7 @@ class TimeClient : boost::noncopyable
     client_.connect();
   }
 
- private:
-
-  EventLoop* loop_;
-  TcpClient client_;
-
+private:
   void onConnection(const TcpConnectionPtr& conn)
   {
     LOG_INFO << conn->localAddress().toIpPort() << " -> "
@@ -67,23 +63,26 @@ class TimeClient : boost::noncopyable
                << " at " << receiveTime.toFormattedString();
     }
   }
+
+ private:
+  EventLoop* loop_;
+  TcpClient client_;
 };
 
 int main(int argc, char* argv[])
 {
   LOG_INFO << "pid = " << getpid();
-  if (argc > 1)
-  {
+
+  if (argc <= 1) {
+    printf("Usage: %s host_ip\n", argv[0]);
+    return 0;
+  }
+
     EventLoop loop;
     InetAddress serverAddr(argv[1], 2037);
 
     TimeClient timeClient(&loop, serverAddr);
     timeClient.connect();
     loop.loop();
-  }
-  else
-  {
-    printf("Usage: %s host_ip\n", argv[0]);
-  }
 }
 
