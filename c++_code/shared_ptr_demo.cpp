@@ -27,6 +27,13 @@
  * 条款14: 不要memcpy shared_ptr
  * 条款15: 使用BOOST预定义的宏去改变shared_ptr行为。
  * 条款16: 构造函数里调用shared_from_this抛例外
+ *
+ *
+ * 总结：专一
+ *      1.拿到指针就不要轻易的暴露出来
+ *      2.只接管new出来的指针，不是malloc内存地址
+ *      3.自定义deleter
+ *      4.多线程对写是不安全的
  * */
 #include <iostream>
 #include <memory>
