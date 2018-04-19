@@ -9,6 +9,9 @@ typeid:typeid.cpp
 virtual_class_deep_unstanderd:virtual_class_deep_unstanderd.cpp
 	$(CC) $(CFLAG) $^ -o $@.out
 
+rvalue:rvalue.cpp
+	$(CC) $(CFLAG) -std=c++11 $^ -o $@.out
+
 .PHONY: clean
 clean:
 	-rm -rf *.o *.out
