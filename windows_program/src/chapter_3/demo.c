@@ -2,7 +2,10 @@
 #include <tchar.h>
 
 // 窗口过程回调函数
-LRESULT CALLBACK WndProc(HWND hHwnd, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK WndProc(HWND hHwnd, 
+						 UINT message,
+						 WPARAM wParam,
+						 LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPreInstance,
