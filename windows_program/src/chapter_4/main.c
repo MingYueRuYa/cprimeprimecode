@@ -3,9 +3,11 @@
 
 #include <windows.h>
 #include <tchar.h>
+#include "data.h"
 
-#define MAX_LOADSTRING 100
-#define LINEHEIGHT 15
+#define MAX_LOADSTRING  100
+#define LINEHEIGHT      15
+#define MAX_LINE        100
 
 // 全局变量:
 HINSTANCE hInst;								// 当前实例
@@ -101,7 +103,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    hInst = hInstance; // 将实例句柄存储在全局变量中
 
-   hWnd = CreateWindow(szWindowClass, _T("title"), WS_OVERLAPPEDWINDOW,
+   hWnd = CreateWindow(szWindowClass, _T("title"),
+      WS_OVERLAPPEDWINDOW | WM_VSCROLL,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
    if (!hWnd)
@@ -116,6 +119,275 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+LRESULT CALLBACK WndProc(HWND hWnd, 
+                           UINT message, 
+                           WPARAM wParam, 
+                           LPARAM lParam)
+{
+    TEXTMETRIC tm;
+	int wmId, wmEvent;
+	PAINTSTRUCT ps;
+	HDC hdc;
+	TCHAR szBuffer[1024];
+    static int iVscrollPos;
+    static int cyClient;
+    static int cxChar, cxCaps, cyChar;
+
+	switch (message)
+	{
+    case WM_SIZE:
+        cyClient = HIWORD(lParam);
+        break;
+    case WM_CREATE:
+        hdc = GetDC(hWnd);
+        GetTextMetrics(hdc, &tm);
+        cyChar = tm.tmHeight + tm.tmExternalLeading;
+        cxCaps = ((tm.tmPitchAndFamily & 1) ? 3 : 2) * cxChar / 2;
+        cxChar = tm.tmAveCharWidth;
+        ReleaseDC(hWnd, hdc);
+
+        iVscrollPos = 0;
+        SetScrollRange(hWnd, SB_VERT, 0, MAX_LINE-1, FALSE);
+        SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
+        break;
+	case WM_COMMAND:
+		wmId    = LOWORD(wParam);
+		wmEvent = HIWORD(wParam);
+		// 分析菜单选择:
+		switch (wmId)
+		{
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+		break;
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+        TCHAR szBuffer[1024] = {0};
+    
+        for (int i=0; i<NUMLINES; ++i) {
+            TextOut(hdc, 0, i*cyChar, 
+                    sysmetrics[i].szLabel,
+                    lstrlen(sysmetrics[i].szLabel));
+            
+            TextOut(hdc, 22*cxChar+10*cxChar, i*cyChar, 
+                    sysmetrics[i].szDesc,
+                    lstrlen(sysmetrics[i].szDesc));
+
+            SetTextAlign(hdc, TA_RIGHT | TA_TOP);
+            TextOut(hdc, 22*cxCaps+70*cxChar, i*cyChar, 
+                    szBuffer, 
+                    wsprintf(szBuffer, 
+                            TEXT("%5d"),
+                            GetSystemMetrics(sysmetrics[i].iIndex))
+                    );
+            SetTextAlign(hdc, TA_LEFT | TA_TOP);
+        }
+
+		EndPaint(hWnd, &ps);
+		break;
+    case WM_VSCROLL:
+        switch (LOWORD(wParam))
+        {
+        case SB_LINEUP:
+            iVscrollPos -= 1;
+            break;
+        case SB_LINEDOWN:
+            iVscrollPos += 1;
+            break;
+        case SB_PAGEDOWN:
+            iVscrollPos += cyClient/cyChar;
+            break;
+        case SB_PAGEUP:
+            iVscrollPos -= cyClient/cyChar;
+            break;
+        case SB_THUMBPOSITION:
+            iVscrollPos = HIWORD(wParam);
+            break;
+        default:
+            break;
+        }
+
+        iVscrollPos = max(0, min(iVscrollPos, MAX_LINE-1)); 
+        if (iVscrollPos != GetScrollPos(hWnd, SB_VERT)) {
+            SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
+            InvalidateRect(hWnd, NULL, TRUE);
+        }
+        break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
+
+LRESULT CALLBACK WndProc03(HWND hWnd, 
+                           UINT message, 
+                           WPARAM wParam, 
+                           LPARAM lParam)
+{
+
+    TEXTMETRIC tm;
+	int wmId, wmEvent;
+	PAINTSTRUCT ps;
+	HDC hdc;
+	TCHAR szBuffer[1024];
+
+    static int iVscrollPos;
+    static int cyChar;  // 字符高度，行高，行距
+    static int cyClient;
+
+	switch (message)
+	{
+    case WM_SIZE:
+        cyClient = HIWORD(lParam);
+        break;
+    case WM_CREATE:
+        hdc = GetDC(hWnd);
+        GetTextMetrics(hdc, &tm);
+        cyChar = tm.tmHeight + tm.tmExternalLeading;
+        ReleaseDC(hWnd, hdc);
+
+        iVscrollPos = 0;
+        SetScrollRange(hWnd, SB_VERT, 0, MAX_LINE-1, FALSE);
+        SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
+        break;
+	case WM_COMMAND:
+		wmId    = LOWORD(wParam);
+		wmEvent = HIWORD(wParam);
+		// 分析菜单选择:
+		switch (wmId)
+		{
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+		break;
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+        TCHAR szBuffer[1024] = {0};
+    
+        for (int i=0; i<MAX_LINE; ++i) {
+            int x = 0;
+            int y = cyChar *(i-iVscrollPos);
+            _sntprintf_s(szBuffer, 1024, 1024, TEXT("hello %d"), i);
+            TextOut(hdc, x, y, szBuffer, lstrlen(szBuffer));
+        }
+
+		EndPaint(hWnd, &ps);
+		break;
+    case WM_VSCROLL:
+        switch (LOWORD(wParam))
+        {
+        case SB_LINEUP:
+            iVscrollPos -= 1;
+            break;
+        case SB_LINEDOWN:
+            iVscrollPos += 1;
+            break;
+        case SB_PAGEDOWN:
+            iVscrollPos += cyClient/cyChar;
+            break;
+        case SB_PAGEUP:
+            iVscrollPos -= cyClient/cyChar;
+            break;
+        case SB_THUMBPOSITION:
+            iVscrollPos = HIWORD(wParam);
+            break;
+        default:
+            break;
+        }
+
+        iVscrollPos = max(0, min(iVscrollPos, MAX_LINE-1)); 
+        if (iVscrollPos != GetScrollPos(hWnd, SB_VERT)) {
+            SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
+            InvalidateRect(hWnd, NULL, TRUE);
+        }
+        break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
+
+
+LRESULT CALLBACK WndProc02(HWND hWnd, 
+                           UINT message, 
+                           WPARAM wParam, 
+                           LPARAM lParam)
+{
+    static int cyChar;  // 字符高度，行高，行距
+    static int cxChar;
+    static int cxCaps;
+
+    static int cxScreen;
+    static int cyScreen;
+
+    TEXTMETRIC tm;
+
+	int wmId, wmEvent;
+	PAINTSTRUCT ps;
+	HDC hdc;
+	TCHAR szBuffer[1024];
+
+	switch (message)
+	{
+    case WM_CREATE:
+        hdc = GetDC(hWnd);
+        GetTextMetrics(hdc, &tm);
+        cxChar = tm.tmAveCharWidth;
+        cyChar = tm.tmHeight + tm.tmExternalLeading;
+        cxCaps = ((tm.tmPitchAndFamily & 1) ? 3 : 2) * cxChar/2;
+        ReleaseDC(hWnd, hdc);
+
+        cxScreen = GetSystemMetrics(SM_CXSCREEN);
+        cyScreen = GetSystemMetrics(SM_CYSCREEN);
+        break;
+	case WM_COMMAND:
+		wmId    = LOWORD(wParam);
+		wmEvent = HIWORD(wParam);
+		// 分析菜单选择:
+		switch (wmId)
+		{
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+		break;
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+        TextOut(hdc, 0, 0, TEXT("SM_CXSCREEN"), lstrlen(TEXT("SM_CXSCREEN")));
+        TextOut(hdc, 22*cxCaps, 0, TEXT("Screen width in pixels"),
+                lstrlen(TEXT("Screen width in pixels")));
+
+        SetTextAlign(hdc, TA_RIGHT | TA_TOP);
+        int ilength = wsprintf(szBuffer, TEXT("%d"), cxScreen);
+        TextOut(hdc, 22*cxCaps+40*cxChar, 0, szBuffer, ilength);
+
+        SetTextAlign(hdc, TA_LEFT | TA_TOP);
+        TextOut(hdc, 0, cyChar, TEXT("SM_CYSCREEN"), lstrlen(TEXT("SM_CYSCREEN")));
+        TextOut(hdc, 22*cxCaps, cyChar, TEXT("Screen higth in pixels"),
+                lstrlen(TEXT("Screen hight in pixels")));
+
+        SetTextAlign(hdc, TA_RIGHT | TA_TOP);
+        ilength = wsprintf(szBuffer, TEXT("%d"), cyScreen);
+        TextOut(hdc, 22*cxCaps+40*cxChar, cyChar, szBuffer, ilength);
+
+        SetTextAlign(hdc, TA_LEFT | TA_TOP);
+
+		EndPaint(hWnd, &ps);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
+
 //
 //  函数: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -126,7 +398,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY	- 发送退出消息并返回
 //
 //
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WndProc01(HWND hWnd, 
+                           UINT message, 
+                           WPARAM wParam, 
+                           LPARAM lParam)
 {
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
