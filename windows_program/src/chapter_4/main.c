@@ -132,11 +132,22 @@ LRESULT CALLBACK WndProc(HWND hWnd,
     static int iVscrollPos;
     static int cyClient;
     static int cxChar, cxCaps, cyChar;
+	SCROLLINFO si;
+
+	int iVertPos = 0;
+	int iPaintBeg, iPaintEnd;
 
 	switch (message)
 	{
     case WM_SIZE:
         cyClient = HIWORD(lParam);
+
+		si.cbSize = sizeof(si);
+		si.fMask  = SIF_RANGE | SIF_PAGE;
+		si.nPage  = cyClient/cyChar;
+		si.nMin	  = 0;
+		si.nMax	  = NUMLINES-1;
+		SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
         break;
     case WM_CREATE:
         hdc = GetDC(hWnd);
@@ -146,9 +157,11 @@ LRESULT CALLBACK WndProc(HWND hWnd,
         cxChar = tm.tmAveCharWidth;
         ReleaseDC(hWnd, hdc);
 
-        iVscrollPos = 0;
-        SetScrollRange(hWnd, SB_VERT, 0, MAX_LINE-1, FALSE);
-        SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
+		iVertPos = 0;
+
+//        iVscrollPos = 0;
+//        SetScrollRange(hWnd, SB_VERT, 0, MAX_LINE-1, FALSE);
+//        SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
         break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
@@ -164,17 +177,20 @@ LRESULT CALLBACK WndProc(HWND hWnd,
 		hdc = BeginPaint(hWnd, &ps);
         TCHAR szBuffer[1024] = {0};
     
+		/*
+		int y = 0;
         for (int i=0; i<NUMLINES; ++i) {
-            TextOut(hdc, 0, i*cyChar, 
+			y = cyChar * (i-iVscrollPos);
+            TextOut(hdc, 0, y, 
                     sysmetrics[i].szLabel,
                     lstrlen(sysmetrics[i].szLabel));
             
-            TextOut(hdc, 22*cxChar+10*cxChar, i*cyChar, 
+            TextOut(hdc, 22*cxChar+10*cxChar, y, 
                     sysmetrics[i].szDesc,
                     lstrlen(sysmetrics[i].szDesc));
 
             SetTextAlign(hdc, TA_RIGHT | TA_TOP);
-            TextOut(hdc, 22*cxCaps+70*cxChar, i*cyChar, 
+            TextOut(hdc, 22*cxCaps+70*cxChar, y, 
                     szBuffer, 
                     wsprintf(szBuffer, 
                             TEXT("%5d"),
@@ -182,36 +198,87 @@ LRESULT CALLBACK WndProc(HWND hWnd,
                     );
             SetTextAlign(hdc, TA_LEFT | TA_TOP);
         }
+		*/
+
+		// 更加优化的做法，就是只需要画出一个客户区的大小，不需要全部绘制
+		// 这样效率会更高
+		si.cbSize	= sizeof(si);
+		si.fMask	= SIF_POS;	
+		GetScrollInfo(hWnd, SB_VERT, &si);
+		iVertPos	= si.nPos;
+
+		iPaintBeg = max(0, iVertPos+ps.rcPaint.top / cyChar);
+		iPaintEnd = min(NUMLINES-1, iVertPos+ps.rcPaint.bottom / cyChar);
+
+		int y = 0;
+		for (int i= iPaintBeg; i<= iPaintEnd; ++i) {
+			y = cyChar*(i-iVertPos);	
+            TextOut(hdc, 0, y, 
+                    sysmetrics[i].szLabel,
+                    lstrlen(sysmetrics[i].szLabel));
+            
+            TextOut(hdc, 22*cxChar+10*cxChar, y, 
+                    sysmetrics[i].szDesc,
+                    lstrlen(sysmetrics[i].szDesc));
+
+            SetTextAlign(hdc, TA_RIGHT | TA_TOP);
+            TextOut(hdc, 22*cxCaps+70*cxChar, y, 
+                    szBuffer, 
+                    wsprintf(szBuffer, 
+                            TEXT("%5d"),
+                            GetSystemMetrics(sysmetrics[i].iIndex))
+                    );
+            SetTextAlign(hdc, TA_LEFT | TA_TOP);
+		}
 
 		EndPaint(hWnd, &ps);
 		break;
     case WM_VSCROLL:
+		si.cbSize	= sizeof(si);
+		si.fMask	= SIF_ALL;
+		GetScrollInfo(hWnd, SB_VERT, &si);
+
         switch (LOWORD(wParam))
         {
         case SB_LINEUP:
-            iVscrollPos -= 1;
+            // iVscrollPos -= 1;
+			si.nPos -= 1;
             break;
         case SB_LINEDOWN:
-            iVscrollPos += 1;
+            // iVscrollPos += 1;
+			si.nPos += 1;
             break;
         case SB_PAGEDOWN:
-            iVscrollPos += cyClient/cyChar;
+            // iVscrollPos += cyClient/cyChar;
+			si.nPos += si.nPage;
             break;
         case SB_PAGEUP:
-            iVscrollPos -= cyClient/cyChar;
+            // iVscrollPos -= cyClient/cyChar;
+			si.nPos -= si.nPage;
             break;
         case SB_THUMBPOSITION:
-            iVscrollPos = HIWORD(wParam);
+            // iVscrollPos = HIWORD(wParam);
+			si.nPos = si.nTrackPos;
             break;
         default:
             break;
         }
 
-        iVscrollPos = max(0, min(iVscrollPos, MAX_LINE-1)); 
-        if (iVscrollPos != GetScrollPos(hWnd, SB_VERT)) {
-            SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
-            InvalidateRect(hWnd, NULL, TRUE);
-        }
+		si.fMask = SIF_POS;
+		SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
+		GetScrollInfo(hWnd, SB_VERT, &si);
+
+		if (si.nPos != iVertPos) {
+			ScrollWindow(hWnd, 0, cyChar*(iVertPos-si.nPos), NULL, NULL);
+			UpdateWindow(hWnd);
+		}
+
+//        iVscrollPos = max(0, min(iVscrollPos, MAX_LINE-1)); 
+//        if (iVscrollPos != GetScrollPos(hWnd, SB_VERT)) {
+//            SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
+//            InvalidateRect(hWnd, NULL, TRUE);
+//			UpdateWindow(hWnd);
+//        }
         break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
