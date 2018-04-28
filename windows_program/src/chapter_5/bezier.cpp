@@ -17,7 +17,7 @@ BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
-int APIENTRY _tWinMain01(_In_ HINSTANCE hInstance,
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
@@ -113,6 +113,17 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+void DrawBezier(HDC hdc, POINT apt[])
+{
+    PolyBezier(hdc, apt, 4);
+
+    MoveToEx(hdc, apt[0].x, apt[0].y, NULL);
+    LineTo(hdc, apt[1].x, apt[1].y);
+
+    MoveToEx(hdc, apt[2].x, apt[2].y, NULL);
+    LineTo(hdc, apt[3].x, apt[3].y);
+}
+
 //
 //  函数:  WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -130,9 +141,51 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 
     TCHAR szBuffer[1024] = {0};
+    static int cxClient, cyClient;
+    static POINT apt[4];
 
 	switch (message)
 	{
+    case WM_SIZE:
+        cxClient = LOWORD(lParam);
+        cyClient = HIWORD(lParam);
+
+        apt[0].x = cxClient/4;
+        apt[0].y = cyClient/2;
+
+        apt[1].x = cxClient/2;
+        apt[1].y = cyClient/4;
+
+        apt[2].x = cxClient/2;
+        apt[2].y = 3*cyClient/4;
+
+        apt[3].x = cxClient/4*3;
+        apt[3].y = cyClient/2;
+
+        break;
+    case WM_LBUTTONDOWN:
+    case WM_RBUTTONDOWN:
+    case WM_MOUSEMOVE:
+        if (wParam & MK_LBUTTON || wParam & MK_RBUTTON) {
+            hdc = GetDC(hWnd);
+            SelectObject(hdc, GetStockObject(WHITE_PEN));
+            DrawBezier(hdc, apt);
+
+            if (wParam & MK_LBUTTON) {
+                apt[1].x = LOWORD(lParam);
+                apt[1].y = HIWORD(lParam);
+            } else if (wParam & MK_RBUTTON) {
+                apt[2].x = LOWORD(lParam);
+                apt[2].y = HIWORD(lParam);
+            }
+
+            SelectObject(hdc, GetStockObject(BLACK_PEN));
+
+            DrawBezier(hdc, apt);
+
+            ReleaseDC(hWnd, hdc);
+        }
+        break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
@@ -152,43 +205,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
     {
 		hdc = BeginPaint(hWnd, &ps);
-		// TODO:  在此添加任意绘图代码...
 
-
-        COLORREF color;
-        color = RGB(255, 0, 0);
-
-        // 画像素
-        for (int i = 0; i < 100; i += 2) {
-            SetPixel(hdc, 100 + i, 100, color);
-        }
-
-        RECT rect;
-        GetClientRect(hWnd, &rect);
-
-        // 画整个屏幕的像素点
-        //        for (int i=rect.left; i<=rect.right; ++i) {
-        //            for (int j=rect.top; j<=rect.bottom; ++j) {
-        //                color = RGB(255, rand()%256, rand()%256);
-        //                SetPixel(hdc, i,j, color);
-        //            }
-        //        }
-
-        color = GetPixel(hdc, 200, 200);
-
-        int red = GetRValue(color);
-        int green = GetGValue(color);
-        int blue = GetBValue(color);
-
-
-        wsprintf(szBuffer, TEXT("x=200, y=200的像素点的颜色：red=%d, green=%d, blue=%d"), red, green, blue);
-
-        TextOut(hdc, 0, 20, szBuffer, lstrlen(szBuffer));
-
-        TextOut(hdc, 0, 100, TEXT("刘世雄"), lstrlen(TEXT("刘世雄")));
+        DrawBezier(hdc, apt);
 
 		EndPaint(hWnd, &ps);
-        }
+    }
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

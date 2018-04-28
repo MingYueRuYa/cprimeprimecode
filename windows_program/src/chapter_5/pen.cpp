@@ -5,6 +5,7 @@
 #include "chapter_5.h"
 
 #define MAX_LOADSTRING 100
+#define NUM_LINES      7
 
 // 全局变量: 
 HINSTANCE hInst;								// 当前实例
@@ -17,7 +18,7 @@ BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
-int APIENTRY _tWinMain01(_In_ HINSTANCE hInstance,
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
@@ -130,9 +131,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 
     TCHAR szBuffer[1024] = {0};
+    static int cxClient, cyClient;
+    static HPEN hPen1, hPen2, hPen3, hOldPen;
+    int iLineDis;
 
 	switch (message)
 	{
+    case WM_CREATE:
+        hPen1 = CreatePen(PS_SOLID, 1, 0);
+        hPen2 = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
+        hPen3 = CreatePen(PS_DOT, 0, RGB(0, 0, 255));
+        break;
+    case WM_SIZE:
+        cxClient = LOWORD(lParam);
+        cyClient = HIWORD(lParam);
+
+        break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
@@ -152,45 +166,50 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
     {
 		hdc = BeginPaint(hWnd, &ps);
-		// TODO:  在此添加任意绘图代码...
 
+        iLineDis = cyClient/(NUM_LINES+1);
 
-        COLORREF color;
-        color = RGB(255, 0, 0);
+        hOldPen  = (HPEN)SelectObject(hdc, hPen1);
+        MoveToEx(hdc, cxClient/10, iLineDis, NULL);
+        LineTo(hdc, cxClient/10*9, iLineDis);
 
-        // 画像素
-        for (int i = 0; i < 100; i += 2) {
-            SetPixel(hdc, 100 + i, 100, color);
-        }
+        SelectObject(hdc, hPen2);
+        MoveToEx(hdc, cxClient/10, iLineDis*2, NULL);
+        LineTo(hdc, cxClient/10*9, iLineDis*2);
 
-        RECT rect;
-        GetClientRect(hWnd, &rect);
+        SelectObject(hdc, hPen3);
+        MoveToEx(hdc, cxClient/10, iLineDis*3, NULL);
+        LineTo(hdc, cxClient/10*9, iLineDis*3);
 
-        // 画整个屏幕的像素点
-        //        for (int i=rect.left; i<=rect.right; ++i) {
-        //            for (int j=rect.top; j<=rect.bottom; ++j) {
-        //                color = RGB(255, rand()%256, rand()%256);
-        //                SetPixel(hdc, i,j, color);
-        //            }
-        //        }
+        SelectObject(hdc, CreatePen(PS_DASH, 0, RGB(0, 255, 0)));
+        MoveToEx(hdc, cxClient/10, iLineDis*4, NULL);
+        LineTo(hdc, cxClient/10*9, iLineDis*4);
 
-        color = GetPixel(hdc, 200, 200);
+        DeleteObject(SelectObject(hdc, 
+                                  CreatePen(PS_DASHDOT, 0, RGB(0, 255, 0))));
+        MoveToEx(hdc, cxClient/10, iLineDis*5, NULL);
+        LineTo(hdc, cxClient/10*9, iLineDis*5);
 
-        int red = GetRValue(color);
-        int green = GetGValue(color);
-        int blue = GetBValue(color);
+        DeleteObject(SelectObject(hdc, 
+                                  CreatePen(PS_DASHDOTDOT, 0, 
+                                  RGB(0, 255, 255))
+                                  ));
+        MoveToEx(hdc, cxClient/10, iLineDis*6, NULL);
+        LineTo(hdc, cxClient/10*9, iLineDis*6);
 
+        DeleteObject(SelectObject(hdc,GetStockObject(BLACK_PEN)));
+        MoveToEx(hdc, cxClient/10, iLineDis*7, NULL);
+        LineTo(hdc, cxClient/10*9, iLineDis*7);
 
-        wsprintf(szBuffer, TEXT("x=200, y=200的像素点的颜色：red=%d, green=%d, blue=%d"), red, green, blue);
-
-        TextOut(hdc, 0, 20, szBuffer, lstrlen(szBuffer));
-
-        TextOut(hdc, 0, 100, TEXT("刘世雄"), lstrlen(TEXT("刘世雄")));
+        SelectObject(hdc, hOldPen);
 
 		EndPaint(hWnd, &ps);
-        }
+    }
 		break;
 	case WM_DESTROY:
+        DeleteObject(hPen3);
+        DeleteObject(hPen2);
+        DeleteObject(hPen1);
 		PostQuitMessage(0);
 		break;
 	default:

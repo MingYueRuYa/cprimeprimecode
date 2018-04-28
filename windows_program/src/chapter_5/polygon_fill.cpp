@@ -17,7 +17,7 @@ BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
-int APIENTRY _tWinMain01(_In_ HINSTANCE hInstance,
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
@@ -130,9 +130,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 
     TCHAR szBuffer[1024] = {0};
+    static int cxClient, cyClient;
+
+    static POINT aptFigure[10] =
+    {   10, 70, 50, 70, 50, 10, 90, 10, 90, 50,
+        30, 50, 30, 90, 70, 90, 70, 30, 10, 30 
+    };
+
+    POINT apt[10];
 
 	switch (message)
 	{
+    case WM_SIZE:
+        cxClient = LOWORD(lParam);
+        cyClient = HIWORD(lParam);
+        break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
@@ -152,43 +164,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
     {
 		hdc = BeginPaint(hWnd, &ps);
-		// TODO:  在此添加任意绘图代码...
 
+        SelectObject(hdc, GetStockObject(GRAY_BRUSH));
+        //SetPolyFillMode(hdc, WIDING);
+//        SetPolyFillMode(hdc, ALTERNATE);
+//        Polygon(hdc, apt, 5);
 
-        COLORREF color;
-        color = RGB(255, 0, 0);
-
-        // 画像素
-        for (int i = 0; i < 100; i += 2) {
-            SetPixel(hdc, 100 + i, 100, color);
+        for (int i=0; i<10; ++i) {
+            apt[i].x = cxClient*aptFigure[i].x / 200;
+            apt[i].y = cyClient*aptFigure[i].y / 200;
         }
+        SetPolyFillMode(hdc, ALTERNATE);
+        Polygon(hdc, apt, 10);
 
-        RECT rect;
-        GetClientRect(hWnd, &rect);
-
-        // 画整个屏幕的像素点
-        //        for (int i=rect.left; i<=rect.right; ++i) {
-        //            for (int j=rect.top; j<=rect.bottom; ++j) {
-        //                color = RGB(255, rand()%256, rand()%256);
-        //                SetPixel(hdc, i,j, color);
-        //            }
-        //        }
-
-        color = GetPixel(hdc, 200, 200);
-
-        int red = GetRValue(color);
-        int green = GetGValue(color);
-        int blue = GetBValue(color);
-
-
-        wsprintf(szBuffer, TEXT("x=200, y=200的像素点的颜色：red=%d, green=%d, blue=%d"), red, green, blue);
-
-        TextOut(hdc, 0, 20, szBuffer, lstrlen(szBuffer));
-
-        TextOut(hdc, 0, 100, TEXT("刘世雄"), lstrlen(TEXT("刘世雄")));
+        for (int i=0; i<10; ++i) {
+            apt[i].x += cxClient/2;
+        }
+        // 经过偶数次且方向相同才会填充颜色
+        SetPolyFillMode(hdc, WINDING);
+        Polygon(hdc, apt, 10);
 
 		EndPaint(hWnd, &ps);
-        }
+    }
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

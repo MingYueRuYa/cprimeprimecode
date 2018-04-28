@@ -17,7 +17,7 @@ BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
-int APIENTRY _tWinMain01(_In_ HINSTANCE hInstance,
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
@@ -130,9 +130,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 
     TCHAR szBuffer[1024] = {0};
+    static int cxClient, cyClient;
+    static POINT apt[4];
 
 	switch (message)
 	{
+    case WM_SIZE:
+        cxClient = LOWORD(lParam);
+        cyClient = HIWORD(lParam);
+        break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
@@ -152,43 +158,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
     {
 		hdc = BeginPaint(hWnd, &ps);
-		// TODO:  在此添加任意绘图代码...
-
-
-        COLORREF color;
-        color = RGB(255, 0, 0);
-
-        // 画像素
-        for (int i = 0; i < 100; i += 2) {
-            SetPixel(hdc, 100 + i, 100, color);
-        }
-
-        RECT rect;
-        GetClientRect(hWnd, &rect);
-
-        // 画整个屏幕的像素点
-        //        for (int i=rect.left; i<=rect.right; ++i) {
-        //            for (int j=rect.top; j<=rect.bottom; ++j) {
-        //                color = RGB(255, rand()%256, rand()%256);
-        //                SetPixel(hdc, i,j, color);
-        //            }
-        //        }
-
-        color = GetPixel(hdc, 200, 200);
-
-        int red = GetRValue(color);
-        int green = GetGValue(color);
-        int blue = GetBValue(color);
-
-
-        wsprintf(szBuffer, TEXT("x=200, y=200的像素点的颜色：red=%d, green=%d, blue=%d"), red, green, blue);
-
-        TextOut(hdc, 0, 20, szBuffer, lstrlen(szBuffer));
-
-        TextOut(hdc, 0, 100, TEXT("刘世雄"), lstrlen(TEXT("刘世雄")));
 
 		EndPaint(hWnd, &ps);
-        }
+    }
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

@@ -5,6 +5,7 @@
 #include "chapter_5.h"
 
 #define MAX_LOADSTRING 100
+#define NUM_LINES      7
 
 // 全局变量: 
 HINSTANCE hInst;								// 当前实例
@@ -17,7 +18,7 @@ BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
-int APIENTRY _tWinMain01(_In_ HINSTANCE hInstance,
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
@@ -130,9 +131,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 
     TCHAR szBuffer[1024] = {0};
+    static int cxClient, cyClient;
+    HPEN hPen1;
+    HBRUSH hBrush;
 
 	switch (message)
 	{
+    case WM_CREATE:
+        break;
+    case WM_SIZE:
+        cxClient = LOWORD(lParam);
+        cyClient = HIWORD(lParam);
+
+        break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
@@ -152,43 +163,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
     {
 		hdc = BeginPaint(hWnd, &ps);
-		// TODO:  在此添加任意绘图代码...
 
+        hBrush = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
+        SelectObject(hdc, hBrush);
+        hPen1  = CreatePen(PS_SOLID, 3, RGB(0, 255, 0));
+        SelectObject(hdc, hPen1);
 
-        COLORREF color;
-        color = RGB(255, 0, 0);
+        Rectangle(hdc, 100, 100, 200, 200);
 
-        // 画像素
-        for (int i = 0; i < 100; i += 2) {
-            SetPixel(hdc, 100 + i, 100, color);
-        }
+        hBrush = CreateSolidBrush(RGB(255, 255, 0));
+        SelectObject(hdc, hBrush);
+        Ellipse(hdc, 300, 100, 400, 200);
 
-        RECT rect;
-        GetClientRect(hWnd, &rect);
+        hBrush = CreateHatchBrush(HS_FDIAGONAL, RGB(255, 0, 0));
+        DeleteObject(SelectObject(hdc, hBrush));
+        Rectangle(hdc, 300,300, 400, 400);
 
-        // 画整个屏幕的像素点
-        //        for (int i=rect.left; i<=rect.right; ++i) {
-        //            for (int j=rect.top; j<=rect.bottom; ++j) {
-        //                color = RGB(255, rand()%256, rand()%256);
-        //                SetPixel(hdc, i,j, color);
-        //            }
-        //        }
+        hBrush = CreateHatchBrush(HS_CROSS, RGB(255, 0, 0));
+        DeleteObject(SelectObject(hdc, hBrush));
+        Rectangle(hdc, 400,300, 500, 400);
 
-        color = GetPixel(hdc, 200, 200);
+        hBrush = CreateHatchBrush(HS_HORIZONTAL, RGB(255, 0, 0));
+        DeleteObject(SelectObject(hdc, hBrush));
+        Ellipse(hdc, 500,300, 600, 400);
 
-        int red = GetRValue(color);
-        int green = GetGValue(color);
-        int blue = GetBValue(color);
-
-
-        wsprintf(szBuffer, TEXT("x=200, y=200的像素点的颜色：red=%d, green=%d, blue=%d"), red, green, blue);
-
-        TextOut(hdc, 0, 20, szBuffer, lstrlen(szBuffer));
-
-        TextOut(hdc, 0, 100, TEXT("刘世雄"), lstrlen(TEXT("刘世雄")));
+        DeleteObject(SelectObject(hdc, GetStockObject(BLACK_PEN)));
+        DeleteObject(SelectObject(hdc, GetStockObject(WHITE_BRUSH)));
 
 		EndPaint(hWnd, &ps);
-        }
+    }
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

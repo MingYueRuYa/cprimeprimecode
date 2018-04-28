@@ -35,7 +35,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="chapter_5.cpp">
+    <ClCompile Include="mapping_coordinates.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
