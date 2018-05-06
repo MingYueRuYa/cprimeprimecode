@@ -35,7 +35,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="area_cropping.cpp">
+    <ClCompile Include="paint_mode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
