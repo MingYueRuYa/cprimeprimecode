@@ -260,6 +260,12 @@ LRESULT CALLBACK WndProc(HWND hWnd,
             // iVscrollPos = HIWORD(wParam);
 			si.nPos = si.nTrackPos;
             break;
+        case SB_TOP:
+            si.nPos = 0;
+            break;
+        case SB_BOTTOM:
+            si.nPos = si.nMax;
+            break;
         default:
             break;
         }
@@ -279,6 +285,28 @@ LRESULT CALLBACK WndProc(HWND hWnd,
 //            InvalidateRect(hWnd, NULL, TRUE);
 //			UpdateWindow(hWnd);
 //        }
+        break;
+    case WM_KEYDOWN:
+        switch (wParam){
+            case VK_DOWN:
+                SendMessage(hWnd, WM_VSCROLL, SB_LINEDOWN, 0);
+                break;
+            case VK_UP:
+                SendMessage(hWnd, WM_VSCROLL, SB_LINEUP, 0);
+                break;
+            case VK_NEXT:
+                SendMessage(hWnd, WM_VSCROLL, SB_PAGEDOWN, 0);
+                break;
+            case VK_PRIOR:
+                SendMessage(hWnd, WM_VSCROLL, SB_PAGEUP, 0);
+                break;
+            case VK_HOME:
+                SendMessage(hWnd, WM_VSCROLL, SB_TOP, 0);
+                break;
+            case VK_END:
+                SendMessage(hWnd, WM_VSCROLL, SB_BOTTOM, 0);
+                break;
+        }
         break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
