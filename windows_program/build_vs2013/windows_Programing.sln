@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chapter_2", "..\src\chapter_2\chapter_2.vcxproj", "{C7A37739-36C0-4711-8D60-1027E4B50D52}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chapter_5", "..\src\chapter_5\chapter_5.vcxproj", "{3008B1C6-9B97-40C6-B406-14BFBCEA55CC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "disassembly", "..\src\disassembly\disassembly.vcxproj", "{77C9966A-3E33-42D9-8676-A1599ECA9BCD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chapter_6", "..\src\chapter_6\chapter_6.vcxproj", "{104D29B7-F12A-4A41-AC8C-AF51A34A1552}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,12 @@ Global
 		{77C9966A-3E33-42D9-8676-A1599ECA9BCD}.Release|Win32.ActiveCfg = Release|Win32
 		{77C9966A-3E33-42D9-8676-A1599ECA9BCD}.Release|Win32.Build.0 = Release|Win32
 		{77C9966A-3E33-42D9-8676-A1599ECA9BCD}.Release|x64.ActiveCfg = Release|Win32
+		{104D29B7-F12A-4A41-AC8C-AF51A34A1552}.Debug|Win32.ActiveCfg = Debug|Win32
+		{104D29B7-F12A-4A41-AC8C-AF51A34A1552}.Debug|Win32.Build.0 = Debug|Win32
+		{104D29B7-F12A-4A41-AC8C-AF51A34A1552}.Debug|x64.ActiveCfg = Debug|Win32
+		{104D29B7-F12A-4A41-AC8C-AF51A34A1552}.Release|Win32.ActiveCfg = Release|Win32
+		{104D29B7-F12A-4A41-AC8C-AF51A34A1552}.Release|Win32.Build.0 = Release|Win32
+		{104D29B7-F12A-4A41-AC8C-AF51A34A1552}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
