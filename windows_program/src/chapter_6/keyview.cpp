@@ -129,7 +129,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	HDC hdc;
 
-    TCHAR szBuffer[1024] = {0};
+    TEXTMETRIC tm;
     static int cxClient, cyClient;
     static int cxChar, cyChar;
     static int count;
@@ -158,6 +158,45 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+    case WM_CREATE:
+        count = 0;
+        hdc = GetDC(hWnd);
+        SelectObject(hdc, GetStockObject(SYSTEM_FIXED_FONT));
+        GetTextMetrics(hdc, &tm);
+        cxChar = tm.tmAveCharWidth;
+        cyChar = tm.tmHeight;
+        ReleaseDC(hWnd, hdc);
+        if (pmsg) { free(pmsg); }
+
+        pmsg = (PMSG)malloc(sizeof(MSG)*3);
+        break;
+    case WM_KEYDOWN:
+        pmsg[0].hwnd    = hWnd;
+        pmsg[0].message = message;
+        pmsg[0].wParam  = wParam;
+        pmsg[0].lParam  = lParam;
+
+        count++;
+        InvalidateRect(hWnd, NULL, TRUE);
+        break;
+    case WM_CHAR:
+        pmsg[1].hwnd    = hWnd;
+        pmsg[1].message = message;
+        pmsg[1].wParam  = wParam;
+        pmsg[1].lParam  = lParam;
+
+        count++;
+        InvalidateRect(hWnd, NULL, TRUE);
+        break;
+    case WM_KEYUP:
+        pmsg[2].hwnd    = hWnd;
+        pmsg[2].message = message;
+        pmsg[2].wParam  = wParam;
+        pmsg[2].lParam  = lParam;
+
+        count++;
+        InvalidateRect(hWnd, NULL, TRUE);
+        break;
     case WM_SIZE:
         cxClient = LOWORD(lParam);
         cyClient = HIWORD(lParam);
@@ -181,12 +220,37 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
     {
 		hdc = BeginPaint(hWnd, &ps);
+        SelectObject(hdc, GetStockObject(SYSTEM_FIXED_FONT));
+        SetBkMode(hdc, TRANSPARENT);
+        TextOut(hdc, 0, 0, szTop, lstrlen(szTop));
+        TextOut(hdc, 0, 0, szUnd, lstrlen(szUnd));
+
+        for (int i=0; i<min(3,count); ++i) {
+            iType = pmsg[i].message == WM_CHAR || 
+                    pmsg[i].message == WM_SYSCHAR ||
+                    pmsg[i].message == WM_DEADCHAR ||
+                    pmsg[i].message == WM_SYSDEADCHAR;
+
+            GetKeyNameText(pmsg[i].lParam, szKeyName, 
+                           sizeof(szKeyName)/sizeof(TCHAR));
+
+            TextOut(hdc, 0, (i+1)*cyChar, szBuffer,
+                    wsprintf(szBuffer, szFormat[iType], 
+                             szMessage[pmsg[i].message-WM_KEYFIRST],
+                             pmsg[i].wParam, 
+                             (PSTR)(iType ? TEXT("") : szKeyName),
+                             (TCHAR)(iType ? pmsg[i].wParam : ' ')
+                             )
+                    );
+
+        }
 
 		EndPaint(hWnd, &ps);
     }
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
+        free(pmsg);
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
