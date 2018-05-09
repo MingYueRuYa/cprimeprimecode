@@ -5,6 +5,7 @@
 #include "chapter_6.h"
 
 #define MAX_LOADSTRING 100
+#define MAX_MSG 100
 
 // 全局变量: 
 HINSTANCE hInst;								// 当前实例
@@ -148,12 +149,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         TEXT("WM_SYSDEADCHAR")
     };
 
+	static TCHAR *szYes = TEXT("Yes");
+	static TCHAR *szNo	= TEXT("No");
+	static TCHAR *szDown	= TEXT("Down"); 
+	static TCHAR *szUp		= TEXT("Up"); 
+
     TCHAR  szBuffer[128], szKeyName[32];
     int iType;
 
     static TCHAR *szFormat[2] = {
-        TEXT("%-13s %3d %-15s%c"),
-        TEXT("%-13s            0x%04X%1s%c")
+        TEXT("%-13s %3d %-15s%c%6u %4d %3s %3s %4s %4s"),
+        TEXT("%-13s            0x%04X%1s%c %6u %4d %3s %3s %4s %4s")
     };
 
 	switch (message)
@@ -168,33 +174,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         ReleaseDC(hWnd, hdc);
         if (pmsg) { free(pmsg); }
 
-        pmsg = (PMSG)malloc(sizeof(MSG)*3);
+        pmsg = (PMSG)malloc(sizeof(MSG)*MAX_MSG);
         break;
     case WM_KEYDOWN:
-        pmsg[0].hwnd    = hWnd;
-        pmsg[0].message = message;
-        pmsg[0].wParam  = wParam;
-        pmsg[0].lParam  = lParam;
-
-        count++;
-        InvalidateRect(hWnd, NULL, TRUE);
-        break;
     case WM_CHAR:
-        pmsg[1].hwnd    = hWnd;
-        pmsg[1].message = message;
-        pmsg[1].wParam  = wParam;
-        pmsg[1].lParam  = lParam;
-
-        count++;
-        InvalidateRect(hWnd, NULL, TRUE);
-        break;
     case WM_KEYUP:
-        pmsg[2].hwnd    = hWnd;
-        pmsg[2].message = message;
-        pmsg[2].wParam  = wParam;
-        pmsg[2].lParam  = lParam;
+	case WM_DEADCHAR:
+	case WM_SYSKEYDOWN:
+	case WM_SYSKEYUP:
+	case WM_SYSCHAR:
+	case WM_SYSDEADCHAR:
+		for (int i = min(count, MAX_MSG); i > 0; i--) {
+			pmsg[i] = pmsg[i-1];
+		}
 
-        count++;
+		pmsg[0].hwnd	= hWnd;
+		pmsg[0].message = message;
+		pmsg[0].wParam	= wParam;
+		pmsg[0].lParam	= lParam;
+
+		count++;
         InvalidateRect(hWnd, NULL, TRUE);
         break;
     case WM_SIZE:
@@ -225,7 +224,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         TextOut(hdc, 0, 0, szTop, lstrlen(szTop));
         TextOut(hdc, 0, 0, szUnd, lstrlen(szUnd));
 
-        for (int i=0; i<min(3,count); ++i) {
+        for (int i=0; i<min(MAX_MSG,count); ++i) {
             iType = pmsg[i].message == WM_CHAR || 
                     pmsg[i].message == WM_SYSCHAR ||
                     pmsg[i].message == WM_DEADCHAR ||
@@ -239,7 +238,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                              szMessage[pmsg[i].message-WM_KEYFIRST],
                              pmsg[i].wParam, 
                              (PSTR)(iType ? TEXT("") : szKeyName),
-                             (TCHAR)(iType ? pmsg[i].wParam : ' ')
+                             (TCHAR)(iType ? pmsg[i].wParam : ' '),
+							 LOWORD(pmsg[i].lParam),
+							 HIWORD(pmsg[i].lParam) & 0x00ff,
+							 0x01000000 & pmsg[i].lParam ? szYes : szNo,
+							 0x20000000 & pmsg[i].lParam ? szYes : szNo,
+							 0x40000000 & pmsg[i].lParam ? szYes : szNo,
+							 0x80000000 & pmsg[i].lParam ? szYes : szNo
                              )
                     );
 
@@ -250,7 +255,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
-        free(pmsg);
+		// 释放内存导致异常
+        // free(pmsg);
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
