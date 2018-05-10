@@ -137,6 +137,12 @@ LRESULT CALLBACK WndProc(HWND hWnd,
 	int iVertPos = 0;
 	int iPaintBeg, iPaintEnd;
 
+    ULONG ulScrollLines;    // 行数
+    static int iDeltaPerLine;    // 每一行 滚轮滚动的标准距离
+    static int iAccumDelta; // 累加
+
+
+
 	switch (message)
 	{
     case WM_SIZE:
@@ -159,9 +165,12 @@ LRESULT CALLBACK WndProc(HWND hWnd,
 
 		iVertPos = 0;
 
-//        iVscrollPos = 0;
-//        SetScrollRange(hWnd, SB_VERT, 0, MAX_LINE-1, FALSE);
-//        SetScrollPos(hWnd, SB_VERT, iVscrollPos, TRUE);
+        SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &ulScrollLines, 0);
+        if (ulScrollLines) {
+            iDeltaPerLine = WHEEL_DELTA/ulScrollLines;
+        } else {
+            iDeltaPerLine = 0;
+        }
         break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
@@ -233,6 +242,24 @@ LRESULT CALLBACK WndProc(HWND hWnd,
 
 		EndPaint(hWnd, &ps);
 		break;
+    case WM_MOUSEWHEEL:
+        if (0 == iDeltaPerLine) {
+            return 0;
+        }
+
+        iAccumDelta += (short)HIWORD(wParam);
+
+        while (iAccumDelta >= iDeltaPerLine) {
+            SendMessage(hWnd, WM_VSCROLL, SB_LINEUP, 0);
+            iAccumDelta -= iDeltaPerLine;
+        }
+
+        while (iAccumDelta <= iDeltaPerLine) {
+            SendMessage(hWnd, WM_VSCROLL, SB_LINEDOWN, 0);
+            iAccumDelta += iDeltaPerLine;
+        }
+
+        break;
     case WM_VSCROLL:
 		si.cbSize	= sizeof(si);
 		si.fMask	= SIF_ALL;
