@@ -72,8 +72,16 @@ LRESULT CALLBACK WndProc(HWND hHwnd,
         hdc = BeginPaint(hHwnd, &ps);
         GetClientRect(hHwnd, &rect);
         // Ellipse(hdc, 0, 0, 200, 200);
-        DrawText(hdc, _T("Hello, Windows!"), -1, &rect,
-                 DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+        // DrawText(hdc, _T("Hello, Windows!"), -1, &rect,
+        //         DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+        TextOut(hdc, 100, 100, TEXT("hello"), 5);
+        SetMapMode(hdc, MM_ISOTROPIC);
+        // 自定义模式
+        // 1.先要设置逻辑坐标范围
+        // 2.再设置设备坐标范围
+        SetWindowExtEx(hdc, 4, 4, NULL);
+        SetViewportExtEx(hdc, 8, 8, NULL);
+        TextOut(hdc, 100, 100, TEXT("hello"), 5);
         EndPaint(hHwnd, &ps);
         break;
     case WM_DESTROY:
