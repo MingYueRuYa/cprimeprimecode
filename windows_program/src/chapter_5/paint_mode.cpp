@@ -168,8 +168,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// hPen = CreatePen(PS_SOLID, 5, RGB(255, 0, 0));
 		// SelectObject(hdc, hPen);
 
-		MoveToEx(hdc, 100, 200, NULL);
-		LineTo(hdc, 400, 200);
+		// MoveToEx(hdc, 100, 200, NULL);
+		// LineTo(hdc, 400, 200);
+
 
 		ReleaseDC(hWnd, hdc);
 	}
@@ -177,6 +178,33 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
     {
 		hdc = BeginPaint(hWnd, &ps);
+
+        RECT rect;
+        GetClientRect(hWnd, &rect);
+
+        // SetMapMode(hdc, MM_ANISOTROPIC);
+        // SetMapMode(hdc, MM_ISOTROPIC);
+        // SetWindowExtEx(hdc, 400, 400, NULL);
+        // SetViewportExtEx(hdc, rect.right-rect.left, 
+                         // rect.bottom-rect.top, NULL);
+// 
+        // Rectangle(hdc, 100, 100, 300, 300);
+
+        // SetMapMode(hdc, MM_ANISOTROPIC);
+        SetMapMode(hdc, MM_ISOTROPIC);
+
+        SetWindowExtEx(hdc, 300, 300, NULL);
+        // 设置视口范围为客户区长宽，但xy轴分别向右向上递增
+        SetViewportExtEx(hdc, rect.right, -rect.bottom, NULL);
+        SetViewportOrgEx(hdc, rect.right/2, rect.bottom/2, NULL);
+
+        Ellipse(hdc, -100, -100, 100, 100);
+
+        MoveToEx(hdc, -50, 0, NULL);
+        LineTo(hdc, 50, 0);
+
+        MoveToEx(hdc, 0, 150, NULL);
+        LineTo(hdc, 0, -150);
 
 		EndPaint(hWnd, &ps);
     }
