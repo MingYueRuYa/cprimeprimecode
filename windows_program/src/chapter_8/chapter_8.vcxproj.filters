@@ -18,7 +18,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="poppad.cpp">
+    <ClCompile Include="edit_control2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
