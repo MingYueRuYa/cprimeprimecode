@@ -320,7 +320,9 @@ LRESULT CALLBACK	ScrollProc(HWND hWnd, UINT message,
 		if (wParam == VK_TAB) {
 			int index = (id+(GetKeyState(VK_SHIFT)<0?2:1))%3;
 			SetFocus(GetDlgItem(GetParent(hWnd), index));
-		}
+		} else if (wParam == VK_F4) {
+        }
+
 		break;
 	case WM_SETFOCUS:
 		idFocus = id;
