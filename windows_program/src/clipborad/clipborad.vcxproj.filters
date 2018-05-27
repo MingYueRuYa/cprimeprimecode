@@ -18,7 +18,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="template.cpp">
+    <ClCompile Include="clipboardviewer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="chapter_9.h">
+    <ClInclude Include="chapter_11.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -40,7 +40,7 @@
     <Image Include="small.ico">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="chapter_9.ico">
+    <Image Include="clipboard.ico">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
@@ -48,7 +48,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="chapter_9.rc">
+    <ResourceCompile Include="clipboard.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>

@@ -23,6 +23,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chapter_8", "..\src\chapter
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chapter_9", "..\src\chapter_9\chapter_9.vcxproj", "{96C5D9BB-EA5C-4B30-A406-5581525DA197}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chapter_11", "..\src\chapter_11\chapter_11.vcxproj", "{5300201F-4F75-4112-9103-DE8EFF5D5229}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "clipborad", "..\src\clipborad\clipborad.vcxproj", "{1A77EBC4-9611-4AE8-A09A-E19FF70F27CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -93,6 +97,18 @@ Global
 		{96C5D9BB-EA5C-4B30-A406-5581525DA197}.Release|Win32.ActiveCfg = Release|Win32
 		{96C5D9BB-EA5C-4B30-A406-5581525DA197}.Release|Win32.Build.0 = Release|Win32
 		{96C5D9BB-EA5C-4B30-A406-5581525DA197}.Release|x64.ActiveCfg = Release|Win32
+		{5300201F-4F75-4112-9103-DE8EFF5D5229}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5300201F-4F75-4112-9103-DE8EFF5D5229}.Debug|Win32.Build.0 = Debug|Win32
+		{5300201F-4F75-4112-9103-DE8EFF5D5229}.Debug|x64.ActiveCfg = Debug|Win32
+		{5300201F-4F75-4112-9103-DE8EFF5D5229}.Release|Win32.ActiveCfg = Release|Win32
+		{5300201F-4F75-4112-9103-DE8EFF5D5229}.Release|Win32.Build.0 = Release|Win32
+		{5300201F-4F75-4112-9103-DE8EFF5D5229}.Release|x64.ActiveCfg = Release|Win32
+		{1A77EBC4-9611-4AE8-A09A-E19FF70F27CC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1A77EBC4-9611-4AE8-A09A-E19FF70F27CC}.Debug|Win32.Build.0 = Debug|Win32
+		{1A77EBC4-9611-4AE8-A09A-E19FF70F27CC}.Debug|x64.ActiveCfg = Debug|Win32
+		{1A77EBC4-9611-4AE8-A09A-E19FF70F27CC}.Release|Win32.ActiveCfg = Release|Win32
+		{1A77EBC4-9611-4AE8-A09A-E19FF70F27CC}.Release|Win32.Build.0 = Release|Win32
+		{1A77EBC4-9611-4AE8-A09A-E19FF70F27CC}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
