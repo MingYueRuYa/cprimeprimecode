@@ -31,5 +31,6 @@
 #include "command.cpp"
 #include "iterator.cpp"
 #include "visitor.cpp"
+#include "singleton.cpp"
 
 #endif //design_pattern_pack_h
