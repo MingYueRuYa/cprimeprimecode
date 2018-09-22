@@ -1,8 +1,11 @@
 set(net_SRCS
   Acceptor.cc
+  Buffer.cc
   Channel.cc
+  Connector.cc
   EventLoop.cc
   EventLoopThread.cc
+  EventLoopThreadPool.cc
   InetAddress.cc
   Poller.cc
   poller/DefaultPoller.cc
@@ -11,6 +14,7 @@ set(net_SRCS
   Socket.cc
   SocketsOps.cc
   TcpConnection.cc
+  TcpClient.cc
   TcpServer.cc
   Timer.cc
   TimerQueue.cc
@@ -22,6 +26,7 @@ target_link_libraries(muduo_net muduo_base)
 install(TARGETS muduo_net DESTINATION lib)
 set(HEADERS
   Acceptor.h
+  Buffer.h
   Channel.h
   EventLoop.h
   EventLoopThread.h
@@ -32,9 +37,9 @@ set(HEADERS
   )
 install(FILES ${HEADERS} DESTINATION include/muduo/net)
 
-#add_subdirectory(http)
-#add_subdirectory(inspect)
-#
+add_subdirectory(http)
+add_subdirectory(inspect)
+
 if(NOT CMAKE_BUILD_NO_EXAMPLES)
   add_subdirectory(tests)
 endif()

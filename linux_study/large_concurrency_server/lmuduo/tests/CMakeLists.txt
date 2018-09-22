@@ -42,11 +42,23 @@ target_link_libraries(Reactor_test06 muduo_net)
 add_executable(Reactor_test07 Reactor_test07.cc)
 target_link_libraries(Reactor_test07 muduo_net)
 
-add_executable(Reactor_test08 Reactor_test08.cc)
-target_link_libraries(Reactor_test08 muduo_net)
+#add_executable(Reactor_test08 Reactor_test08.cc)
+#target_link_libraries(Reactor_test08 muduo_net)
+#
+#add_executable(Reactor_test09 Reactor_test09.cc)
+#target_link_libraries(Reactor_test09 muduo_net)
+#
+#add_executable(Reactor_test10 Reactor_test10.cc)
+#target_link_libraries(Reactor_test10 muduo_net)
 
-add_executable(Reactor_test09 Reactor_test09.cc)
-target_link_libraries(Reactor_test09 muduo_net)
+add_executable(Reactor_test11 Reactor_test11.cc)
+target_link_libraries(Reactor_test11 muduo_net)
+
+add_executable(Reactor_test12 Reactor_test12.cc)
+target_link_libraries(Reactor_test12 muduo_net)
+
+add_executable(Reactor_test13 Reactor_test13.cc)
+target_link_libraries(Reactor_test13 muduo_net)
 
 add_executable(Test_lower_bound_upper_bound 
 				Test_lower_bound_upper_bound.cpp)

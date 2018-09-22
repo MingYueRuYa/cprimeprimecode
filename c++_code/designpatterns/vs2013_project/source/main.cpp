@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 liushixiongcpp@163.com (http://www.2144.cn)
+** Copyright (C) 2017 liushixiongcpp@163.com
 ** All rights reserved.
 **
 ****************************************************************************/
@@ -11,6 +11,7 @@
 #include <map>
 
 #include "designpatternpack.h"
+#include "singleton.cpp"
 
 using std::cout;
 using std::endl;
@@ -47,6 +48,7 @@ void InitMap()
     g_map[20] = std::bind(command::test_command);
     g_map[21] = std::bind(iterator::test_iterator);
     g_map[22] = std::bind(visitor::test_visitor);
+    g_map[23] = std::bind(singleton::test_singleton);
 }
 
 void Print()
@@ -76,6 +78,7 @@ void Print()
     cout << "(20) " << "command::test_command"      << endl;
     cout << "(21) " << "iterator::test_iterator"    << endl;
     cout << "(22) " << "visitor::test_visitor"      << endl;
+    cout << "(23) " << "singleton::test_singleton"  << endl;
 }
 
 int main(int argc, char *argv[])
@@ -94,7 +97,7 @@ int main(int argc, char *argv[])
         }
         funptr fun = g_map[index];
         if (NULL == fun) {
-            cout << "please input 1-22 index" << endl;
+            cout << "please input 1-23 index" << endl;
         } else {
             fun();
         }

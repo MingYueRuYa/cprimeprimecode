@@ -1,5 +1,6 @@
 //#define _CRT_SECURE_NO_WARNINGS
 
+#include <time.h>
 #include <windows.h>
 #include <iostream>
 
@@ -60,8 +61,88 @@ private:
 	int id;
 };
 
+wstring str2time(const wstring &strTime)
+{
+    struct tm sTime;
+    swscanf_s(strTime.c_str(), L"%d-%d-%d %d:%d:%d", &sTime.tm_year, &sTime.tm_mon, &sTime.tm_mday, &sTime.tm_hour, &sTime.tm_min, &sTime.tm_sec, sizeof(tm));
+    sTime.tm_year -= 1900;
+
+    sTime.tm_mon -= 1;
+    time_t ft = mktime(&sTime);
+    wchar_t wcbuf[50] = { 0 };
+    swprintf(wcbuf, sizeof(wcbuf), L"%lld", ft);
+    return wcbuf;
+}
+
+#include <string>
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
+#ifdef WIN32
+#include <objbase.h>
+#else
+#include <uuid/uuid.h>
+#endif
+
+std::string CreateGuid()
+{
+    GUID guid;
+    CoCreateGuid(&guid);
+    char buf[64] = { 0 };
+    _snprintf_s(
+        buf,
+        sizeof(buf),
+        "%08X%04X%04X%02X%02X%02X%02X%02X%02X%02X%02X",
+        guid.Data1, guid.Data2, guid.Data3,
+        guid.Data4[0], guid.Data4[1],
+        guid.Data4[2], guid.Data4[3],
+        guid.Data4[4], guid.Data4[5],
+        guid.Data4[6], guid.Data4[7]);
+    return std::string(buf);
+}
+
+std::string GuidToString(const GUID &guid)
+{
+    char buf[64] = { 0 };
+#ifdef __GNUC__
+    snprintf(
+#else // MSVC
+    _snprintf_s(
+#endif
+        buf,
+        sizeof(buf),
+        "%08X%04X%04X%02X%02X%02X%02X%02X%02X%02X%02X",
+        guid.Data1, guid.Data2, guid.Data3,
+        guid.Data4[0], guid.Data4[1],
+        guid.Data4[2], guid.Data4[3],
+        guid.Data4[4], guid.Data4[5],
+        guid.Data4[6], guid.Data4[7]);
+    return std::string(buf);
+}
 
 int main(int argc, CHAR* argv[])
+{
+    cout <<CreateGuid() << endl;
+
+    int i = 0;
+    cin >> i;
+    return 0;
+}
+
+int main03(int argc, CHAR* argv[])
+{
+    wstring timestamp = str2time(L"2013-08-01 0:0:0");
+
+    cout << timestamp.c_str() << endl;
+
+    int i = 0;
+    cin >> i;
+    return 0;
+}
+
+
+int main01(int argc, CHAR* argv[])
 {
 
 	Test *test = new Test(3);
@@ -75,13 +156,10 @@ int main(int argc, CHAR* argv[])
 	return 0;
     MSG msg;
     //hStartEvent = ::CreateEvent(0, FALSE, FALSE, 0);
-<<<<<<< HEAD
     //获取分辨率
     int m_nWindwMetricsX = ::GetSystemMetrics(SM_CXSCREEN);
     int m_nWindwMetricsY = ::GetSystemMetrics(SM_CYSCREEN);
 
-=======
->>>>>>> 4d74e25c08a4ce355ed20aaf5df2105e666c53ad
     hStartEvent = ::CreateEvent(0, FALSE, FALSE, 0); //create thread start event
     if (hStartEvent == 0)
     {

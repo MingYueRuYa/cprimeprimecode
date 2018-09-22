@@ -68,14 +68,18 @@ template <typename T>
 class Singleton
 {
 public:
-    static T& Instance() //1.为什么返回引用类型 --> 此内存是由Singleton自己管理，外界不需要知道具体的细节问题
+	// 1.为什么返回引用类型 --> 
+	// 此内存是由Singleton自己管理，外界不需要知道具体的细节问题
+    static T& Instance()
     {
         if (NULL == mInstance )
         {
             mMutex.lock();
             if (NULL == mInstance) {
                 mInstance = new T();
-                atexit(Destroy); //3.为什么调用atexit函数 --> 一是为了能释放资源，二是减轻用户责任不要用户在手动调用释放资源的函数
+				// 3.为什么调用atexit函数 --> 
+				// 一是为了能释放资源，二是减轻用户责任不要用户在手动调用释放资源的函数
+                atexit(Destroy); 
             }
             mMutex.unlock();
             return *mInstance;
@@ -99,7 +103,9 @@ private:
         mInstance = NULL;
     }
 
-    static T* volatile mInstance; //2.为什么加上volatile关键字 --> 确保多线程每次从内存中取值，而不是从寄存器中取值
+	// 2.为什么加上volatile关键字 --> 
+	// 确保多线程每次从内存中取值，而不是从寄存器中取值
+    static T* volatile mInstance;
     static mutex mMutex;
 };
 
@@ -109,11 +115,20 @@ T* volatile Singleton<T>::mInstance = NULL;
 template <typename T>
 mutex Singleton<T>::mMutex;
 
-class DemoSingleton : public Singleton<DemoSingleton>
+class DemoSingleton : public singleton::Singleton<DemoSingleton>
 {
 public:
+	~DemoSingleton() {}
     void Show() { cout << "this is demo singleton." << endl; }
     void Test() { cout << "this is test test demo singleton." << endl; }
+
+private:
+	DemoSingleton() {}
+	DemoSingleton(const DemoSingleton &) {}
+	DemoSingleton& operator =(const DemoSingleton &) {}
+
+private:
+	friend singleton::Singleton<DemoSingleton>;
 };
     
     static void test_singleton()
@@ -124,8 +139,7 @@ public:
                 "######################################"   \
              << endl;
 
-        DemoSingleton::Instance().Show();
-        DemoSingleton::Instance().Test();
+        singleton::Singleton<DemoSingleton>::Instance().Show();
     }
 };
 
