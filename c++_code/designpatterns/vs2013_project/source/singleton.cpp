@@ -115,6 +115,14 @@ T* volatile Singleton<T>::mInstance = NULL;
 template <typename T>
 mutex Singleton<T>::mMutex;
 
+
+#define SINGLETON_INSTANCE(CLASSNAME)  singleton::Singleton<CLASSNAME>::Instance()
+#define DECLARE_FRIEND_SINGLETON(CLASSNAME)	private: friend class singleton::Singleton<CLASSNAME>;
+#define DECLARE_PRIVATE_CONSTRUCTOR(CLASSNAME) 	private: \
+												CLASSNAME() {} \
+												CLASSNAME(const CLASSNAME &) {} \
+												CLASSNAME& operator =(const CLASSNAME &) {}
+
 class DemoSingleton : public singleton::Singleton<DemoSingleton>
 {
 public:
@@ -122,13 +130,9 @@ public:
     void Show() { cout << "this is demo singleton." << endl; }
     void Test() { cout << "this is test test demo singleton." << endl; }
 
-private:
-	DemoSingleton() {}
-	DemoSingleton(const DemoSingleton &) {}
-	DemoSingleton& operator =(const DemoSingleton &) {}
+DECLARE_PRIVATE_CONSTRUCTOR(DemoSingleton)
 
-private:
-	friend singleton::Singleton<DemoSingleton>;
+DECLARE_FRIEND_SINGLETON(DemoSingleton)
 };
     
     static void test_singleton()
@@ -139,7 +143,7 @@ private:
                 "######################################"   \
              << endl;
 
-        singleton::Singleton<DemoSingleton>::Instance().Show();
+		SINGLETON_INSTANCE(DemoSingleton).Test();
     }
 };
 
