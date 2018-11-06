@@ -115,24 +115,28 @@ T* volatile Singleton<T>::mInstance = NULL;
 template <typename T>
 mutex Singleton<T>::mMutex;
 
+#define SINGLETON_INHERIT(CLASSNAME) singleton::Singleton<CLASSNAME>
+#define SINGLETON_INSTANCE(CLASSNAME)  \
+								singleton::Singleton<CLASSNAME>::Instance()
+#define DECLARE_FRIEND_SINGLETON(CLASSNAME)	\
+						private: friend class singleton::Singleton<CLASSNAME>;
+#define DECLARE_PRIVATE_CONSTRUCTOR(CLASSNAME, INIT_FUNCTION) 	\
+					private: \
+					CLASSNAME() { INIT_FUNCTION(); } \
+					CLASSNAME(const CLASSNAME &) {} \
+					CLASSNAME& operator =(const CLASSNAME &) { return *this; }
 
-#define SINGLETON_INSTANCE(CLASSNAME)  singleton::Singleton<CLASSNAME>::Instance()
-#define DECLARE_FRIEND_SINGLETON(CLASSNAME)	private: friend class singleton::Singleton<CLASSNAME>;
-#define DECLARE_PRIVATE_CONSTRUCTOR(CLASSNAME) 	private: \
-												CLASSNAME() {} \
-												CLASSNAME(const CLASSNAME &) {} \
-												CLASSNAME& operator =(const CLASSNAME &) {}
-
-class DemoSingleton : public singleton::Singleton<DemoSingleton>
+class DemoSingleton : public SINGLETON_INHERIT(DemoSingleton)
 {
+	// 如果不想传递初始化函数，可以传递void
+	DECLARE_PRIVATE_CONSTRUCTOR(DemoSingleton, Initialiaze)
+	DECLARE_FRIEND_SINGLETON(DemoSingleton)
+
 public:
 	~DemoSingleton() {}
     void Show() { cout << "this is demo singleton." << endl; }
     void Test() { cout << "this is test test demo singleton." << endl; }
-
-DECLARE_PRIVATE_CONSTRUCTOR(DemoSingleton)
-
-DECLARE_FRIEND_SINGLETON(DemoSingleton)
+	void Initialiaze() { cout << "I am init." << endl; }
 };
     
     static void test_singleton()
