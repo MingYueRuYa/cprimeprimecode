@@ -93,7 +93,7 @@ protected:
 
 private:
     Singleton(const Singleton& rhs) {}
-    Singleton& operator = (const Singleton& rhs) {}
+    Singleton& operator = (const Singleton& rhs) { return *this; }
 
     static void Destroy()
     {
