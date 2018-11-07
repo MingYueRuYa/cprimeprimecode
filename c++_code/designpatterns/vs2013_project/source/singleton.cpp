@@ -123,8 +123,8 @@ mutex Singleton<T>::mMutex;
 #define DECLARE_PRIVATE_CONSTRUCTOR(CLASSNAME, INIT_FUNCTION) 	\
 					private: \
 					CLASSNAME() { INIT_FUNCTION(); } \
-					CLASSNAME(const CLASSNAME &) {} \
-					CLASSNAME& operator =(const CLASSNAME &) { return *this; }
+					CLASSNAME(const CLASSNAME &) = delete; \
+					CLASSNAME& operator =(const CLASSNAME &) = delete;
 
 class DemoSingleton : public SINGLETON_INHERIT(DemoSingleton)
 {
