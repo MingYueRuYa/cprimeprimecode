@@ -83,6 +83,7 @@
   <ItemGroup>
     <ClInclude Include="commonpack.h" />
     <ClInclude Include="debughelper.h" />
+    <ClInclude Include="registerhelper.h" />
     <ClInclude Include="servicesmanager.h" />
     <ClInclude Include="servicewrap.h" />
     <ClInclude Include="singleton.h" />
@@ -92,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debughelper.cpp" />
+    <ClCompile Include="registerhelper.cpp" />
     <ClCompile Include="servicesmanager.cpp" />
     <ClCompile Include="servicewrap.cpp" />
     <ClCompile Include="stdafx.cpp">

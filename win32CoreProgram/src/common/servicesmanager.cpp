@@ -8,11 +8,9 @@
 #include "stdafx.h"
 #include "servicesmanager.h"
 
-namespace XIBAO {
-
 using std::pair;
 
-// LPWSTR appname = L"service_manager_test";
+namespace XIBAO {
 
 void WINAPI ServicesManager::_ServiceMain(
 		_In_ DWORD dwArgc,
@@ -32,10 +30,9 @@ ServicesManager::~ServicesManager()
 
 ServicesManager::SMErrorCode ServicesManager::Start(const wstring &servicename)
 {
-	// mCurServiceName = servicename;
-	WCHAR appname[1024] = {0};
-	// wcscpy_s(appname, _countof(appname), mCurServiceName.c_str());
-	wcscpy_s(appname, _countof(appname), servicename.c_str());
+	mCurServiceName = servicename;
+	WCHAR appname[MAX_PATH*4] = {0};
+	wcscpy_s(appname, _countof(appname), mCurServiceName.c_str());
 	SERVICE_TABLE_ENTRY DispatchTable[]={
 		{appname, ServicesManager::_ServiceMain},
 		{NULL, NULL}
@@ -58,12 +55,14 @@ ServicesManager::SMErrorCode ServicesManager::InstallService(
 		return errcode;
 	}
 
+	wstring serdesc		= serwrap->GetServiceDesc();
 	wstring wstrname	= serwrap->GetAppAbsPath();
 	LPCTSTR strappname	= wstrname.c_str();
+
 	SC_HANDLE scmanager = 0, scservice = 0;
 	scmanager = OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 	if (NULL == scmanager) {
-		DWORD dwlasterror = GetLastError();
+		errcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
@@ -78,51 +77,55 @@ ServicesManager::SMErrorCode ServicesManager::InstallService(
 									NULL, NULL, NULL, NULL, NULL);
 
 	if (NULL == scservice) {
-		DWORD dwlasterror = GetLastError();
+		errcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
+	WCHAR chDes[MAX_PATH*4] = {0};
+	wcscpy_s(chDes, _countof(chDes), serdesc.c_str());
+
 	SERVICE_DESCRIPTION servicedesc;
-	servicedesc.lpDescription = L"Service Manager demo";
+	servicedesc.lpDescription = chDes;
 	if (0 == ChangeServiceConfig2W(scservice, 
 									SERVICE_CONFIG_DESCRIPTION, 
 									&servicedesc)) {
-		DWORD dwlasterror = GetLastError();
+		errcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
 	CloseServiceHandle(scmanager);
 	CloseServiceHandle(scservice);
-	return SM_SUCCESS;
+	return errcode;
 
 CloseSCHandle:
 	CloseServiceHandle(scmanager);
 	CloseServiceHandle(scservice);
-	return SM_FAILED;	
+	return errcode;	
 }
 
 ServicesManager::SMErrorCode ServicesManager::StartService(
 										const wstring &wstrName)
 {
+	SMErrorCode errorcode = SM_SUCCESS;
 	SC_HANDLE scmanager = 0, scservice = 0;
 	scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
 	if (0 == scmanager) {
-		DWORD dwlasterror = GetLastError();
-		return SM_FAILED;
+		errorcode = static_cast<SMErrorCode>(GetLastError());
+		goto CloseSCHandle;
 	}
 
 	scservice = ::OpenServiceW(scmanager, 
 								wstrName.c_str(),
 								SERVICE_ALL_ACCESS);	
 	if (0 == scservice) {
-		DWORD dwlasterror = GetLastError();
+		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
 	SERVICE_STATUS status;
 	::ZeroMemory(&status, sizeof(status));
 	if (! ::QueryServiceStatus(scservice, &status)) {
-		DWORD dwlasterror = GetLastError();
+		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
@@ -130,7 +133,7 @@ ServicesManager::SMErrorCode ServicesManager::StartService(
 	if (status.dwCurrentState == SERVICE_RUNNING) {
 		// 先停止，再启动
 		if (! ::ControlService(scservice, SERVICE_CONTROL_STOP, &status)) {
-			DWORD dwlasterror = GetLastError();
+			errorcode = static_cast<SMErrorCode>(GetLastError());
 			goto CloseSCHandle;
 		}
 
@@ -145,7 +148,7 @@ ServicesManager::SMErrorCode ServicesManager::StartService(
 
 	// 启动服务
 	if (! ::StartServiceW(scservice, NULL, NULL)) {
-		DWORD dwlasterror = GetLastError();
+		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
@@ -159,41 +162,42 @@ ServicesManager::SMErrorCode ServicesManager::StartService(
 
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
-	return SM_SUCCESS;
+	return errorcode;
 
 CloseSCHandle:
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
-	return SM_FAILED;
+	return errorcode;
 }
 
 ServicesManager::SMErrorCode ServicesManager::StopService(
 								const wstring &serviceName)
 {
+	SMErrorCode errorcode = SM_SUCCESS;
 	SC_HANDLE scmanager = 0, scservice = 0;
 	scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
 	if (0 == scmanager) {
-		DWORD dwlasterror = GetLastError();
-		return SM_FAILED;
+		errorcode = static_cast<SMErrorCode>(GetLastError());
+		goto CloseSCHandle;
 	}
 
 	scservice = ::OpenServiceW(scmanager, serviceName.c_str(),
 								SERVICE_ALL_ACCESS);
 	if (0 == scservice) {
-		DWORD dwlasterror = GetLastError();
+		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
 	SERVICE_STATUS status;
 	::ZeroMemory(&status, sizeof(status));
 	if (! ::QueryServiceStatus(scservice, &status)) {
-		DWORD dwlasterror = GetLastError();
+		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
 	if (SERVICE_RUNNING == status.dwCurrentState) {
 		if (! ::ControlService(scservice, SERVICE_CONTROL_STOP, &status)) {
-			DWORD dwlasterror = GetLastError();
+			errorcode = static_cast<SMErrorCode>(GetLastError());
 			goto CloseSCHandle;
 		}	
 
@@ -208,12 +212,12 @@ ServicesManager::SMErrorCode ServicesManager::StopService(
 
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
-	return SM_SUCCESS;
+	return errorcode;
 
 CloseSCHandle:
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
-	return SM_FAILED;
+	return errorcode;
 }
 
 ServicesManager::SMErrorCode ServicesManager::PauseService(
@@ -232,7 +236,9 @@ ServicesManager::SMErrorCode ServicesManager::ResumeService(
 ServicesManager::SMErrorCode ServicesManager::QueryServiceStatus(
 							const wstring &serviceName)
 {
-	return SM_FAILED;
+	SMErrorCode errorcode = SM_SUCCESS;
+
+	return errorcode;
 }
 
 void ServicesManager::ServiceMain(
@@ -242,7 +248,7 @@ void ServicesManager::ServiceMain(
 	ServiceWrap *servicewrap = nullptr;
 	if (ServicesManager::SM_SUCCESS != 
 			SINGLETON_INSTANCE(ServicesManager).GetServiceWrap(
-										L"demo", servicewrap)
+										mCurServiceName.c_str(), servicewrap)
 		) {
 		return;
 	}
@@ -254,7 +260,7 @@ void ServicesManager::ServiceMain(
 void ServicesManager::ServiceCtrlHandler(DWORD Opcode)
 {
 	ServiceWrap *servicewrap = nullptr;
-	if (SM_SUCCESS != GetServiceWrap(L"demo", servicewrap)) {
+	if (SM_SUCCESS != GetServiceWrap(mCurServiceName.c_str(), servicewrap)) {
 		return;
 	}
 
@@ -304,11 +310,6 @@ ServicesManager::SMErrorCode ServicesManager::DeleteService(
 	return _DeleteService(wstrName);
 }
 
-void ServicesManager::Initialize()
-{
-	// AddServiceWrap(ServiceWrap(L"demo"));
-}
-
 ServicesManager::SMErrorCode ServicesManager::GetServiceWrap(
 										const wstring &ServiceName, 
 										ServiceWrap *&serviceWrap) {
@@ -333,7 +334,6 @@ ServicesManager::SMErrorCode ServicesManager::_FindServiceWrap(
 	map<wstring, ServiceWrap>::iterator ifind = mServiceMap.find(
 															wstrServiceName
 														);
-	
 	return ifind == mServiceMap.end() ? 
 				SM_SERVICEWRAP_NOT_EXIST : SM_SERVICEWRAP_EXIST;
 }
@@ -341,10 +341,11 @@ ServicesManager::SMErrorCode ServicesManager::_FindServiceWrap(
 ServicesManager::SMErrorCode ServicesManager::_DeleteService(
 							const wstring &wstrServiceName)
 {
+	SMErrorCode errorcode = SM_SUCCESS;
 	SC_HANDLE scmanager = 0, scservice = 0;
 	scmanager = ::OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 	if (0 == scmanager) {
-		DWORD dwlasterror = GetLastError();
+		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
@@ -352,23 +353,23 @@ ServicesManager::SMErrorCode ServicesManager::_DeleteService(
 								SERVICE_ALL_ACCESS);
 
 	if (0 == scservice) {
-		DWORD dwlasterror = GetLastError();
+		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
 	if (0 == ::DeleteService(scservice)) {
-		DWORD dwlasterror = GetLastError();
+		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
-	return SM_SUCCESS;
+	return errorcode;
 
 CloseSCHandle:
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
-	return SM_FAILED;
+	return errorcode;
 }
 
 }

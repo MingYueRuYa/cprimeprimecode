@@ -9,14 +9,19 @@
 #include "servicewrap.h"
 #include "commonpack.h"
 
+using XIBAO::DebugHelper;
+using XIBAO::ServicesManager;
+
 namespace XIBAO
 {
 	ServiceWrap::ServiceWrap(const wstring &wstrName, 
-								const wstring &wstrAppAbsPath, 
+								const wstring &wstrAppAbsPath,
+								const wstring &wstrDesc,
 								bool running)
-		: mServiceName(wstrName),
+		: mStopped(running),
 		  mAppAbsPath(wstrAppAbsPath),
-		  mStopped(running),
+	  	  mServiceName(wstrName),
+		  mServiceDesc(wstrDesc),
 		  mServiceStatusHandle(0)		
 	{
 	}
@@ -80,6 +85,16 @@ namespace XIBAO
 		return mStopped;
 	}
 
+	void ServiceWrap::SetServiceDesc(const wstring &serviceDesc)
+	{
+		mServiceDesc = serviceDesc;
+	}
+
+	wstring ServiceWrap::GetServiceDesc()
+	{
+		return mServiceDesc;
+	}
+
 	void ServiceWrap::ServiceMain(DWORD argc, LPTSTR *argv)
 	{
 		mServiceStatus.dwServiceType          = SERVICE_WIN32;  
@@ -113,46 +128,106 @@ namespace XIBAO
 		switch(Opcode)  
 		{  
 			case SERVICE_CONTROL_PAUSE:  
-				mStopped = false; 
-				::InterlockedExchange(&mServiceStatus.dwCurrentState,
-									SERVICE_PAUSED);
-				::SetServiceStatus(mServiceStatusHandle, &mServiceStatus);
-				XIBAO::DebugHelper::OutputDebugStringW(L"SERVICE_CONTROL_PAUSE");
+				Pause();
 			break;  
 			case SERVICE_CONTROL_CONTINUE:  
-				mStopped = true; 
-				XIBAO::DebugHelper::OutputDebugStringW(
-												L"SERVICE_CONTROL_CONTINUE"
-											);
-				::InterlockedExchange(&mServiceStatus.dwCurrentState,
-									SERVICE_RUNNING);
-				::SetServiceStatus(mServiceStatusHandle, &mServiceStatus);
-				// 继续执行函数
-				DoTask();
+				Continue();
 			break;
 			case SERVICE_CONTROL_STOP:  
-				mStopped = false; 
-				mServiceStatus.dwWin32ExitCode = 0;  
-				mServiceStatus.dwCheckPoint      = 0;  
-				mServiceStatus.dwWaitHint        = 0;     
-				::InterlockedExchange(&mServiceStatus.dwCurrentState,
-									SERVICE_STOPPED);
-				SetServiceStatus(mServiceStatusHandle, &mServiceStatus); 
-				XIBAO::DebugHelper::OutputDebugStringW(L"SERVICE_CONTROL_STOP");
+				Stop();	
 			break; 
 			case SERVICE_CONTROL_SHUTDOWN:
-				mStopped = false; 
-				mServiceStatus.dwWin32ExitCode	 = 0;  
-				mServiceStatus.dwCheckPoint      = 0;  
-				mServiceStatus.dwWaitHint        = 0;     
-				::InterlockedExchange(&mServiceStatus.dwCurrentState,
-										SERVICE_STOPPED);
-				SetServiceStatus(mServiceStatusHandle, &mServiceStatus); 
+				Shutdown();
 			break;
 			case SERVICE_CONTROL_INTERROGATE:  
+				Interrogate();
 			break;  
 		}       
 		return;  
+	}
+
+	DWORD ServiceWrap::QueryServiceStatus()
+	{
+		DWORD errorcode = 0;
+		SC_HANDLE scmanager = 0, scservice = 0;
+		scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
+		if (0 == scmanager) {
+			errorcode = GetLastError();
+			goto CloseSCHandle;
+		}
+
+		scservice = ::OpenServiceW(scmanager, mServiceName.c_str(),
+									SERVICE_ALL_ACCESS);
+		if (0 == scservice) {
+			errorcode = GetLastError();
+			goto CloseSCHandle;
+		}
+
+		if (! ::QueryServiceStatus(scservice, &mServiceStatus)) {
+			errorcode = GetLastError();
+			goto CloseSCHandle;
+		}
+
+		::CloseServiceHandle(scmanager);
+		::CloseServiceHandle(scservice);
+		return errorcode;
+
+CloseSCHandle:
+		::CloseServiceHandle(scmanager);
+		::CloseServiceHandle(scservice);
+		return errorcode;
+	}
+
+	void ServiceWrap::SetRegInfo()
+	{
+	}
+
+	void ServiceWrap::DelRegInfo()
+	{
+	}
+
+	void ServiceWrap::Pause()
+	{
+		mStopped = false; 
+		::InterlockedExchange(&mServiceStatus.dwCurrentState,
+								SERVICE_PAUSED);
+		::SetServiceStatus(mServiceStatusHandle, &mServiceStatus);
+		DebugHelper::OutputDebugStringW(L"SERVICE_CONTROL_PAUSE");	
+	}
+
+	void ServiceWrap::Continue()
+	{
+		mStopped = true; 
+		DebugHelper::OutputDebugStringW(L"SERVICE_CONTROL_CONTINUE");
+		::InterlockedExchange(&mServiceStatus.dwCurrentState,
+								SERVICE_RUNNING);
+		::SetServiceStatus(mServiceStatusHandle, &mServiceStatus);
+		while (0 == this->QueryServiceStatus()) {
+			if (SERVICE_RUNNING == mServiceStatus.dwCurrentState) {
+				break;
+			} // if
+		}
+
+		// 继续执行函数
+		DoTask();
+	}
+
+	void ServiceWrap::Stop()
+	{
+		mStopped = false; 
+		DebugHelper::OutputDebugStringW(L"SERVICE_CONTROL_STOP");
+		::InterlockedExchange(&mServiceStatus.dwCurrentState,
+								SERVICE_STOPPED);
+		::SetServiceStatus(mServiceStatusHandle, &mServiceStatus);
+	}
+
+	void ServiceWrap::Shutdown()
+	{
+		Stop();
+	}
+
+	void ServiceWrap::Interrogate()
+	{
 	}
 
 	void ServiceWrap::DoTask()
@@ -166,8 +241,9 @@ namespace XIBAO
 	void ServiceWrap::_CopyValue(const ServiceWrap &servicewrap)
 	{
 		this->mStopped				= servicewrap.mStopped;
-		this->mServiceName			= servicewrap.mServiceName;
 		this->mAppAbsPath			= servicewrap.mAppAbsPath;
+		this->mServiceName			= servicewrap.mServiceName;
+		this->mServiceDesc			= servicewrap.mServiceDesc;
 		this->mServiceStatus		= servicewrap.mServiceStatus;
 		this->mServiceStatusHandle	= servicewrap.mServiceStatusHandle;
 	}

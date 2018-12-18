@@ -25,7 +25,8 @@ class ServiceWrap
 {
 public:
 	explicit ServiceWrap(const wstring &wstrName, 
-							const wstring &wstrAppAbsPath, 
+							const wstring &wstrAppAbsPath,
+							const wstring &wstrDesc,
 							bool running = true);
 	ServiceWrap &operator=(const ServiceWrap &servicewrap);
 	ServiceWrap(const ServiceWrap &servicewrap);
@@ -43,21 +44,34 @@ public:
 	void SetStop(bool stop);
 	bool GetStop() const;
 
-	virtual void ServiceMain(DWORD argc, LPTSTR *argv);
-	virtual void ServiceCtrlHandler(DWORD Opcode);  
+	void SetServiceDesc(const wstring &serviceDesc);
+	wstring GetServiceDesc();
+
+	void ServiceMain(DWORD argc, LPTSTR *argv);
+	void ServiceCtrlHandler(DWORD Opcode);  
+	DWORD QueryServiceStatus();
+	void SetRegInfo();
+	void DelRegInfo();
+
+	virtual void Pause();
+	virtual void Continue();
+	virtual void Stop();
+	virtual void Shutdown();
+	virtual void Interrogate();
 	virtual void DoTask();
 
 public:
 	SERVICE_STATUS mServiceStatus;
 
-private:
+protected:
 	void _CopyValue(const ServiceWrap &servicewrap);
 
 protected:
-	SERVICE_STATUS_HANDLE mServiceStatusHandle;
-	wstring mServiceName;
-	wstring mAppAbsPath;
 	bool	mStopped;
+	wstring mAppAbsPath;
+	wstring mServiceName;
+	wstring mServiceDesc;
+	SERVICE_STATUS_HANDLE mServiceStatusHandle;
 };
 
 }

@@ -17,6 +17,7 @@
 #include "./singleton.h"
 #include "./debughelper.h"
 #include "./stringhelper.h"
+#include "./registerhelper.h"
 
 #include "./servicewrap.h"
 #include "./servicesmanager.h"

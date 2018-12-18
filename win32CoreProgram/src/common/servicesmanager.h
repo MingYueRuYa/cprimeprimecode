@@ -36,11 +36,12 @@ class ServicesManager : SINGLETON_INHERIT(ServicesManager)
 
 public:
 	typedef enum SMErrorCode{
-		SM_SUCCESS = 0,
-		SM_FAILED,
+		SM_FAILED = -100,
 		SM_SERVICEWRAP_EXIST,
 		SM_SERVICEWRAP_NOT_EXIST,
-		SM_SERVICEMAP_EMPTY
+		SM_SERVICEMAP_EMPTY,
+		//这里添加新的enum值
+		SM_SUCCESS = 0,
 	};
 
 public:
@@ -77,7 +78,6 @@ public:
 	SMErrorCode DeleteService(const wstring &wstrName);
 
 private:
-	void Initialize();
 	SMErrorCode GetServiceWrap(const wstring &ServiceName, 
 								ServiceWrap *&serviceWrap);
 	SMErrorCode _FindServiceWrap(const wstring &wstrServiceName);
@@ -85,9 +85,7 @@ private:
 	SMErrorCode _DeleteService(const wstring &wstrServiceName);
 
 private:
-	// wstring						mCurServiceName;
-	SERVICE_STATUS				m_ServiceStatus; 
-	SERVICE_STATUS_HANDLE		m_ServiceStatusHandle; 
+	wstring						mCurServiceName;
 	map<wstring, ServiceWrap>	mServiceMap;
 
 };

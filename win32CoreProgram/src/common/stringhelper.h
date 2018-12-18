@@ -36,4 +36,4 @@ public:
 
 };
 
-#endif // debughelper_h
+#endif // stringhelper_h
