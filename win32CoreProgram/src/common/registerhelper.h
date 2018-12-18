@@ -57,9 +57,9 @@ private:
 			RegDataType(const RegDataType &right) = default;
 			RegDataType& operator=(const RegDataType &right) = default;
 
-			unsigned int size() { return sizeof(T); }
-			T *GetAddress() { return &mValue; }
-			DWORD GetType() { return mRegType; }
+			unsigned int size() const { return sizeof(T); }
+			T *GetAddress() const { return &mValue; }
+			DWORD GetType() const { return mRegType; }
 
 		public:
 			DWORD mRegType;
@@ -71,7 +71,7 @@ private:
 	public:
 		RegDataType(DWORD regType, const wstring &tValue)
 			: mRegType(regType),
-			mValue(tValue)
+			  mValue(tValue)
 		{ 
 		}
 
@@ -80,19 +80,14 @@ private:
 		RegDataType(const RegDataType &right) = default;
 		RegDataType& operator=(const RegDataType &right) = default;
 
-		unsigned int size() { return mValue.length() * sizeof(wchar_t); }
-		const wchar_t *GetAddress() { return mValue.c_str(); }
-		DWORD GetType() { return mRegType; }
+		unsigned int size() const { return mValue.length() * sizeof(wchar_t); }
+		const wchar_t *GetAddress() const { return mValue.c_str(); }
+		DWORD GetType() const { return mRegType; }
 
 	public:
 		DWORD	mRegType;
 		wstring	mValue;
 	};
-
-
-//	// notice: 不支持指针处理，处理太琐碎
-//	template <typename T>
-//	class RegDataType<T*> {};
 
 public:
 	RegisterHelper(HKEY key, const wstring &subPath, REGSAM regSam);
@@ -129,6 +124,7 @@ public:
 		}
 
 		
+		//TODO 需要优化下此处的if语句
 		if (REG_SZ == regtype || REG_EXPAND_SZ == regtype ||
 			REG_MULTI_SZ == regtype) {
 			value = TRetValue((reinterpret_cast<wchar_t *>(lpData)));

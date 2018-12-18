@@ -48,23 +48,6 @@ void RegisterHelper::InnerRegData::_CopyValue(const InnerRegData &right)
 	this->valueType = right.valueType;
 }
 
-//template<typename T>
-//RegisterHelper::RegDataType::RegDataType(DWORD regType)
-//{
-//
-//}
-//
-//template<typename T>
-//RegisterHelper::RegDataType::~RegDataType()
-//{
-//}
-//
-//template<typename T>
-//unsigned int RegisterHelper::RegDataType::size()
-//{
-//	return sizeof(T);
-//}
-
 RegisterHelper::RegisterHelper(HKEY key, const wstring &subPath, REGSAM regSam)
 	:	mRootKey(key),
 		mSubPath(subPath),
