@@ -90,6 +90,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stringhelper.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="timer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debughelper.cpp" />

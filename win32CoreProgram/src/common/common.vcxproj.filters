@@ -45,6 +45,9 @@
     <ClInclude Include="registerhelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="timer.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
