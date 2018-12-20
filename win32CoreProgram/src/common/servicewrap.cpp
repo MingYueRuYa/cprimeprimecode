@@ -36,6 +36,16 @@ namespace XIBAO
 		return *this;
 	}
 
+	bool ServiceWrap::operator==(const ServiceWrap &servicewrap)
+	{
+		if (this == &servicewrap) {
+			return true;
+		}
+		
+		return 0 == mServiceName.compare(servicewrap.mServiceName) ? 
+					true : false;
+	}
+
 	ServiceWrap::ServiceWrap(const ServiceWrap &servicewrap)
 	{
 		_CopyValue(servicewrap);

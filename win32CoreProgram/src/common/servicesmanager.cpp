@@ -49,7 +49,7 @@ ServicesManager::SMErrorCode ServicesManager::InstallService(
 		return errcode;
 	}
 	
-	ServiceWrap *serwrap = nullptr;
+	shared_ptr<ServiceWrap> serwrap = nullptr;
 	errcode	= GetServiceWrap(wstrServiceName, serwrap);
 	if (SM_SUCCESS != errcode) {
 		return errcode;
@@ -175,6 +175,7 @@ CloseSCHandle:
 ServicesManager::SMErrorCode ServicesManager::StopService(
 								const wstring &serviceName)
 {
+	shared_ptr<ServiceWrap> serwrap = nullptr;
 	SMErrorCode errorcode = SM_SUCCESS;
 	SC_HANDLE scmanager = 0, scservice = 0;
 	scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
@@ -182,6 +183,7 @@ ServicesManager::SMErrorCode ServicesManager::StopService(
 		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
+
 
 	scservice = ::OpenServiceW(scmanager, serviceName.c_str(),
 								SERVICE_ALL_ACCESS);
@@ -197,8 +199,7 @@ ServicesManager::SMErrorCode ServicesManager::StopService(
 		goto CloseSCHandle;
 	}
 
-	ServiceWrap *serwrap = nullptr;
-	if (SM_SERVICEWRAP_NOT_EXIST != GetServiceWrap(serviceName, serwrap)) {
+	if (SM_SUCCESS != GetServiceWrap(serviceName, serwrap)) {
 		errorcode = static_cast<SMErrorCode>(-1);
 		return errorcode;
 	}
@@ -253,7 +254,7 @@ void ServicesManager::ServiceMain(
 		_In_ DWORD dwArgc,
 		_In_reads_(dwArgc) _Deref_pre_z_ LPTSTR* lpszArgv)
 {
-	ServiceWrap *servicewrap = nullptr;
+	shared_ptr<ServiceWrap> servicewrap = nullptr;
 	if (ServicesManager::SM_SUCCESS != 
 			SINGLETON_INSTANCE(ServicesManager).GetServiceWrap(
 										mCurServiceName.c_str(), servicewrap)
@@ -267,7 +268,7 @@ void ServicesManager::ServiceMain(
 
 void ServicesManager::ServiceCtrlHandler(DWORD Opcode)
 {
-	ServiceWrap *servicewrap = nullptr;
+	shared_ptr<ServiceWrap> servicewrap = nullptr;
 	if (SM_SUCCESS != GetServiceWrap(mCurServiceName.c_str(), servicewrap)) {
 		return;
 	}
@@ -276,33 +277,33 @@ void ServicesManager::ServiceCtrlHandler(DWORD Opcode)
 }
 
 ServicesManager::SMErrorCode ServicesManager::AddServiceWrap(
-												const ServiceWrap &serviceWrap
-											)
+										shared_ptr<ServiceWrap> serviceWrap
+										)
 {		
-	if (SM_SERVICEWRAP_EXIST == _FindServiceWrap(serviceWrap.GetServiceName())
+	if (SM_SERVICEWRAP_EXIST == _FindServiceWrap(serviceWrap->GetServiceName())
 		) {
 		return SM_SERVICEWRAP_EXIST;
 	}
 
 	mServiceMap.insert(
-			pair<wstring, ServiceWrap>(serviceWrap.GetServiceName(),
-			ServiceWrap(serviceWrap))
+		pair<wstring, shared_ptr<ServiceWrap>>(serviceWrap->GetServiceName(),
+		serviceWrap)
 		);
 
 	return SM_SUCCESS;
 }
 
 ServicesManager::SMErrorCode ServicesManager::DeleteServiceWrap(
-												const ServiceWrap &serviceWrap
-											)
+										shared_ptr<ServiceWrap> serviceWrap
+										)
 {
 	if (SM_SERVICEWRAP_NOT_EXIST == _FindServiceWrap(
-										serviceWrap.GetServiceName()
+										serviceWrap->GetServiceName()
 									)) {
 		return SM_SERVICEWRAP_NOT_EXIST;
 	}
 
-	mServiceMap.erase(serviceWrap.GetServiceName());
+	mServiceMap.erase(serviceWrap->GetServiceName());
 
 	return SM_SUCCESS;
 }
@@ -319,8 +320,8 @@ ServicesManager::SMErrorCode ServicesManager::DeleteService(
 }
 
 ServicesManager::SMErrorCode ServicesManager::GetServiceWrap(
-										const wstring &ServiceName, 
-										ServiceWrap *&serviceWrap) {
+									const wstring &ServiceName, 
+									shared_ptr<ServiceWrap> &serviceWrap) {
 	if (mServiceMap.empty()) {
 		return SM_SERVICEMAP_EMPTY;
 	}
@@ -329,8 +330,8 @@ ServicesManager::SMErrorCode ServicesManager::GetServiceWrap(
 		return SM_SERVICEWRAP_NOT_EXIST;
 	}
 
-	map<wstring, ServiceWrap>::iterator ifind = mServiceMap.find(ServiceName);
-	serviceWrap = &(ifind->second);
+	map<wstring, shared_ptr<ServiceWrap>>::iterator ifind = mServiceMap.find(ServiceName);
+	serviceWrap = (ifind->second);
 
 	return SM_SUCCESS;
 }
@@ -339,7 +340,7 @@ ServicesManager::SMErrorCode ServicesManager::_FindServiceWrap(
 											const wstring &wstrServiceName
 										)
 {
-	map<wstring, ServiceWrap>::iterator ifind = mServiceMap.find(
+	map<wstring, shared_ptr<ServiceWrap>>::iterator ifind = mServiceMap.find(
 															wstrServiceName
 														);
 	return ifind == mServiceMap.end() ? 
@@ -349,8 +350,9 @@ ServicesManager::SMErrorCode ServicesManager::_FindServiceWrap(
 ServicesManager::SMErrorCode ServicesManager::_DeleteService(
 							const wstring &wstrServiceName)
 {
-	SMErrorCode errorcode = SM_SUCCESS;
-	SC_HANDLE scmanager = 0, scservice = 0;
+	SMErrorCode errorcode	= SM_SUCCESS;
+	SC_HANDLE scmanager		= 0, scservice = 0;
+	shared_ptr<ServiceWrap> serwrap = nullptr;
 	scmanager = ::OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 	if (0 == scmanager) {
 		errorcode = static_cast<SMErrorCode>(GetLastError());
@@ -373,7 +375,6 @@ ServicesManager::SMErrorCode ServicesManager::_DeleteService(
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
 
-	ServiceWrap *serwrap = nullptr;
 	if (SM_SUCCESS == GetServiceWrap(wstrServiceName, serwrap)) {
 		serwrap->DelRegInfo();
 	}

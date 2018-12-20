@@ -13,10 +13,12 @@
 
 #include <map>
 #include <string>
+#include <memory>
 #include <windows.h>
 
 using std::map;
 using std::wstring;
+using std::shared_ptr;
 
 namespace XIBAO {
 
@@ -73,20 +75,20 @@ public:
 			_In_ DWORD dwArgc,
 			_In_reads_(dwArgc) _Deref_pre_z_ LPTSTR* lpszArgv);
 	void ServiceCtrlHandler(DWORD Opcode);
-	SMErrorCode AddServiceWrap(const ServiceWrap &serviceWrap);
-	SMErrorCode DeleteServiceWrap(const ServiceWrap &serviceWrap);
+	SMErrorCode AddServiceWrap(shared_ptr<ServiceWrap> serviceWrap);
+	SMErrorCode DeleteServiceWrap(shared_ptr<ServiceWrap> serviceWrap);
 	SMErrorCode DeleteService(const wstring &wstrName);
 
 private:
 	SMErrorCode GetServiceWrap(const wstring &ServiceName, 
-								ServiceWrap *&serviceWrap);
+								shared_ptr<ServiceWrap> &serviceWrap);
 	SMErrorCode _FindServiceWrap(const wstring &wstrServiceName);
 	// É¾³ý·þÎñ
 	SMErrorCode _DeleteService(const wstring &wstrServiceName);
 
 private:
-	wstring						mCurServiceName;
-	map<wstring, ServiceWrap>	mServiceMap;
+	wstring	mCurServiceName;
+	map<wstring, shared_ptr<ServiceWrap>> mServiceMap;
 
 };
 

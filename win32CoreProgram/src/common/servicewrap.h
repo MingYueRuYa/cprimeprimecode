@@ -29,6 +29,7 @@ public:
 							const wstring &wstrDesc,
 							bool running = true);
 	ServiceWrap &operator=(const ServiceWrap &servicewrap);
+	bool operator==(const ServiceWrap &servicewrap);
 	ServiceWrap(const ServiceWrap &servicewrap);
 	virtual ~ServiceWrap();
 	
