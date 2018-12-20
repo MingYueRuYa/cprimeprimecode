@@ -23,7 +23,7 @@ namespace XIBAO {
 /*! \brief common::stringhelper
 	\author liushixiong (liushixiongcpp@163.cn)
 	\version 0.01
-	\description Timer 
+	\description 测试代码执行的时间间隔
 	\date 2018-12-18 14:59:04
 */
 class Timer 
