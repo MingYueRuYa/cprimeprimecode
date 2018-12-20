@@ -58,6 +58,8 @@ ServicesManager::SMErrorCode ServicesManager::InstallService(
 	wstring serdesc		= serwrap->GetServiceDesc();
 	wstring wstrname	= serwrap->GetAppAbsPath();
 	LPCTSTR strappname	= wstrname.c_str();
+	// 注册表写入信息
+	serwrap->SetRegInfo();
 
 	SC_HANDLE scmanager = 0, scservice = 0;
 	scmanager = OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
@@ -193,6 +195,12 @@ ServicesManager::SMErrorCode ServicesManager::StopService(
 	if (! ::QueryServiceStatus(scservice, &status)) {
 		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
+	}
+
+	ServiceWrap *serwrap = nullptr;
+	if (SM_SERVICEWRAP_NOT_EXIST != GetServiceWrap(serviceName, serwrap)) {
+		errorcode = static_cast<SMErrorCode>(-1);
+		return errorcode;
 	}
 
 	if (SERVICE_RUNNING == status.dwCurrentState) {
@@ -364,6 +372,12 @@ ServicesManager::SMErrorCode ServicesManager::_DeleteService(
 
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
+
+	ServiceWrap *serwrap = nullptr;
+	if (SM_SUCCESS == GetServiceWrap(wstrServiceName, serwrap)) {
+		serwrap->DelRegInfo();
+	}
+
 	return errorcode;
 
 CloseSCHandle:

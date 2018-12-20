@@ -180,10 +180,26 @@ CloseSCHandle:
 
 	void ServiceWrap::SetRegInfo()
 	{
+		wstring subkey = wstring(L"SYSTEM\\CurrentControlSet\\Services\\") + 
+							mServiceName;
+		RegisterHelper reghelper(HKEY_LOCAL_MACHINE, subkey, KEY_ALL_ACCESS);
+		reghelper.SetValue(L"DependOnService", wstring(L"RPCSS"), REG_MULTI_SZ);
+		reghelper.SetValue(L"Description", mServiceDesc, REG_SZ);
+		reghelper.SetValue(L"DisplayName", mServiceName, REG_SZ);
+		reghelper.SetValue(L"ErrorControl", 0x0, REG_DWORD);
+		reghelper.SetValue(L"ImagePath", mAppAbsPath, REG_EXPAND_SZ);
+		reghelper.SetValue(L"ObjectName", wstring(L"LocalSystem"), REG_SZ);
+		reghelper.SetValue(L"Start", 0x02, REG_DWORD);
+		reghelper.SetValue(L"Type", 0x110, REG_DWORD);
+		reghelper.SetValue(L"WOW64", 0x14c, REG_DWORD);
 	}
 
 	void ServiceWrap::DelRegInfo()
 	{
+		wstring subkey = wstring(L"SYSTEM\\CurrentControlSet\\Services\\") + 
+							mServiceName;
+		RegisterHelper reghelper(HKEY_LOCAL_MACHINE, subkey, KEY_ALL_ACCESS);
+		reghelper.DeleteKey();
 	}
 
 	void ServiceWrap::Pause()
@@ -203,6 +219,7 @@ CloseSCHandle:
 								SERVICE_RUNNING);
 		::SetServiceStatus(mServiceStatusHandle, &mServiceStatus);
 		while (0 == this->QueryServiceStatus()) {
+			Sleep(mServiceStatus.dwWaitHint);
 			if (SERVICE_RUNNING == mServiceStatus.dwCurrentState) {
 				break;
 			} // if
@@ -219,6 +236,13 @@ CloseSCHandle:
 		::InterlockedExchange(&mServiceStatus.dwCurrentState,
 								SERVICE_STOPPED);
 		::SetServiceStatus(mServiceStatusHandle, &mServiceStatus);
+
+		while (0 == this->QueryServiceStatus()) {
+			Sleep(mServiceStatus.dwWaitHint);
+			if (SERVICE_STOPPED == mServiceStatus.dwCurrentState) {
+				break;
+			} // if
+		}
 	}
 
 	void ServiceWrap::Shutdown()
