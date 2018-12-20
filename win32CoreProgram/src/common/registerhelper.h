@@ -58,7 +58,7 @@ private:
 			RegDataType& operator=(const RegDataType &right) = default;
 
 			unsigned int size() const { return sizeof(T); }
-			T *GetAddress() const { return &mValue; }
+			const T *GetAddress() const { return &mValue; }
 			DWORD GetType() const { return mRegType; }
 
 		public:
@@ -124,7 +124,7 @@ public:
 		}
 
 		
-		//TODO 需要优化下此处的if语句
+		// TODO 需要优化下此处的if语句
 		if (REG_SZ == regtype || REG_EXPAND_SZ == regtype ||
 			REG_MULTI_SZ == regtype) {
 			value = TRetValue((reinterpret_cast<wchar_t *>(lpData)));
@@ -176,6 +176,10 @@ public:
 		delete[] lpData;
 		return result;
 	}
+
+	DWORD DeleteValue(const wstring &keyName);
+	DWORD DeleteAllValues();
+	DWORD DeleteKey();
 
 private:
 	void _CopyValue(const RegisterHelper &right);

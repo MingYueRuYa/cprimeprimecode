@@ -74,44 +74,63 @@ RegisterHelper::~RegisterHelper()
 {
 }
 
-//bool RegisterHelper::GetValue(const wstring &keyName)
-//{
-//	return false;
-//}
+DWORD RegisterHelper::DeleteValue(const wstring &keyName)
+{
+	if (keyName.empty()) { return -1; }
 
-//bool RegisterHelper::SetValue(const wstring &keyName, 
-//								const wstring &value, 
-//								DWORD regType)
-//{
-//	HKEY hKey			= 0;
-//	DWORD dwSize		= 0;
-//	DWORD dwType		= REG_SZ;
-//	bool result			= false;
-//	wstring strvalue	= value;
-//	long lRet			= RegOpenKeyEx(mRootKey, mSubPath.c_str(), 0, 
-//								mSamDesired, &hKey);
-//	if (lRet == ERROR_SUCCESS) {
-//		result = true;
-//
-//		dwSize	= strvalue.length() * sizeof(TCHAR);
-//		lRet	= RegSetValueEx(hKey, keyName.c_str(), 0, dwType, 
-//								(const BYTE*)strvalue.c_str(), dwSize);
-//		result = lRet == ERROR_SUCCESS ? true : false;
-//	} else {
-//		if (ERROR_SUCCESS == RegCreateKey(mRootKey, mSubPath.c_str(), &hKey))
-//		{
-//			result	= true;
-//			dwSize	= strvalue.length() * sizeof(TCHAR);
-//			lRet	= RegSetValueEx(hKey, keyName.c_str(), 0, 
-//								dwType, (const BYTE*)strvalue.c_str(), dwSize);
-//			result = lRet == ERROR_SUCCESS ? true : false;
-//		}
-//	}
-//	RegCloseKey(hKey);
-//
-//	return result;
-//}
-//
+	HKEY hKey		= 0;
+	DWORD errorcode = 0;
+
+	errorcode = RegOpenKeyExW(mRootKey, mSubPath.c_str(), 0, 
+											mSamDesired, &hKey);
+	if (ERROR_SUCCESS != errorcode) { return errorcode; }
+	errorcode = RegDeleteValueW(hKey, keyName.c_str());
+	RegCloseKey(hKey);
+
+	return errorcode;
+}
+
+DWORD RegisterHelper::DeleteAllValues()
+{
+	HKEY hKey		= 0;
+	DWORD errorcode = 0;
+
+	errorcode = RegOpenKeyExW(mRootKey, mSubPath.c_str(), 0, 
+											mSamDesired, &hKey);
+	if (ERROR_SUCCESS != errorcode) { return errorcode; }
+
+	errorcode = RegDeleteTreeW(hKey, NULL);
+	if (ERROR_SUCCESS != errorcode) { 
+		RegCloseKey(hKey);
+		return errorcode; 
+	}
+
+	RegCloseKey(hKey);
+	return errorcode;
+}
+
+DWORD RegisterHelper::DeleteKey()
+{
+	size_t pos = mSubPath.rfind(L"\\");	
+	if (wstring::npos == pos) { return -1; }
+
+	wstring partialpath = mSubPath.substr(0, pos);
+	wstring keyname		= mSubPath.substr(pos+1, mSubPath.length());
+
+	HKEY hKey = 0;
+	DWORD errorcode = RegOpenKeyExW(mRootKey, partialpath.c_str(), 0, 
+											mSamDesired, &hKey);
+	if (ERROR_SUCCESS != errorcode) { return errorcode; }
+	errorcode = RegDeleteKeyExW(hKey, keyname.c_str(), mSamDesired, 0);
+	if (ERROR_SUCCESS != errorcode) { 
+		RegCloseKey(hKey);
+		return errorcode; 
+	}
+	RegCloseKey(hKey);
+
+	return errorcode;
+}
+
 void RegisterHelper::_CopyValue(const RegisterHelper &right)
 {
 	mRootKey	= right.mRootKey;
