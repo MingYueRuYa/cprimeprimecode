@@ -25,8 +25,7 @@ void WINAPI ServicesManager::_ServiceCtrlHandler(DWORD Opcode)
 }
 
 ServicesManager::~ServicesManager()
-{
-}
+{}
 
 ServicesManager::SMErrorCode ServicesManager::Start(const wstring &servicename)
 {
@@ -108,6 +107,7 @@ CloseSCHandle:
 ServicesManager::SMErrorCode ServicesManager::StartService(
 										const wstring &wstrName)
 {
+	// 将此段代码移动到servicewrap里面
 	SMErrorCode errorcode = SM_SUCCESS;
 	SC_HANDLE scmanager = 0, scservice = 0;
 	scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
@@ -183,7 +183,6 @@ ServicesManager::SMErrorCode ServicesManager::StopService(
 		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
-
 
 	scservice = ::OpenServiceW(scmanager, serviceName.c_str(),
 								SERVICE_ALL_ACCESS);
@@ -330,7 +329,8 @@ ServicesManager::SMErrorCode ServicesManager::GetServiceWrap(
 		return SM_SERVICEWRAP_NOT_EXIST;
 	}
 
-	map<wstring, shared_ptr<ServiceWrap>>::iterator ifind = mServiceMap.find(ServiceName);
+	map<wstring, shared_ptr<ServiceWrap>>::iterator ifind = 
+												mServiceMap.find(ServiceName);
 	serviceWrap = (ifind->second);
 
 	return SM_SUCCESS;

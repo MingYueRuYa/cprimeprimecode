@@ -24,6 +24,7 @@ namespace XIBAO
 		  mServiceDesc(wstrDesc),
 		  mServiceStatusHandle(0)		
 	{
+		memset(&mServiceStatus, 0, sizeof(SERVICE_STATUS));
 	}
 
 	ServiceWrap& ServiceWrap::operator=(const ServiceWrap &servicewrap)
