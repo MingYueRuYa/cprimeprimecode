@@ -194,15 +194,15 @@ CloseSCHandle:
 		wstring subkey = wstring(L"SYSTEM\\CurrentControlSet\\Services\\") + 
 							mServiceName;
 		RegisterHelper reghelper(HKEY_LOCAL_MACHINE, subkey, KEY_ALL_ACCESS);
-		reghelper.SetValue(L"DependOnService", wstring(L"RPCSS"), REG_MULTI_SZ);
-		reghelper.SetValue(L"Description", mServiceDesc, REG_SZ);
-		reghelper.SetValue(L"DisplayName", mServiceName, REG_SZ);
-		reghelper.SetValue(L"ErrorControl", 0x0, REG_DWORD);
-		reghelper.SetValue(L"ImagePath", mAppAbsPath, REG_EXPAND_SZ);
-		reghelper.SetValue(L"ObjectName", wstring(L"LocalSystem"), REG_SZ);
-		reghelper.SetValue(L"Start", 0x02, REG_DWORD);
-		reghelper.SetValue(L"Type", 0x110, REG_DWORD);
-		reghelper.SetValue(L"WOW64", 0x14c, REG_DWORD);
+		reghelper.SetMultiSZ(L"DependOnService", wstring(L"RPCSS"));
+		reghelper.SetMultiSZ(L"Description", mServiceDesc);
+		reghelper.SetSZ(L"DisplayName", mServiceName);
+		reghelper.SetDWORD(L"ErrorControl", 0x0);
+		reghelper.SetExpandSZ(L"ImagePath", mAppAbsPath);
+		reghelper.SetSZ(L"ObjectName", wstring(L"LocalSystem"));
+		reghelper.SetDWORD(L"Start", 0x02);
+		reghelper.SetDWORD(L"Type", 0x110);
+		reghelper.SetDWORD(L"WOW64", 0x14c);
 	}
 
 	void ServiceWrap::DelRegInfo()
