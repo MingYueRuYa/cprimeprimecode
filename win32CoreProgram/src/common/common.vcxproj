@@ -92,6 +92,7 @@
     <ClInclude Include="stringhelper.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="timer.hpp" />
+    <ClInclude Include="utili.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debughelper.cpp" />
