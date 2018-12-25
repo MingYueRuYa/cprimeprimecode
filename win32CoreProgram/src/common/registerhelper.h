@@ -76,14 +76,14 @@ private:
 			RegDataType& operator=(const RegDataType &right) = default;
 
 			unsigned int ValueSize() const { return sizeof(T); }
-			const T *GetAddress() const { return &mValue; }
+			const T *GetValueAddress() const { return &mValue; }
 			DWORD GetType() const { return mRegType; }
-			DWORD *GetType() { return &mRegType; }
+			DWORD *GetTypeAddress() { return &mRegType; }
 			
 			BYTE *GetByte()
 			{
 				if (nullptr == mshByte.get()) {
-					mshByte = make_shared<BYTE>(mByteSize);
+					mshByte.reset(new BYTE[mByteSize]);
 				} 
 				return mshByte.get();
 			}
@@ -127,8 +127,9 @@ private:
 
 		unsigned int ValueSize() const 
 		{ return mValue.length() * sizeof(wchar_t); }
-		const wchar_t *GetAddress() const { return mValue.c_str(); }
+		const wchar_t *GetValueAddress() const { return mValue.c_str(); }
 		DWORD GetType() const { return mRegType; }
+		DWORD *GetTypeAddress() { return &mRegType; }
 
 		wchar_t *GetByte()
 		{
@@ -177,8 +178,37 @@ public:
 	DWORD DeleteValue(const wstring &keyName);
 	DWORD DeleteAllValues();
 	DWORD DeleteKey();
-	DWORD TraverseKey();
-	DWORD TraverseValue();
+
+	// 保存数组数据时，需要泛型的迭代器
+	template<typename TContainer>
+	DWORD TraverseKey(TContainer &containter)
+	{
+		HKEY hKey = 0;
+		DWORD errorcode = RegOpenKeyExW(mRootKey, mSubPath.c_str(), 0, 
+										mSamDesired, &hKey);
+		if (ERROR_SUCCESS != errorcode) { return errorcode; }
+		DWORD dwIndex = 0;
+		do {
+			wchar_t lpName[MAX_PATH]	= {0};
+			DWORD cchName				= MAX_PATH;
+			errorcode = RegEnumKeyExW(hKey, dwIndex, lpName, &cchName, 
+										NULL, NULL, NULL, NULL);
+			if (errorcode != ERROR_SUCCESS) { break; }
+			
+			dwIndex++;
+			
+			containter.push_back(wstring(lpName));
+
+#ifdef XIBAO_DEBUG_HELPER
+			DebugHelper::OutputDebugStringW(wstring(lpName) + L"\r\n");
+#endif // XIBAO_DEBUG_HELPER
+		} while (errorcode != ERROR_NO_MORE_ITEMS);
+
+		if (errorcode == ERROR_NO_MORE_ITEMS) { errorcode = ERROR_SUCCESS; }
+
+		RegCloseKey(hKey);	
+		return errorcode;
+	}
 
 private:
 	template<typename TRetValue>
@@ -235,7 +265,7 @@ private:
 		}
 
 		lpData = new BYTE[datatype.ValueSize()];
-		CopyMemory(lpData, datatype.GetAddress(), datatype.ValueSize());
+		CopyMemory(lpData, datatype.GetValueAddress(), datatype.ValueSize());
 		lRet = RegSetValueEx(hKey, keyName.c_str(), 0, datatype.GetType(), 
 								lpData, datatype.ValueSize());
 		result = lRet;
@@ -250,6 +280,8 @@ private:
 	}
 
 private:
+	// TODO 测试代码
+	DWORD TraverseValue();
 	void _CopyValue(const RegisterHelper &right);
 
 private:
@@ -259,7 +291,7 @@ private:
 	wstring mSubPath;
 	// 读取权限
 	REGSAM mSamDesired;
-	map<wstring, InnerRegData> mMapRegData;
+	// map<wstring, InnerRegData> mMapRegData;
 	
 };
 

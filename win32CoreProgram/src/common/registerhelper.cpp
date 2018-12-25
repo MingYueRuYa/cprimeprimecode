@@ -184,32 +184,6 @@ DWORD RegisterHelper::DeleteKey()
 	return errorcode;
 }
 
-DWORD RegisterHelper::TraverseKey()
-{
-	HKEY hKey = 0;
-	DWORD errorcode = RegOpenKeyExW(mRootKey, mSubPath.c_str(), 0, 
-									mSamDesired, &hKey);
-	if (ERROR_SUCCESS != errorcode) { return errorcode; }
-	DWORD dwIndex = 0;
-	do {
-		wchar_t lpName[MAX_PATH]	= {0};
-		DWORD cchName				= MAX_PATH;
-		errorcode = RegEnumKeyExW(hKey, dwIndex, lpName, &cchName, 
-									NULL, NULL, NULL, NULL);
-		if (errorcode != ERROR_SUCCESS) { break; }
-		
-		dwIndex++;
-#ifdef XIBAO_DEBUG_HELPER
-		DebugHelper::OutputDebugStringW(wstring(lpName) + L"\r\n");
-#endif // XIBAO_DEBUG_HELPER
-	} while (errorcode != ERROR_NO_MORE_ITEMS);
-
-	if (errorcode == ERROR_NO_MORE_ITEMS) { errorcode = ERROR_SUCCESS; }
-
-	RegCloseKey(hKey);	
-	return errorcode;
-}
-
 DWORD RegisterHelper::TraverseValue()
 {
 	HKEY hKey = 0;
@@ -251,7 +225,6 @@ DWORD RegisterHelper::TraverseValue()
 	RegCloseKey(hKey);	
 	return errorcode;
 }
-
 
 void RegisterHelper::_CopyValue(const RegisterHelper &right)
 {
