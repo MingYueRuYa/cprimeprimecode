@@ -25,29 +25,14 @@ namespace XIBAO {
 
 /*! \brief common::registerhelper
  	\author liushixiong (liushixiongcpp@163.cn)
- 	\version 0.01
+ 	\version 0.03
 	\description 注册表读取助手
  	\date 2018-12-13 20:13:42
+	\description 增加遍历key，增加模板支持 2018-12-23 11:23:40
 */
 class RegisterHelper
 {
 private:
-	class InnerRegData {
-		public:
-			InnerRegData();
-			~InnerRegData();
-			InnerRegData(const InnerRegData &right);
-			InnerRegData& operator=(const InnerRegData &right);
-
-		private:
-			void _CopyValue(const InnerRegData &right);
-			
-		public:
-			wstring mKeyName;
-			wstring value;
-			DWORD	valueType;
-	};
-
 	template <typename T>
 	class RegDataType {
 		public:
@@ -154,6 +139,7 @@ private:
 		shared_ptr<wchar_t> mshByte;
 	};
 
+	// TODO 优化：HKEY不用每次都打开，可以考虑将HKEY作为成员变量
 public:
 	RegisterHelper(HKEY key, const wstring &subPath, REGSAM regSam);
 	RegisterHelper(const RegisterHelper &right);
@@ -203,6 +189,55 @@ public:
 			DebugHelper::OutputDebugStringW(wstring(lpName) + L"\r\n");
 #endif // XIBAO_DEBUG_HELPER
 		} while (errorcode != ERROR_NO_MORE_ITEMS);
+
+		if (errorcode == ERROR_NO_MORE_ITEMS) { errorcode = ERROR_SUCCESS; }
+
+		RegCloseKey(hKey);	
+		return errorcode;
+	}
+
+	// container内需要pair类型（key, value）
+	template<typename TContainer>
+	DWORD TraverseValue(TContainer &container)
+	{
+		HKEY hKey = 0;
+		DWORD errorcode = RegOpenKeyExW(mRootKey, mSubPath.c_str(), 0, 
+										mSamDesired, &hKey);
+		DWORD dwIndex = 0;
+		BYTE *lpData = new BYTE[MAX_PATH];
+		do {
+			ZeroMemory(lpData, MAX_PATH);
+			wchar_t wchvalue[MAX_PATH]	= {0};
+			DWORD cchcount				= MAX_PATH; 
+			DWORD type = 0;
+			errorcode = RegEnumValueW(hKey, dwIndex, wchvalue, &cchcount, 
+										0, 0, 0, 0);
+			if (errorcode != ERROR_SUCCESS) { break; }
+
+			DWORD cbData = MAX_PATH;
+			errorcode = RegQueryValueExW(hKey, wchvalue, 0, &type, lpData, &cbData);
+			if (errorcode != ERROR_SUCCESS) { continue; }
+
+			// TODO: 这里需要考虑如何消除这里的if判断 ugly code
+			wstring value = L"";
+			DWORD dwvalue = 0;
+			if (type == REG_SZ || type == REG_EXPAND_SZ || type == REG_MULTI_SZ) {
+				value = reinterpret_cast<wchar_t *>(lpData);	
+			} else if (type == REG_DWORD) {
+				dwvalue = *(reinterpret_cast<DWORD *>(lpData));	
+				value = to_wstring(dwvalue);
+			}
+			
+			dwIndex++;
+#ifdef XIBAO_DEBUG_HELPER
+			DebugHelper::OutputDebugStringW(L"%s:%s\r\n", wchvalue, 
+												value.c_str());
+#endif // XIBAO_DEBUG_HELPER
+			
+			container.push_back(std::pair<wstring, wstring>(wchvalue, value));
+
+		} while(errorcode != ERROR_NO_MORE_ITEMS);
+		delete [] lpData;
 
 		if (errorcode == ERROR_NO_MORE_ITEMS) { errorcode = ERROR_SUCCESS; }
 
@@ -280,8 +315,6 @@ private:
 	}
 
 private:
-	// TODO 测试代码
-	DWORD TraverseValue();
 	void _CopyValue(const RegisterHelper &right);
 
 private:
@@ -291,7 +324,6 @@ private:
 	wstring mSubPath;
 	// 读取权限
 	REGSAM mSamDesired;
-	// map<wstring, InnerRegData> mMapRegData;
 	
 };
 
