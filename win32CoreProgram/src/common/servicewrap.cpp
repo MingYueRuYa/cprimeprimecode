@@ -273,6 +273,11 @@ CloseSCHandle:
 		}
 	}
 
+	shared_ptr<ServiceWrap> ServiceWrap::clone()
+	{
+		return enable_shared_from_this<ServiceWrap>::shared_from_this();
+	}
+
 	void ServiceWrap::_CopyValue(const ServiceWrap &servicewrap)
 	{
 		this->mStopped				= servicewrap.mStopped;

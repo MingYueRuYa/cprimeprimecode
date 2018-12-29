@@ -51,6 +51,12 @@
     <ClInclude Include="utili.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="cloneable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="servicedemo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
