@@ -183,7 +183,7 @@ public:
 			
 			dwIndex++;
 			
-			containter.push_back(wstring(lpName));
+			containter.insert(wstring(lpName));
 
 #ifdef XIBAO_DEBUG_HELPER
 			DebugHelper::OutputDebugStringW(wstring(lpName) + L"\r\n");
@@ -234,7 +234,7 @@ public:
 												value.c_str());
 #endif // XIBAO_DEBUG_HELPER
 			
-			container.push_back(std::pair<wstring, wstring>(wchvalue, value));
+			container.insert(std::pair<wstring, wstring>(wchvalue, value));
 
 		} while(errorcode != ERROR_NO_MORE_ITEMS);
 		delete [] lpData;
