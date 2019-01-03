@@ -164,6 +164,8 @@ public:
 	DWORD DeleteValue(const wstring &keyName);
 	DWORD DeleteAllValues();
 	DWORD DeleteKey();
+	// DWORD DeleteAllKey();
+	BOOL RegDelnode(/*HKEY hKeyRoot, LPCTSTR lpSubKey*/);
 
 	// 保存数组数据时，需要泛型的迭代器
 	template<typename TContainer>
@@ -316,6 +318,7 @@ private:
 
 private:
 	void _CopyValue(const RegisterHelper &right);
+	BOOL _RegDelnodeRecurse(HKEY hKeyRoot, LPTSTR lpSubKey);
 
 private:
 	// 主键
