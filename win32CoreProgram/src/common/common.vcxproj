@@ -82,9 +82,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cloneable.h" />
     <ClInclude Include="commonpack.h" />
     <ClInclude Include="debughelper.h" />
     <ClInclude Include="registerhelper.h" />
+    <ClInclude Include="servicedemo.h" />
     <ClInclude Include="servicesmanager.h" />
     <ClInclude Include="servicewrap.h" />
     <ClInclude Include="singleton.h" />
@@ -92,6 +94,7 @@
     <ClInclude Include="stringhelper.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="timer.hpp" />
+    <ClInclude Include="utili.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debughelper.cpp" />
