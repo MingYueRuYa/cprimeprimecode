@@ -14,6 +14,14 @@ using XIBAO::ServicesManager;
 
 namespace XIBAO
 {
+	DWORD ServiceWrap::DeleteServiceReg(const wstring &servicename)
+	{
+		wstring subkey = wstring(L"SYSTEM\\CurrentControlSet\\Services\\") + 
+							servicename;
+		RegisterHelper reghelper(HKEY_LOCAL_MACHINE, subkey, KEY_ALL_ACCESS);
+		return reghelper.DeleteKey();	
+	}
+
 	ServiceWrap::ServiceWrap(const wstring &wstrName, 
 								const wstring &wstrAppAbsPath,
 								const wstring &wstrDesc,
@@ -205,13 +213,6 @@ CloseSCHandle:
 		reghelper.SetDWORD(L"WOW64", 0x14c);
 	}
 
-	void ServiceWrap::DelRegInfo()
-	{
-		wstring subkey = wstring(L"SYSTEM\\CurrentControlSet\\Services\\") + 
-							mServiceName;
-		RegisterHelper reghelper(HKEY_LOCAL_MACHINE, subkey, KEY_ALL_ACCESS);
-		reghelper.DeleteKey();
-	}
 
 	void ServiceWrap::Pause()
 	{

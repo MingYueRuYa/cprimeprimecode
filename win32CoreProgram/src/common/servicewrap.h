@@ -30,6 +30,9 @@ class ServiceWrap : public std::enable_shared_from_this<ServiceWrap>,
 					ICloneable<shared_ptr<ServiceWrap>>
 {
 public:
+	static DWORD DeleteServiceReg(const wstring &servicename);
+
+public:
 	explicit ServiceWrap(const wstring &wstrName, 
 							const wstring &wstrAppAbsPath,
 							const wstring &wstrDesc,
@@ -59,7 +62,6 @@ public:
 	void ServiceCtrlHandler(DWORD Opcode);  
 	DWORD QueryServiceStatus();
 	void SetRegInfo();
-	void DelRegInfo();
 
 	virtual void Pause();
 	virtual void Continue();

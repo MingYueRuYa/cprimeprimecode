@@ -51,6 +51,13 @@ public:
 			_In_ DWORD dwArgc,
 			_In_reads_(dwArgc) _Deref_pre_z_ LPTSTR* lpszArgv) throw();
 	static void WINAPI _ServiceCtrlHandler(DWORD Opcode);
+	// 移除服务
+	static SMErrorCode RemoveService(const wstring &serviceName);
+	// 中止服务
+	static SMErrorCode HaltService(const wstring &serviceName);
+
+private:
+	static DWORD DeleteServiceReg(const wstring &wstrServiceName);
 
 public:
 	~ServicesManager();
@@ -62,8 +69,6 @@ public:
 	SMErrorCode InstallService(const wstring &wstrName);
 	// 启动服务
 	SMErrorCode StartService(const wstring &wstrName);
-	// 关闭服务
-	SMErrorCode StopService(const wstring &serviceName);
 	// 中断服务
 	SMErrorCode PauseService(const wstring &serviceName);
 	// 恢复服务
@@ -83,8 +88,6 @@ private:
 	SMErrorCode GetServiceWrap(const wstring &ServiceName, 
 								shared_ptr<ServiceWrap> &serviceWrap);
 	SMErrorCode _FindServiceWrap(const wstring &wstrServiceName);
-	// 删除服务
-	SMErrorCode _DeleteService(const wstring &wstrServiceName);
 
 private:
 	wstring	mCurServiceName;
