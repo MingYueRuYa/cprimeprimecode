@@ -6,6 +6,7 @@
 ****************************************************************************/
 
 #include "thread_start.h"
+#include "thread_mutex.h"
 
 int main(int argc, char **argv)
 {
@@ -15,6 +16,8 @@ int main(int argc, char **argv)
 	// thread_move();
 	// thread_bind();
 	// thread_copy();
+
+	TestMutex();
 
 	system("pause");
 

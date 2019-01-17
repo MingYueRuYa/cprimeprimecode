@@ -23,5 +23,8 @@
     <ClInclude Include="thread_start.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="thread_mutex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
