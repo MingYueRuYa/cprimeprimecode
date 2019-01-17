@@ -26,5 +26,8 @@
     <ClInclude Include="thread_mutex.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SyncQueue.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

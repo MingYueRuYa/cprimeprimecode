@@ -81,6 +81,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SyncQueue.hpp" />
     <ClInclude Include="thread_mutex.h" />
     <ClInclude Include="thread_start.h" />
   </ItemGroup>

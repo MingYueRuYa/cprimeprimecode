@@ -7,6 +7,7 @@
 
 #include "thread_start.h"
 #include "thread_mutex.h"
+#include "SyncQueue.hpp"
 
 int main(int argc, char **argv)
 {
@@ -19,7 +20,9 @@ int main(int argc, char **argv)
 
 	// TestMutex();
 	// TestRecursiveMutex();
-	TestTimeoutMutex();
+	// TestTimeoutMutex();
+
+	TestSyncQueue();
 
 	system("pause");
 
