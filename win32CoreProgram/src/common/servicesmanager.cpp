@@ -27,53 +27,43 @@ void WINAPI ServicesManager::_ServiceCtrlHandler(DWORD Opcode)
 ServicesManager::SMErrorCode ServicesManager::RemoveService(
 													const wstring &serviceName)
 {
-	SMErrorCode errorcode = SM_SUCCESS;
-	SC_HANDLE scmanager = 0, scservice = 0;
-	scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
+	if (SM_SUCCESS != HaltService(serviceName)) {
+		return SM_FAILED;
+	}
+
+	SMErrorCode errorcode	= SM_SUCCESS;
+	SC_HANDLE scmanager		= 0, scservice = 0;
+	shared_ptr<ServiceWrap> serwrap = nullptr;
+	scmanager = ::OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 	if (0 == scmanager) {
 		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
-	scservice = ::OpenServiceW(scmanager, serviceName.c_str(),
+	scservice = ::OpenServiceW(scmanager, serviceName.c_str(), 
 								SERVICE_ALL_ACCESS);
+
 	if (0 == scservice) {
 		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
-	SERVICE_STATUS status;
-	::ZeroMemory(&status, sizeof(status));
-	if (! ::QueryServiceStatus(scservice, &status)) {
+	if (0 == ::DeleteService(scservice)) {
 		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}
 
-	if (SERVICE_RUNNING == status.dwCurrentState) {
-		if (! ::ControlService(scservice, SERVICE_CONTROL_STOP, &status)) {
-			errorcode = static_cast<SMErrorCode>(GetLastError());
-			goto CloseSCHandle;
-		}	
-
-		while (::QueryServiceStatus(scservice, &status)) {
-			::Sleep(status.dwWaitHint);
-			if (SERVICE_STOPPED == status.dwCurrentState) {
-				break;
-			} // if
-		} // while
-
-	} // if
-
-	DeleteServiceReg(serviceName);
-
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
+
+	DeleteServiceReg(serviceName);
 	return errorcode;
 
 CloseSCHandle:
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
-	return errorcode;}
+	return errorcode;
+}
 
 ServicesManager::SMErrorCode ServicesManager::HaltService(
 													const wstring &serviceName)
@@ -112,8 +102,7 @@ ServicesManager::SMErrorCode ServicesManager::HaltService(
 				break;
 			} // if
 		} // while
-
-	} // if
+	}
 
 	::CloseServiceHandle(scmanager);
 	::CloseServiceHandle(scservice);
