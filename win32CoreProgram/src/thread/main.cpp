@@ -17,7 +17,9 @@ int main(int argc, char **argv)
 	// thread_bind();
 	// thread_copy();
 
-	TestMutex();
+	// TestMutex();
+	// TestRecursiveMutex();
+	TestTimeoutMutex();
 
 	system("pause");
 
