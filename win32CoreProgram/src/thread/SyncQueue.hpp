@@ -31,7 +31,15 @@ public:
 
 	void Put(const T &data)
 	{
+//		lock_guard<mutex> lock(mMutex);
+//		while (IsEmpty()) {
+//			cout << "Sync queue is full" << endl;
+//			mNotFullCondVar.wait(mMutex);
+//		}
+
 		unique_lock<mutex> locker(mMutex);
+		// 这种lambda表达式，每次都会执行
+		// 而上面的while循环，并不是每次都会执行里面的循环体
 		mNotFullCondVar.wait(locker, [this] { 
 			return ! IsFull(); 
 		});
@@ -47,6 +55,8 @@ public:
 //			mNotEmptyCondVar.wait(mMutex);
 //		}
 		unique_lock<mutex> locker(mMutex);
+		// 这种lambda表达式，每次都会执行
+		// 而上面的while循环，并不是每次都会执行里面的循环体
 		mNotEmptyCondVar.wait(locker, [this] {
 			return ! IsEmpty();
 		});
