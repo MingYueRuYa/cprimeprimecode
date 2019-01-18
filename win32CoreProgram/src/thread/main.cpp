@@ -8,6 +8,8 @@
 #include "thread_start.h"
 #include "thread_mutex.h"
 #include "SyncQueue.hpp"
+#include "counter.hpp"
+#include "thread_get_retvalue.h"
 
 int main(int argc, char **argv)
 {
@@ -22,7 +24,13 @@ int main(int argc, char **argv)
 	// TestRecursiveMutex();
 	// TestTimeoutMutex();
 
-	TestSyncQueue();
+	// TestSyncQueue();
+
+	// TestMutexCounter();
+	// TestAtomicCounter();
+
+	// TestFuture();
+	TestAsync();
 
 	system("pause");
 

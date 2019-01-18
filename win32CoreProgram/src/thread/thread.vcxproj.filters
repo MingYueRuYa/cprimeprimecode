@@ -29,5 +29,11 @@
     <ClInclude Include="SyncQueue.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="counter.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="thread_get_retvalue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
