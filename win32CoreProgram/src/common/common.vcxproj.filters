@@ -45,9 +45,6 @@
     <ClInclude Include="registerhelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="timer.hpp">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="utili.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -55,6 +52,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="servicedemo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="simpletimestamp.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -75,6 +78,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="registerhelper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="simpletimestamp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

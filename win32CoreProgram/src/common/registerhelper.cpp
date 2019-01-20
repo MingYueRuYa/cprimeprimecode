@@ -5,8 +5,6 @@
 **
 ****************************************************************************/
 
-#include "stdafx.h"
-
 #include "debughelper.h"
 #include "registerhelper.h"
 

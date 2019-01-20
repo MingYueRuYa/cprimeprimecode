@@ -18,6 +18,7 @@
 #include "./debughelper.h"
 #include "./stringhelper.h"
 #include "./registerhelper.h"
+#include "./simpletimestamp.h"
 
 #include "./servicedemo.h"
 #include "./servicewrap.h"

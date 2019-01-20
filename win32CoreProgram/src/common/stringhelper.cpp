@@ -5,8 +5,6 @@
 **
 ****************************************************************************/
 
-#include "stdafx.h"
-
 #include "stringhelper.h"
 
 #include <stdio.h>

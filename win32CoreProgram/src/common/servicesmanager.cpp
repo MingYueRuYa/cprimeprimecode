@@ -5,7 +5,6 @@
 **
 ****************************************************************************/
 
-#include "stdafx.h"
 #include "servicesmanager.h"
 
 using std::pair;
