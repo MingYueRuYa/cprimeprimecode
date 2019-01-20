@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\AbortAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Appender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AppendersFactory.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AppenderSkeleton.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BasicConfigurator.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BasicLayout.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BufferingAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Category.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CategoryStream.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Configurator.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DailyRollingFileAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DllMain.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DummyThreads.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FactoryParams.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Filter.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FixedContextCategory.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HierarchyMaintainer.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IdsaAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LayoutAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LayoutsFactory.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelEvaluator.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Localtime.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LoggingEvent.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Manipulator.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MSThreads.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NDC.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NTEventLogAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OmniThreads.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OstreamAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PassThroughLayout.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PatternLayout.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PortabilityImpl.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Priority.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Properties.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PropertyConfigurator.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PropertyConfiguratorImpl.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PThreads.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RemoteSyslogAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RollingFileAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SimpleConfigurator.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SimpleLayout.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SmtpAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\snprintf.c">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringQueueAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringUtil.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SyslogAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TimeStamp.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TriggeringEventEvaluatorFactory.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Win32DebugAppender.cpp">
+      <Filter>log4cpp_cpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AbortAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Appender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AppendersFactory.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AppenderSkeleton.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BasicConfigurator.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BasicLayout.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BufferingAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\BoostThreads.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CategoryStream.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Category.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config-MinGW32.h">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config-openvms.h">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Configurator.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config-win32.h">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config-win32-stlport-boost.h">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\convenience.h">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DailyRollingFileAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Export.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FactoryParams.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FileAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Filter.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FixedContextCategory.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\HierarchyMaintainer.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IdsaAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Layout.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LayoutAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LayoutsFactory.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LevelEvaluator.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LoggingEvent.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Manipulator.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDC.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NTEventLogAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OstreamAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PassThroughLayout.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PatternLayout.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Portability.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Priority.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PropertyConfigurator.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RemoteSyslogAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RollingFileAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SimpleConfigurator.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SimpleLayout.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SmtpAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringQueueAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SyslogAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TimeStamp.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TriggeringEventEvaluator.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TriggeringEventEvaluatorFactory.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Win32DebugAppender.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Localtime.hh">
+      <Filter>log4cpp_cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PortabilityImpl.hh">
+      <Filter>log4cpp_cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Properties.hh">
+      <Filter>log4cpp_cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PropertyConfiguratorImpl.hh">
+      <Filter>log4cpp_cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StringUtil.hh">
+      <Filter>log4cpp_cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\DummyThreads.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\MSThreads.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\OmniThreads.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\PThreads.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\Threading.hh">
+      <Filter>log4cpp_h</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="log4cpp_h">
+      <UniqueIdentifier>{91dcc91c-66bf-4313-9d6e-b7770e38353f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="log4cpp_cpp">
+      <UniqueIdentifier>{736507db-ca4c-48fc-bfd3-79c26566be34}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NTEventLogCategories.mc">
+      <Filter>log4cpp_cpp</Filter>
+    </None>
+  </ItemGroup>
+</Project>

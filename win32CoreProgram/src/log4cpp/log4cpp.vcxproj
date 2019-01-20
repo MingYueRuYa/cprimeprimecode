@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug with Boost|Win32">
+      <Configuration>Debug with Boost</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release with Boost|Win32">
+      <Configuration>Release with Boost</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8C796FDD-5BB9-41D5-8471-DDC897C8C486}</ProjectGuid>
+    <RootNamespace>log4cpp</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../bin_win32/$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../bin_win32/$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../bin_win32/$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../bin_win32/$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_DLL;_USRDLL;LOG4CPP_HAS_DLL;LOG4CPP_BUILD_DLL;HAVE_SNPRINTF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;msvcrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)log4cpp.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>$(OutDir)log4cpp.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_DLL;_USRDLL;LOG4CPP_HAS_DLL;LOG4CPP_BUILD_DLL;HAVE_SNPRINTF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <AdditionalIncludeDirectories>./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <RegisterOutput>false</RegisterOutput>
+      <AdditionalDependencies>ws2_32.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImportLibrary>$(OutDir)log4cpp.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug with Boost|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_DLL;_USRDLL;LOG4CPP_HAS_DLL;LOG4CPP_BUILD_DLL;LOG4CPP_HAVE_BOOST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)log4cpp.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>$(OutDir)log4cpp.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release with Boost|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_DLL;_USRDLL;LOG4CPP_HAS_DLL;LOG4CPP_BUILD_DLL;LOG4CPP_HAVE_BOOST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <RegisterOutput>false</RegisterOutput>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImportLibrary>$(OutDir)log4cpp.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AbortAppender.cpp" />
+    <ClCompile Include="src\Appender.cpp" />
+    <ClCompile Include="src\AppendersFactory.cpp" />
+    <ClCompile Include="src\AppenderSkeleton.cpp" />
+    <ClCompile Include="src\BasicConfigurator.cpp" />
+    <ClCompile Include="src\BasicLayout.cpp" />
+    <ClCompile Include="src\BufferingAppender.cpp" />
+    <ClCompile Include="src\Category.cpp" />
+    <ClCompile Include="src\CategoryStream.cpp" />
+    <ClCompile Include="src\Configurator.cpp" />
+    <ClCompile Include="src\DailyRollingFileAppender.cpp" />
+    <ClCompile Include="src\DllMain.cpp" />
+    <ClCompile Include="src\DummyThreads.cpp" />
+    <ClCompile Include="src\FactoryParams.cpp" />
+    <ClCompile Include="src\FileAppender.cpp" />
+    <ClCompile Include="src\Filter.cpp" />
+    <ClCompile Include="src\FixedContextCategory.cpp" />
+    <ClCompile Include="src\HierarchyMaintainer.cpp" />
+    <ClCompile Include="src\IdsaAppender.cpp" />
+    <ClCompile Include="src\LayoutAppender.cpp" />
+    <ClCompile Include="src\LayoutsFactory.cpp" />
+    <ClCompile Include="src\LevelEvaluator.cpp" />
+    <ClCompile Include="src\Localtime.cpp" />
+    <ClCompile Include="src\LoggingEvent.cpp" />
+    <ClCompile Include="src\Manipulator.cpp" />
+    <ClCompile Include="src\MSThreads.cpp" />
+    <ClCompile Include="src\NDC.cpp" />
+    <ClCompile Include="src\NTEventLogAppender.cpp" />
+    <ClCompile Include="src\OmniThreads.cpp" />
+    <ClCompile Include="src\OstreamAppender.cpp" />
+    <ClCompile Include="src\PassThroughLayout.cpp" />
+    <ClCompile Include="src\PatternLayout.cpp" />
+    <ClCompile Include="src\PortabilityImpl.cpp" />
+    <ClCompile Include="src\Priority.cpp" />
+    <ClCompile Include="src\Properties.cpp" />
+    <ClCompile Include="src\PropertyConfigurator.cpp" />
+    <ClCompile Include="src\PropertyConfiguratorImpl.cpp" />
+    <ClCompile Include="src\PThreads.cpp" />
+    <ClCompile Include="src\RemoteSyslogAppender.cpp" />
+    <ClCompile Include="src\RollingFileAppender.cpp" />
+    <ClCompile Include="src\SimpleConfigurator.cpp" />
+    <ClCompile Include="src\SimpleLayout.cpp" />
+    <ClCompile Include="src\SmtpAppender.cpp" />
+    <ClCompile Include="src\snprintf.c" />
+    <ClCompile Include="src\StringQueueAppender.cpp" />
+    <ClCompile Include="src\StringUtil.cpp" />
+    <ClCompile Include="src\SyslogAppender.cpp" />
+    <ClCompile Include="src\TimeStamp.cpp" />
+    <ClCompile Include="src\TriggeringEventEvaluatorFactory.cpp" />
+    <ClCompile Include="src\Win32DebugAppender.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AbortAppender.hh" />
+    <ClInclude Include="include\Appender.hh" />
+    <ClInclude Include="include\AppendersFactory.hh" />
+    <ClInclude Include="include\AppenderSkeleton.hh" />
+    <ClInclude Include="include\BasicConfigurator.hh" />
+    <ClInclude Include="include\BasicLayout.hh" />
+    <ClInclude Include="include\BufferingAppender.hh" />
+    <ClInclude Include="include\Category.hh" />
+    <ClInclude Include="include\CategoryStream.hh" />
+    <ClInclude Include="include\config-MinGW32.h" />
+    <ClInclude Include="include\config-openvms.h" />
+    <ClInclude Include="include\config-win32-stlport-boost.h" />
+    <ClInclude Include="include\config-win32.h" />
+    <ClInclude Include="include\Configurator.hh" />
+    <ClInclude Include="include\convenience.h" />
+    <ClInclude Include="include\DailyRollingFileAppender.hh" />
+    <ClInclude Include="include\Export.hh" />
+    <ClInclude Include="include\FactoryParams.hh" />
+    <ClInclude Include="include\FileAppender.hh" />
+    <ClInclude Include="include\Filter.hh" />
+    <ClInclude Include="include\FixedContextCategory.hh" />
+    <ClInclude Include="include\HierarchyMaintainer.hh" />
+    <ClInclude Include="include\IdsaAppender.hh" />
+    <ClInclude Include="include\Layout.hh" />
+    <ClInclude Include="include\LayoutAppender.hh" />
+    <ClInclude Include="include\LayoutsFactory.hh" />
+    <ClInclude Include="include\LevelEvaluator.hh" />
+    <ClInclude Include="include\LoggingEvent.hh" />
+    <ClInclude Include="include\Manipulator.hh" />
+    <ClInclude Include="include\NDC.hh" />
+    <ClInclude Include="include\NTEventLogAppender.hh" />
+    <ClInclude Include="include\OstreamAppender.hh" />
+    <ClInclude Include="include\PassThroughLayout.hh" />
+    <ClInclude Include="include\PatternLayout.hh" />
+    <ClInclude Include="include\Portability.hh" />
+    <ClInclude Include="include\Priority.hh" />
+    <ClInclude Include="include\PropertyConfigurator.hh" />
+    <ClInclude Include="include\RemoteSyslogAppender.hh" />
+    <ClInclude Include="include\RollingFileAppender.hh" />
+    <ClInclude Include="include\SimpleConfigurator.hh" />
+    <ClInclude Include="include\SimpleLayout.hh" />
+    <ClInclude Include="include\SmtpAppender.hh" />
+    <ClInclude Include="include\StringQueueAppender.hh" />
+    <ClInclude Include="include\SyslogAppender.hh" />
+    <ClInclude Include="include\threading\BoostThreads.hh" />
+    <ClInclude Include="include\threading\DummyThreads.hh" />
+    <ClInclude Include="include\threading\MSThreads.hh" />
+    <ClInclude Include="include\threading\OmniThreads.hh" />
+    <ClInclude Include="include\threading\PThreads.hh" />
+    <ClInclude Include="include\threading\Threading.hh" />
+    <ClInclude Include="include\TimeStamp.hh" />
+    <ClInclude Include="include\TriggeringEventEvaluator.hh" />
+    <ClInclude Include="include\TriggeringEventEvaluatorFactory.hh" />
+    <ClInclude Include="include\Win32DebugAppender.hh" />
+    <ClInclude Include="src\Localtime.hh" />
+    <ClInclude Include="src\PortabilityImpl.hh" />
+    <ClInclude Include="src\Properties.hh" />
+    <ClInclude Include="src\PropertyConfiguratorImpl.hh" />
+    <ClInclude Include="src\StringUtil.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NTEventLogCategories.mc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
