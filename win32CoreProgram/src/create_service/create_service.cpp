@@ -10,6 +10,13 @@
 
 #include "../common/commonpack.h"
 
+/****************************************************************************
+**
+** Copyright (C) 2018 635672377@qq.com
+** All rights reserved.
+**
+****************************************************************************/
+
 using std::string;
 using std::wstring;
 using std::make_shared;

@@ -42,9 +42,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>../../bin_win32/$(Configuration)\</OutDir>
+    <IntDir>../../bin_win32/$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../bin_win32/$(Configuration)\</OutDir>
+    <IntDir>../../bin_win32/$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -58,7 +62,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../bin_win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../bin_win32/$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>common.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -78,7 +82,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>../../bin_win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../bin_win32/$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>common.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
