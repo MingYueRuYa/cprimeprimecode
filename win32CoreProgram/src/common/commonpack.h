@@ -13,6 +13,7 @@
  	\version 0.01
  	\date 2018-12-3 15:16:02
 */
+#include "./oshelper.h"
 #include "./cloneable.h"
 #include "./singleton.h"
 #include "./debughelper.h"

@@ -60,6 +60,9 @@
     <ClInclude Include="simpletimestamp.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="oshelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -81,6 +84,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="simpletimestamp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="oshelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
