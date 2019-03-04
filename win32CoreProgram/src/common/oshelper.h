@@ -14,10 +14,11 @@ using std::wstring;
 
 namespace XIBAO {
 
-/*! \brief common::debughelper
+/*! \brief common::oshelper
  	\author liushixiong (liushixiongcpp@163.cn)
  	\version 0.01
  	\date 2019-2-23 16:12:04
+	\description 获取系统的版本和系统的类型（winxp, win7...）
 */
 class OSHelper
 {

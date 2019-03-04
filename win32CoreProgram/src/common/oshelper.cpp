@@ -8,7 +8,7 @@
 #include "oshelper.h"
 
 #include <windows.h>
-#include <versionhelpers.h>
+// #include <versionhelpers.h>
 
 #pragma warning(disable: 4996) 
 
