@@ -220,14 +220,18 @@ public:
 			errorcode = RegQueryValueExW(hKey, wchvalue, 0, &type, lpData, &cbData);
 			if (errorcode != ERROR_SUCCESS) { continue; }
 
-			// TODO: 这里需要考虑如何消除这里的if判断 ugly code
 			wstring value = L"";
 			DWORD dwvalue = 0;
-			if (type == REG_SZ || type == REG_EXPAND_SZ || type == REG_MULTI_SZ) {
+			switch (type) {
+			case REG_SZ:
+			case REG_MULTI_SZ:
+			case REG_EXPAND_SZ:
 				value = reinterpret_cast<wchar_t *>(lpData);	
-			} else if (type == REG_DWORD) {
+			case REG_DWORD:
 				dwvalue = *(reinterpret_cast<DWORD *>(lpData));	
 				value = to_wstring(dwvalue);
+			default:
+				break;
 			}
 			
 			dwIndex++;
