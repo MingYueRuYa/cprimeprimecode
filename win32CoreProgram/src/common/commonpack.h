@@ -18,8 +18,12 @@
 #include "./singleton.h"
 #include "./debughelper.h"
 #include "./stringhelper.h"
+#include "./taskscheduler.h"
 #include "./registerhelper.h"
 #include "./simpletimestamp.h"
+
+#include "./xptaskscheduler.h"
+#include "./win7taskscheduler.h"
 
 #include "./servicedemo.h"
 #include "./servicewrap.h"

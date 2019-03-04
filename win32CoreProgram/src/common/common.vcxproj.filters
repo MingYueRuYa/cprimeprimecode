@@ -63,6 +63,15 @@
     <ClInclude Include="oshelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="taskscheduler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="win7taskscheduler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="xptaskscheduler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -87,6 +96,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="oshelper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="taskscheduler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
