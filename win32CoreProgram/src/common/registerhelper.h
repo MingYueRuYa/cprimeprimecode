@@ -63,7 +63,7 @@ private:
 			unsigned int ValueSize() const { return sizeof(T); }
 			const T *GetValueAddress() const { return &mValue; }
 			DWORD GetType() const { return mRegType; }
-			DWORD *GetTypeAddress() { return &mRegType; }
+			DWORD *GetTypeAddress() const { return &mRegType; }
 			
 			BYTE *GetByte()
 			{
@@ -114,7 +114,7 @@ private:
 		{ return mValue.length() * sizeof(wchar_t); }
 		const wchar_t *GetValueAddress() const { return mValue.c_str(); }
 		DWORD GetType() const { return mRegType; }
-		DWORD *GetTypeAddress() { return &mRegType; }
+		DWORD *GetTypeAddress() const { return &mRegType; }
 
 		wchar_t *GetByte()
 		{
@@ -147,19 +147,19 @@ public:
 	~RegisterHelper();
 
 	DWORD SetDWORD(const wstring &keyName, DWORD dwValue);
-	DWORD GetDWORD(const wstring &keyName, DWORD &dwValue);
+	DWORD GetDWORD(const wstring &keyName, DWORD &dwValue) const;
 
 	DWORD SetQWORD(const wstring &keyName, int64_t dwValue);
-	DWORD GetQWORD(const wstring &keyName, int64_t &dwValue);
+	DWORD GetQWORD(const wstring &keyName, int64_t &dwValue) const;
 
 	DWORD SetSZ(const wstring &keyName, const wstring &strValue);
-	DWORD GetSZ(const wstring &keyName, wstring &strValue);
+	DWORD GetSZ(const wstring &keyName, wstring &strValue) const;
 
 	DWORD SetMultiSZ(const wstring &keyName, const wstring &strValue);
-	DWORD GetMultiSZ(const wstring &keyName, wstring &strValue);
+	DWORD GetMultiSZ(const wstring &keyName, wstring &strValue) const;
 
 	DWORD SetExpandSZ(const wstring &keyName, const wstring &strValue);
-	DWORD GetExpandSZ(const wstring &keyName, wstring &strValue);
+	DWORD GetExpandSZ(const wstring &keyName, wstring &strValue) const;
 
 	DWORD DeleteValue(const wstring &keyName);
 	DWORD DeleteAllValues();
@@ -253,7 +253,9 @@ public:
 
 private:
 	template<typename TRetValue>
-	DWORD GetValue(DWORD regType, const wstring &keyName, TRetValue &value)
+	DWORD GetValue(DWORD regType, 
+					const wstring &keyName, 
+					TRetValue &value) const
 	{
 		HKEY hKey		= 0;
 		DWORD result	= NOERROR;

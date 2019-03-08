@@ -47,7 +47,7 @@ DWORD RegisterHelper::SetDWORD(const wstring &keyName, DWORD dwValue)
 	return SetValue(REG_DWORD, keyName, dwValue);
 }
 
-DWORD RegisterHelper::GetDWORD(const wstring &keyName, DWORD &dwValue)
+DWORD RegisterHelper::GetDWORD(const wstring &keyName, DWORD &dwValue) const
 {
 	return GetValue(REG_DWORD, keyName, dwValue);
 }
@@ -57,7 +57,7 @@ DWORD RegisterHelper::SetQWORD(const wstring &keyName, int64_t dwValue)
 	return SetValue(REG_QWORD, keyName, dwValue);
 }
 
-DWORD RegisterHelper::GetQWORD(const wstring &keyName, int64_t &dwValue)
+DWORD RegisterHelper::GetQWORD(const wstring &keyName, int64_t &dwValue) const
 {
 	return GetValue(REG_QWORD, keyName, dwValue);
 }
@@ -67,7 +67,7 @@ DWORD RegisterHelper::SetSZ(const wstring &keyName, const wstring &strValue)
 	return SetValue(REG_SZ, keyName, strValue);
 }
 
-DWORD RegisterHelper::GetSZ(const wstring &keyName, wstring &strValue)
+DWORD RegisterHelper::GetSZ(const wstring &keyName, wstring &strValue) const
 {
 	return GetValue(REG_SZ, keyName, strValue);
 }
@@ -78,7 +78,8 @@ DWORD RegisterHelper::SetMultiSZ(const wstring &keyName,
 	return SetValue(REG_MULTI_SZ, keyName, strValue);
 }
 
-DWORD RegisterHelper::GetMultiSZ(const wstring &keyName, wstring &strValue)
+DWORD RegisterHelper::GetMultiSZ(const wstring &keyName, 
+									wstring &strValue) const
 {
 	return GetValue(REG_MULTI_SZ, keyName, strValue);
 }
@@ -89,7 +90,8 @@ DWORD RegisterHelper::SetExpandSZ(const wstring &keyName,
 	return SetValue(REG_EXPAND_SZ, keyName, strValue);
 }
 
-DWORD RegisterHelper::GetExpandSZ(const wstring &keyName, wstring &strValue)
+DWORD RegisterHelper::GetExpandSZ(const wstring &keyName, 
+									wstring &strValue) const
 {
 	return GetValue(REG_EXPAND_SZ, keyName, strValue);
 }
