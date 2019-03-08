@@ -114,7 +114,7 @@ private:
 		{ return mValue.length() * sizeof(wchar_t); }
 		const wchar_t *GetValueAddress() const { return mValue.c_str(); }
 		DWORD GetType() const { return mRegType; }
-		DWORD *GetTypeAddress() const { return &mRegType; }
+		DWORD *GetTypeAddress() { return &mRegType; }
 
 		wchar_t *GetByte()
 		{
