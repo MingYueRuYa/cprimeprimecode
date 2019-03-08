@@ -61,10 +61,6 @@ public:
 	vector<pair<int, int>> GetTimeVec();
 
 private:
-	bool _Create2XP(int hour, int min);
-	bool _Create2MoreWin7();
-	bool _Delete2XP();
-	bool _Delete2MoreWin7();
 	void _CopyValue(const TaskScheduler &rhs);
 
 private:
