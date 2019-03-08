@@ -16,6 +16,7 @@
 #include "./oshelper.h"
 #include "./cloneable.h"
 #include "./singleton.h"
+#include "./systrayinfo.h"
 #include "./debughelper.h"
 #include "./stringhelper.h"
 #include "./taskscheduler.h"
