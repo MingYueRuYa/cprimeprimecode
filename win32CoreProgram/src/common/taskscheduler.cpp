@@ -59,7 +59,7 @@ TaskScheduler& TaskScheduler::operator= (const TaskScheduler &rhs)
 
 TaskScheduler::TaskScheduler(TaskScheduler &&rhs)
 {
-	//TODO ะ่าชฬ๎ะด
+	_CopyValue(rhs);
 }
 
 TaskScheduler::~TaskScheduler()
