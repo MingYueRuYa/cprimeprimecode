@@ -7,14 +7,73 @@
 
 #include <iostream>
 #include "thread.cpp"
+#include "lvalue.h"
+
+#include <list>
 
 using std::cout;
 using std::endl;
+using std::list;
 
-int main(int argc, char *argv[])
+#define TEST_RIGHT_REFRENCE
+
+int main(void)
 {
-    use_thread::test_thread();
 
-    system("pause");
-    return 0;
+#ifdef TEST_RIGHT_REFRENCE
+	// LValue::TestRValueFun();
+	// class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &
+	// class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >
+
+	// LValue::TestCopyCon01();
+	//constructor 1
+	//constructor 2
+	//copy constructor
+	//~dtor 2
+	//~dtor 1
+	//~dtor 1
+	// -------------------add ”“÷µøΩ±¥
+	//constructor 1
+	//constructor 2
+	//move constructor
+	//~dtor
+	//~dtor
+	//~dtor
+
+	// LValue::TestForwardFun();
+	// left value
+	// right value
+	// right value
+	// left value
+	// left value
+	// right value
+	// left value
+	// right value
+	// right value
+
+	// LValue::TestFuncWrapperFunc();
+	// void
+	// 1
+	// 2
+	// abcdef
+
+	LValue::TestEmplaceFunc();
+	// --insert--
+	// is constructed
+	// is moved
+	// is moved
+	// --emplace--
+	// is constructed
+	// is moved
+	// --emplace back--
+	// is constructed
+	// --puch back--
+	// is constructed
+	// is moved
+	// is moved
+
+#endif // TEST_RIGHT_REFRENCE
+
+	system("pause");
+	return 0;
 }
