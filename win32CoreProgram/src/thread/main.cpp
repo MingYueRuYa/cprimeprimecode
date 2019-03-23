@@ -13,7 +13,6 @@
 
 int main(int argc, char **argv)
 {
-	
 	// thread_start();
 	// thread_deatch(1, "liushixiong");
 	// thread_move();
@@ -29,8 +28,8 @@ int main(int argc, char **argv)
 	// TestMutexCounter();
 	// TestAtomicCounter();
 
-	// TestFuture();
-	TestAsync();
+	TestFuture();
+	// TestAsync();
 
 	system("pause");
 

@@ -15,7 +15,11 @@
 #include <vector>
 #include <iostream>
 
-int func_future(int x) { return x + 2; }
+int func_future(int x) 
+{ 
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+	return x + 2; 
+}
 
 void TestFuture()
 {
@@ -23,6 +27,7 @@ void TestFuture()
 	std::future<int> fut = task.get_future();
 	std::thread(std::move(task), 2).detach();
 
+	// future get的方法是阻塞获取状态
 	int value = fut.get();
 	std::cout << "The result is " << value << std::endl;
 	
