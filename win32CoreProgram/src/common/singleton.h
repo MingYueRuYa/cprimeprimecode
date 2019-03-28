@@ -12,16 +12,37 @@
 
 using std::mutex;
 
+// 所谓的单例模式，还是无法完全禁止用创建对象
+// 比如：
+
+// DemoSingleton *s = (DemoSingleton *)malloc(sizeof(DemoSingleton));
+// s->showName();
+// s->~DemoSingleton();	//手动调用析构函数
+// free(s);
+// s = nullptr;
+// 
+
+/*
+	usage:
+	Singleton<DemoSingleton>::Instance("liushixiong");
+	SINGLETON_GET_INSTANCE(DemoSingleton).showName();
+*/
+
 namespace XIBAO {
 
 #define SINGLETON_INHERIT(CLASSNAME) \
 								public XIBAO::singleton::Singleton<CLASSNAME>
 
+#define SINGLETON_GET_INSTANCE(CLASSNAME) \
+					XIBAO::singleton::Singleton<CLASSNAME>::GetInstance()
+
 #define SINGLETON_INSTANCE(CLASSNAME) \
 					XIBAO::singleton::Singleton<CLASSNAME>::Instance()
+
 #define DECLARE_FRIEND_SINGLETON(CLASSNAME)	\
 						private: \
 							friend class XIBAO::singleton::Singleton<CLASSNAME>;
+
 #define DECLARE_PRIVATE_CONSTRUCTOR(CLASSNAME, INIT_FUNCTION) 	\
 				private: \
 				CLASSNAME() { INIT_FUNCTION(); } \
@@ -34,6 +55,7 @@ template <typename T>
 class Singleton
 {
 public:
+	/*
     static T& Instance()
     {
         if (NULL == mInstance )
@@ -48,6 +70,33 @@ public:
         }
         return *mInstance;
     }
+	*/
+
+	template<typename... Args>
+	static T& Instance(Args&&... args)
+	{
+        if (NULL == mInstance )
+        {
+            mMutex.lock();
+            if (NULL == mInstance) {
+                mInstance = new T(std::forward<Args>(args)...);
+                atexit(Destroy); 
+            }
+            mMutex.unlock();
+            return *mInstance;
+        }
+        return *mInstance;
+	}
+
+	static T& GetInstance()
+	{
+		if (nullptr == mInstance) {
+			throw std::logic_error("the instance is not init, "\
+									"please initialize the instance first");
+		}
+
+		return *mInstance;
+	}
 
 protected:
     Singleton(void) {}
