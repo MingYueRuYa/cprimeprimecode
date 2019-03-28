@@ -7,16 +7,70 @@
 #include <iostream>
 
 #include "commonpack.h"
-//#include "xptaskscheduler.h"
-//#include "win7taskscheduler.h"
 
 using std::cout;
 using std::endl;
 using std::shared_ptr;
 
-// using XIBAO::TaskScheduler;
+using XIBAO::SysTrayInfo;
+using XIBAO::singleton::Singleton;
+
+class DemoSingleton : SINGLETON_INHERIT(DemoSingleton)
+{
+	DECLARE_PRIVATE_CONSTRUCTOR(DemoSingleton, Initialize)
+	DECLARE_FRIEND_SINGLETON(DemoSingleton)
+
+private:
+	DemoSingleton(const string &name): mName(name)
+	{}
+
+	void Initialize()
+	{
+		mName = "";
+	}
+
+public:
+	void showName() { cout << mName << endl; }
+
+private:
+	string mName;
+
+};
 
 int _tmain(int argc, _TCHAR* argv[])
+{
+	return 0;
+}
+
+int _tmain_test_singleton(int argc, _TCHAR* argv[])
+{
+	// SINGLETON_INSTANCE_EX(DemoSingleton, "name");
+
+	Singleton<DemoSingleton>::Instance("liushixiong");
+
+	SINGLETON_GET_INSTANCE(DemoSingleton).showName();
+	
+
+//	DemoSingleton *s = (DemoSingleton *)malloc(sizeof(DemoSingleton));
+//	s->showName();
+//	free(s);
+//	s = nullptr;
+	
+	system("pause");
+	return 0;
+} 
+
+int _tmain_test_systray(int argc, _TCHAR* argv[])
+{
+	vector<SysTrayInfo::TrayInfo> vecInfo(
+										std::move(SysTrayInfo::GetTrayInfo()));
+
+	system("pause");
+	return 0;
+}
+
+
+int _tmain_test_service(int argc, _TCHAR* argv[])
 {
 	XIBAO::TaskScheduler task(L"C:\\Create_Service.exe", 
 								L"appdemo", L"", L"", L"",
