@@ -55,6 +55,9 @@ public:
 	static SMErrorCode RemoveService(const wstring &serviceName);
 	// 中止服务
 	static SMErrorCode HaltService(const wstring &serviceName);
+	// 查询服务状态
+	static SMErrorCode QueryServiceStatus(const wstring &serviceName, 
+											DWORD &status);
 
 private:
 	static DWORD DeleteServiceReg(const wstring &wstrServiceName);
@@ -73,8 +76,7 @@ public:
 	SMErrorCode PauseService(const wstring &serviceName);
 	// 恢复服务
 	SMErrorCode ResumeService(const wstring &serviceName);
-	// 查询服务状态
-	SMErrorCode QueryServiceStatus(const wstring &serviceName);
+
 	// service主函数
 	void ServiceMain(
 			_In_ DWORD dwArgc,

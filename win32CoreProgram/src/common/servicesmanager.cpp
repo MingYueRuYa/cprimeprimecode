@@ -113,6 +113,44 @@ CloseSCHandle:
 	return errorcode;
 }
 
+ServicesManager::SMErrorCode ServicesManager::QueryServiceStatus(
+							const wstring &serviceName, DWORD &servicestatus)
+{
+	SMErrorCode errorcode= SM_SUCCESS;
+	SC_HANDLE scmanager = 0, scservice = 0;
+	scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
+	if (0 == scmanager) {
+		errorcode = static_cast<SMErrorCode>(GetLastError());
+		goto CloseSCHandle;
+	}
+
+	scservice = ::OpenServiceW(scmanager, 
+								serviceName.c_str(),
+								SERVICE_ALL_ACCESS);	
+	if (0 == scservice) {
+		errorcode = static_cast<SMErrorCode>(GetLastError());
+		goto CloseSCHandle;
+	}
+
+	SERVICE_STATUS status;
+	::ZeroMemory(&status, sizeof(status));
+	if (! ::QueryServiceStatus(scservice, &status)) {
+		errorcode = static_cast<SMErrorCode>(GetLastError());
+		goto CloseSCHandle;
+	}
+
+	::CloseServiceHandle(scmanager);
+	::CloseServiceHandle(scservice);
+	servicestatus = status.dwCurrentState;
+	return errorcode;
+
+CloseSCHandle:
+	::CloseServiceHandle(scmanager);
+	::CloseServiceHandle(scservice);
+	return errorcode;
+}
+
+
 DWORD ServicesManager::DeleteServiceReg(const wstring &wstrServiceName)
 {
 	return ServiceWrap::DeleteServiceReg(wstrServiceName);
@@ -276,15 +314,6 @@ ServicesManager::SMErrorCode ServicesManager::ResumeService(
 							const wstring &serviceName)
 {
 	return SM_FAILED;
-}
-
-
-ServicesManager::SMErrorCode ServicesManager::QueryServiceStatus(
-							const wstring &serviceName)
-{
-	SMErrorCode errorcode = SM_SUCCESS;
-
-	return errorcode;
 }
 
 void ServicesManager::ServiceMain(
