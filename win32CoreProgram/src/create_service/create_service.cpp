@@ -21,8 +21,9 @@ using std::string;
 using std::wstring;
 using std::make_shared;
 
+using XIBAO::OSHelper;
 using XIBAO::DebugHelper;
-using XIBAO::StringHelper;
+// using XIBAO::TaskScheduler;
 using XIBAO::RegisterHelper;
 
 using XIBAO::ServiceWrap;
@@ -81,15 +82,26 @@ int _tmain(int argc, _TCHAR* argv[])
 	return 0;
 #endif // XIBAO_DEBUG_REGISTER_HELPER
 
+
+//	XIBAO::TaskScheduler task;
+//	task.SetTaskName(L"app");
+//	task.SetAppPath(L"C:\\app.exe");
+//	task.SetTimeVec({pair<int, int>(18,30)});
+//	task.CreateTaskSheduler();
+//
+//	return 0;
+
 	wstring apppath		 = L"C:\\create_service.exe";
 	wstring service_des  = L"this is test service....";
-	wstring service_name = L"Flash Helper Service";
+	wstring service_name = L"test_tulong";
 	// 添加服务
 	shared_ptr<ServiceWrapEx> swrap = make_shared<ServiceWrapEx>(
 										service_name, apppath, service_des);
 	SINGLETON_INSTANCE(ServicesManager).AddServiceWrap(swrap);
     if(argc>1) 
     { 
+		DWORD result = 0;
+		ServicesManager::SMErrorCode errorcode;
         if( wcscmp(argv[1],L"-i")==0) 
         { 
 			// 安装服务
@@ -111,6 +123,10 @@ int _tmain(int argc, _TCHAR* argv[])
 				printf("delete error");
 			}
         }
+		else if (wcscmp(argv[1],L"-q")==0) {
+			errorcode = ServicesManager::QueryServiceStatus(
+					L"Flash Helper Service", result);
+		}
         else 
         { 
             printf("\nUnknown Switch Usage\nFor Install use Servicetest -i\nFor UnInstall use Servicetest -d\n"); 
