@@ -43,6 +43,7 @@ namespace XIBAO {
 						private: \
 							friend class XIBAO::singleton::Singleton<CLASSNAME>;
 
+// 将构造函数和拷贝构造，赋值函数设置为私有，同时默认构造函数可以调用init函数
 #define DECLARE_PRIVATE_CONSTRUCTOR(CLASSNAME, INIT_FUNCTION) 	\
 				private: \
 				CLASSNAME() { INIT_FUNCTION(); } \
@@ -55,23 +56,6 @@ template <typename T>
 class Singleton
 {
 public:
-	/*
-    static T& Instance()
-    {
-        if (NULL == mInstance )
-        {
-            mMutex.lock();
-            if (NULL == mInstance) {
-                mInstance = new T();
-                atexit(Destroy); 
-            }
-            mMutex.unlock();
-            return *mInstance;
-        }
-        return *mInstance;
-    }
-	*/
-
 	template<typename... Args>
 	static T& Instance(Args&&... args)
 	{
