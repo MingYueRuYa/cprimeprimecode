@@ -15,6 +15,9 @@
 #include <vector>
 #include <iostream>
 
+using std::cout;
+using std::endl;
+
 int func_future(int x) 
 { 
 	std::this_thread::sleep_for(std::chrono::seconds(3));

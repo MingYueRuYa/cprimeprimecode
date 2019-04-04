@@ -1,6 +1,10 @@
 #include <cstdio>
 #include <iostream>
 
+#include "objsize.h"
+#include "analysis_adjust_this.h"
+#include "default_constructor.cpp"
+
 using std::cout;
 using std::endl;
 
@@ -331,8 +335,14 @@ int main(int argc, char *argv[])
 
 	//mem_fun_layout::test_mem_fun_layout();
 
-    no_natrual_polymorphism::test_memeber_layout();
+    // no_natrual_polymorphism::test_memeber_layout();
 
-    system("pause");
+	// test_obj_size();
+
+	// analysis_adjust_this::test_this_point_address();
+
+	defualt_constructor::test_compiler_generator_default_constrcuctor();
+
+	system("pause");
 	return 0;
 }

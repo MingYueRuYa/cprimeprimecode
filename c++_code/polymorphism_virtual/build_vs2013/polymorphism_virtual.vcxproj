@@ -13,6 +13,11 @@
   <ItemGroup>
     <ClCompile Include="..\source\main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\analysis_adjust_this.h" />
+    <ClInclude Include="..\source\default_constructor.cpp" />
+    <ClInclude Include="..\source\objsize.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2F9154F9-9DB2-43F3-AAFD-E03A722DD317}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
