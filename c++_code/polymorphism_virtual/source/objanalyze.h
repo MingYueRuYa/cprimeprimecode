@@ -91,7 +91,6 @@ void test_this_point_address()
 	child.Func0A();
 	child.ParentA::Func0A();
 	child.Func0B();
-	system("pause");
 
 	// 1.parentA,B¶¼Ã»ÓÐvirtual function
 	// ParentA size 8

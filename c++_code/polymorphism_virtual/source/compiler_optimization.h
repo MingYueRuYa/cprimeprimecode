@@ -25,15 +25,27 @@ public:
 	OptimizationA(int compiler, int level) 
 		: type_compiler(compiler),
 		  type_level(level)
-	{ cout << "call ctor" << endl; }
+	{ 
+        cout << "compiler:" << type_compiler 
+             << " level:" << type_level
+             << " call ctor" << endl; 
+    }
 
 	OptimizationA(const OptimizationA &rhs)
-		: type_compiler(rhs.type_compiler),
-		  type_level(rhs.type_level) 
-	{ cout << "copy ctor" << endl; }
+		: type_compiler(rhs.type_compiler+1),
+		  type_level(rhs.type_level+1) 
+	{ 
+        cout << "compiler:" << type_compiler 
+             << " level:" << type_level
+             << " call copy ctor" << endl; 
+    }
 
 	virtual ~OptimizationA()
-	{ cout << "call dtor" << endl; }
+	{ 
+        cout << "compiler:" << type_compiler 
+             << " level:" << type_level
+             << " call dtor" << endl; 
+    }
 
 private:
 	int type_compiler;

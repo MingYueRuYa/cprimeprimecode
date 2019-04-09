@@ -9,6 +9,8 @@
 using std::cout;
 using std::endl;
 
+#ifdef _MSC_VER_
+
 class ClassA
 {
 public:
@@ -326,6 +328,7 @@ void test_memeber_layout()
 }
 
 }
+#endif // _MSC_VER_
 
 
 int main(int argc, char *argv[])
@@ -346,7 +349,8 @@ int main(int argc, char *argv[])
 	
 	compiler_optimization::test_compiler_optimization();
 	
-
+#ifdef _MSC_VER
 	system("pause");
+#endif //_MSC_VER
 	return 0;
 }
