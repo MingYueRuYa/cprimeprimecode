@@ -23,5 +23,8 @@
     <ClInclude Include="..\source\default_constructor.cpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\compiler_optimization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

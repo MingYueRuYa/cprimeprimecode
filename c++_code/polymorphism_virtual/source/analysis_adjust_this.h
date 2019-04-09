@@ -5,6 +5,10 @@
 **
 ****************************************************************************/
 
+/*
+	测试：this指针的调整
+*/
+
 #ifndef analysis_adjust_this_h
 #define analysis_adjust_this_h
 

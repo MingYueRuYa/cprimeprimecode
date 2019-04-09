@@ -4,6 +4,7 @@
 #include "objsize.h"
 #include "analysis_adjust_this.h"
 #include "default_constructor.cpp"
+#include "compiler_optimization.h"
 
 using std::cout;
 using std::endl;
@@ -341,7 +342,10 @@ int main(int argc, char *argv[])
 
 	// analysis_adjust_this::test_this_point_address();
 
-	defualt_constructor::test_compiler_generator_default_constrcuctor();
+	// defualt_constructor::test_compiler_generator_default_constrcuctor();
+	
+	compiler_optimization::test_compiler_optimization();
+	
 
 	system("pause");
 	return 0;

@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\analysis_adjust_this.h" />
+    <ClInclude Include="..\source\compiler_optimization.h" />
     <ClInclude Include="..\source\default_constructor.cpp" />
     <ClInclude Include="..\source\objsize.h" />
   </ItemGroup>

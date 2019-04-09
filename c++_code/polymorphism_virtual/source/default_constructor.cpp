@@ -4,8 +4,10 @@
 ** All rights reserved.
 **
 ****************************************************************************/
+
 /*
 	测试编译器在何种情况会合成默认的构造函数
+	同理可证：在何种情况下编译器会合成默认的拷贝构造函数
 */
 
 #ifndef default_constrcuctor_h
@@ -20,12 +22,12 @@ namespace defualt_constructor
 {
 
 // #define has_default_ctor_memeber 1
-// #define has_inherit_base 1
+#define has_inherit_ctor_base 1
 // #define has_virtual_function 1
 // #define has_virtual_func_member 1
 
 // MatrixC, MatrixB 虚继承MatrixD
-#define has_virtual_inherit_base 1
+// #define has_virtual_inherit_base 1
 
 class MatrixD
 {
@@ -38,7 +40,7 @@ class MatrixC
 #endif // has_virtual_inherit_base
 {
 public: 
-#ifndef has_virtual_inherit_base
+#ifdef has_inherit_ctor_base
 	MatrixC() { cout << "MatrixC" << endl; }
 #endif // has_virtual_inherit_base
 };
@@ -64,7 +66,7 @@ public:
 class MatrixA
 #elif has_virtual_function
 class MatrixA
-#elif has_inherit_base
+#elif has_inherit_ctor_base
 class MatrixA : public MatrixC
 #elif has_virtual_func_member
 class MatrixA
@@ -107,6 +109,16 @@ void test_compiler_generator_default_constrcuctor()
 
 	// 同样的道理，copy constrcutor也和constructor也是在同样的情况下，编译器会合成默认
 	// 的构造函数
+
+	// A.含有默认的构造函数
+	//	1.父类有默认的构造函数
+	//	2.包含类对象的成员变量含有默认构造函数
+
+	// B.虚函数
+	//	1.不管是自己包含虚函数，还是类成员变量有虚函数，还是父类中虚函数
+
+	// C.虚继承
+	//	1.编译器为了在插入vttable 虚基类表
 }
 
 }
