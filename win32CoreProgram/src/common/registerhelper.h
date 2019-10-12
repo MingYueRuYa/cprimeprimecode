@@ -264,9 +264,7 @@ private:
 
 		long lRet = RegOpenKeyExW(mRootKey, mSubPath.c_str(), 0,
 									mSamDesired, &hKey);
-		if (lRet != ERROR_SUCCESS) {
-			return GetLastError();
-		}
+		if (lRet != ERROR_SUCCESS) { return lRet; }
 
 		DWORD regtype;
 		lRet = RegQueryValueExW(hKey, 
@@ -277,9 +275,7 @@ private:
 								regdata.GetByteSize()
 								);
 		
-		if (lRet != ERROR_SUCCESS) {
-			return GetLastError();
-		}
+		if (lRet != ERROR_SUCCESS) { return lRet; }
 		value = regdata.GetValue();
 		return 0;
 	}
@@ -299,10 +295,10 @@ private:
 		long lRet = RegOpenKeyExW(mRootKey, mSubPath.c_str(), 0, 
 											mSamDesired, &hKey);
 		if (lRet != ERROR_SUCCESS) {
-			if (ERROR_SUCCESS != RegCreateKeyW(mRootKey, 
+			if (ERROR_SUCCESS != (lRet = RegCreateKeyW(mRootKey, 
 												mSubPath.c_str(), 
-												&hKey)) {
-				result = GetLastError();
+												&hKey))) {
+				result = lRet;
 				goto CreateError;
 			}
 		}
