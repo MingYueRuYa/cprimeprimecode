@@ -196,6 +196,7 @@ static bool Create2MoreWin7(const wstring &appPath,
 	IRegisteredTaskHelper iRegisteredTask;
 	ITaskDefinitionHelper iTask;
 	BOOL bTmp = FALSE;
+    /*
 	if(! appWorkDir.empty()){
 		hr = iRootFolder.p->GetFolder(_bstr_t(appWorkDir.c_str()),&iNewFolder.p);
 		if(hr  != S_OK){
@@ -215,6 +216,7 @@ static bool Create2MoreWin7(const wstring &appPath,
 	else{
 		hr = iRootFolder.p->GetTask(_bstr_t(taskName.c_str()),&iRegisteredTask.p);
 	}
+    */
 
 	DO( iService.p->NewTask( 0, &iTask.p ) )
 	// DO( iService->NewTask( 0, &iTask.p ) )

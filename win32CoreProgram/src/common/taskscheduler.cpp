@@ -14,7 +14,6 @@
 #include <memory>
 
 using std::to_wstring;
-using std::shared_ptr;
 
 namespace XIBAO
 {
