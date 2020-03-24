@@ -1,12 +1,17 @@
-// unittest.cpp : 定义控制台应用程序的入口点。
-//
+#define _CRT_SECURE_NO_WARNINGS 1
 
-#include "stdafx.h"
+/****************************************************************************
+**
+** Copyright (C) 2019 635672377@qq.com
+** All rights reserved.
+**
+****************************************************************************/
 
 #include <memory>
 #include <iostream>
 
 #include "commonpack.h"
+// #include "python_bak_file.h"
 
 using std::cout;
 using std::endl;
@@ -36,11 +41,6 @@ private:
 	string mName;
 
 };
-
-int _tmain(int argc, _TCHAR* argv[])
-{
-	return 0;
-}
 
 int _tmain_test_singleton(int argc, _TCHAR* argv[])
 {
@@ -91,3 +91,25 @@ int _tmain_test_service(int argc, _TCHAR* argv[])
 	return 0;
 }
 
+#include <ctime>
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+#ifdef test_python_task_backup
+    bool result = python_bak_file::InstallService();
+#endif // test_python_task_backup
+
+    struct std::tm a = {0,0,0,1,2,120}; /* June 24, 2004 */
+    struct std::tm b = {0,0,0,1,3,120}; /* July 5, 2004 */
+    std::time_t x = std::mktime(&a);
+    std::time_t y = std::mktime(&b);
+    if ( x != (std::time_t)(-1) && y != (std::time_t)(-1) )
+    {
+        double difference = std::difftime(y, x) / (60 * 60 * 24);
+        std::cout << ctime(&x);
+        std::cout << ctime(&y);
+        std::cout << "difference = " << difference << " days" << std::endl;
+    }
+
+	return 0;
+}
