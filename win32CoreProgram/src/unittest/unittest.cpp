@@ -19,6 +19,8 @@ using std::shared_ptr;
 
 using XIBAO::SysTrayInfo;
 using XIBAO::singleton::Singleton;
+using XIBAO::SyncQueue;
+using XIBAO::ThreadPool;
 
 class DemoSingleton : SINGLETON_INHERIT(DemoSingleton)
 {
@@ -93,7 +95,7 @@ int _tmain_test_service(int argc, _TCHAR* argv[])
 
 #include <ctime>
 
-int _tmain(int argc, _TCHAR* argv[])
+int _tmain_time(int argc, _TCHAR* argv[])
 {
 #ifdef test_python_task_backup
     bool result = python_bak_file::InstallService();
@@ -110,6 +112,85 @@ int _tmain(int argc, _TCHAR* argv[])
         std::cout << ctime(&y);
         std::cout << "difference = " << difference << " days" << std::endl;
     }
+
+	return 0;
+}
+
+// 测试线程池和同步队列
+int _tmain_threadpool(int argc, _TCHAR* argv[])
+{
+    ThreadPool tpool(2, 1);
+    tpool.Start();
+
+    std::thread t1([&tpool] () {
+        for (int i = 0; i < 10; ++i) {
+            auto thread_id = std::this_thread::get_id();
+
+            tpool.AddTask([thread_id, i] () {
+                cout << "同步层线程1的线程ID：" << thread_id 
+                     << " index:" << i << endl;
+            });
+        }
+    });
+
+    std::thread t2([&tpool] () {
+        for (int i = 0; i < 10; ++i) {
+            auto thread_id = std::this_thread::get_id();
+
+            tpool.AddTask([thread_id, i] () {
+                cout << "同步层线程2的线程ID：" << thread_id 
+                     << " index:" << i << endl;
+            });
+        }
+    });
+
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    getchar();
+
+    tpool.Stop();
+
+    t1.join();
+    t2.join();
+
+	return 0;
+}
+
+
+#include <Windows.h>
+#include <stdio.h>
+#include <WtsApi32.h>
+#pragma comment( lib, "Wtsapi32.lib" )
+
+
+
+int main( void )
+{
+	DWORD				dwCount			= 0;
+	PWTS_PROCESS_INFO	pi				= { 0 };
+	int					i				= 0;
+	DWORD				dwSize			= 0;
+	char				username[128]	= { 0 };
+	SID_NAME_USE		nameuse			= SidTypeUser;
+
+	if( WTSEnumerateProcesses(NULL, 0, 1, &pi, &dwCount) ) {
+		for( i = 0; i < dwCount; i++ ) {
+			wprintf( L"Process Name: %s\n", pi[i].pProcessName );
+			printf( "Process Id:   %d\n", pi[i].ProcessId );
+			printf( "Session Id:   %d\n", pi[i].SessionId );
+
+			memset( username, 0, sizeof(char) * 128 );
+			dwSize = 128;
+			if( LookupAccountSidA(NULL, pi[i].pUserSid, username, &dwSize, NULL, &dwSize, &nameuse) )
+				printf( "User Name:    %s\n\n", username );
+			else
+				printf( "User Name:    Unknown\n\n" );
+		}
+	}
+
+	WTSFreeMemory( pi );
+
+    getchar();
 
 	return 0;
 }

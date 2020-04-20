@@ -90,6 +90,7 @@
     <ClInclude Include="cloneable.h" />
     <ClInclude Include="commonpack.h" />
     <ClInclude Include="debughelper.h" />
+    <ClInclude Include="noncopyable.h" />
     <ClInclude Include="oshelper.h" />
     <ClInclude Include="registerhelper.h" />
     <ClInclude Include="servicedemo.h" />
@@ -98,10 +99,12 @@
     <ClInclude Include="singleton.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stringhelper.h" />
+    <ClInclude Include="syncqueue.hpp" />
     <ClInclude Include="systeminfo.h" />
     <ClInclude Include="systrayinfo.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="taskscheduler.h" />
+    <ClInclude Include="threadpool.hpp" />
     <ClInclude Include="timer.hpp" />
     <ClInclude Include="simpletimestamp.h" />
     <ClInclude Include="utili.hpp" />

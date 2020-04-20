@@ -23,6 +23,9 @@
 #include "./registerhelper.h"
 #include "./simpletimestamp.h"
 
+#include "./syncqueue.hpp"
+#include "./threadpool.hpp"
+
 #include "./xptaskscheduler.h"
 #include "./win7taskscheduler.h"
 

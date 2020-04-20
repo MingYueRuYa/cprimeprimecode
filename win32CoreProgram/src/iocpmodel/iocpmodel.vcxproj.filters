@@ -18,12 +18,33 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="iocpserver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="connection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="callbacks.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="app.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="iocpserver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="overlapped.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="connection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="callbacks.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
