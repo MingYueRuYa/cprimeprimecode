@@ -19,13 +19,16 @@
 #include <WS2tcpip.h>
 
 #include <cstdio>
-
+#include <vector>
 #include <thread>
+#include <mutex>
 #include <iostream>
 
 using std::thread;
+using std::mutex;
 using std::cout;
 using std::endl;
+using std::vector;
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -52,6 +55,8 @@ public:
     bool _wsa_inited;
     HANDLE _completion_port;
     SOCKET _socket;
+    vector<Connection *> mConnectionVec;
+    mutex mMutex;
 
 };
 

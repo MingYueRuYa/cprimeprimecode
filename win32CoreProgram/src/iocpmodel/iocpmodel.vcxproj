@@ -89,6 +89,7 @@
     <ClInclude Include="callbacks.h" />
     <ClInclude Include="connection.h" />
     <ClInclude Include="iocpserver.h" />
+    <ClInclude Include="message.hpp" />
     <ClInclude Include="overlapped.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,6 +2,7 @@
 #define app_h
 
 #include "iocpserver.h"
+#include "message.hpp"
 
 class App
 {
@@ -15,6 +16,7 @@ public:
     void OnClientDisconnected(const Connection *conn);
     void OnRead(const Connection *con , void *data, std::size_t size);
     void OnWrite(const Connection *conn, std::size_t bytes_transferred);
+    void ProcessMessage(MessageHeader *msgHeader, Connection *conn);
 
 private:
     IocpServer _iocpServer;

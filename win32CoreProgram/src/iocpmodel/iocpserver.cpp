@@ -100,6 +100,33 @@ int IocpServer::InitSocket()
     return ret;
 }
 
+
+int IocpServer::Bind(const char *ip, unsigned short port)
+{
+    SOCKADDR_IN addr;
+    addr.sin_addr.S_un.S_addr = inet_addr(ip);
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+
+    if (::bind(_socket, (SOCKADDR *)&addr, sizeof(SOCKADDR)) == SOCKET_ERROR) {
+        fprintf(stderr, "bind 失败\n");
+        return -1;
+    }
+
+    return 0;
+}
+
+int IocpServer::Listen(unsigned int nListen)
+{
+    if (::listen(_socket, nListen) == SOCKET_ERROR) {
+        fprintf(stderr, "listen 失败\n");
+        return -1;
+    }
+
+    return 0;
+}
+
+
 int IocpServer::Accept()
 {
     int ret = -1;
@@ -155,37 +182,17 @@ int IocpServer::Accept()
         CreateIoCompletionPort(reinterpret_cast<HANDLE>(accept_socket),
                                 _completion_port, 0, 0);
 
+        /*
+        std::unique_lock<mutex> gurad(mMutex);
+        mConnectionVec.push_back(new_connection.get());
+        gurad.unlock();
+        */
         new_connection.release();
+
     } while (0);
 
     return ret;
 }
-
-int IocpServer::Bind(const char *ip, unsigned short port)
-{
-    SOCKADDR_IN addr;
-    addr.sin_addr.S_un.S_addr = inet_addr(ip);
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(port);
-
-    if (::bind(_socket, (SOCKADDR *)&addr, sizeof(SOCKADDR)) == SOCKET_ERROR) {
-        fprintf(stderr, "bind 失败\n");
-        return -1;
-    }
-
-    return 0;
-}
-
-int IocpServer::Listen(unsigned int nListen)
-{
-    if (::listen(_socket, nListen) == SOCKET_ERROR) {
-        fprintf(stderr, "listen 失败\n");
-        return -1;
-    }
-
-    return 0;
-}
-
 void IocpServer::Run(const char *ip, unsigned short port, unsigned int nListen)
 {
     if (Init(ip, port, nListen) == -1) {
@@ -246,6 +253,9 @@ void IocpServer::Mainloop()
                     overlapped->connection->GetSocket());
 
             if (OnDisconnected) { OnDisconnected(overlapped->connection); }
+
+            delete overlapped->connection;
+            overlapped = nullptr;
             continue;
         }
 
@@ -260,6 +270,7 @@ void IocpServer::Mainloop()
         }
 
         if (overlapped->type == Overlapped::Type::Write_Type) {
+
             auto conn = overlapped->connection;
             conn->SetSentBytes(conn->GetSentBytes() + bytes_transferred);
             fprintf(stdout, "write type, client:%d, connect ID:%d\n",
@@ -269,12 +280,12 @@ void IocpServer::Mainloop()
             // 判断是否只发送了一部分
             if (conn->GetSentBytes() < conn->GetTotalBytes()) {
                 // 将剩余的部分在发送
-                overlapped->wsa_buff.len = conn->GetTotalBytes() - conn->GetSentBytes();
-                overlapped->wsa_buff.buf = reinterpret_cast<CHAR *>(
+                overlapped->wsa_buf.len = conn->GetTotalBytes() - conn->GetSentBytes();
+                overlapped->wsa_buf.buf = reinterpret_cast<CHAR *>(
                                 conn->GetWriteBuffer()) + conn->GetSentBytes();
 
                 auto send_result = WSASend(conn->GetSocket(),
-                                            &overlapped->wsa_buff, 1,
+                                            &overlapped->wsa_buf, 1,
                                             &bytes_transferred,
                                             0,
                                 reinterpret_cast<LPWSAOVERLAPPED>(overlapped),
@@ -286,6 +297,8 @@ void IocpServer::Mainloop()
             } else {
                 // 发送完成
                 // AsyncRead(overlapped->connection);
+                conn->Clear();    
+
                 if (OnWrite) { 
                     OnWrite(overlapped->connection, bytes_transferred); 
                 }
@@ -298,14 +311,15 @@ void IocpServer::Mainloop()
 void IocpServer::AsyncRead(const Connection *conn)
 {
     auto overlapped = conn->GetReadOverlapped();
-    overlapped->wsa_buff.len = overlapped->connection->GetReadBufferSize();
-    overlapped->wsa_buff.buf = reinterpret_cast<CHAR*>(overlapped->connection->GetReadBuffer());
+    overlapped->wsa_buf.len = overlapped->connection->GetReadBufferSize();
+    overlapped->wsa_buf.buf = reinterpret_cast<CHAR*>(overlapped->connection->GetReadBuffer());
     
     DWORD flags = 0;
     DWORD bytes_transferred = 0;
 
+    // 非阻塞收取数据，此时内核将数据推到应用层
     auto recv_result = WSARecv(overlapped->connection->GetSocket(),
-                               &overlapped->wsa_buff, 1,
+                               &overlapped->wsa_buf, 1,
                                &bytes_transferred, &flags,
                                reinterpret_cast<LPWSAOVERLAPPED>(overlapped), 
                                NULL);
@@ -318,8 +332,35 @@ void IocpServer::AsyncRead(const Connection *conn)
 
 void IocpServer::AsyncWrite(const Connection *conn, void *data, std::size_t size)
 {
-    auto mutable_conn = const_cast<Connection *>(conn);
+    /*
+    std::unique_lock<mutex> guard(mMutex);
+    do { 
+        for (auto item : mConnectionVec) {
+            auto mutable_conn = const_cast<Connection *>(item);
 
+            char *send_msg = "I am server...";
+            auto overlapped = mutable_conn->GetWriteOverlapped();
+            overlapped->wsa_buff.len = strlen(send_msg);
+            overlapped->wsa_buff.buf = send_msg;// reinterpret_cast<CHAR*>(mutable_conn->GetWriteBuffer());
+
+            DWORD bytes;
+            auto send_result = WSASend(mutable_conn->GetSocket(),
+                                        &overlapped->wsa_buff, 1,
+                                        &bytes, 0,
+                                        reinterpret_cast<LPWSAOVERLAPPED>(overlapped),
+                                        NULL);
+        }
+        
+        if (mConnectionVec.size() >= 10 && guard.owns_lock()) { 
+            guard.unlock(); 
+        }
+
+    } while (mConnectionVec.size() >= 10);
+
+    if (guard.owns_lock()) { guard.unlock(); }
+    */
+    
+    auto mutable_conn = const_cast<Connection *>(conn);
     if (mutable_conn->GetWriteBufferSize() < size) {
         mutable_conn->ResizeWriteBuffer(size);
     }
@@ -330,12 +371,12 @@ void IocpServer::AsyncWrite(const Connection *conn, void *data, std::size_t size
     mutable_conn->SetTotalBytes(size);
 
     auto overlapped = mutable_conn->GetWriteOverlapped();
-    overlapped->wsa_buff.len = size;
-    overlapped->wsa_buff.buf = reinterpret_cast<CHAR*>(mutable_conn->GetWriteBuffer());
+    overlapped->wsa_buf.len = size;
+    overlapped->wsa_buf.buf = reinterpret_cast<CHAR*>(mutable_conn->GetWriteBuffer());
 
     DWORD bytes;
     auto send_result = WSASend(mutable_conn->GetSocket(),
-                                &overlapped->wsa_buff, 1,
+                                &overlapped->wsa_buf, 1,
                                 &bytes, 0,
                                 reinterpret_cast<LPWSAOVERLAPPED>(overlapped),
                                 NULL);

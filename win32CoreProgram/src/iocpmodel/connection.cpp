@@ -13,6 +13,8 @@ public:
     SOCKET _socket;
 
     char _read_buffer[ReadBufferSize];
+    char _msg_buffer[ReadBufferSize*4]; // ÏûÏ¢»º³åÇø
+    int _pos;
 
     std::size_t _write_buffer_size;
 
@@ -26,6 +28,8 @@ public:
     std::unique_ptr<Overlapped> _accept_overlapped;
     std::unique_ptr<Overlapped> _read_overlapped;
     std::unique_ptr<Overlapped> _write_overlapped;
+
+    void Clear();
 };
 
 Connection::Impl::Impl(const SOCKET &socket, Connection *owner)
@@ -34,10 +38,11 @@ Connection::Impl::Impl(const SOCKET &socket, Connection *owner)
     , _accept_overlapped(CreateOverlapped(Overlapped::Accept_Type))
     , _read_overlapped(CreateOverlapped(Overlapped::Read_Type))
     , _write_overlapped(CreateOverlapped(Overlapped::Write_Type))
-    , _sent_bytes()
-    , _total_bytes()
+    , _sent_bytes(0)
+    , _total_bytes(0)
     , _write_buffer(nullptr)
-    , _write_buffer_size()
+    , _write_buffer_size(0)
+    , _pos(0)
 {
     _connect_overlapped->connection = owner;
     _accept_overlapped->connection = owner;
@@ -49,6 +54,14 @@ Connection::Impl::Impl(const SOCKET &socket, Connection *owner)
 Connection::Impl::~Impl()
 {
     if (_socket) { closesocket(_socket); }
+}
+
+void Connection::Impl::Clear()
+{
+    _pos = 0;
+    _sent_bytes = 0;
+    _total_bytes = 0;
+    _write_buffer_size = 0;
 }
 
 Connection::Connection(const SOCKET &socket)
@@ -134,4 +147,24 @@ SOCKET& Connection::GetSocket()
 int Connection::GetID() const
 {
     return mID;
+}
+
+char *Connection::GetMsgBuffer() const
+{
+    return _impl->_msg_buffer;
+}
+
+int Connection::GetMsgPos() const
+{
+    return _impl->_pos;
+}
+
+void Connection::SetMsgPos(int pos)
+{
+    _impl->_pos = pos;
+}
+
+void Connection::Clear()
+{
+    _impl->Clear();
 }

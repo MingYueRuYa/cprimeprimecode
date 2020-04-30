@@ -20,7 +20,7 @@ struct Overlapped
     WSAOVERLAPPED overlapped;
 
     Type type;
-    WSABUF wsa_buff;
+    WSABUF wsa_buf;
     SOCKET _accepted_socket;
     Connection *connection;
 

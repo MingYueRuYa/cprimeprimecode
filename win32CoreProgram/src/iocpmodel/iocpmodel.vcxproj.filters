@@ -47,5 +47,8 @@
     <ClInclude Include="callbacks.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="message.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

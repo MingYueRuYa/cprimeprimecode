@@ -37,6 +37,12 @@ public:
 
     int GetID() const;
 
+    void SetMsgPos(int pos);
+    int GetMsgPos() const;
+    char *GetMsgBuffer() const;
+
+    void Clear();
+
 private:
     class Impl;
     std::unique_ptr<Impl> _impl;
