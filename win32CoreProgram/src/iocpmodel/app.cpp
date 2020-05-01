@@ -21,6 +21,7 @@ void App::onClientConnected(const Connection *conn)
     fprintf(stderr, "新客户端链接\n");
     _iocpServer.AsyncRead(conn);
     // _iocpServer.AsyncWrite(conn, nullptr, 0);
+    _iocpServer._client_count++;
 }
 
 void App::OnRead(const Connection *con , void *data, std::size_t size)
@@ -62,6 +63,7 @@ void App::OnClientDisconnected(const Connection *conn)
     auto variable_conn = const_cast<Connection *>(conn);
     SOCKET clifd = variable_conn->GetSocket();
     fprintf(stderr, "client:%d 断开\n", clifd);
+    _iocpServer._client_count--;
 }
 
 
@@ -84,6 +86,17 @@ void App::ProcessMessage(MessageHeader *msgHeader, Connection *conn)
     {
     case T_Login:
     {
+        /*
+        _iocpServer._msg_count++;
+        
+        if (_iocpServer._chrono_timer.GetSecInterval() > 1) {
+            fprintf(stderr, "client count<%d> msg count <%d> \n", _iocpServer._client_count, _iocpServer._msg_count);
+            _iocpServer._msg_count = 0;
+            _iocpServer._chrono_timer.FlushTime();
+        }
+
+        return;
+        */
         Login *login = (Login *)msgHeader;
         fprintf(stderr, "client socket<%d> ID<%d> T_Login name(%s), password(%s) 数据长度:%d\n",
                 conn->GetSocket(), conn->GetID(), login->name, login->passwrod, login->length);
@@ -107,6 +120,6 @@ void App::ProcessMessage(MessageHeader *msgHeader, Connection *conn)
     }
 
     if (nullptr != send_msg) {
-        // _iocpServer.AsyncWrite(conn, send_msg, send_msg->length);
+        _iocpServer.AsyncWrite(conn, send_msg, send_msg->length);
     }
 }

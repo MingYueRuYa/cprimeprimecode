@@ -13,6 +13,7 @@
 
 #include "connection.h"
 #include "callbacks.h"
+#include "chronotimer.hpp"
 
 #include <Windows.h>
 #include <WinSock2.h>
@@ -57,6 +58,9 @@ public:
     SOCKET _socket;
     vector<Connection *> mConnectionVec;
     mutex mMutex;
+    ChronoTimer _chrono_timer;
+    int _client_count;
+    int _msg_count;
 
 };
 

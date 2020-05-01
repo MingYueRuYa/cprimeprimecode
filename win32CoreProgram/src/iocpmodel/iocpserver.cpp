@@ -9,6 +9,8 @@ IocpServer::IocpServer()
 {
     _wsa_inited = false;
     _socket     = INVALID_SOCKET;
+    _msg_count  = 0;
+    _client_count = 0;
 }
 
 IocpServer::~IocpServer()
@@ -223,12 +225,14 @@ void IocpServer::Mainloop()
                 ERROR_NETNAME_DELETED == GetLastError()) {
 
                 // 客户端断开
+                /*
                 fprintf(stderr, "client:%d 断开\n", 
                         overlapped->connection->GetSocket());
 
                 delete overlapped->connection;
                 overlapped = nullptr;
                 continue;
+                */
             }
         }
 
@@ -254,9 +258,12 @@ void IocpServer::Mainloop()
 
             if (OnDisconnected) { OnDisconnected(overlapped->connection); }
 
+            //TODO 先不进行内存管理
+            /* 
             delete overlapped->connection;
             overlapped = nullptr;
             continue;
+            */
         }
 
         if (overlapped->type == Overlapped::Type::Read_Type) {
@@ -297,7 +304,7 @@ void IocpServer::Mainloop()
             } else {
                 // 发送完成
                 // AsyncRead(overlapped->connection);
-                conn->Clear();    
+                // conn->Clear();    
 
                 if (OnWrite) { 
                     OnWrite(overlapped->connection, bytes_transferred); 

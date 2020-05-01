@@ -50,5 +50,8 @@
     <ClInclude Include="message.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="chronotimer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

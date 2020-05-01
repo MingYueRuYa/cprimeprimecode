@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClInclude Include="app.h" />
     <ClInclude Include="callbacks.h" />
+    <ClInclude Include="chronotimer.hpp" />
     <ClInclude Include="connection.h" />
     <ClInclude Include="iocpserver.h" />
     <ClInclude Include="message.hpp" />
