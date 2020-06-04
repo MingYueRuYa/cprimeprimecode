@@ -55,7 +55,7 @@ void App::OnRead(const Connection *con , void *data, std::size_t size)
 
     //ECHO功能，给客户端发送回去
     // _iocpServer.AsyncWrite(con, value, size);
-    _iocpServer.AsyncRead(con);
+    // _iocpServer.AsyncRead(con);
 }
 
 void App::OnClientDisconnected(const Connection *conn)
@@ -86,20 +86,17 @@ void App::ProcessMessage(MessageHeader *msgHeader, Connection *conn)
     {
     case T_Login:
     {
-        /*
         _iocpServer._msg_count++;
-        
-        if (_iocpServer._chrono_timer.GetSecInterval() > 1) {
-            fprintf(stderr, "client count<%d> msg count <%d> \n", _iocpServer._client_count, _iocpServer._msg_count);
-            _iocpServer._msg_count = 0;
-            _iocpServer._chrono_timer.FlushTime();
-        }
 
-        return;
-        */
+        // if (_iocpServer._chrono_timer.GetSecInterval() > 1) {
+            // fprintf(stderr, "client count<%d> msg count <%d> \n", _iocpServer._client_count, _iocpServer._msg_count);
+            // _iocpServer._msg_count = 0;
+            // _iocpServer._chrono_timer.FlushTime();
+        // }
+
         Login *login = (Login *)msgHeader;
-        fprintf(stderr, "client socket<%d> ID<%d> T_Login name(%s), password(%s) 数据长度:%d\n",
-                conn->GetSocket(), conn->GetID(), login->name, login->passwrod, login->length);
+        //fprintf(stderr, "client socket<%d> ID<%d> T_Login name(%s), password(%s) 数据长度:%d\n",
+        //        conn->GetSocket(), conn->GetID(), login->name, login->passwrod, login->length);
         send_msg = new Login_Result();
     }
         break;

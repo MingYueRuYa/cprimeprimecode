@@ -16,6 +16,7 @@
 #include "chronotimer.hpp"
 
 #include <Windows.h>
+#include <MSWSock.h>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 
@@ -24,6 +25,7 @@
 #include <thread>
 #include <mutex>
 #include <iostream>
+#include <atomic>
 
 using std::thread;
 using std::mutex;
@@ -60,7 +62,8 @@ public:
     mutex mMutex;
     ChronoTimer _chrono_timer;
     int _client_count;
-    int _msg_count;
+    std::atomic_int  _msg_count;
+    LPFN_ACCEPTEX _acceptex_func;
 
 };
 

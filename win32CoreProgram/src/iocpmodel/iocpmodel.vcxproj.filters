@@ -30,6 +30,9 @@
     <ClCompile Include="callbacks.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="worker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h">
@@ -51,6 +54,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="chronotimer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="socketexfunshunter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="worker.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

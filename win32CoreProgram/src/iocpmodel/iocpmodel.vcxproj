@@ -83,6 +83,7 @@
     <ClCompile Include="connection.cpp" />
     <ClCompile Include="iocpserver.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="worker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h" />
@@ -92,6 +93,8 @@
     <ClInclude Include="iocpserver.h" />
     <ClInclude Include="message.hpp" />
     <ClInclude Include="overlapped.h" />
+    <ClInclude Include="socketexfunshunter.h" />
+    <ClInclude Include="worker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

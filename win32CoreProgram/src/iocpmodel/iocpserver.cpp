@@ -1,5 +1,7 @@
 #include "iocpserver.h"
 #include "overlapped.h"
+#include "socketexfunshunter.h"
+#include "worker.h"
 
 #include <memory>
 #include <WinSock2.h>
@@ -47,9 +49,17 @@ int IocpServer::Init(const char *ip, unsigned short port, unsigned int nListen)
             break;
         }
 
+        /*
         if (-1 == Accept()) {
             break;
         }
+        */
+
+       SocketExFnsHunter _socketExFunsHunter; 
+       _acceptex_func = _socketExFunsHunter.AcceptEx;
+
+        Workers *workers = new Workers(this); 
+        workers->Start();
 
     } while(0);
 
@@ -139,6 +149,7 @@ int IocpServer::Accept()
 		//WSAIoctl获取acceptex的函数地址
 		//存放AcceptEx函数的指针
 
+#if 0
         LPFN_ACCEPTEX _acceptex_func;
         GUID acceptex_guid = WSAID_ACCEPTEX;
         DWORD bytes_returned;
@@ -154,6 +165,7 @@ int IocpServer::Accept()
             break;
         }
 
+#endif
         SOCKET accept_socket = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         if (accept_socket == INVALID_SOCKET) {
             fprintf(stderr, "初始化accept socket失败\n");
@@ -207,6 +219,19 @@ void IocpServer::Run(const char *ip, unsigned short port, unsigned int nListen)
 
 void IocpServer::Mainloop()
 {
+    //现在有工作者线程去处理业务，那主循环可以做点其他的事情了
+	for (;;)
+	{
+		if (_chrono_timer.GetSecInterval() > 1.0)
+		{
+			fprintf(stderr, "client count<%d> msg count<%d>\n", _client_count, _msg_count);
+			_chrono_timer.FlushTime();
+			_msg_count = 0;
+		}
+	}
+
+
+    /*
     DWORD bytes_transferred;
     ULONG_PTR completion_key;
     DWORD Flags = 0;
@@ -225,14 +250,12 @@ void IocpServer::Mainloop()
                 ERROR_NETNAME_DELETED == GetLastError()) {
 
                 // 客户端断开
-                /*
-                fprintf(stderr, "client:%d 断开\n", 
-                        overlapped->connection->GetSocket());
-
-                delete overlapped->connection;
-                overlapped = nullptr;
-                continue;
-                */
+                // fprintf(stderr, "client:%d 断开\n", 
+                        // overlapped->connection->GetSocket());
+ 
+                // delete overlapped->connection;
+                // overlapped = nullptr;
+                // continue;
             }
         }
 
@@ -259,11 +282,9 @@ void IocpServer::Mainloop()
             if (OnDisconnected) { OnDisconnected(overlapped->connection); }
 
             //TODO 先不进行内存管理
-            /* 
-            delete overlapped->connection;
-            overlapped = nullptr;
-            continue;
-            */
+            // delete overlapped->connection;
+            // overlapped = nullptr;
+            // continue;
         }
 
         if (overlapped->type == Overlapped::Type::Read_Type) {
@@ -313,6 +334,7 @@ void IocpServer::Mainloop()
         }
 
     }
+    */
 }
 
 void IocpServer::AsyncRead(const Connection *conn)
