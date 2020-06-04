@@ -163,8 +163,7 @@ int _tmain_threadpool(int argc, _TCHAR* argv[])
 #pragma comment( lib, "Wtsapi32.lib" )
 
 
-
-int main( void )
+int test_enum_process_main( void )
 {
 	DWORD				dwCount			= 0;
 	PWTS_PROCESS_INFO	pi				= { 0 };
@@ -191,6 +190,31 @@ int main( void )
 	WTSFreeMemory( pi );
 
     getchar();
+
+	return 0;
+}
+
+
+#include <set>
+#include <string>
+#include <algorithm>
+
+using std::set;
+using std::string;
+
+// 测试STL的在关联容器中指针类型的排序
+int _tmain(int argc, _TCHAR* argv[])
+{
+    set<string *, std::LessDerefrence<string>> pstr_set;   
+    pstr_set.insert(new string("b"));
+    pstr_set.insert(new string("a"));
+    pstr_set.insert(new string("c"));
+
+    // std::for_each(pstr_set.begin(), pstr_set.end(), [](string *pstr) { cout << *pstr << std::hex << pstr << endl; });
+    // 类型不一致，编译出错
+    // std::copy(pstr_set.begin(), pstr_set.end(), std::ostream_iterator<string>(cout, "\n"));
+
+    std::transform(pstr_set.begin(), pstr_set.end(),std::ostream_iterator<string>(cout, "\n"), std::Derefrence()); 
 
 	return 0;
 }
