@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IPC", "..\src\IPC\IPC.vcxpr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "socket_client", "..\src\socket_client\socket_client.vcxproj", "{6364EE30-5EBC-4093-A3E7-E87C5AC72749}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "STL", "..\src\STL\STL.vcxproj", "{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug with Boost|Win32 = Debug with Boost|Win32
@@ -193,6 +195,18 @@ Global
 		{6364EE30-5EBC-4093-A3E7-E87C5AC72749}.Release|Win32.ActiveCfg = Release|Win32
 		{6364EE30-5EBC-4093-A3E7-E87C5AC72749}.Release|Win32.Build.0 = Release|Win32
 		{6364EE30-5EBC-4093-A3E7-E87C5AC72749}.Release|x64.ActiveCfg = Release|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Debug with Boost|Win32.ActiveCfg = Debug|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Debug with Boost|Win32.Build.0 = Debug|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Debug with Boost|x64.ActiveCfg = Debug|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Debug|Win32.Build.0 = Debug|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Debug|x64.ActiveCfg = Debug|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Release with Boost|Win32.ActiveCfg = Release|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Release with Boost|Win32.Build.0 = Release|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Release with Boost|x64.ActiveCfg = Release|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Release|Win32.ActiveCfg = Release|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Release|Win32.Build.0 = Release|Win32
+		{23E7F9BE-3E3E-47D7-B49D-89B07708BEFB}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
