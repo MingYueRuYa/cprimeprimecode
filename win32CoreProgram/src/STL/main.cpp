@@ -131,7 +131,7 @@ typename MapType::iterator efficentAddOrUpdate(MapType &mapType,
     }
 }
 
-int main(int argc, char *argv[])
+int test_map_main(int argc, char *argv[])
 {
     ChronoTimer chrono_timer;
 
@@ -166,5 +166,72 @@ int main(int argc, char *argv[])
 
     getchar();
      
+    return 0;
+}
+
+template <typename T>
+struct base
+{
+
+    void interface()
+    {
+        T &derived = static_cast<T &>(*this);
+        derived.Implementation();
+    }
+
+};
+
+struct derive : public base<derive>
+{
+    void Implementation()
+    {
+        cout << "child dosomething" << endl;
+    }
+
+};
+
+struct grandson : public base<grandson>
+{
+    void Implementation()
+    {
+        cout << "grandson dosomething" << endl;
+    }
+
+};
+
+template <typename T>
+void Action(base<T> &child)
+{
+    child.interface();
+}
+
+
+// 测试模板的奇异模板递归
+/*
+    将动态的绑定，转化为在编译期间的绑定，这样做是为了避免虚函数的开销。
+    但是无法真正做到运行时的动态绑定,
+    在智能指针shared_ptr中返回自己的时候，也是用到了CRTP技术。
+*/
+int test_CRTP_main(int argc, char *argv[])
+{
+    derive child;
+    Action(child);
+
+    grandson son;
+    Action(son);
+    /*
+    derive child;
+    child.interface();
+
+    grandson son;
+    son.interface();
+    */
+
+    getchar();
+    return 0;
+}
+
+int main(int argc, char *argv[])
+{
     return 0;
 }
