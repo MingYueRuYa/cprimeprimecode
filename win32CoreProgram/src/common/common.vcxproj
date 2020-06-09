@@ -87,6 +87,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="chronotimer.hpp" />
     <ClInclude Include="cloneable.h" />
     <ClInclude Include="commonpack.h" />
     <ClInclude Include="debughelper.h" />

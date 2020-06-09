@@ -43,5 +43,26 @@ struct Derefrence
     }
 };
 
+// 对map执行高效率的操作，选择operator[]还是选择insert
+template <typename MapType, typename KeyArgType, typename ValueArgType>
+typename MapType::iterator efficentAddOrUpdate(MapType &mapType, 
+                                            const KeyArgType &keyArgType,
+                                            const ValueArgType &valueArgType)
+{
+    typename MapType::iterator ifind = mapType.lower_bound(keyArgType);
+
+    // 如果key已经存在就是更新操作
+    if (ifind != mapType.end() && 
+        ! (mapType.key_comp()(keyArgType, ifind->first))) {
+
+        ifind->second = valueArgType;
+
+        return ifind;
+    } else {    // 不存在就执行insert操作
+        typedef typename MapType::value_type MVT;
+
+        return mapType.insert(ifind, MVT(keyArgType, valueArgType));
+    }
+}
 
 }; // std
