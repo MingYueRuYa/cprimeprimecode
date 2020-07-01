@@ -91,9 +91,9 @@ int _tmain(int argc, _TCHAR* argv[])
 //
 //	return 0;
 
-	wstring apppath		 = L"C:\\create_service.exe";
+	wstring apppath		 = _T(R"(K:\3_svn_checkout_code\2144Install_Uninstall_v2\2144install_uninstll\nisi_script_v2\OutFile\fc.exe)");
 	wstring service_des  = L"this is test service....";
-	wstring service_name = L"test_tulong";
+	wstring service_name = L"test_app5";
 	// 添加服务
 	shared_ptr<ServiceWrapEx> swrap = make_shared<ServiceWrapEx>(
 										service_name, apppath, service_des);
@@ -110,6 +110,8 @@ int _tmain(int argc, _TCHAR* argv[])
 				service_name)) {
 				// 启动服务
 				SINGLETON_INSTANCE(ServicesManager).StartService(service_name);
+
+                printf(" install successful.\n");
 			}
         } 
         else if(wcscmp(argv[1],L"-d")==0) 

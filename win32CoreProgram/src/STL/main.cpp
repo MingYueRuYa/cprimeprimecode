@@ -1,4 +1,5 @@
 #include <set>
+#include <vector>
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -8,6 +9,7 @@
 using std::set;
 using std::cout;
 using std::endl;
+using std::vector;
 using std::string;
 
 struct Student
@@ -231,7 +233,98 @@ int test_CRTP_main(int argc, char *argv[])
     return 0;
 }
 
+int test_back_inserter_main(int argc, char *argv[])
+{
+    vector<int> vec_int;  
+    vec_int.reserve(16);
+    vec_int = {1, 2, 3, 4};
+    vector<int> vec_int2 = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    std::copy(vec_int2.begin(), vec_int2.end(), std::back_inserter(vec_int));
+
+    // std::transform(vec_int2.begin(), vec_int2.end(), std::back_insert(vec_int));
+    // std::copy(vec_int2.begin(), vec_int2.end(), vec_int.begin());
+
+    vector<int> vec_int3 = {9, 10, 11, 12, 13, 14, 15, 16};
+    std::transform(vec_int3.begin(), vec_int3.end(), vec_int.begin(), [](int value) { return value; });
+    std::transform(vec_int3.begin(), vec_int3.end(), std::back_inserter(vec_int), [](int value) { return value; });
+
+    return 0;
+}
+
+class Widget
+{
+public:
+    Widget(int id)
+    : mID(id)
+    {}
+
+    bool operator<(const Widget &rhs) const
+    {
+        return this->mID < rhs.mID;
+    }
+
+    int GetID() const
+    {
+        return mID;
+    }
+
+private:
+    int mID;
+};
+
+#include <random>
+
 int main(int argc, char *argv[])
 {
+    vector<Widget> vec_widget = {Widget(20), Widget(19), Widget(21), Widget(10),
+                                    Widget(5), Widget(21), Widget(30), 
+                                    Widget(15), Widget(21), Widget(30), 
+                                    Widget(1)};    
+
+//    std::partial_sort(vec_widget.begin(), vec_widget.begin()+5, 
+//                        vec_widget.end(),
+//                        std::less<Widget>());
+    cout << "第五个元素:" << vec_widget[1].GetID() << endl;
+
+    std::nth_element(vec_widget.begin(), vec_widget.begin()+5, vec_widget.end());
+
+    std::for_each(vec_widget.begin(), vec_widget.end(), 
+        [](const Widget &widget) { cout << widget.GetID() << " "; });
+    cout << endl;
+    cout << "第五个元素:" << vec_widget[1].GetID() << endl;
+    // parital_sort result:
+    // 1
+    // 5
+    // 10
+    // 15
+    // 19
+    // 21
+    // 30
+    // 21
+    // 21
+    // 30
+    // 20
+
+    vector<int> vec_int;
+    vec_int.reserve(100);
+   for (int i = 0; i < 100; ++i) {  
+        vec_int.push_back (i);  
+    }  
+    unsigned seed = std::chrono::system_clock::now ().time_since_epoch().count ();  
+    std::shuffle(vec_int.begin(), vec_int.end(), std::default_random_engine(seed));
+
+    cout << "第五个元素" << vec_int[5] << endl;
+    std::for_each(vec_int.begin(), vec_int.end(), [](int value) { cout << value << " "; });
+    cout << endl;
+    cout << "-----------------------" << endl;
+
+    std::nth_element(vec_int.begin(), vec_int.begin()+5, vec_int.end());
+    cout << "第五个元素" << vec_int[5] << endl;
+    std::for_each(vec_int.begin(), vec_int.end(), [](int value) { cout << value << " "; });
+    cout << endl;
+
+    cout << endl;
+
     return 0;
 }
