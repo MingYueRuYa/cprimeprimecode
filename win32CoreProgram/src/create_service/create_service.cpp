@@ -1,4 +1,5 @@
-// create_service.cpp : 定义控制台应用程序的入口点。
+
+// create_service.cpp : ??????????????
 //
 
 #include "stdafx.h"
@@ -77,7 +78,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	reghelper.GetDWORD(L"liushixiong", value);
 
 	reghelper.SetQWORD(L"liushixiong", (long long )0x1234567812345678);
-	reghelper.SetMultiSZ(L"liushixiong@2144.cn", wstring(L"profession --- 刘世雄"));
+	reghelper.SetMultiSZ(L"liushixiong@2144.cn", wstring(L"profession --- ???"));
 
 	return 0;
 #endif // XIBAO_DEBUG_REGISTER_HELPER
@@ -91,10 +92,9 @@ int _tmain(int argc, _TCHAR* argv[])
 //
 //	return 0;
 
-	wstring apppath		 = _T(R"(K:\3_svn_checkout_code\2144Install_Uninstall_v2\2144install_uninstll\nisi_script_v2\OutFile\fc.exe)");
+	wstring apppath		 = _T(R"(K:\3_svn_checkout_code\Install_Uninstall_v2\install_uninstll\nisi_script_v2\OutFile\fc.exe)");
 	wstring service_des  = L"this is test service....";
 	wstring service_name = L"test_app5";
-	// 添加服务
 	shared_ptr<ServiceWrapEx> swrap = make_shared<ServiceWrapEx>(
 										service_name, apppath, service_des);
 	SINGLETON_INSTANCE(ServicesManager).AddServiceWrap(swrap);
@@ -102,43 +102,52 @@ int _tmain(int argc, _TCHAR* argv[])
     { 
 		DWORD result = 0;
 		ServicesManager::SMErrorCode errorcode;
+        // install service
         if( wcscmp(argv[1],L"-i")==0) 
         { 
-			// 安装服务
 			if (ServicesManager::SM_SUCCESS == 
 				SINGLETON_INSTANCE(ServicesManager).InstallService(
 				service_name)) {
-				// 启动服务
+                // start service
 				SINGLETON_INSTANCE(ServicesManager).StartService(service_name);
-
-                printf(" install successful.\n");
 			}
         } 
         else if(wcscmp(argv[1],L"-d")==0) 
         { 
-			// 删除服务
+            // delete service
+            if (argc < 3) {
+                DebugHelper::OutputDebugString("parameter format: app.exe -d server_name");
+                return 0;
+            }
+
 			// SINGLETON_INSTANCE(ServicesManager).DeleteService(service_name);
-			if (ServicesManager::SMErrorCode::SM_SUCCESS ==  
-				SINGLETON_INSTANCE(ServicesManager).DeleteService(L"Flash Helper Service")) {
-				printf("delete ok");
+            ServicesManager::SMErrorCode code =  
+				SINGLETON_INSTANCE(ServicesManager).DeleteService(argv[2]);
+			if (ServicesManager::SMErrorCode::SM_SUCCESS == code) {
+                DebugHelper::OutputDebugString(L"%s, delete ok", argv[2]);
 			} else {
-				printf("delete error");
+                DebugHelper::OutputDebugString(L"%s, delete error, error code:%d", argv[2], code);
 			}
         }
 		else if (wcscmp(argv[1],L"-q")==0) {
+            // query service status
+            if (argc < 3) {
+                DebugHelper::OutputDebugString("parameter format: app.exe -d server_name");
+                return 0;
+            }
 			errorcode = ServicesManager::QueryServiceStatus(
-					L"Flash Helper Service", result);
+					argv[2], result);
+            DebugHelper::OutputDebugString(L"%s query service status , error code:%d, status:%d", argv[2], errorcode, result);
 		}
         else 
         { 
-            printf("\nUnknown Switch Usage\nFor Install use Servicetest -i\nFor UnInstall use Servicetest -d\n"); 
+            DebugHelper::OutputDebugString("\nUnknown Switch Usage\nFor Install use Servicetest -i\nFor UnInstall use Servicetest -d\n");
         } 
     } 
     else 
     { 
 		SINGLETON_INSTANCE(ServicesManager).Start(service_name);
-		printf("service start successful.");
-		system("pause");
+        DebugHelper::OutputDebugString("service start successful.");
     } 
     
     return 0; 

@@ -43,7 +43,7 @@ void DebugHelper::OutputDebugString(LPCTSTR format, ...)
 	_vsnwprintf_s(buf, len, len, format, args);
 	va_end(args);
 
-	::OutputDebugString(buf);
+	::OutputDebugStringW(buf);
 	delete[] buf;
 #endif // XIBAO_DEBUG_HELPER
 }
