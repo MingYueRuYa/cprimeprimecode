@@ -25,7 +25,7 @@ namespace XIBAO
 								const wstring &wstrAppAbsPath,
 								const wstring &wstrDesc,
 								bool running)
-		: mStopped(running),
+		: mRunning(running),
 		  mAppAbsPath(wstrAppAbsPath),
 	  	  mServiceName(wstrName),
 		  mServiceDesc(wstrDesc),
@@ -95,12 +95,12 @@ namespace XIBAO
 
 	void ServiceWrap::SetStop(bool stop)
 	{
-		mStopped = stop;
+		mRunning = stop;
 	}
 
 	bool ServiceWrap::GetStop() const
 	{
-		return mStopped;
+		return mRunning;
 	}
 
 	void ServiceWrap::SetServiceDesc(const wstring &serviceDesc)
@@ -115,6 +115,7 @@ namespace XIBAO
 
 	void ServiceWrap::ServiceMain(DWORD argc, LPTSTR *argv)
 	{
+        DebugHelper::OutputDebugString("ServiceMain...");	
 		mServiceStatus.dwServiceType          = SERVICE_WIN32;  
 		mServiceStatus.dwCurrentState         = SERVICE_START_PENDING;  
 		mServiceStatus.dwWin32ExitCode        = 0;  
@@ -129,6 +130,7 @@ namespace XIBAO
 									ServicesManager::_ServiceCtrlHandler);   
 		if ((SERVICE_STATUS_HANDLE)0 == mServiceStatusHandle) { 
 			DWORD dwlasterror = GetLastError();
+		    DebugHelper::OutputDebugString("RegisterServiceCtrlHandler last error:%d", dwlasterror);	
 			return; 
 		}      
 
@@ -137,8 +139,17 @@ namespace XIBAO
 		mServiceStatus.dwCurrentState         = SERVICE_RUNNING;  
 		if (! SetServiceStatus(mServiceStatusHandle, &mServiceStatus)) { 
 			DWORD dwlasterror = GetLastError();
+		    DebugHelper::OutputDebugString("SetServiceStatus last error:%d", dwlasterror);	
 			return; 
 		}  
+
+        while (0 == this->QueryServiceStatus()) {
+			Sleep(mServiceStatus.dwWaitHint);
+			if (SERVICE_RUNNING == mServiceStatus.dwCurrentState) {
+				break;
+			} // if
+		    DebugHelper::OutputDebugString("wait service...");	
+		}
 	}
 
 	void ServiceWrap::ServiceCtrlHandler(DWORD Opcode) 
@@ -215,7 +226,7 @@ CloseSCHandle:
 
 	void ServiceWrap::Pause()
 	{
-		mStopped = false; 
+		mRunning = false; 
 		::InterlockedExchange(&mServiceStatus.dwCurrentState,
 								SERVICE_PAUSED);
 		::SetServiceStatus(mServiceStatusHandle, &mServiceStatus);
@@ -224,7 +235,7 @@ CloseSCHandle:
 
 	void ServiceWrap::Continue()
 	{
-		mStopped = true; 
+		mRunning = true; 
 		DebugHelper::OutputDebugStringW(L"SERVICE_CONTROL_CONTINUE");
 		::InterlockedExchange(&mServiceStatus.dwCurrentState,
 								SERVICE_RUNNING);
@@ -242,7 +253,7 @@ CloseSCHandle:
 
 	void ServiceWrap::Stop()
 	{
-		mStopped = false; 
+		mRunning = false; 
 		DebugHelper::OutputDebugStringW(L"SERVICE_CONTROL_STOP");
 		::InterlockedExchange(&mServiceStatus.dwCurrentState,
 								SERVICE_STOPPED);
@@ -267,7 +278,7 @@ CloseSCHandle:
 
 	void ServiceWrap::DoTask()
 	{
-		while (mStopped) {
+		while (mRunning) {
 			Sleep(1000*3);
 			DebugHelper::OutputDebugString("service dotask....\r\n");
 		}
@@ -280,7 +291,7 @@ CloseSCHandle:
 
 	void ServiceWrap::_CopyValue(const ServiceWrap &servicewrap)
 	{
-		this->mStopped				= servicewrap.mStopped;
+		this->mRunning				= servicewrap.mRunning;
 		this->mAppAbsPath			= servicewrap.mAppAbsPath;
 		this->mServiceName			= servicewrap.mServiceName;
 		this->mServiceDesc			= servicewrap.mServiceDesc;

@@ -78,7 +78,7 @@ protected:
 	void _CopyValue(const ServiceWrap &servicewrap);
 
 protected:
-	bool	mStopped;
+	bool	mRunning;
 	wstring mAppAbsPath;
 	wstring mServiceName;
 	wstring mServiceDesc;

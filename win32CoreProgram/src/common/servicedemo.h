@@ -32,9 +32,9 @@ public:
 
 	virtual void DoTask() override
 	{
-		while (mStopped) {
-			Sleep(3000);
-			DebugHelper::OutputDebugStringW(L"liushixiong");
+		while (mRunning) {
+			Sleep(500);
+			DebugHelper::OutputDebugStringW(L"this is test service");
 		}
 	}
 

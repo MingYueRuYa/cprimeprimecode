@@ -1,4 +1,4 @@
-/****************************************************************************
+ï»¿/****************************************************************************
 **
 ** Copyright (C) 2018 635672377@qq.com
 ** All rights reserved.
@@ -189,7 +189,7 @@ ServicesManager::SMErrorCode ServicesManager::InstallService(
 	wstring serdesc		= serwrap->GetServiceDesc();
 	wstring wstrname	= serwrap->GetAppAbsPath();
 	LPCTSTR strappname	= wstrname.c_str();
-	// ×¢²á±íĞ´ÈëĞÅÏ¢
+	// æ³¨å†Œè¡¨å†™å…¥ä¿¡æ¯
 	serwrap->SetRegInfo();
 
 	SC_HANDLE scmanager = 0, scservice = 0;
@@ -239,7 +239,7 @@ CloseSCHandle:
 ServicesManager::SMErrorCode ServicesManager::StartService(
 										const wstring &wstrName)
 {
-	// ½«´Ë¶Î´úÂëÒÆ¶¯µ½servicewrapÀïÃæ
+	// å°†æ­¤æ®µä»£ç ç§»åŠ¨åˆ°servicewrapé‡Œé¢
 	SMErrorCode errorcode = SM_SUCCESS;
 	SC_HANDLE scmanager = 0, scservice = 0;
 	scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
@@ -263,9 +263,9 @@ ServicesManager::SMErrorCode ServicesManager::StartService(
 		goto CloseSCHandle;
 	}
 
-	// Èç¹ûÕıÔÚÔËĞĞ×´Ì¬
+	// å¦‚æœæ­£åœ¨è¿è¡ŒçŠ¶æ€
 	if (status.dwCurrentState == SERVICE_RUNNING) {
-		// ÏÈÍ£Ö¹£¬ÔÙÆô¶¯
+		// å…ˆåœæ­¢ï¼Œå†å¯åŠ¨
 		if (! ::ControlService(scservice, SERVICE_CONTROL_STOP, &status)) {
 			errorcode = static_cast<SMErrorCode>(GetLastError());
 			goto CloseSCHandle;
@@ -280,13 +280,13 @@ ServicesManager::SMErrorCode ServicesManager::StartService(
 		} // while
 	} // if
 
-	// Æô¶¯·şÎñ
+	// å¯åŠ¨æœåŠ¡
 	if (! ::StartServiceW(scservice, NULL, NULL)) {
 		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
-	}
+	}   
 
-	// µÈ´ı·şÎñÆô¶¯
+	// ç­‰å¾…æœåŠ¡å¯åŠ¨
 	while (::QueryServiceStatus(scservice, &status)) {
 		::Sleep(status.dwWaitHint);
 		if (SERVICE_RUNNING == status.dwCurrentState) {
@@ -325,6 +325,7 @@ void ServicesManager::ServiceMain(
 			SINGLETON_INSTANCE(ServicesManager).GetServiceWrap(
 										mCurServiceName.c_str(), servicewrap)) 
 	{
+  
 		return;
 	}
 
