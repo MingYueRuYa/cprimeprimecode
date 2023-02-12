@@ -16,12 +16,6 @@ using std::wstring;
 
 namespace XIBAO {
 
-#ifndef XIBAO_DEBUG_HELPER
-#define XIBAO_DEBUG_HELPER
-#endif // XIBAO_DEBUG_HELPER
-
-// #undef XIBAO_DEBUG_HELPER
-
 /*! \brief common::debughelper
  	\author liushixiong (liushixiongcpp@163.cn)
  	\version 0.01

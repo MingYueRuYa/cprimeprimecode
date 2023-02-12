@@ -92,7 +92,7 @@ int _tmain(int argc, _TCHAR* argv[])
 //
 //	return 0;
 
-	wstring apppath		 = _T(R"(K:\3_svn_checkout_code\Install_Uninstall_v2\install_uninstll\nisi_script_v2\OutFile\fc.exe)");
+	wstring apppath		 = _T(R"(c:\test_service.exe)");
 	wstring service_des  = L"this is test service....";
 	wstring service_name = L"test_app5";
 	shared_ptr<ServiceWrapEx> swrap = make_shared<ServiceWrapEx>(
@@ -137,7 +137,7 @@ int _tmain(int argc, _TCHAR* argv[])
             }
 			errorcode = ServicesManager::QueryServiceStatus(
 					argv[2], result);
-            DebugHelper::OutputDebugString(L"%s query service status , error code:%d, status:%d", argv[2], errorcode, result);
+            DebugHelper::OutputDebugString(L"%s query service status , error code:%ul, status:%d", argv[2], errorcode, result);
 		}
         else 
         { 

@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "servicewrap.h"
+#include "debughelper.h"
 
 using std::shared_ptr;
 using std::dynamic_pointer_cast;
@@ -33,9 +34,7 @@ public:
 	{
 		while (mStopped) {
 			Sleep(3000);
-#ifdef XIBAO_DEBUG_HELPER
 			DebugHelper::OutputDebugStringW(L"liushixiong");
-#endif // XIBAO_DEBUG_HELPER
 		}
 	}
 
