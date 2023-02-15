@@ -121,9 +121,8 @@ int _tmain(int argc, _TCHAR* argv[])
                 return 0;
             }
 
-			// SINGLETON_INSTANCE(ServicesManager).DeleteService(service_name);
             ServicesManager::SMErrorCode code =  
-				SINGLETON_INSTANCE(ServicesManager).DeleteService(argv[2]);
+				SINGLETON_INSTANCE(ServicesManager).RemoveService(argv[2]);
 			if (ServicesManager::SMErrorCode::SM_SUCCESS == code) {
                 DebugHelper::OutputDebugString(L"%s, delete ok", argv[2]);
 			} else {
