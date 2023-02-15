@@ -58,11 +58,12 @@ public:
 	void SetServiceDesc(const wstring &serviceDesc);
 	wstring GetServiceDesc();
 
-	void ServiceMain(DWORD argc, LPTSTR *argv);
+	void ServiceMain(DWORD argc, LPWSTR *argv);
 	void ServiceCtrlHandler(DWORD Opcode);  
 	DWORD QueryServiceStatus();
 	void SetRegInfo();
 
+    virtual void Start(DWORD argc, LPWSTR *argv);
 	virtual void Pause();
 	virtual void Continue();
 	virtual void Stop();

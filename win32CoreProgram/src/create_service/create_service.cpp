@@ -109,7 +109,8 @@ int _tmain(int argc, _TCHAR* argv[])
 				SINGLETON_INSTANCE(ServicesManager).InstallService(
 				service_name)) {
                 // start service
-				SINGLETON_INSTANCE(ServicesManager).StartService(service_name);
+                const wchar_t* para[2] = {L"abc", L"edc"};
+				SINGLETON_INSTANCE(ServicesManager).StartService(service_name, 2, para);
 			}
         } 
         else if(wcscmp(argv[1],L"-d")==0) 

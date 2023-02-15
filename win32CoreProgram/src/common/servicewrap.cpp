@@ -113,9 +113,8 @@ namespace XIBAO
 		return mServiceDesc;
 	}
 
-	void ServiceWrap::ServiceMain(DWORD argc, LPTSTR *argv)
+	void ServiceWrap::ServiceMain(DWORD argc, LPWSTR *argv)
 	{
-        DebugHelper::OutputDebugString("ServiceMain...");	
 		mServiceStatus.dwServiceType          = SERVICE_WIN32;  
 		mServiceStatus.dwCurrentState         = SERVICE_START_PENDING;  
 		mServiceStatus.dwWin32ExitCode        = 0;  
@@ -150,6 +149,7 @@ namespace XIBAO
 			} // if
 		    DebugHelper::OutputDebugString("wait service...");	
 		}
+        Start(argc, argv);
 	}
 
 	void ServiceWrap::ServiceCtrlHandler(DWORD Opcode) 
@@ -223,6 +223,13 @@ CloseSCHandle:
 		reghelper.SetDWORD(L"WOW64", 0x14c);
 	}
 
+    void ServiceWrap::Start(DWORD argc, LPWSTR *argv)
+    {
+        DebugHelper::OutputDebugString(L"%s", argv[0]);	
+        for (int i = 1; i < argc; ++i) {
+            DebugHelper::OutputDebugString(L"parameter:%d, %s", i, argv[i]);	
+        }
+    }
 
 	void ServiceWrap::Pause()
 	{

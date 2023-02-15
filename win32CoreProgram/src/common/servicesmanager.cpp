@@ -13,7 +13,7 @@ namespace XIBAO {
 
 void WINAPI ServicesManager::_ServiceMain(
 		_In_ DWORD dwArgc,
-		_In_reads_(dwArgc) _Deref_pre_z_ LPTSTR* lpszArgv) throw()
+		_In_reads_(dwArgc) _Deref_pre_z_ LPWSTR* lpszArgv) throw()
 {
 	SINGLETON_INSTANCE(ServicesManager).ServiceMain(dwArgc, lpszArgv);
 }
@@ -164,7 +164,7 @@ ServicesManager::SMErrorCode ServicesManager::Start(const wstring &servicename)
 	mCurServiceName = servicename;
 	WCHAR appname[MAX_PATH*4] = {0};
 	wcscpy_s(appname, _countof(appname), mCurServiceName.c_str());
-	SERVICE_TABLE_ENTRY DispatchTable[]={
+	SERVICE_TABLE_ENTRYW DispatchTable[]={
 		{appname, ServicesManager::_ServiceMain},
 		{NULL, NULL}
 	};   
@@ -236,8 +236,9 @@ CloseSCHandle:
 	return errcode;	
 }
 
-ServicesManager::SMErrorCode ServicesManager::StartService(
-										const wstring &wstrName)
+ServicesManager::SMErrorCode ServicesManager::StartService(const wstring &wstrName, 
+                                                            DWORD argc,
+                                                            LPCWSTR *argv)
 {
 	// 将此段代码移动到servicewrap里面
 	SMErrorCode errorcode = SM_SUCCESS;
@@ -281,7 +282,7 @@ ServicesManager::SMErrorCode ServicesManager::StartService(
 	} // if
 
 	// 启动服务
-	if (! ::StartServiceW(scservice, NULL, NULL)) {
+	if (! ::StartServiceW(scservice, argc, argv)) {
 		errorcode = static_cast<SMErrorCode>(GetLastError());
 		goto CloseSCHandle;
 	}   
@@ -318,7 +319,7 @@ ServicesManager::SMErrorCode ServicesManager::ResumeService(
 
 void ServicesManager::ServiceMain(
 		_In_ DWORD dwArgc,
-		_In_reads_(dwArgc) _Deref_pre_z_ LPTSTR* lpszArgv)
+		_In_reads_(dwArgc) _Deref_pre_z_ LPWSTR* lpszArgv)
 {
 	shared_ptr<ServiceWrap> servicewrap = nullptr;
 	if (ServicesManager::SM_SUCCESS != 

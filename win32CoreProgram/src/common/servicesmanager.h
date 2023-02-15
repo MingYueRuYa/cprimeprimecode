@@ -49,7 +49,7 @@ public:
 public:
 	static void WINAPI _ServiceMain(
 			_In_ DWORD dwArgc,
-			_In_reads_(dwArgc) _Deref_pre_z_ LPTSTR* lpszArgv) throw();
+			_In_reads_(dwArgc) _Deref_pre_z_ LPWSTR* lpszArgv) throw();
 	static void WINAPI _ServiceCtrlHandler(DWORD Opcode);
 	// 移除服务
 	static SMErrorCode RemoveService(const wstring &serviceName);
@@ -71,7 +71,7 @@ public:
 	// 创建服务
 	SMErrorCode InstallService(const wstring &wstrName);
 	// 启动服务
-	SMErrorCode StartService(const wstring &wstrName);
+	SMErrorCode StartService(const wstring &wstrName, DWORD argc,LPCWSTR *argv);
 	// 中断服务
 	SMErrorCode PauseService(const wstring &serviceName);
 	// 恢复服务
@@ -80,7 +80,7 @@ public:
 	// service主函数
 	void ServiceMain(
 			_In_ DWORD dwArgc,
-			_In_reads_(dwArgc) _Deref_pre_z_ LPTSTR* lpszArgv);
+			_In_reads_(dwArgc) _Deref_pre_z_ LPWSTR* lpszArgv);
 	void ServiceCtrlHandler(DWORD Opcode);
 	SMErrorCode AddServiceWrap(shared_ptr<ServiceWrap> serviceWrap);
 	SMErrorCode DeleteServiceWrap(shared_ptr<ServiceWrap> serviceWrap);
