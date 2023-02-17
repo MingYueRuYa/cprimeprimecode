@@ -13,11 +13,9 @@
 using std::pair;
 using std::unique_ptr;
 
-#define GUARD_SERVICE(pointer)                                  \
-  std::unique_ptr<void, void (*)(void*)> p##pointer(            \
-      pointer, [](void* handle) {                               \
-        ::CloseServiceHandle((SC_HANDLE)handle);                \
-      });
+#define GUARD_SERVICE(pointer)                       \
+  std::unique_ptr<void, void (*)(void*)> p##pointer( \
+      pointer, [](void* handle) { ::CloseServiceHandle((SC_HANDLE)handle); });
 
 namespace XIBAO {
 
@@ -63,34 +61,33 @@ ServicesManager::SMErrorCode ServicesManager::RemoveService(
 ServicesManager::SMErrorCode ServicesManager::HaltService(
     const wstring& serviceName) {
   SMErrorCode errorcode = SM_SUCCESS;
-  SC_HANDLE scmanager = 0, scservice = 0;
+  SC_HANDLE scmanager = 0;
   scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
+  GUARD_SERVICE(scmanager);
   if (0 == scmanager) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
-  scservice =
-      ::OpenServiceW(scmanager, serviceName.c_str(), SERVICE_ALL_ACCESS);
+  SC_HANDLE scservice = ::OpenServiceW((SC_HANDLE)pscmanager.get(),
+                                       serviceName.c_str(), SERVICE_ALL_ACCESS);
+  GUARD_SERVICE(scservice);
   if (0 == scservice) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
   SERVICE_STATUS status;
   ::ZeroMemory(&status, sizeof(status));
-  if (!::QueryServiceStatus(scservice, &status)) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+  if (!::QueryServiceStatus((SC_HANDLE)pscservice.get(), &status)) {
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
   if (SERVICE_RUNNING == status.dwCurrentState) {
-    if (!::ControlService(scservice, SERVICE_CONTROL_STOP, &status)) {
-      errorcode = static_cast<SMErrorCode>(GetLastError());
-      goto CloseSCHandle;
+    if (!::ControlService((SC_HANDLE)pscservice.get(), SERVICE_CONTROL_STOP,
+                          &status)) {
+      return static_cast<SMErrorCode>(GetLastError());
     }
 
-    while (::QueryServiceStatus(scservice, &status)) {
+    while (::QueryServiceStatus((SC_HANDLE)pscservice.get(), &status)) {
       ::Sleep(status.dwWaitHint);
       if (SERVICE_STOPPED == status.dwCurrentState) {
         break;
@@ -98,13 +95,6 @@ ServicesManager::SMErrorCode ServicesManager::HaltService(
     }    // while
   }
 
-  ::CloseServiceHandle(scmanager);
-  ::CloseServiceHandle(scservice);
-  return errorcode;
-
-CloseSCHandle:
-  ::CloseServiceHandle(scmanager);
-  ::CloseServiceHandle(scservice);
   return errorcode;
 }
 
@@ -112,35 +102,26 @@ ServicesManager::SMErrorCode ServicesManager::QueryServiceStatus(
     const wstring& serviceName,
     DWORD& servicestatus) {
   SMErrorCode errorcode = SM_SUCCESS;
-  SC_HANDLE scmanager = 0, scservice = 0;
+  SC_HANDLE scmanager = 0;
   scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
+  GUARD_SERVICE(scmanager);
   if (0 == scmanager) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
-  scservice =
-      ::OpenServiceW(scmanager, serviceName.c_str(), SERVICE_ALL_ACCESS);
+  SC_HANDLE scservice = ::OpenServiceW((SC_HANDLE)pscmanager.get(),
+                                       serviceName.c_str(), SERVICE_ALL_ACCESS);
+  GUARD_SERVICE(scservice);
   if (0 == scservice) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
   SERVICE_STATUS status;
   ::ZeroMemory(&status, sizeof(status));
-  if (!::QueryServiceStatus(scservice, &status)) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+  if (!::QueryServiceStatus((SC_HANDLE)pscservice.get(), &status)) {
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
-  ::CloseServiceHandle(scmanager);
-  ::CloseServiceHandle(scservice);
-  servicestatus = status.dwCurrentState;
-  return errorcode;
-
-CloseSCHandle:
-  ::CloseServiceHandle(scmanager);
-  ::CloseServiceHandle(scservice);
   return errorcode;
 }
 
@@ -183,21 +164,22 @@ ServicesManager::SMErrorCode ServicesManager::InstallService(
   // 注册表写入信息
   serwrap->SetRegInfo();
 
-  SC_HANDLE scmanager = 0, scservice = 0;
+  SC_HANDLE scmanager = 0;
   scmanager = OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+  GUARD_SERVICE(scmanager);
   if (NULL == scmanager) {
-    errcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
-  scservice = ::CreateServiceW(
-      scmanager, wstrServiceName.c_str(), wstrServiceName.c_str(),
-      SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS, SERVICE_AUTO_START,
-      SERVICE_ERROR_NORMAL, strappname, NULL, NULL, NULL, NULL, NULL);
+  SC_HANDLE scservice = ::CreateServiceW(
+      (SC_HANDLE)pscmanager.get(), wstrServiceName.c_str(),
+      wstrServiceName.c_str(), SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
+      SERVICE_AUTO_START, SERVICE_ERROR_NORMAL, strappname, NULL, NULL, NULL,
+      NULL, NULL);
 
+  GUARD_SERVICE(scservice);
   if (NULL == scservice) {
-    errcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
   WCHAR chDes[MAX_PATH * 4] = {0};
@@ -205,19 +187,11 @@ ServicesManager::SMErrorCode ServicesManager::InstallService(
 
   SERVICE_DESCRIPTION servicedesc;
   servicedesc.lpDescription = chDes;
-  if (0 == ChangeServiceConfig2W(scservice, SERVICE_CONFIG_DESCRIPTION,
-                                 &servicedesc)) {
-    errcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+  if (0 == ChangeServiceConfig2W((SC_HANDLE)pscservice.get(),
+                                 SERVICE_CONFIG_DESCRIPTION, &servicedesc)) {
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
-  CloseServiceHandle(scmanager);
-  CloseServiceHandle(scservice);
-  return errcode;
-
-CloseSCHandle:
-  CloseServiceHandle(scmanager);
-  CloseServiceHandle(scservice);
   return errcode;
 }
 
@@ -227,35 +201,35 @@ ServicesManager::SMErrorCode ServicesManager::StartService(
     LPCWSTR* argv) {
   // 将此段代码移动到servicewrap里面
   SMErrorCode errorcode = SM_SUCCESS;
-  SC_HANDLE scmanager = 0, scservice = 0;
+  SC_HANDLE scmanager = 0;
   scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
+  GUARD_SERVICE(scmanager);
   if (0 == scmanager) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
-  scservice = ::OpenServiceW(scmanager, wstrName.c_str(), SERVICE_ALL_ACCESS);
+  SC_HANDLE scservice = ::OpenServiceW((SC_HANDLE)pscmanager.get(),
+                                       wstrName.c_str(), SERVICE_ALL_ACCESS);
+  GUARD_SERVICE(scservice);
   if (0 == scservice) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
   SERVICE_STATUS status;
   ::ZeroMemory(&status, sizeof(status));
-  if (!::QueryServiceStatus(scservice, &status)) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+  if (!::QueryServiceStatus((SC_HANDLE)pscservice.get(), &status)) {
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
   // 如果正在运行状态
   if (status.dwCurrentState == SERVICE_RUNNING) {
     // 先停止，再启动
-    if (!::ControlService(scservice, SERVICE_CONTROL_STOP, &status)) {
-      errorcode = static_cast<SMErrorCode>(GetLastError());
-      goto CloseSCHandle;
+    if (!::ControlService((SC_HANDLE)pscservice.get(), SERVICE_CONTROL_STOP,
+                          &status)) {
+      return static_cast<SMErrorCode>(GetLastError());
     }
 
-    while (::QueryServiceStatus(scservice, &status)) {
+    while (::QueryServiceStatus((SC_HANDLE)pscservice.get(), &status)) {
       ::Sleep(status.dwWaitHint);
 
       if (SERVICE_STOPPED == status.dwCurrentState) {
@@ -265,26 +239,18 @@ ServicesManager::SMErrorCode ServicesManager::StartService(
   }      // if
 
   // 启动服务
-  if (!::StartServiceW(scservice, argc, argv)) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+  if (!::StartServiceW((SC_HANDLE)pscservice.get(), argc, argv)) {
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
   // 等待服务启动
-  while (::QueryServiceStatus(scservice, &status)) {
+  while (::QueryServiceStatus((SC_HANDLE)pscservice.get(), &status)) {
     ::Sleep(status.dwWaitHint);
     if (SERVICE_RUNNING == status.dwCurrentState) {
       break;
     }  // if
   }    // while
 
-  ::CloseServiceHandle(scmanager);
-  ::CloseServiceHandle(scservice);
-  return errorcode;
-
-CloseSCHandle:
-  ::CloseServiceHandle(scmanager);
-  ::CloseServiceHandle(scservice);
   return errorcode;
 }
 
