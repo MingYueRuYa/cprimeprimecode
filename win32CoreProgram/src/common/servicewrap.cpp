@@ -6,7 +6,6 @@
 ****************************************************************************/
 
 #include "servicewrap.h"
-
 #include "commonpack.h"
 
 using XIBAO::DebugHelper;

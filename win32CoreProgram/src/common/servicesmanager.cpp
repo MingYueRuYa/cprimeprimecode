@@ -5,17 +5,23 @@
 **
 ****************************************************************************/
 
+#include "registerhelper.h"
 #include "servicesmanager.h"
 
-#include "registerhelper.h"
+#include <memory>
 
 using std::pair;
+using std::unique_ptr;
+
+#define GUARD_SERVICE(p)                       \
+  std::unique_ptr<void, void (*)(void*)> p##p( \
+      p, [](void* handle) { ::CloseServiceHandle((SC_HANDLE)handle); });
 
 namespace XIBAO {
 
 void WINAPI ServicesManager::_ServiceMain(
     _In_ DWORD dwArgc,
-    _In_reads_(dwArgc) _Deref_pre_z_ LPWSTR *lpszArgv) throw() {
+    _In_reads_(dwArgc) _Deref_pre_z_ LPWSTR* lpszArgv) throw() {
   SINGLETON_INSTANCE(ServicesManager).ServiceMain(dwArgc, lpszArgv);
 }
 
@@ -24,7 +30,7 @@ void WINAPI ServicesManager::_ServiceCtrlHandler(DWORD Opcode) {
 }
 
 ServicesManager::SMErrorCode ServicesManager::RemoveService(
-    const wstring &serviceName) {
+    const wstring& serviceName) {
   if (SM_SUCCESS != HaltService(serviceName)) {
     return SM_FAILED;
   }
@@ -33,6 +39,7 @@ ServicesManager::SMErrorCode ServicesManager::RemoveService(
   SC_HANDLE scmanager = 0, scservice = 0;
   shared_ptr<ServiceWrap> serwrap = nullptr;
   scmanager = ::OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+  GUARD_SERVICE(scmanager);
   if (0 == scmanager) {
     errorcode = static_cast<SMErrorCode>(GetLastError());
     goto CloseSCHandle;
@@ -64,7 +71,7 @@ CloseSCHandle:
 }
 
 ServicesManager::SMErrorCode ServicesManager::HaltService(
-    const wstring &serviceName) {
+    const wstring& serviceName) {
   SMErrorCode errorcode = SM_SUCCESS;
   SC_HANDLE scmanager = 0, scservice = 0;
   scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
@@ -112,7 +119,8 @@ CloseSCHandle:
 }
 
 ServicesManager::SMErrorCode ServicesManager::QueryServiceStatus(
-    const wstring &serviceName, DWORD &servicestatus) {
+    const wstring& serviceName,
+    DWORD& servicestatus) {
   SMErrorCode errorcode = SM_SUCCESS;
   SC_HANDLE scmanager = 0, scservice = 0;
   scmanager = ::OpenSCManagerW(NULL, NULL, GENERIC_EXECUTE);
@@ -146,7 +154,7 @@ CloseSCHandle:
   return errorcode;
 }
 
-DWORD ServicesManager::DeleteServiceReg(const wstring &wstrServiceName) {
+DWORD ServicesManager::DeleteServiceReg(const wstring& wstrServiceName) {
   wstring subkey =
       wstring(L"SYSTEM\\CurrentControlSet\\Services\\") + wstrServiceName;
   RegisterHelper reghelper(HKEY_LOCAL_MACHINE, subkey, KEY_ALL_ACCESS);
@@ -156,7 +164,7 @@ DWORD ServicesManager::DeleteServiceReg(const wstring &wstrServiceName) {
 ServicesManager::~ServicesManager() {}
 
 ServicesManager::SMErrorCode ServicesManager::Start(
-    const wstring &servicename) {
+    const wstring& servicename) {
   mCurServiceName = servicename;
   WCHAR appname[MAX_PATH * 4] = {0};
   wcscpy_s(appname, _countof(appname), mCurServiceName.c_str());
@@ -167,7 +175,7 @@ ServicesManager::SMErrorCode ServicesManager::Start(
 }
 
 ServicesManager::SMErrorCode ServicesManager::InstallService(
-    const wstring &wstrServiceName) {
+    const wstring& wstrServiceName) {
   SMErrorCode errcode = _FindServiceWrap(wstrServiceName);
   if (SM_SERVICEWRAP_EXIST != errcode) {
     return errcode;
@@ -224,7 +232,9 @@ CloseSCHandle:
 }
 
 ServicesManager::SMErrorCode ServicesManager::StartService(
-    const wstring &wstrName, DWORD argc, LPCWSTR *argv) {
+    const wstring& wstrName,
+    DWORD argc,
+    LPCWSTR* argv) {
   // 将此段代码移动到servicewrap里面
   SMErrorCode errorcode = SM_SUCCESS;
   SC_HANDLE scmanager = 0, scservice = 0;
@@ -289,18 +299,18 @@ CloseSCHandle:
 }
 
 ServicesManager::SMErrorCode ServicesManager::PauseService(
-    const wstring &serviceName) {
+    const wstring& serviceName) {
   return SM_FAILED;
 }
 
 ServicesManager::SMErrorCode ServicesManager::ResumeService(
-    const wstring &serviceName) {
+    const wstring& serviceName) {
   return SM_FAILED;
 }
 
 void ServicesManager::ServiceMain(_In_ DWORD dwArgc,
                                   _In_reads_(dwArgc)
-                                      _Deref_pre_z_ LPWSTR *lpszArgv) {
+                                      _Deref_pre_z_ LPWSTR* lpszArgv) {
   shared_ptr<ServiceWrap> servicewrap = nullptr;
   if (ServicesManager::SM_SUCCESS !=
       SINGLETON_INSTANCE(ServicesManager)
@@ -346,7 +356,7 @@ ServicesManager::SMErrorCode ServicesManager::DeleteServiceWrap(
 }
 
 ServicesManager::SMErrorCode ServicesManager::DeleteService(
-    const wstring &wstrName) {
+    const wstring& wstrName) {
   SMErrorCode errorcode = HaltService(wstrName);
   if (SM_SUCCESS != errorcode) {
     return errorcode;
@@ -372,7 +382,8 @@ ServicesManager::SMErrorCode ServicesManager::DeleteService(
 }
 
 ServicesManager::SMErrorCode ServicesManager::GetServiceWrap(
-    const wstring &ServiceName, shared_ptr<ServiceWrap> &serviceWrap) {
+    const wstring& ServiceName,
+    shared_ptr<ServiceWrap>& serviceWrap) {
   if (mServiceMap.empty()) {
     return SM_SERVICEMAP_EMPTY;
   }
@@ -389,7 +400,7 @@ ServicesManager::SMErrorCode ServicesManager::GetServiceWrap(
 }
 
 ServicesManager::SMErrorCode ServicesManager::_FindServiceWrap(
-    const wstring &wstrServiceName) {
+    const wstring& wstrServiceName) {
   map<wstring, shared_ptr<ServiceWrap>>::iterator ifind =
       mServiceMap.find(wstrServiceName);
   return ifind == mServiceMap.end() ? SM_SERVICEWRAP_NOT_EXIST
