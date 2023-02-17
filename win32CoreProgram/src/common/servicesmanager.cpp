@@ -13,9 +13,11 @@
 using std::pair;
 using std::unique_ptr;
 
-#define GUARD_SERVICE(p)                       \
-  std::unique_ptr<void, void (*)(void*)> p##p( \
-      p, [](void* handle) { ::CloseServiceHandle((SC_HANDLE)handle); });
+#define GUARD_SERVICE(pointer)                                  \
+  std::unique_ptr<void, void (*)(void*)> p##pointer(            \
+      pointer, [](void* handle) {                               \
+        ::CloseServiceHandle((SC_HANDLE)handle);                \
+      });
 
 namespace XIBAO {
 
@@ -36,37 +38,25 @@ ServicesManager::SMErrorCode ServicesManager::RemoveService(
   }
 
   SMErrorCode errorcode = SM_SUCCESS;
-  SC_HANDLE scmanager = 0, scservice = 0;
-  shared_ptr<ServiceWrap> serwrap = nullptr;
+  SC_HANDLE scmanager = 0;
   scmanager = ::OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
   GUARD_SERVICE(scmanager);
   if (0 == scmanager) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
-  scservice =
-      ::OpenServiceW(scmanager, serviceName.c_str(), SERVICE_ALL_ACCESS);
-
+  SC_HANDLE scservice = ::OpenServiceW((SC_HANDLE)pscmanager.get(),
+                                       serviceName.c_str(), SERVICE_ALL_ACCESS);
+  GUARD_SERVICE(scservice);
   if (0 == scservice) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+    return static_cast<SMErrorCode>(GetLastError());
   }
 
-  if (0 == ::DeleteService(scservice)) {
-    errorcode = static_cast<SMErrorCode>(GetLastError());
-    goto CloseSCHandle;
+  if (0 == ::DeleteService((SC_HANDLE)pscservice.get())) {
+    return static_cast<SMErrorCode>(GetLastError());
   }
-
-  ::CloseServiceHandle(scmanager);
-  ::CloseServiceHandle(scservice);
 
   DeleteServiceReg(serviceName);
-  return errorcode;
-
-CloseSCHandle:
-  ::CloseServiceHandle(scmanager);
-  ::CloseServiceHandle(scservice);
   return errorcode;
 }
 

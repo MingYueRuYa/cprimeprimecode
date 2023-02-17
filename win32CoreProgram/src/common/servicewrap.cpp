@@ -12,8 +12,10 @@ using XIBAO::DebugHelper;
 using XIBAO::ServicesManager;
 
 namespace XIBAO {
-ServiceWrap::ServiceWrap(const wstring &wstrName, const wstring &wstrAppAbsPath,
-                         const wstring &wstrDesc, bool running)
+ServiceWrap::ServiceWrap(const wstring& wstrName,
+                         const wstring& wstrAppAbsPath,
+                         const wstring& wstrDesc,
+                         bool running)
     : mRunning(running),
       mAppAbsPath(wstrAppAbsPath),
       mServiceName(wstrName),
@@ -22,7 +24,7 @@ ServiceWrap::ServiceWrap(const wstring &wstrName, const wstring &wstrAppAbsPath,
   memset(&mServiceStatus, 0, sizeof(SERVICE_STATUS));
 }
 
-ServiceWrap &ServiceWrap::operator=(const ServiceWrap &servicewrap) {
+ServiceWrap& ServiceWrap::operator=(const ServiceWrap& servicewrap) {
   if (this == &servicewrap) {
     return *this;
   }
@@ -31,7 +33,7 @@ ServiceWrap &ServiceWrap::operator=(const ServiceWrap &servicewrap) {
   return *this;
 }
 
-bool ServiceWrap::operator==(const ServiceWrap &servicewrap) {
+bool ServiceWrap::operator==(const ServiceWrap& servicewrap) {
   if (this == &servicewrap) {
     return true;
   }
@@ -39,13 +41,13 @@ bool ServiceWrap::operator==(const ServiceWrap &servicewrap) {
   return 0 == mServiceName.compare(servicewrap.mServiceName) ? true : false;
 }
 
-ServiceWrap::ServiceWrap(const ServiceWrap &servicewrap) {
+ServiceWrap::ServiceWrap(const ServiceWrap& servicewrap) {
   _CopyValue(servicewrap);
 }
 
 ServiceWrap::~ServiceWrap() {}
 
-void ServiceWrap::SetServiceStatusHandle(const SERVICE_STATUS_HANDLE &handle) {
+void ServiceWrap::SetServiceStatusHandle(const SERVICE_STATUS_HANDLE& handle) {
   mServiceStatusHandle = handle;
 }
 
@@ -53,29 +55,39 @@ SERVICE_STATUS_HANDLE ServiceWrap::GetServiceStatusHandle() const {
   return mServiceStatusHandle;
 }
 
-void ServiceWrap::SetServiceName(const wstring &wstrServiceName) {
+void ServiceWrap::SetServiceName(const wstring& wstrServiceName) {
   mServiceName = wstrServiceName;
 }
 
-wstring ServiceWrap::GetServiceName() const { return mServiceName; }
+wstring ServiceWrap::GetServiceName() const {
+  return mServiceName;
+}
 
-void ServiceWrap::SetAppAbsPath(const wstring &wstrAppAbsPath) {
+void ServiceWrap::SetAppAbsPath(const wstring& wstrAppAbsPath) {
   mAppAbsPath = wstrAppAbsPath;
 }
 
-wstring ServiceWrap::GetAppAbsPath() const { return mAppAbsPath; }
+wstring ServiceWrap::GetAppAbsPath() const {
+  return mAppAbsPath;
+}
 
-void ServiceWrap::SetStop(bool stop) { mRunning = stop; }
+void ServiceWrap::SetStop(bool stop) {
+  mRunning = stop;
+}
 
-bool ServiceWrap::GetStop() const { return mRunning; }
+bool ServiceWrap::GetStop() const {
+  return mRunning;
+}
 
-void ServiceWrap::SetServiceDesc(const wstring &serviceDesc) {
+void ServiceWrap::SetServiceDesc(const wstring& serviceDesc) {
   mServiceDesc = serviceDesc;
 }
 
-wstring ServiceWrap::GetServiceDesc() { return mServiceDesc; }
+wstring ServiceWrap::GetServiceDesc() {
+  return mServiceDesc;
+}
 
-void ServiceWrap::ServiceMain(DWORD argc, LPWSTR *argv) {
+void ServiceWrap::ServiceMain(DWORD argc, LPWSTR* argv) {
   mServiceStatus.dwServiceType = SERVICE_WIN32;
   mServiceStatus.dwCurrentState = SERVICE_START_PENDING;
   mServiceStatus.dwWin32ExitCode = 0;
@@ -181,7 +193,7 @@ void ServiceWrap::SetRegInfo() {
   reghelper.SetDWORD(L"WOW64", 0x14c);
 }
 
-void ServiceWrap::Start(DWORD argc, LPWSTR *argv) {
+void ServiceWrap::Start(DWORD argc, LPWSTR* argv) {
   DebugHelper::OutputDebugString(L"%s", argv[0]);
   for (int i = 1; i < argc; ++i) {
     DebugHelper::OutputDebugString(L"parameter:%d, %s", i, argv[i]);
@@ -225,7 +237,9 @@ void ServiceWrap::Stop() {
   }
 }
 
-void ServiceWrap::Shutdown() { Stop(); }
+void ServiceWrap::Shutdown() {
+  Stop();
+}
 
 void ServiceWrap::Interrogate() {}
 
@@ -240,7 +254,7 @@ shared_ptr<ServiceWrap> ServiceWrap::clone() {
   return enable_shared_from_this<ServiceWrap>::shared_from_this();
 }
 
-void ServiceWrap::_CopyValue(const ServiceWrap &servicewrap) {
+void ServiceWrap::_CopyValue(const ServiceWrap& servicewrap) {
   this->mRunning = servicewrap.mRunning;
   this->mAppAbsPath = servicewrap.mAppAbsPath;
   this->mServiceName = servicewrap.mServiceName;
