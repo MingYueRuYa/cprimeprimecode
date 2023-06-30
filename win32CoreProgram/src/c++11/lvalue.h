@@ -146,7 +146,7 @@ void TestForwardFun()
 	TestForward(std::forward<int>(x));
 }
 
-// 万能的函数包装器，并不能实现函数的参数不同问题
+// 万能的函数包装器，并能实现函数的参数不同问题
 template <class Function, class... Args>
 inline auto FuncWrapper(Function && f, Args && ... args) -> decltype(f(std::forward<Args>(args)...))
 {
@@ -200,6 +200,12 @@ struct Complicated
 	Complicated(const Complicated &other)
 		: year(other.year), country(other.country), name(other.name)
 	{ cout << "is moved" << endl; }
+
+	Complicated( Complicated &&other)
+		: year(other.year), country(other.country), name(other.name)
+	{
+		cout << "Complicated &&other" << endl;
+	}
 };
 
 void TestEmplaceFunc()
