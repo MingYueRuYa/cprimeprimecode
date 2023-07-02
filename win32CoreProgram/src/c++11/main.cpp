@@ -8,6 +8,7 @@
 #include <iostream>
 #include "thread.cpp"
 #include "lvalue.h"
+#include "stl_function.h"
 
 #include <list>
 
@@ -15,7 +16,7 @@ using std::cout;
 using std::endl;
 using std::list;
 
-#define TEST_RIGHT_REFRENCE
+// #define TEST_RIGHT_REFRENCE
 
 int main(void)
 {
@@ -73,6 +74,10 @@ int main(void)
 	// is moved
 
 #endif // TEST_RIGHT_REFRENCE
+
+    stl_function::test_function1();
+    stl_function::test_function2();
+    stl_function::test_my_func();
 
 	system("pause");
 	return 0;

@@ -26,5 +26,8 @@
     <ClInclude Include="lvalue.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="stl_function.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
