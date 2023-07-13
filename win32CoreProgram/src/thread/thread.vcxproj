@@ -90,6 +90,8 @@
     <ClInclude Include="SyncQueue.hpp" />
     <ClInclude Include="thread_get_retvalue.h" />
     <ClInclude Include="thread_mutex.h" />
+    <ClInclude Include="thread_pool.hpp" />
+    <ClInclude Include="thread_semphore.hpp" />
     <ClInclude Include="thread_start.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

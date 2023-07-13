@@ -35,5 +35,11 @@
     <ClInclude Include="thread_get_retvalue.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="thread_semphore.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="thread_pool.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,6 +10,8 @@
 #include "SyncQueue.hpp"
 #include "counter.hpp"
 #include "thread_get_retvalue.h"
+#include "thread_semphore.hpp"
+#include "thread_pool.hpp"
 
 #include <Windows.h>
 
@@ -46,18 +48,25 @@ int main(int argc, char **argv)
 	system("pause");
     */
 
-    mutex test_mutex;
+    // mutex test_mutex;
 
-    unique_lock<mutex> lock(test_mutex);
+    // unique_lock<mutex> lock(test_mutex);
 
-    bool owns = lock.owns_lock();
+    // bool owns = lock.owns_lock();
 
-    lock.unlock();
+    // lock.unlock();
 
-    owns = lock.owns_lock();
-    if (owns) {
-        lock.unlock();
-    }
+    // owns = lock.owns_lock();
+    // if (owns) {
+    //     lock.unlock();
+    // }
+
+
+    // Thread::test_thread_seamphore();
+    
+    ThreadPool::test_any();
+
+    getchar();
 
 	return 0;
 }
