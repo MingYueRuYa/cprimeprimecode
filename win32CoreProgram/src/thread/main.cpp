@@ -64,7 +64,9 @@ int main(int argc, char **argv)
 
     // Thread::test_thread_seamphore();
     
-    ThreadPool::test_any();
+    // ThreadPool::test_any();
+
+    ThreadPool::test_thread_pool();
 
     getchar();
 

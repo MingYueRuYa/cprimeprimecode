@@ -16,6 +16,7 @@
 #include <vector>
 #include <list>
 #include <memory>
+#include <functional>
 
 using std::string;
 using std::cout;
