@@ -9,6 +9,9 @@
 // 2、线程间如何通信
 // 3、万能的函数如何封装
 
+#ifndef thread_pool_hpp
+#define thread_pool_hpp
+
 #include <mutex>
 #include <functional>
 #include <queue>
@@ -387,3 +390,5 @@ void test_thread_pool()
 
 
 }  // namespace ThreadPool
+
+#endif // thread_pool_hpp
