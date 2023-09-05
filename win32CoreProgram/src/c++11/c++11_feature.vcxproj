@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lvalue.h" />
+    <ClInclude Include="message_bus.hpp" />
     <ClInclude Include="stl_function.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
