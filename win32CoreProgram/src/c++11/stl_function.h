@@ -38,7 +38,7 @@ namespace stl_function {
         //在这里我们把元素70按序插入
         // auto it1 = find_if(vec.begin(), vec.end(), bind1st(greater<int>(), 70));
         // 自定义find_if函数
-        auto it1 = my_find_if(vec.begin(), vec.end(), bind1st(greater<int>(), 70));
+        auto it1 = my_find_if(vec.begin(), vec.end(), std::bind(greater<int>(), 70, std::placeholders::_1));
 
         if (it1 != vec.end())
         {

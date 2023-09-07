@@ -21,7 +21,8 @@ class MessageBus : public NonCopyable {
   // ×¢²áÏûÏ¢
   template <typename F>
   void Attach(F&& f, const string& strTopic = "") {
-    auto func = to_function(std::forward<F>(f)) Add(strTopic, std::move(func))
+    auto func = to_function(std::forward<F>(f));
+    Add(strTopic, std::move(func));
   }
 
   template <typename R>
@@ -59,7 +60,7 @@ class MessageBus : public NonCopyable {
  private:
   template <typename F>
   void Add(const string& strTopic, F&& f) {
-    string strMsgType = strTopic + typeid(function_type).name();
+    string strMsgType = strTopic + typeid(f).name();
     m_map.emplace(std::move(strMsgType), std::forward<F>(f));
   }
 

@@ -9,6 +9,7 @@
 #include "thread.cpp"
 #include "lvalue.h"
 #include "stl_function.h"
+#include "message_bus.hpp"
 
 #include <list>
 
@@ -17,6 +18,39 @@ using std::endl;
 using std::list;
 
 // #define TEST_RIGHT_REFRENCE
+
+void test_msg_bus()
+{
+    MessageBus msgbus;
+    msgbus.Attach([](int a) { std::cout << "no reference" << a << std::endl; });
+    msgbus.Attach([](int& a) { std::cout << "left reference" << a << std::endl; });
+    msgbus.Attach([](int&& a) { std::cout << "right reference" << a << std::endl; });
+    msgbus.Attach([](const int& a) { std::cout << "const left reference" << a << std::endl; });
+    msgbus.Attach([](int a) { std::cout << "no reference has reture value and key" << a << std::endl; return a; }, "a");
+
+    int i = 2;
+
+    msgbus.SendReq<void, int>(2);
+    msgbus.SendReq<int, int>(2, "a");
+    msgbus.SendReq<void, int &>(i);
+    msgbus.SendReq<void, const int &>(2);
+    msgbus.SendReq<void, int &&>(2);
+
+
+    msgbus.Remove<void, int>();
+    msgbus.Remove<int, int>();
+    msgbus.Remove<void, int &>();
+    msgbus.Remove<void, const int&>();
+    msgbus.Remove<void, int&&>();
+
+    msgbus.SendReq<void, int>(2);
+    msgbus.SendReq<int, int>(2, "a");
+    msgbus.SendReq<void, int &>(i);
+    msgbus.SendReq<void, const int &>(2);
+    msgbus.SendReq<void, int &&>(2);
+}
+
+
 
 int main(void)
 {
@@ -78,6 +112,9 @@ int main(void)
     stl_function::test_function1();
     stl_function::test_function2();
     stl_function::test_my_func();
+
+
+    test_msg_bus();
 
 	system("pause");
 	return 0;

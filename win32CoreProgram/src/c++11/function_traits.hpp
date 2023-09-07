@@ -40,7 +40,7 @@ struct function_traits<std::function<Ret(Args...)>> : function_traits<Ret(Args..
 // member function
 #define FUNCTION_TRAITS(...)\
 template <typename ReturnType, typename ClassType, typename... Args>\
-struct function_traits<ReturType(ClassType::*)(Args...) __VA_ARGS>: function_traits<ReturnType(Args...)>{};\
+struct function_traits<ReturnType(ClassType::*)(Args...) __VA_ARGS__>: function_traits<ReturnType(Args...)>{};
 
 FUNCTION_TRAITS()
 FUNCTION_TRAITS(const)
@@ -55,13 +55,13 @@ struct function_traits : function_traits<decltype(&Callable::operator())>{};
 template<typename Function>
 typename function_traits<Function>::stl_function_type to_function(const Function& lambda)
 {
-	return static_cast<typename function_traits<Fucntion>::stl_function_tpe>(lambda);
+	return static_cast<typename function_traits<Function>::stl_function_type>(lambda);
 }
 
 template<typename Function>
 typename function_traits<Function>::stl_function_type to_function(const Function&& lambda)
 {
-	return static_cast<typename function_traits<Fucntion>::stl_function_tpe>(lambda);
+	return static_cast<typename function_traits<Function>::stl_function_type>(lambda);
 }
 
 template<typename Function>
