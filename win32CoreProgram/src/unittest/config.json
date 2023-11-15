@@ -1,0 +1,8 @@
+{
+	"app_name":"svn_update_code",
+	"app_path_d":"",
+	"app_desc":"KK1 自动更新代码任务",
+	"app_param_d":"",		
+	"app_start_dir_d": "",
+	"start_time":[{"hour":13, "min":30}, {"hour":23, "min":30}]
+}

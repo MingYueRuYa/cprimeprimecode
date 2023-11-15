@@ -29,6 +29,9 @@ namespace XIBAO
 */
 class TaskScheduler{
 public:
+	static bool DeleteTaskScheduler(const wstring &taskName);
+
+public:
 	explicit TaskScheduler();
 	TaskScheduler(const wstring &appPath, const wstring &taskName,
 					const wstring &taskDescription, const wstring &workDir,
@@ -39,8 +42,8 @@ public:
 	TaskScheduler(TaskScheduler &&rhs);
 	~TaskScheduler();
 
-	bool CreateTaskSheduler();
-	bool DeleteTaskSheduler();
+	bool CreateTaskScheduler();
+	bool DeleteTaskScheduler();
 
 	void SetAppPath(const wstring &appPath);
 	wstring GetAppPath();

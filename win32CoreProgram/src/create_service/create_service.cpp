@@ -84,7 +84,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
   //	task.SetTaskName(L"app");
   //	task.SetAppPath(L"C:\\app.exe");
   //	task.SetTimeVec({pair<int, int>(18,30)});
-  //	task.CreateTaskSheduler();
+  //	task.CreateTaskScheduler();
   //
   //	return 0;
 

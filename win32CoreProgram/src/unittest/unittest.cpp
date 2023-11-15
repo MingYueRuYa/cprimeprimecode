@@ -77,13 +77,13 @@ int _tmain_test_service(int argc, _TCHAR* argv[])
 	XIBAO::TaskScheduler task(L"C:\\Create_Service.exe", 
 								L"appdemo", L"", L"", L"",
 								{pair<int, int>(18,30)});
-	if (task.CreateTaskSheduler()) {
+	if (task.CreateTaskScheduler()) {
 		cout << "create task successfule..." << endl;
 	} else {
 		cout << "create task failed..." << endl;
 	}
 
-	if (task.DeleteTaskSheduler()) {
+	if (task.DeleteTaskScheduler()) {
 		cout << "delete task successfule..." << endl;
 	} else {
 		cout << "delete task failed..." << endl;
@@ -203,7 +203,7 @@ using std::set;
 using std::string;
 
 // 测试STL的在关联容器中指针类型的排序
-int _tmain(int argc, _TCHAR* argv[])
+int _tmain_stl(int argc, _TCHAR* argv[])
 {
     set<string *, std::LessDerefrence<string>> pstr_set;   
     pstr_set.insert(new string("b"));
@@ -217,4 +217,24 @@ int _tmain(int argc, _TCHAR* argv[])
     std::transform(pstr_set.begin(), pstr_set.end(),std::ostream_iterator<string>(cout, "\n"), std::Derefrence()); 
 
 	return 0;
+}
+
+#include "task_scheduler.h"
+
+int main(int argc, char* argv[])
+{
+	SetConsoleOutputCP(CP_UTF8);
+	if (!ReadConfig())
+	{
+		system("pause");
+	}
+	if (argc >= 2)
+	{
+		DeleteTaskScheduler(argc, argv);
+	}
+	else
+	{
+		CreateTaskScheduler();
+	}
+	system("pause");
 }

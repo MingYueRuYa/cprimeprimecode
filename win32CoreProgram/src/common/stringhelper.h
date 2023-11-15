@@ -32,6 +32,9 @@ public:
 	static string FormatString(LPCSTR format, ...);
 	static wstring FormatString(LPCTSTR format, ...);
 
+	static wstring to_wstring(const string &str);
+	static string to_string(const wstring &str);
+
 };
 
 };

@@ -17,6 +17,27 @@ using std::to_wstring;
 
 namespace XIBAO
 {
+	bool TaskScheduler::DeleteTaskScheduler(const wstring &taskName)
+	{
+		//TODO com初始化必须放在外面整理，原理还未知
+		CoInitialize(NULL);
+		bool result = false;
+		wstring osname = L"";
+		OSHelper::Version osversion = OSHelper::GetOSVersion(osname);
+		if (OSHelper::VERSION_XP >= osversion) {
+			for (int i = 0; i<10; ++i) {
+				wstring taskname = taskName + L"_" + to_wstring(i);
+				result = XPTaskScheduler::DeleteTaskForXP(taskname.c_str());
+				if (!result) { return false; }
+			}
+		}
+		else if (OSHelper::VERSION_WIN7 <= osversion) {
+			result = Win7TaskScheduler::Delete2MoreWin7(taskName);
+		}
+		CoUninitialize();
+		return result;
+	}
+
 TaskScheduler::TaskScheduler()
 	:	mAppPath(L""),
 		mTaskName(L""),
@@ -65,7 +86,7 @@ TaskScheduler::~TaskScheduler()
 {
 }
 
-bool TaskScheduler::CreateTaskSheduler()
+bool TaskScheduler::CreateTaskScheduler()
 {
 	bool result = false;
 	wstring osname = L"";
@@ -94,24 +115,26 @@ bool TaskScheduler::CreateTaskSheduler()
 	return result;
 }
 
-bool TaskScheduler::DeleteTaskSheduler()
+bool TaskScheduler::DeleteTaskScheduler()
 {
-	//TODO com初始化必须放在外面整理，原理还未知
-	CoInitialize(NULL);
-	bool result = false;
-	wstring osname = L"";
-	OSHelper::Version osversion = OSHelper::GetOSVersion(osname);
-	if (OSHelper::VERSION_XP >= osversion) {
-		for (int i = 0; i<10; ++i) {
-			wstring taskname = mTaskName + L"_" + to_wstring(i);
-			result = XPTaskScheduler::DeleteTaskForXP(taskname.c_str());
-			if (!result) { return false; }
-		}
-	} else if (OSHelper::VERSION_WIN7 <=  osversion) {
-		result = Win7TaskScheduler::Delete2MoreWin7(mTaskName);
-	}
-	CoUninitialize();
-	return result;
+	////TODO com初始化必须放在外面整理，原理还未知
+	//CoInitialize(NULL);
+	//bool result = false;
+	//wstring osname = L"";
+	//OSHelper::Version osversion = OSHelper::GetOSVersion(osname);
+	//if (OSHelper::VERSION_XP >= osversion) {
+	//	for (int i = 0; i<10; ++i) {
+	//		wstring taskname = mTaskName + L"_" + to_wstring(i);
+	//		result = XPTaskScheduler::DeleteTaskForXP(taskname.c_str());
+	//		if (!result) { return false; }
+	//	}
+	//} else if (OSHelper::VERSION_WIN7 <=  osversion) {
+	//	result = Win7TaskScheduler::Delete2MoreWin7(mTaskName);
+	//}
+	//CoUninitialize();
+	//return result;
+
+	return TaskScheduler::DeleteTaskScheduler(this->mTaskName);
 }
 
 void TaskScheduler::SetAppPath(const wstring &appPath)

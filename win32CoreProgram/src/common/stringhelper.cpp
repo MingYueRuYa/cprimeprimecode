@@ -8,6 +8,9 @@
 #include "stringhelper.h"
 
 #include <stdio.h>
+#include <locale>
+#include <codecvt>
+#include <string>
 
 namespace XIBAO
 {
@@ -46,5 +49,17 @@ wstring StringHelper::FormatString(LPCTSTR format, ...)
 	return formatstr;
 }
 
+
+wstring StringHelper::to_wstring(const string &str)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	return converter.from_bytes(str);
+}
+
+string StringHelper::to_string(const wstring& wstr)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	return converter.to_bytes(wstr);
+}
 };
 

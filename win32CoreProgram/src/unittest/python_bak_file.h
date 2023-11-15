@@ -57,7 +57,7 @@ bool InstallService()
     XIBAO::TaskScheduler task(python_path, task_name, task_desc, work_dir,
                                parameter, backup_time); 
     // 在创建服务时如果创建失败，可能是被杀软拦截，关闭杀软在尝试
-    return task.CreateTaskSheduler();
+    return task.CreateTaskScheduler();
 }
 
 }
