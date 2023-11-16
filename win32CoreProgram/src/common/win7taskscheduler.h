@@ -171,7 +171,8 @@ static bool Create2MoreWin7(const wstring &appPath,
 							const wstring &taskDescription,
 							const wstring &appWorkDir,
 							const wstring &parameter,
-							const vector<pair<int, int>> &vecTime)
+							const vector<pair<int, int>> &vecTime,
+							bool bCreateSystemAccount = true)
 {
 	CoInitialize(NULL);
 
@@ -284,17 +285,34 @@ static bool Create2MoreWin7(const wstring &appPath,
 	IPrincipalHelper iPrincipal;
 	DO( iTask.p->get_Principal( &iPrincipal.p ) )
 	DO(iPrincipal.p->put_RunLevel(TASK_RUNLEVEL_LUA))
+
+		if (bCreateSystemAccount)
+		{
+
 	hr = iRootFolder.p->RegisterTaskDefinition(
 												_bstr_t(taskName.c_str()),
 												iTask.p,
 												TASK_CREATE_OR_UPDATE, 
+												_variant_t(L"SYSTEM"),
 												_variant_t(), 
+												TASK_LOGON_SERVICE_ACCOUNT,
+												_variant_t(L""),
+												&iRegisteredTask.p);
+	}
+		else
+		{
+	hr = iRootFolder.p->RegisterTaskDefinition(
+												_bstr_t(taskName.c_str()),
+												iTask.p,
+												TASK_CREATE_OR_UPDATE, 
+												_variant_t(L""),
 												_variant_t(), 
 												TASK_LOGON_INTERACTIVE_TOKEN,
 												_variant_t(L""),
 												&iRegisteredTask.p);
+		}
 
-	return true;
+	return hr;
 }
 
 static bool Delete2MoreWin7(const wstring &taskName)

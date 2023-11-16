@@ -1,8 +1,17 @@
 {
-	"app_name":"svn_update_code",
-	"app_path_d":"",
-	"app_desc":"",
-	"app_param_d":"",		
-	"app_start_dir_d": "",
-	"start_time":[{"hour":13, "min":30}, {"hour":23, "min":30}]
+    "app_start_dir": "e:\\demo\\",
+    "app_param": "notepad.exe",
+    "app_name": "auto_open_notepad",
+    "app_desc": "auto open notepad demo",
+    "start_time": [
+        {
+            "min": 30,
+            "hour": 7
+        },
+		        {
+            "min": 30,
+            "hour": 16
+        }
+    ],
+    "app_path": "c:\\notepad"
 }
