@@ -9,6 +9,9 @@ using std::wstring;
 #include "Win7RunTool.h"
 
 #pragma comment(lib, "dbghelp.lib")  
+#pragma comment(lib, "exception_handler.lib")  
+#pragma comment(lib, "common.lib")  
+#pragma comment(lib, "crash_generation_client.lib")  
 
 //我们的回调函数  
 LONG __stdcall ExceptCallBack(EXCEPTION_POINTERS *pExcPointer)
@@ -94,7 +97,7 @@ BOOL IsRunasAdmin(HANDLE hProcess)
     return bElevated;    
 }  
 
-int _tmain(int argc, _TCHAR* argv[])
+int _tmain03(int argc, _TCHAR* argv[])
 {  
 
 //	DeleteTaskForWin7(L"aaaa");
@@ -129,3 +132,38 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	return 0;  
 }  
+
+#include "breakpad/src/client/windows/handler/exception_handler.h"
+
+static bool callback(const wchar_t* dump_path, const wchar_t* id,
+	void* context, EXCEPTION_POINTERS* exinfo,
+	MDRawAssertionInfo* assertion,
+	bool succeeded) {
+	if (succeeded) {
+		printf("dump guid is %ws\n", id);
+	}
+	else {
+		printf("dump failed\n");
+	}
+	fflush(stdout);
+
+	return succeeded;
+}
+
+static void CrashFunction() {
+	int* i = reinterpret_cast<int*>(0x45);
+	*i = 5;  // crash!
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	google_breakpad::ExceptionHandler eh(L".",
+		NULL,
+		callback,
+		NULL,
+		google_breakpad::ExceptionHandler::HANDLER_ALL);
+
+	CrashFunction();
+
+	return 0;
+}

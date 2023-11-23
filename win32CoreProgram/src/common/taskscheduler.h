@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <winerror.h>
 
 using std::pair;
 using std::vector;
@@ -36,13 +37,13 @@ public:
 	TaskScheduler(const wstring &appPath, const wstring &taskName,
 					const wstring &taskDescription, const wstring &workDir,
 					const wstring &parameter, 
-					const vector<pair<int, int>> vecTime);
+					const vector<pair<int, int>> vecTime, int mode);
 	TaskScheduler(const TaskScheduler &rhs);
 	TaskScheduler& operator= (const TaskScheduler &rhs);
 	TaskScheduler(TaskScheduler &&rhs);
 	~TaskScheduler();
 
-	bool CreateTaskScheduler();
+	HRESULT CreateTaskScheduler();
 	bool DeleteTaskScheduler();
 
 	void SetAppPath(const wstring &appPath);
@@ -63,6 +64,16 @@ public:
 	void SetTimeVec(const vector<pair<int, int>> &vecTime);
 	vector<pair<int, int>> GetTimeVec();
 
+	
+	void SetName(const wstring &userName);
+	wstring GetName();
+
+	void SetPasswd(const wstring &passwd);
+	wstring GetPasswd();
+
+	void SetTaskMode(int mode);
+	int GetTaskMode() const;
+
 private:
 	void _CopyValue(const TaskScheduler &rhs);
 
@@ -72,7 +83,10 @@ private:
 	wstring mTaskDescription;
 	wstring mAppWorkDir;
 	wstring mParameter;
+	wstring mUserName;
+	wstring mPassword;
 	vector<pair<int, int>> mVecTime;
+	int mode;
 
 };
 

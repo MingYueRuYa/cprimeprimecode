@@ -58,7 +58,7 @@ wstring StringHelper::to_wstring(const string &str)
 
 string StringHelper::to_string(const wstring& wstr)
 {
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	return converter.to_bytes(wstr);
 }
 };

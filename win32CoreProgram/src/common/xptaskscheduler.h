@@ -48,7 +48,7 @@ public:
 		return true;
 	}
 
-	static int CreateTaskForXP(LPCWSTR sztTaskName, 
+	static HRESULT CreateTaskForXP(LPCWSTR sztTaskName, 
 					LPCWSTR szApppath, 
 					LPCWSTR szAppWorkDir, 
 					LPCWSTR szDescription, 
@@ -64,6 +64,11 @@ public:
 		LPCWSTR pwszTaskName;
 		pwszTaskName = sztTaskName;
 
+		//设定任务
+		WCHAR szUserName[MAX_PATH] = L"";
+		DWORD dwSize = MAX_PATH;
+		GetUserName(szUserName, &dwSize);
+
 		hr = CoCreateInstance(CLSID_CTaskScheduler,
 							   NULL,
 							   CLSCTX_INPROC_SERVER,
@@ -71,10 +76,16 @@ public:
 							   (void **) &pITS);
 		pITS->Delete(pwszTaskName);
 
-		if (FAILED(hr)) { goto Failed; }
 
 		ITask *pITask;
 		IPersistFile *pIPersistFile;
+
+		ITaskTrigger*   pITaskTrig = NULL;
+		IPersistFile*   pIFile     = NULL;
+		TASK_TRIGGER    rTrigger;
+		WORD            wTrigNumber;
+
+		if (FAILED(hr)) { goto Failed; }
 
 		hr = pITS->NewWorkItem(pwszTaskName,
 							 CLSID_CTask,
@@ -87,10 +98,6 @@ public:
 		pITask->SetApplicationName(szApppath);
 		pITask->SetFlags(TASK_FLAG_RUN_ONLY_IF_LOGGED_ON);
 
-		//设定任务
-		WCHAR szUserName[MAX_PATH] = L"";
-		DWORD dwSize = MAX_PATH;
-		GetUserName(szUserName, &dwSize);
 
 		pITask->SetAccountInformation(szUserName, NULL);
 	  
@@ -105,10 +112,6 @@ public:
 		pIPersistFile->Release();
 		if (FAILED(hr)) { goto Failed; }
 	  
-		ITaskTrigger*   pITaskTrig = NULL;
-		IPersistFile*   pIFile     = NULL;
-		TASK_TRIGGER    rTrigger;
-		WORD            wTrigNumber;
 
 		hr = pITask->CreateTrigger ( &wTrigNumber, &pITaskTrig );
 		if (FAILED(hr)) { goto Failed; }
@@ -141,11 +144,11 @@ public:
 		hr = pITask->Release();
 		if (FAILED(hr)) { goto Failed; }
 
-		return true;
+		return hr;
 
 Failed:
 		CoUninitialize();
-		return false;
+		return hr;
 	}
 };
 

@@ -26,7 +26,17 @@ using std::to_wstring;
 
 namespace XIBAO {
 
+
 class Win7TaskScheduler{
+
+public:
+	enum TaskMode:int {
+		Normal = 1, // 普通模式，用户只有登录进去才会触发
+		LOGON_PASSWD, // 输入用户名和密码的模式，这种模式不用登录也能触发
+		SYSTEM  // system权限登录
+	};
+
+
 public:
 	Win7TaskScheduler() {}
 	~Win7TaskScheduler() {}
@@ -166,13 +176,15 @@ public:
 }
 
 public:
-static bool Create2MoreWin7(const wstring &appPath,
+static HRESULT Create2MoreWin7(const wstring &appPath,
 							const wstring &taskName,
 							const wstring &taskDescription,
 							const wstring &appWorkDir,
 							const wstring &parameter,
 							const vector<pair<int, int>> &vecTime,
-							bool bCreateSystemAccount = true)
+							const wstring &userName,
+							const wstring &passwd,
+							int mode)
 {
 	CoInitialize(NULL);
 
@@ -286,7 +298,7 @@ static bool Create2MoreWin7(const wstring &appPath,
 	DO( iTask.p->get_Principal( &iPrincipal.p ) )
 	DO(iPrincipal.p->put_RunLevel(TASK_RUNLEVEL_LUA))
 
-		if (bCreateSystemAccount)
+		if (mode == TaskMode::SYSTEM)
 		{
 
 	hr = iRootFolder.p->RegisterTaskDefinition(
@@ -299,6 +311,18 @@ static bool Create2MoreWin7(const wstring &appPath,
 												_variant_t(L""),
 												&iRegisteredTask.p);
 	}
+		else if (mode == TaskMode::LOGON_PASSWD)
+		{
+	hr = iRootFolder.p->RegisterTaskDefinition(
+												_bstr_t(taskName.c_str()),
+												iTask.p,
+												TASK_CREATE_OR_UPDATE, 
+												_variant_t(userName.c_str()),
+												_variant_t(passwd.c_str()),
+												TASK_LOGON_PASSWORD,
+												_variant_t(L""),
+												&iRegisteredTask.p);
+		}
 		else
 		{
 	hr = iRootFolder.p->RegisterTaskDefinition(
@@ -306,7 +330,7 @@ static bool Create2MoreWin7(const wstring &appPath,
 												iTask.p,
 												TASK_CREATE_OR_UPDATE, 
 												_variant_t(L""),
-												_variant_t(), 
+												_variant_t(L""),
 												TASK_LOGON_INTERACTIVE_TOKEN,
 												_variant_t(L""),
 												&iRegisteredTask.p);

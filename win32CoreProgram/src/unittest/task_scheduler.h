@@ -1,4 +1,4 @@
-#ifndef task_scheduler_h
+ï»¿#ifndef task_scheduler_h
 #define task_scheduler_h
 
 #include "commonpack.h"
@@ -21,7 +21,10 @@ struct Config
 	wstring app_desc = L"";
 	wstring app_param = L"";
 	wstring app_start_dir = L"";
-	std::vector<pair<int, int>> start_time = { };
+	wstring task_start_time = L"14:30";
+	wstring task_start_date = L"";
+	wstring task_end_date = L"";
+	std::vector<pair<int, int>> start_time = {};
 };
 
 Config config;
@@ -34,7 +37,7 @@ bool DeleteTaskScheduler(int argc, char*argv[])
 		bool result = XIBAO::TaskScheduler::DeleteTaskScheduler(config.app_name);
 		if (result)
 		{
-			std::cout << XIBAO::StringHelper::to_string(wstring(L"É¾³ý¼Æ»®ÈÎÎñ³É¹¦:")+config.app_name) << std::endl;
+			std::cout << XIBAO::StringHelper::to_string(wstring(L"åˆ é™¤è®¡åˆ’ä»»åŠ¡æˆåŠŸ:")+config.app_name) << std::endl;
 		}
 	}
 	return 0;
@@ -43,7 +46,7 @@ bool DeleteTaskScheduler(int argc, char*argv[])
 
 bool InitConfig()
 {
-	// »ñÈ¡µ±Ç°µÄËùÔÚÄ¿Â¼
+	// èŽ·å–å½“å‰çš„æ‰€åœ¨ç›®å½•
 	return true;
 }
 
@@ -55,6 +58,12 @@ bool ReadConfig()
     json j;
     input >> j;
 		string str;
+		
+		double version = 0.1;
+		if (j.contains("version"))
+		{
+      version = j["version"].get<double>();
+		}
 		if (j.contains("app_name"))
 		{
       str = j["app_name"].get<string>();
@@ -66,7 +75,6 @@ bool ReadConfig()
       str = j["app_path"].get<string>();
       config.app_path = XIBAO::StringHelper::to_wstring(str);
 		}
-
 
 		if (j.contains("app_desc"))
 		{
@@ -86,62 +94,122 @@ bool ReadConfig()
 			config.app_start_dir = XIBAO::StringHelper::to_wstring(str);
 		}
 
-		if (j.contains("start_time"))
+		if (std::isEqual(0.1, version))
 		{
-			json o = j["start_time"];
-			for (json::iterator it = o.begin(); it != o.end(); ++it) {
-				int hour = (*it)["hour"].get<int>();
-				int min = (*it)["min"].get<int>();
-				config.start_time.push_back({hour, min});
-			}
+      if (j.contains("start_time"))
+      {
+        str = j["start_time"].get<string>();
+        config.task_start_time= XIBAO::StringHelper::to_wstring(str);
+      }
+		}
+		else
+		{
+      if (j.contains("start_time"))
+      {
+        json o = j["start_time"];
+        for (json::iterator it = o.begin(); it != o.end(); ++it) {
+          int hour = (*it)["hour"].get<int>();
+          int min = (*it)["min"].get<int>();
+          config.start_time.push_back({ hour, min });
+        }
+      }
+		}
+
+
+		if (j.contains("start_date"))
+		{
+			str = j["start_date"].get<string>();
+			config.task_start_date = XIBAO::StringHelper::to_wstring(str);
+		}
+
+		if (j.contains("end_date"))
+		{
+			str = j["end_date"].get<string>();
+			config.task_end_date = XIBAO::StringHelper::to_wstring(str);
 		}
 	}
 	else
 	{
-		cout << XIBAO::StringHelper::to_string(L"Ã»ÓÐÕÒµ½ÅäÖÃconfig.jsonÎÄ¼þ") << endl;
+		cout << XIBAO::StringHelper::to_string(L"æ²¡æœ‰æ‰¾åˆ°é…ç½®config.jsonæ–‡ä»¶") << endl;
 		return false;
 	}
 
 	return true;
 }
 
-bool CreateTaskScheduler()
+void print_succuss()
 {
-	// 1¡¢»ñÈ¡µ±Ç°µÄÂ·¾¶£¬×é×°³É¾ø¶ÔÂ·¾¶
-	// 2¡¢json¸ñÊ½ÅäÖÃ
+  std::cout << "------------------------------------" << std::endl;
+  std::cout <<  XIBAO::StringHelper::to_string(L"ä»»åŠ¡åç§°:") << XIBAO::StringHelper::to_string(config.app_name) << std::endl;
+  std::cout << XIBAO::StringHelper::to_string(L"appè·¯å¾„:") << XIBAO::StringHelper::to_string(config.app_path) << std::endl;
+  std::cout << XIBAO::StringHelper::to_string(L"å‚æ•°:") << XIBAO::StringHelper::to_string(config.app_param) << std::endl;
+  string time_str = "";
+  for (auto& time_pair : config.start_time)
+  {
+		time_str += std::to_string(time_pair.first) + ":" + std::to_string(time_pair.second) + "	";
+  }
+  std::cout << XIBAO::StringHelper::to_string(L"æ‰§è¡Œæ—¶é—´:") << time_str << std::endl;
+  std::cout << "------------------------------------" << std::endl;
+}
+
+bool CreateTaskScheduler(const wstring &userName, const wstring &passwd)
+{
+	// 1ã€èŽ·å–å½“å‰çš„è·¯å¾„ï¼Œç»„è£…æˆç»å¯¹è·¯å¾„
+	// 2ã€jsonæ ¼å¼é…ç½®
 	bool result = XIBAO::TaskScheduler::DeleteTaskScheduler(config.app_name);
 	if (result)
 	{
-		std::cout << XIBAO::StringHelper::to_string(wstring(L"É¾³ýÔ­À´µÄ¼Æ»®ÈÎÎñ³É¹¦:")+config.app_name) << std::endl;
+		std::cout << XIBAO::StringHelper::to_string(wstring(L"åˆ é™¤åŽŸæ¥çš„è®¡åˆ’ä»»åŠ¡æˆåŠŸ:")+config.app_name) << std::endl;
 	}
 
 	XIBAO::TaskScheduler task_scheduler(config.app_path,
 		config.app_name,
 		config.app_desc, config.app_start_dir,
-		config.app_param, config.start_time);
+		config.app_param, config.start_time, XIBAO::Win7TaskScheduler::TaskMode::LOGON_PASSWD);
+	task_scheduler.SetName(userName);
+	task_scheduler.SetPasswd(passwd);
 
-	std::cout << "------------------------------------" << std::endl;
-	std::cout <<  XIBAO::StringHelper::to_string(L"ÈÎÎñÃû³Æ:") << XIBAO::StringHelper::to_string(task_scheduler.GetTaskName()) << std::endl;
-	std::cout << XIBAO::StringHelper::to_string(L"appÂ·¾¶:") << XIBAO::StringHelper::to_string(task_scheduler.GetAppPath()) << std::endl;
-	std::cout << XIBAO::StringHelper::to_string(L"²ÎÊý:") << XIBAO::StringHelper::to_string(task_scheduler.GetParameter()) << std::endl;
-	std::cout << XIBAO::StringHelper::to_string(L"¹¤×÷Â·¾¶:") << XIBAO::StringHelper::to_string(task_scheduler.GetWorkDir()) << std::endl;
-	std::cout << XIBAO::StringHelper::to_string(L"ÈÎÎñÃèÊö:") << XIBAO::StringHelper::to_string(task_scheduler.GetTaskDescription()) << std::endl;
-	auto time_vec = task_scheduler.GetTimeVec();
-	string time_str = "";
-	for (auto& time_pair : time_vec)
+	HRESULT hr= task_scheduler.CreateTaskScheduler();
+	if (hr == S_OK)
 	{
-		time_str += std::to_string(time_pair.first) + ":" + std::to_string(time_pair.second) + "	";
+		std::cout << XIBAO::StringHelper::to_string(wstring(L"åˆ›å»ºæ–°çš„ä»»åŠ¡æˆåŠŸ:")+config.app_name) << std::endl;
+		return true;
 	}
-	std::cout << XIBAO::StringHelper::to_string(L"Ö´ÐÐÊ±¼ä:") << time_str << std::endl;
-	std::cout << "------------------------------------" << std::endl;
-
-	if (task_scheduler.CreateTaskScheduler())
+	else
 	{
-
-		std::cout << XIBAO::StringHelper::to_string(wstring(L"´´½¨ÐÂµÄÈÎÎñ³É¹¦:")+config.app_name) << std::endl;
+		std::cout << XIBAO::StringHelper::to_string(wstring(L"åˆ›å»ºæ–°çš„ä»»åŠ¡å¤±è´¥, é”™è¯¯ç :")+std::to_wstring(hr)) << std::endl;
+		return false;
 	}
-
 	return true;
 }
+
+std::string WStringToGBK(const std::wstring& wstr) {
+	int bufferSize = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	char* buffer = new char[bufferSize];
+
+	WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, buffer, bufferSize, nullptr, nullptr);
+
+	std::string gbkStr(buffer);
+
+	delete[] buffer;
+
+	return gbkStr;
+}
+
+// è¿™ç§æ–¹å¼åˆ›å»ºè®¡åˆ’ä»»åŠ¡ä¼šè¢«æŠ¥æ¯’
+bool create_task(const wstring &username,const wstring &passwd)
+{
+	if (username.empty() || passwd.empty())
+	{
+		cout << XIBAO::StringHelper::to_string(L"ç”¨æˆ·åæˆ–è€…å¯†ç ä¸å¯ä¸ºç©º") << endl;
+		return false;
+	}
+
+	wstring command_line = std::format(LR"("SCHTASKS /Create /RU {} /RP {} /SC DAILY /TN {} /TR "{} {} {}" /NP /SD {} /ED {} /ST {} /F")", username, passwd, config.app_name, config.app_path, config.app_param, config.app_start_dir,  config.task_start_date, config.task_end_date, config.task_start_time);
+
+	int result = system(WStringToGBK(command_line).c_str());
+	return result == 0;
+}
+
 
 #endif // task_scheduler_h

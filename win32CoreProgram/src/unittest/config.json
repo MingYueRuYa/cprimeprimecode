@@ -1,17 +1,9 @@
 {
-    "app_start_dir": "e:\\demo\\",
-    "app_param": "notepad.exe",
-    "app_name": "auto_open_notepad",
-    "app_desc": "auto open notepad demo",
-    "start_time": [
-        {
-            "min": 30,
-            "hour": 7
-        },
-		        {
-            "min": 30,
-            "hour": 16
-        }
-    ],
-    "app_path": "c:\\notepad"
+    "version": 0.2,
+    "app_path": "I:\\works\\UP1\\src\\tools\\svn_update_code/../Python34/Python.exe",
+    "app_start_dir": "I:\\works\\UP1\\src\\tools\\svn_update_code",
+    "app_name": "自动更新代码",
+    "app_desc": "自动更新代码任务",
+    "app_param": "I:\\works\\UP1\\src\\tools\\svn_update_code\\svn_update_code.py",
+	"start_time": [{"min": 30,"hour": 7},{"min": 30, "hour": 16}]
 }

@@ -6,6 +6,7 @@
 ****************************************************************************/
 
 #include <memory>
+#include <cmath>
 
 using std::shared_ptr;
 
@@ -19,12 +20,12 @@ shared_ptr<T> make_shared_array(size_t size) {
 }
 
 // 对指针解引用进行判断大小
-template <typename T>
-struct LessDerefrence : public std::binary_function<const T*, const T*, bool> {
-  bool operator()(const T* param1, const T* param2) const {
-    return *param1 < *param2;
-  }
-};
+//template <typename T>
+//struct LessDerefrence : public std::binary_function<const T*, const T*, bool> {
+//  bool operator()(const T* param1, const T* param2) const {
+//    return *param1 < *param2;
+//  }
+//};
 
 // 对指针对象进行解引用
 struct Derefrence {
@@ -53,6 +54,10 @@ typename MapType::iterator efficentAddOrUpdate(
 
     return mapType.insert(ifind, MVT(keyArgType, valueArgType));
   }
+}
+
+bool isEqual(double a, double b) {
+  return fabs(a - b) < 1e-9; // 使用一个小的容差值进行比较
 }
 
 };  // namespace std

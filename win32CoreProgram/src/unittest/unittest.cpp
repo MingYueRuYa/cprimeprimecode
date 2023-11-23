@@ -76,7 +76,7 @@ int _tmain_test_service(int argc, _TCHAR* argv[])
 {
 	XIBAO::TaskScheduler task(L"C:\\Create_Service.exe", 
 								L"appdemo", L"", L"", L"",
-								{pair<int, int>(18,30)});
+								{pair<int, int>(18,30)}, XIBAO::Win7TaskScheduler::TaskMode::Normal);
 	if (task.CreateTaskScheduler()) {
 		cout << "create task successfule..." << endl;
 	} else {
@@ -205,21 +205,39 @@ using std::string;
 // 测试STL的在关联容器中指针类型的排序
 int _tmain_stl(int argc, _TCHAR* argv[])
 {
-    set<string *, std::LessDerefrence<string>> pstr_set;   
-    pstr_set.insert(new string("b"));
-    pstr_set.insert(new string("a"));
-    pstr_set.insert(new string("c"));
+    //set<string *, std::LessDerefrence<string>> pstr_set;   
+    //pstr_set.insert(new string("b"));
+    //pstr_set.insert(new string("a"));
+    //pstr_set.insert(new string("c"));
 
-    // std::for_each(pstr_set.begin(), pstr_set.end(), [](string *pstr) { cout << *pstr << std::hex << pstr << endl; });
-    // 类型不一致，编译出错
-    // std::copy(pstr_set.begin(), pstr_set.end(), std::ostream_iterator<string>(cout, "\n"));
+    //// std::for_each(pstr_set.begin(), pstr_set.end(), [](string *pstr) { cout << *pstr << std::hex << pstr << endl; });
+    //// 类型不一致，编译出错
+    //// std::copy(pstr_set.begin(), pstr_set.end(), std::ostream_iterator<string>(cout, "\n"));
 
-    std::transform(pstr_set.begin(), pstr_set.end(),std::ostream_iterator<string>(cout, "\n"), std::Derefrence()); 
+    //std::transform(pstr_set.begin(), pstr_set.end(),std::ostream_iterator<string>(cout, "\n"), std::Derefrence()); 
 
 	return 0;
 }
 
 #include "task_scheduler.h"
+
+wstring get_user_name()
+{
+	wchar_t username[MAX_PATH + 1];
+	DWORD usernameLen = MAX_PATH + 1;
+
+	// 获取当前机器的用户名
+	if (GetUserNameW(username, &usernameLen)) {
+		std::cout << XIBAO::StringHelper::to_string(L"当前用户名为：") << XIBAO::StringHelper::to_string(username) << std::endl;
+		return username;
+	}
+	else {
+		std::cout << XIBAO::StringHelper::to_string(L"无法获取用户名") << std::endl;
+		return L"";
+	}
+	return L"";
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -227,6 +245,7 @@ int main(int argc, char* argv[])
 	if (!ReadConfig())
 	{
 		system("pause");
+		return 1;
 	}
 	if (argc >= 2)
 	{
@@ -234,7 +253,25 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		CreateTaskScheduler();
+		wstring user_name = get_user_name();
+		if (user_name.empty())
+		{
+			std::cout << XIBAO::StringHelper::to_string(L"获取用户名失败, 需要手动输入用户名:");
+			string name;
+			std::getline(std::cin, name);
+			user_name = XIBAO::StringHelper::to_wstring(name);
+		}
+
+    std::cout << XIBAO::StringHelper::to_string(L"请输入密码：");
+    string passwd;
+    std::getline(std::cin, passwd);
+
+		if (CreateTaskScheduler(user_name, XIBAO::StringHelper::to_wstring(passwd)))
+		{
+			print_succuss();
+		}
 	}
 	system("pause");
+	return 0;
 }
+

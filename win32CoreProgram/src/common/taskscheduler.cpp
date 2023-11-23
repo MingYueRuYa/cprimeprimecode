@@ -53,13 +53,15 @@ TaskScheduler::TaskScheduler(const wstring &appPath,
 					const wstring &taskDescription, 
 					const wstring &workDir,
 					const wstring &parameter, 
-					const vector<pair<int, int>> vecTime)
+					const vector<pair<int, int>> vecTime,
+					int taskmode)
 					:	mAppPath(appPath),
 						mTaskName(taskName),
 						mTaskDescription(taskDescription),
 						mAppWorkDir(workDir),
 						mParameter(parameter),
-						mVecTime(vecTime)
+						mVecTime(vecTime),
+						mode(taskmode)
 {
 }
 
@@ -86,7 +88,7 @@ TaskScheduler::~TaskScheduler()
 {
 }
 
-bool TaskScheduler::CreateTaskScheduler()
+HRESULT TaskScheduler::CreateTaskScheduler()
 {
 	bool result = false;
 	wstring osname = L"";
@@ -109,7 +111,10 @@ bool TaskScheduler::CreateTaskScheduler()
 													mTaskDescription,
 													mAppWorkDir, 
 													mParameter, 
-													mVecTime);
+													mVecTime,
+													mUserName,
+													mPassword,
+													mode);
 	}
 
 	return result;
@@ -195,6 +200,36 @@ void TaskScheduler::SetTimeVec(const vector<pair<int, int>> &vecTime)
 vector<pair<int, int>> TaskScheduler::GetTimeVec()
 {
 	return mVecTime;
+}
+
+void TaskScheduler::SetName(const wstring &userName)
+{
+	this->mUserName = userName;
+}
+
+wstring TaskScheduler::GetName()
+{
+	return this->mUserName;
+}
+
+void TaskScheduler::SetPasswd(const wstring& passwd)
+{
+	this->mPassword = passwd;
+}
+
+wstring TaskScheduler::GetPasswd()
+{
+	return this->mPassword;
+}
+
+void TaskScheduler::SetTaskMode(int mode)
+{
+  this->mode = mode;
+}
+
+int TaskScheduler::GetTaskMode() const
+{
+  return this->mode;
 }
 
 void TaskScheduler::_CopyValue(const TaskScheduler &rhs)

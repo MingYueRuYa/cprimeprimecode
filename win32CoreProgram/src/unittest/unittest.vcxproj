@@ -14,6 +14,7 @@
     <ProjectGuid>{B7624CD7-7A8E-4A32-BCE2-66E9BAFB996C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>unittest</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -58,6 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../common</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,6 +80,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../common</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
