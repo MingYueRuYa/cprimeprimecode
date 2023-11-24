@@ -34,6 +34,7 @@ public:
 
 	static wstring to_wstring(const string &str);
 	static string to_string(const wstring &str);
+	static string wstring_to_gbk(const wstring &str);
 
 };
 

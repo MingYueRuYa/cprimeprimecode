@@ -238,7 +238,6 @@ wstring get_user_name()
 	return L"";
 }
 
-
 int main(int argc, char* argv[])
 {
 	SetConsoleOutputCP(CP_UTF8);

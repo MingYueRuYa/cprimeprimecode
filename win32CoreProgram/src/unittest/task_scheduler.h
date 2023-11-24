@@ -183,33 +183,4 @@ bool CreateTaskScheduler(const wstring &userName, const wstring &passwd)
 	return true;
 }
 
-std::string WStringToGBK(const std::wstring& wstr) {
-	int bufferSize = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
-	char* buffer = new char[bufferSize];
-
-	WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, buffer, bufferSize, nullptr, nullptr);
-
-	std::string gbkStr(buffer);
-
-	delete[] buffer;
-
-	return gbkStr;
-}
-
-// 这种方式创建计划任务会被报毒
-bool create_task(const wstring &username,const wstring &passwd)
-{
-	if (username.empty() || passwd.empty())
-	{
-		cout << XIBAO::StringHelper::to_string(L"用户名或者密码不可为空") << endl;
-		return false;
-	}
-
-	wstring command_line = std::format(LR"("SCHTASKS /Create /RU {} /RP {} /SC DAILY /TN {} /TR "{} {} {}" /NP /SD {} /ED {} /ST {} /F")", username, passwd, config.app_name, config.app_path, config.app_param, config.app_start_dir,  config.task_start_date, config.task_end_date, config.task_start_time);
-
-	int result = system(WStringToGBK(command_line).c_str());
-	return result == 0;
-}
-
-
 #endif // task_scheduler_h

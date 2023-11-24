@@ -150,6 +150,12 @@ static bool callback(const wchar_t* dump_path, const wchar_t* id,
 	return succeeded;
 }
 
+void crash()
+{
+  char szchar[8];
+  sprintf(szchar, "%s", "1111111111122222");
+}
+
 static void CrashFunction() {
 	int* i = reinterpret_cast<int*>(0x45);
 	*i = 5;  // crash!
@@ -157,13 +163,17 @@ static void CrashFunction() {
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	_CrtSetReportMode(_CRT_ASSERT, 0);
+	_CrtSetReportMode(_CRT_ERROR, 0);
+	_CrtSetReportMode(_CRT_ERRCNT, 0);
 	google_breakpad::ExceptionHandler eh(L".",
 		NULL,
 		callback,
 		NULL,
 		google_breakpad::ExceptionHandler::HANDLER_ALL);
 
-	CrashFunction();
+	// CrashFunction();
+	crash();
 
 	return 0;
 }

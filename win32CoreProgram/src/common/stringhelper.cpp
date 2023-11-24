@@ -61,5 +61,15 @@ string StringHelper::to_string(const wstring& wstr)
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	return converter.to_bytes(wstr);
 }
+
+string StringHelper::wstring_to_gbk(const wstring& wstr)
+{
+	int bufferSize = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	char* buffer = new char[bufferSize];
+	WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, buffer, bufferSize, nullptr, nullptr);
+	std::string gbkStr(buffer);
+	delete[] buffer;
+	return gbkStr;
+}
 };
 
