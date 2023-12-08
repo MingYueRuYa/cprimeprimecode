@@ -50,7 +50,7 @@
     <OutDir>../../bin_win32/$(Configuration)\</OutDir>
     <IntDir>../../bin_win32/$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);./breakpad/src</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);./include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

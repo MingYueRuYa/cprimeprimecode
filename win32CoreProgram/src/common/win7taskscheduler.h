@@ -360,9 +360,71 @@ static bool Delete2MoreWin7(const wstring &taskName)
 	ITaskDefinitionHelper iTask;
 
 	hr = iRootFolder.p->GetTask(_bstr_t(taskName.c_str()),&iRegisteredTask.p);
+	if (S_OK != hr)
+	{
+		return hr;
+	}
 	hr = iRootFolder.p->DeleteTask(_bstr_t(taskName.c_str()),0);
 
-	return true;
+	return hr;
+}
+
+static HRESULT StartTaskScheduler(const wchar_t *app_name)
+{
+	CoInitialize(NULL);
+
+	ITaskService* pService = NULL;
+	HRESULT hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pService);
+	if (FAILED(hr))
+	{
+		CoUninitialize();
+		return hr;
+	}
+
+	hr = pService->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t());
+	if (FAILED(hr))
+	{
+		pService->Release();
+		CoUninitialize();
+		return hr;
+	}
+
+	ITaskFolder* pRootFolder = NULL;
+	hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
+	if (FAILED(hr))
+	{
+		pService->Release();
+		CoUninitialize();
+		return hr;
+	}
+
+	IRegisteredTask* pTask = NULL;
+	hr = pRootFolder->GetTask(_bstr_t(app_name), &pTask);
+	if (FAILED(hr))
+	{
+		pRootFolder->Release();
+		pService->Release();
+		CoUninitialize();
+		return hr;
+	}
+
+	IRunningTask* pRunningTask = NULL;
+	hr = pTask->Run(_variant_t(), &pRunningTask);
+	if (FAILED(hr))
+	{
+		pTask->Release();
+		pRootFolder->Release();
+		pService->Release();
+		CoUninitialize();
+		return hr;
+	}
+
+	pRunningTask->Release();
+	pTask->Release();
+	pRootFolder->Release();
+	pService->Release();
+	CoUninitialize();
+	return S_OK;
 }
 
 };

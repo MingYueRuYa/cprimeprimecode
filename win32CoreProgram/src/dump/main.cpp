@@ -163,9 +163,9 @@ static void CrashFunction() {
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	_CrtSetReportMode(_CRT_ASSERT, 0);
-	_CrtSetReportMode(_CRT_ERROR, 0);
-	_CrtSetReportMode(_CRT_ERRCNT, 0);
+	//_CrtSetReportMode(_CRT_ASSERT, 0);
+	//_CrtSetReportMode(_CRT_ERROR, 0);
+	//_CrtSetReportMode(_CRT_ERRCNT, 0);
 	google_breakpad::ExceptionHandler eh(L".",
 		NULL,
 		callback,
@@ -173,7 +173,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		google_breakpad::ExceptionHandler::HANDLER_ALL);
 
 	// CrashFunction();
-	crash();
+	CrashFunction();
 
 	return 0;
 }

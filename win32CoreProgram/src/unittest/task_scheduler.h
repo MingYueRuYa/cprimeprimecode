@@ -24,25 +24,11 @@ struct Config
 	wstring task_start_time = L"14:30";
 	wstring task_start_date = L"";
 	wstring task_end_date = L"";
+	wstring notification_task_name = L"";
 	std::vector<pair<int, int>> start_time = {};
 };
 
 Config config;
-
-bool DeleteTaskScheduler(int argc, char*argv[])
-{
-	string param = argv[1];
-	if (param == "-d")
-	{
-		bool result = XIBAO::TaskScheduler::DeleteTaskScheduler(config.app_name);
-		if (result)
-		{
-			std::cout << XIBAO::StringHelper::to_string(wstring(L"删除计划任务成功:")+config.app_name) << std::endl;
-		}
-	}
-	return 0;
-}
-
 
 bool InitConfig()
 {
@@ -115,18 +101,12 @@ bool ReadConfig()
       }
 		}
 
-
-		if (j.contains("start_date"))
+		if (j.contains("notification_task_name"))
 		{
-			str = j["start_date"].get<string>();
-			config.task_start_date = XIBAO::StringHelper::to_wstring(str);
+      str = j["notification_task_name"].get<string>();
+			config.notification_task_name = XIBAO::StringHelper::to_wstring(str);
 		}
 
-		if (j.contains("end_date"))
-		{
-			str = j["end_date"].get<string>();
-			config.task_end_date = XIBAO::StringHelper::to_wstring(str);
-		}
 	}
 	else
 	{

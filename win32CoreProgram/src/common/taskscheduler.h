@@ -31,6 +31,7 @@ namespace XIBAO
 class TaskScheduler{
 public:
 	static bool DeleteTaskScheduler(const wstring &taskName);
+	static HRESULT StartTaskScheduler(const wstring &taskName);
 
 public:
 	explicit TaskScheduler();

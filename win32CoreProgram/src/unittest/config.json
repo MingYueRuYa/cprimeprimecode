@@ -1,9 +1,21 @@
 {
-    "version": 0.2,
+    "update_script_path": "I:\\works\\UP1\\src\\tools\\svn_update_code/update_code.bat",
+    "code_top_dir": "I:\\works\\UP1\\src\\tools\\svn_update_code/../../..",
+    "app_log_path": "I:\\works\\UP1\\src\\tools\\svn_update_code/svn_update_1701952337.482957.log",
     "app_path": "I:\\works\\UP1\\src\\tools\\svn_update_code/../Python34/Python.exe",
+    "start_date": "12/07/2023",
     "app_start_dir": "I:\\works\\UP1\\src\\tools\\svn_update_code",
-    "app_name": "自动更新代码",
-    "app_desc": "自动更新代码任务",
+    "notification_task_name": "notifcation_task_name_1701952337",
     "app_param": "I:\\works\\UP1\\src\\tools\\svn_update_code\\svn_update_code.py",
-	"start_time": [{"min": 30,"hour": 7},{"min": 30, "hour": 16}]
+    "app_desc": "KK1 自动更新代码任务",
+    "app_top_dir": "",
+    "end_date": "12/31/2099",
+    "version": 0.3,
+    "start_time": [
+        {
+            "hour": 6,
+            "min": 0
+        }
+    ],
+    "app_name": "KK1自动更新代码_1701952337"
 }

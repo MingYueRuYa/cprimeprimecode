@@ -19,6 +19,10 @@ namespace XIBAO
 {
 	bool TaskScheduler::DeleteTaskScheduler(const wstring &taskName)
 	{
+		if (taskName.empty())
+		{
+			return false;
+		}
 		//TODO com初始化必须放在外面整理，原理还未知
 		CoInitialize(NULL);
 		bool result = false;
@@ -37,6 +41,12 @@ namespace XIBAO
 		CoUninitialize();
 		return result;
 	}
+
+	HRESULT TaskScheduler::StartTaskScheduler(const wstring& taskName)
+	{
+		return XIBAO::Win7TaskScheduler::StartTaskScheduler(taskName.c_str());
+	}
+
 
 TaskScheduler::TaskScheduler()
 	:	mAppPath(L""),

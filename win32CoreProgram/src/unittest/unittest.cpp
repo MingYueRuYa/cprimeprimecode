@@ -238,20 +238,23 @@ wstring get_user_name()
 	return L"";
 }
 
-int main(int argc, char* argv[])
+void print_info(const wstring &action, HRESULT hr)
 {
-	SetConsoleOutputCP(CP_UTF8);
-	if (!ReadConfig())
-	{
-		system("pause");
-		return 1;
-	}
-	if (argc >= 2)
-	{
-		DeleteTaskScheduler(argc, argv);
-	}
-	else
-	{
+		if (S_OK == hr)
+		{
+			XIBAO::DebugHelper::OutputDebugString(action + L" successful");
+		}
+		else
+		{
+      std::stringstream ss;
+      ss << std::hex << hr;
+			wstring msg = action + wstring(L" error, code:") + XIBAO::StringHelper::to_wstring(ss.str());
+			XIBAO::DebugHelper::OutputDebugString(action);
+		}
+}
+
+void create_task2()
+{
 		wstring user_name = get_user_name();
 		if (user_name.empty())
 		{
@@ -269,8 +272,69 @@ int main(int argc, char* argv[])
 		{
 			print_succuss();
 		}
+		system("pause");
+}
+
+int main(int argc, char* argv[])
+{
+	SetConsoleOutputCP(CP_UTF8);
+	if (!ReadConfig())
+	{
+		system("pause");
+		return 1;
 	}
-	system("pause");
+
+	if (argc < 2)
+	{
+		create_task2();
+		return 0;
+	}
+
+	string command = argv[1];
+	if (command == "-d")
+	{
+		bool result = XIBAO::TaskScheduler::DeleteTaskScheduler(config.app_name);
+		if (result)
+		{
+			std::cout << XIBAO::StringHelper::to_string(wstring(L"删除计划任务成功:") + config.app_name) << std::endl;
+		}
+	}
+	else if (command == "-dn")
+	{
+		bool result = XIBAO::TaskScheduler::DeleteTaskScheduler(config.notification_task_name);
+		if (result)
+		{
+			std::cout << XIBAO::StringHelper::to_string(wstring(L"删除计划任务成功:") + config.app_name) << std::endl;
+		}
+	}
+	else if (command == "-c")
+	{
+		create_task2();
+	}
+	else if (command == "-s")
+	{
+		wstring parameter = XIBAO::StringHelper::to_wstring(argv[2]);
+		HRESULT hr = XIBAO::TaskScheduler::StartTaskScheduler(parameter);
+		print_info(L"start task ", hr);
+	}
+	else if (command == "-cn")
+	{
+		wstring app_path = config.app_start_dir + L"/notification.exe";
+		wstring task_name = config.notification_task_name;
+		wstring param = wstring(L"start_by_task ") + config.app_start_dir + L"/config.json";
+		HRESULT hr = XIBAO::Win7TaskScheduler::Create2MoreWin7(app_path, task_name, L"", config.app_start_dir, param, {}, L"", L"", XIBAO::Win7TaskScheduler::SYSTEM);
+		print_info(L"install notification task ", hr);
+	}
+	else if (command == "-h")
+	{
+		std::cout << "usage: task.exe -d task_name\n"
+			<< "task.exe -s task_name\n"
+			<< "task.exe -n \n"
+			<< "task.exe -c task_name\n" << std::endl;
+		system("pause");
+		return -1;
+	}
+
 	return 0;
 }
 

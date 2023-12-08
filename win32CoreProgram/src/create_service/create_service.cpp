@@ -48,6 +48,10 @@ using std::vector;
 // #define XIBAO_DEBUG_REGISTER_HELPER
 
 int _tmain(int argc, _TCHAR* argv[]) {
+
+  OutputDebugStringA("I'am comming");
+
+  return 0;
 #ifdef XIBAO_DEBUG_REGISTER_HELPER
   RegisterHelper reghelper(HKEY_LOCAL_MACHINE,
                            L"SOFTWARE\\WOW6432Node\\Macromedia",
@@ -88,59 +92,59 @@ int _tmain(int argc, _TCHAR* argv[]) {
   //
   //	return 0;
 
-  wstring apppath = _T(R"(c:\test_service.exe)");
-  wstring service_des = L"this is test service....";
-  wstring service_name = L"test_app5";
-  shared_ptr<ServiceWrapEx> swrap =
-      make_shared<ServiceWrapEx>(service_name, apppath, service_des);
-  SINGLETON_INSTANCE(ServicesManager).AddServiceWrap(swrap);
-  if (argc > 1) {
-    DWORD result = 0;
-    ServicesManager::SMErrorCode errorcode;
-    // install service
-    if (wcscmp(argv[1], L"-i") == 0) {
-      if (ServicesManager::SM_SUCCESS ==
-          SINGLETON_INSTANCE(ServicesManager).InstallService(service_name)) {
-        // start service
-        const wchar_t* para[2] = {L"abc", L"edc"};
-        SINGLETON_INSTANCE(ServicesManager).StartService(service_name, 2, para);
-      }
-    } else if (wcscmp(argv[1], L"-d") == 0) {
-      // delete service
-      if (argc < 3) {
-        DebugHelper::OutputDebugString(
-            "parameter format: app.exe -d server_name");
-        return 0;
-      }
+  //wstring apppath = _T(R"(c:\test_service.exe)");
+  //wstring service_des = L"this is test service....";
+  //wstring service_name = L"test_app5";
+  //shared_ptr<ServiceWrapEx> swrap =
+  //    make_shared<ServiceWrapEx>(service_name, apppath, service_des);
+  //SINGLETON_INSTANCE(ServicesManager).AddServiceWrap(swrap);
+  //if (argc > 1) {
+  //  DWORD result = 0;
+  //  ServicesManager::SMErrorCode errorcode;
+  //  // install service
+  //  if (wcscmp(argv[1], L"-i") == 0) {
+  //    if (ServicesManager::SM_SUCCESS ==
+  //        SINGLETON_INSTANCE(ServicesManager).InstallService(service_name)) {
+  //      // start service
+  //      const wchar_t* para[2] = {L"abc", L"edc"};
+  //      SINGLETON_INSTANCE(ServicesManager).StartService(service_name, 2, para);
+  //    }
+  //  } else if (wcscmp(argv[1], L"-d") == 0) {
+  //    // delete service
+  //    if (argc < 3) {
+  //      DebugHelper::OutputDebugString(
+  //          "parameter format: app.exe -d server_name");
+  //      return 0;
+  //    }
 
-      ServicesManager::SMErrorCode code =
-          SINGLETON_INSTANCE(ServicesManager).RemoveService(argv[2]);
-      if (ServicesManager::SMErrorCode::SM_SUCCESS == code) {
-        DebugHelper::OutputDebugString(L"%s, delete ok", argv[2]);
-      } else {
-        DebugHelper::OutputDebugString(L"%s, delete error, error code:%d",
-                                       argv[2], code);
-      }
-    } else if (wcscmp(argv[1], L"-q") == 0) {
-      // query service status
-      if (argc < 3) {
-        DebugHelper::OutputDebugString(
-            "parameter format: app.exe -d server_name");
-        return 0;
-      }
-      errorcode = ServicesManager::QueryServiceStatus(argv[2], result);
-      DebugHelper::OutputDebugString(
-          L"%s query service status , error code:%ul, status:%d", argv[2],
-          errorcode, result);
-    } else {
-      DebugHelper::OutputDebugString(
-          "\nUnknown Switch Usage\nFor Install use Servicetest -i\nFor "
-          "UnInstall use Servicetest -d\n");
-    }
-  } else {
-    SINGLETON_INSTANCE(ServicesManager).Start(service_name);
-    DebugHelper::OutputDebugString("service start successful.");
-  }
+  //    ServicesManager::SMErrorCode code =
+  //        SINGLETON_INSTANCE(ServicesManager).RemoveService(argv[2]);
+  //    if (ServicesManager::SMErrorCode::SM_SUCCESS == code) {
+  //      DebugHelper::OutputDebugString(L"%s, delete ok", argv[2]);
+  //    } else {
+  //      DebugHelper::OutputDebugString(L"%s, delete error, error code:%d",
+  //                                     argv[2], code);
+  //    }
+  //  } else if (wcscmp(argv[1], L"-q") == 0) {
+  //    // query service status
+  //    if (argc < 3) {
+  //      DebugHelper::OutputDebugString(
+  //          "parameter format: app.exe -d server_name");
+  //      return 0;
+  //    }
+  //    errorcode = ServicesManager::QueryServiceStatus(argv[2], result);
+  //    DebugHelper::OutputDebugString(
+  //        L"%s query service status , error code:%ul, status:%d", argv[2],
+  //        errorcode, result);
+  //  } else {
+  //    DebugHelper::OutputDebugString(
+  //        "\nUnknown Switch Usage\nFor Install use Servicetest -i\nFor "
+  //        "UnInstall use Servicetest -d\n");
+  //  }
+  //} else {
+  //  SINGLETON_INSTANCE(ServicesManager).Start(service_name);
+  //  DebugHelper::OutputDebugString("service start successful.");
+  //}
 
   return 0;
 }

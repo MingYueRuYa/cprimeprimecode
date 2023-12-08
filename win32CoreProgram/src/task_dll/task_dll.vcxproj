@@ -175,11 +175,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\oshelper.h" />
+    <ClInclude Include="..\common\taskscheduler.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="task_scheduler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\oshelper.cpp" />
+    <ClCompile Include="..\common\taskscheduler.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

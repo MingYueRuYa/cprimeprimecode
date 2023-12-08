@@ -24,6 +24,12 @@
     <ClInclude Include="task_scheduler.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\oshelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\taskscheduler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -33,6 +39,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="task_scheduler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\oshelper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\taskscheduler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
