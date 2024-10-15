@@ -1,0 +1,3 @@
+LIBRARY testdll2
+EXPORTS
+	hello2

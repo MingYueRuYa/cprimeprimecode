@@ -1,0 +1,6 @@
+LIBRARY hello_dll
+
+EXPORTS
+	add
+	hello
+	world
