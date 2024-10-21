@@ -90,6 +90,9 @@
     <ClInclude Include="chronotimer.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="inject_helper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -123,6 +126,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="systeminfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="inject_helper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
