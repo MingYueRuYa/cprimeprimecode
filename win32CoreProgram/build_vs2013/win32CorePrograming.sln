@@ -51,6 +51,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello_dll", "..\src\about_d
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testdll2", "..\src\about_dll\testdll2\testdll2.vcxproj", "{07DB97BE-AF67-4944-8E8A-F990D08C0F09}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "memory", "..\src\memory\memory.vcxproj", "{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug with Boost|Win32 = Debug with Boost|Win32
@@ -299,6 +301,22 @@ Global
 		{07DB97BE-AF67-4944-8E8A-F990D08C0F09}.Release|Win32.Build.0 = Release|Win32
 		{07DB97BE-AF67-4944-8E8A-F990D08C0F09}.Release|x64.ActiveCfg = Release|x64
 		{07DB97BE-AF67-4944-8E8A-F990D08C0F09}.Release|x64.Build.0 = Release|x64
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Debug with Boost|Win32.ActiveCfg = Debug|Win32
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Debug with Boost|Win32.Build.0 = Debug|Win32
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Debug with Boost|x64.ActiveCfg = Debug|x64
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Debug with Boost|x64.Build.0 = Debug|x64
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Debug|Win32.Build.0 = Debug|Win32
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Debug|x64.ActiveCfg = Debug|x64
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Debug|x64.Build.0 = Debug|x64
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Release with Boost|Win32.ActiveCfg = Release|Win32
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Release with Boost|Win32.Build.0 = Release|Win32
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Release with Boost|x64.ActiveCfg = Release|x64
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Release with Boost|x64.Build.0 = Release|x64
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Release|Win32.ActiveCfg = Release|Win32
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Release|Win32.Build.0 = Release|Win32
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Release|x64.ActiveCfg = Release|x64
+		{E92C1F7B-EB68-4B1D-AEA5-6B4D01DDFD45}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
